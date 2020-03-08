@@ -1,0 +1,36 @@
+.sidebar {
+  overflow: hidden;
+  overflow-y: auto;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  background: white;
+}
+
+.ant-menu-item {
+  color: rgba(0, 0, 0, 0.8) !important;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  font-size: 12px !important;
+}
+
+.ant-menu-item-selected {
+  background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%) !important;
+  color: white !important;
+}
+
+.ant-menu-vertical .ant-menu-item::after,
+.ant-menu-vertical-left .ant-menu-item::after,
+.ant-menu-vertical-right .ant-menu-item::after,
+.ant-menu-inline .ant-menu-item::after {
+  border-right: 0;
+}
+
+.ant-menu-root.ant-menu-vertical,
+.ant-menu-root.ant-menu-vertical-left,
+.ant-menu-root.ant-menu-vertical-right,
+.ant-menu-root.ant-menu-inline {
+  background: transparent;
+  width: 201px !important;
+  padding-right: 5px;
+}

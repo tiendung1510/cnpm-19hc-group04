@@ -11,17 +11,38 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
   width: 100vw;
   height: 100vh;
   @extend .centered-content;
-  background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
+  // background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
+  position: relative;
+
+  background: url("../../../assets/images/bg.jpg");
+  background-size: 100% 100%;
+
+  .dark-bg {
+    background: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(3px);
+  }
+
+  .wave {
+    position: absolute;
+    z-index: 2;
+    bottom: 0;
+  }
 
   .login {
     position: relative;
-    z-index: 2;
+    z-index: 3;
     width: 40%;
     height: 55%;
     padding-right: 50px;
     background: rgba(255, 255, 255, 0.2);
     @extend .centered-content;
-    border: 1px solid #eee;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     border-radius: 5px;
     background: white;
 
@@ -29,12 +50,14 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 
     .__content {
       width: 100%;
-      padding-top: 10px;
+      padding-top: 20px;
 
       .__main-title {
         text-align: center;
         font-size: 20px;
         padding-bottom: 10px;
+        font-weight: bold;
+        color: darkorange;
       }
 
       .__form {
@@ -52,12 +75,18 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
       }
 
+      .__forgot-password {
+        width: 100%;
+        text-align: center;
+      }
+
       .__btn-submit {
         background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
         border: 0;
         width: 100%;
         font-weight: bold;
         height: 45px;
+        margin-top: 20px;
         border-radius: 24px;
         text-shadow: $primaryTextShadow;
       }
@@ -65,7 +94,7 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
       .__staff-symbol {
         width: 100%;
         @extend .centered-content;
-        height: 250px;
+        height: 270px;
 
         img {
           width: 50%;
@@ -106,7 +135,8 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     .__footer {
       position: absolute;
       bottom: 0;
-      left: 33%;
+      left: 36%;
+      font-size: 12px;
     }
   }
 }

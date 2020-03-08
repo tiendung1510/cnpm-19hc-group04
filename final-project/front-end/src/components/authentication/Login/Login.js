@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Button, Row, Col } from 'antd';
+import { Form, Input, Button, Row, Col, Tooltip } from 'antd';
 import './Login.style.scss';
 
 const layout = {
@@ -30,7 +30,8 @@ export default class Login extends Component {
   render() {
     return (
       <div className="container">
-        <div className="login animated bounceInDown">
+        <div className="dark-bg"></div>
+        <div className="login animated fadeIn">
           <div className="__header">
             <img className="__company-logo" src={require('../../../assets/images/app-logo.png')} alt="logo" />
             <div className="__company-brand">
@@ -39,13 +40,13 @@ export default class Login extends Component {
             </div>
           </div>
           <Row className="__content">
-            <Col span={10}>
+            <Col span={11}>
               <div className="__staff-symbol">
                 <img src={require('../../../assets/images/staffs.png')} alt="staffs" />
               </div>
             </Col>
-            <Col span={14}>
-              <p className="__main-title">HỆ THỐNG QUẢN LÝ</p>
+            <Col span={13}>
+              <p className="__main-title">QUẢN LÝ SIÊU THỊ</p>
               <Form
                 className="__form"
                 {...layout}
@@ -80,17 +81,29 @@ export default class Login extends Component {
                   <Input.Password placeholder="Mật khẩu" />
                 </Form.Item>
 
+                <div className="__forgot-password">
+                  <Tooltip title="Yêu cầu khôi phục mật khẩu">
+                    <a style={{ marginLeft: 8 }}>
+                      Quên mật khẩu?
+                    </a>
+                  </Tooltip>
+                </div>
+
                 <Form.Item {...tailLayout}>
                   <Button type="primary" htmlType="submit" className="__btn-submit">
                     ĐĂNG NHẬP
-              </Button>
+                  </Button>
                 </Form.Item>
+
               </Form>
             </Col>
           </Row>
 
           <p className="__footer">Mini Mart &copy;2020 All right reserved.</p>
         </div>
+
+        <svg className="wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ff8220" fillOpacity={1} d="M0,160L1440,0L1440,320L0,320Z" /></svg>
+
       </div>
     )
   }
