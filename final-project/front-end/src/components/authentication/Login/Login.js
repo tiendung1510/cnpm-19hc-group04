@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Input, Button, Row, Col, Tooltip } from 'antd';
 import './Login.style.scss';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 const layout = {
   labelCol: {
@@ -21,11 +22,19 @@ export default class Login extends Component {
 
   onFinish = values => {
     console.log('Success:', values);
+    this.login(values);
   };
 
   onFinishFailed = errorInfo => {
     console.log('Failed:', errorInfo);
   };
+
+  login(account) {
+    const { username, password } = account;
+    if (username === 'tuevo' && password === 'asdasd') {
+      this.props.history.push('/');
+    }
+  }
 
   render() {
     return (
@@ -66,7 +75,7 @@ export default class Login extends Component {
                     },
                   ]}
                 >
-                  <Input placeholder="Tài khoản" autoFocus={true} />
+                  <Input prefix={<UserOutlined className="__form__icon" />} placeholder="Tài khoản" autoFocus={true} />
                 </Form.Item>
 
                 <Form.Item
@@ -78,19 +87,19 @@ export default class Login extends Component {
                     },
                   ]}
                 >
-                  <Input.Password placeholder="Mật khẩu" />
+                  <Input.Password prefix={<LockOutlined className="__form__icon" />} placeholder="Mật khẩu" />
                 </Form.Item>
 
-                <div className="__forgot-password">
+                <div className="__form__forgot-password">
                   <Tooltip title="Yêu cầu khôi phục mật khẩu">
-                    <a style={{ marginLeft: 8 }}>
+                    <a href="/login" style={{ marginLeft: 8 }}>
                       Quên mật khẩu?
                     </a>
                   </Tooltip>
                 </div>
 
                 <Form.Item {...tailLayout}>
-                  <Button type="primary" htmlType="submit" className="__btn-submit">
+                  <Button className="__form__btn-submit" type="primary" htmlType="submit">
                     ĐĂNG NHẬP
                   </Button>
                 </Form.Item>

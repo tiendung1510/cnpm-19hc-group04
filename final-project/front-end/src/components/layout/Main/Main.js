@@ -14,7 +14,7 @@ class Main extends Component {
 
   constructor(props) {
     super(props);
-    this.isAuthenticated = false;
+    this.isAuthenticated = true;
   }
 
   render() {
