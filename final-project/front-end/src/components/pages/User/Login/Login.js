@@ -6,6 +6,8 @@ import { API } from '../../../../constants/api.constant';
 import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
 import { withCookies } from 'react-cookie';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '../../../../redux/actions';
 
 const layout = {
   labelCol: {
@@ -33,6 +35,7 @@ class Login extends Component {
   }
 
   login = async (values) => {
+    this.props.setAppLoading(true);
     const params = {
       username: values.username,
       password: values.password
@@ -44,18 +47,23 @@ class Login extends Component {
       headers: { 'Content-type': 'application/json; charset=UTF-8' }
     })).json();
 
+    this.props.setAppLoading(false);
+
     if (res.status !== 200) {
       message.error(res.errors[0]);
       return;
     }
-    message.success(res.messages[0]);
+
     const user = res.data.user;
     const token = res.data.meta.token;
+
+    this.props.login(user, token);
 
     const { cookies } = this.props;
     cookies.set(COOKIE_NAMES.user, user, { path: '/' });
     cookies.set(COOKIE_NAMES.token, token, { path: '/' });
-    this.props.history.push('/');
+    window.location.href = '/';
+    // this.props.history.push('/');
   };
 
   render() {
@@ -77,7 +85,7 @@ class Login extends Component {
               </div>
             </Col>
             <Col span={13}>
-              <p className="__main-title">QUẢN LÝ SIÊU THỊ</p>
+              <p className="__main-title">HỆ THỐNG QUẢN LÝ</p>
               <Form
                 className="__form"
                 {...layout}
@@ -140,4 +148,4 @@ class Login extends Component {
   }
 }
 
-export default withCookies(withRouter(Login));
+export default connect(null, actions)(withCookies(withRouter(Login)));

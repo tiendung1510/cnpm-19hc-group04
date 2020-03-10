@@ -6,8 +6,17 @@
   padding-left: 36px;
   background: white;
 
+  .__page-title {
+    color: #ff8220;
+    font-size: 16px;
+
+    .__page-title__text {
+      margin-left: 10px;
+    }
+  }
+
   .__account {
-    .__account__more-feature {
+    .__account__avatar-menu {
       cursor: pointer;
     }
   }

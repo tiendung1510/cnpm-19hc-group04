@@ -2,19 +2,26 @@ import React, { Component } from 'react';
 import { Layout } from 'antd';
 import './Main.style.scss';
 import links from '../../../constants/sidebar.constant';
-import { withRouter, Route } from 'react-router-dom';
+import { withRouter, Route, Redirect } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
 import { COOKIE_NAMES } from '../../../constants/cookie-name.constant';
 import Toolbar from '../Toolbar/Toolbar';
 import Sidebar from '../Sidebar/Sidebar';
 import USER_ROLE from '../../../constants/user-role.constant';
+import * as actions from '../../../redux/actions';
+import { connect } from 'react-redux';
 
 const { Footer, Content } = Layout;
 
 class Main extends Component {
   cookies;
+  isAuthenticated;
 
   componentWillMount() {
+    this.checkLoggedInUser();
+  }
+
+  checkLoggedInUser() {
     this.cookies = this.props.cookies;
     const user = this.cookies.get(COOKIE_NAMES.user);
     const token = this.cookies.get(COOKIE_NAMES.token);
@@ -22,36 +29,41 @@ class Main extends Component {
     if (!(user && token)) {
       this.cookies.remove(COOKIE_NAMES.token);
       this.cookies.remove(COOKIE_NAMES.user);
-      this.props.history.push('/login');
+      this.isAuthenticated = false;
+    } else {
+      this.isAuthenticated = true;
+      this.props.login(user, token);
     }
   }
+
   render() {
-    const user = {
-      _id: 'be7a0cde-613e-11ea-bc55-0242ac130003',
-      role: 'MANAGER',
-      username: 'tuevo',
-      password: 'asdasd',
-      fullname: 'Tue Vo',
-      email: 'tuevo.it@gmail.com',
-      phone: '0932659211',
-      dateOfBirth: new Date(),
-      avatar: 'https://spon.mdp.ac.id/pluginfile.php/1/theme_moove/marketing1icon/1582524735/icon-lecture.png',
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
+    const user = this.cookies.get(COOKIE_NAMES.user) || this.props.loggedInUser.user;
+    const commonPages = [...links.find(link => link.role === USER_ROLE.USER.role).pages];
+    const toolbarAvatarMenuItems = commonPages.filter((page, index) => index > 0);
 
-    const userCommonPages = [...links.find(link => link.role === USER_ROLE.USER.role).pages];
+    if (user.role === USER_ROLE.MANAGER.role)
+      commonPages.length = 0;
 
-    if (user.role === USER_ROLE.MANAGER.rol)
-      userCommonPages.length = 0;
-
-    const userPagesByRole = userCommonPages.concat([...links.find(link => link.role === user.role).pages]);
+    const userPagesByRole = commonPages.concat([
+      ...links.find(link => link.role === user.role).pages]
+      .concat(toolbarAvatarMenuItems));
 
     const PrivateRoute = ({ component: Component, ...rest }) => {
       return (
         <Route
           {...rest}
-          render={props => <Component {...props} />}
+          render={props =>
+            this.isAuthenticated ? (
+              <Component {...props} />
+            ) : (
+                <Redirect
+                  to={{
+                    pathname: '/login',
+                    state: { from: props.location }
+                  }}
+                />
+              )
+          }
         />
       )
     }
@@ -78,7 +90,7 @@ class Main extends Component {
         <Layout>
           <Sidebar user={user} userPagesByRole={userPagesByRole} />
           <Layout style={{ marginLeft: 200 }} className="animated fadeIn">
-            <Toolbar user={user} userPagesByRole={userPagesByRole} />
+            <Toolbar user={user} avatarMenuItems={toolbarAvatarMenuItems} />
             <Content className="__content">
               <div className="__content__inner">
                 {renderContents()}
@@ -93,5 +105,9 @@ class Main extends Component {
     )
   }
 }
-export default withCookies(withRouter(Main));
 
+const mapStateToProps = (state) => ({
+  loggedInUser: state.loggedInUser
+})
+
+export default connect(mapStateToProps, actions)(withCookies(withRouter(Main)));

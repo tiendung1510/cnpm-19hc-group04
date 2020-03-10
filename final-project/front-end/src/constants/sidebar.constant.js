@@ -1,4 +1,6 @@
 import WorkSchedule from '../components/pages/User/WorkSchedule/WorkSchedule';
+import Profile from '../components/pages/User/Profile/Profile';
+import ChangePassword from '../components/pages/User/ChangePassword/ChangePassword';
 
 import MoneyCounting from '../components/pages/Cashier/MoneyCounting/MoneyCounting';
 import InventoryRequesting from '../components/pages/Cashier/InventoryRequesting/InventoryRequesting';
@@ -11,7 +13,7 @@ import WorkAssignment from '../components/pages/Manager/WorkAssignment/WorkAssig
 import SupplierManagement from '../components/pages/Manager/SupplierManagement/SupplierManagement';
 
 import {
-  DollarOutlined, QuestionCircleOutlined, CalendarOutlined, InboxOutlined, BarChartOutlined, TeamOutlined, FileDoneOutlined, RocketOutlined,
+  DollarOutlined, QuestionCircleOutlined, CalendarOutlined, InboxOutlined, BarChartOutlined, TeamOutlined, FileDoneOutlined, RocketOutlined, UserOutlined, LockOutlined,
 } from '@ant-design/icons';
 
 export default [
@@ -23,6 +25,20 @@ export default [
         path: '/working-schedule',
         icon: CalendarOutlined,
         component: WorkSchedule
+      },
+      {
+        title: 'Thông tin cá nhân',
+        path: '/profile',
+        icon: UserOutlined,
+        component: Profile,
+        key: 'PROFILE'
+      },
+      {
+        title: 'Đổi mật khẩu',
+        path: '/change-password',
+        icon: LockOutlined,
+        component: ChangePassword,
+        key: 'CHANGE_PASSWORD'
       }
     ]
   },

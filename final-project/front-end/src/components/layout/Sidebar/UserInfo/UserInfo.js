@@ -17,8 +17,8 @@ export default class UserInfo extends Component {
     }
 
     return (
-      <div className="user-info">
-        <div className="__wallpaper" style={{ backgroundImage: `url(${user.avatar})` }}>
+      <div className="user-info animated fadeIn">
+        <div className="__wallpaper">
           <div className={`__wallpaper__role ${userRoleStyle} animated fadeInRight`}>
             <span>{userRoleName}</span>
           </div>
@@ -26,10 +26,9 @@ export default class UserInfo extends Component {
             <div className="__wallpaper__info__fullname"><span>{user.fullname || ''}</span></div>
             <span className="__wallpaper__info__email">{user.email || ''}</span>
           </div>
-          <div className="__wallpaper__dark-bg"></div>
         </div>
         <div className="__avatar">
-          <Avatar size={68} src={user.avatar} className="__avatar__image" />
+          <Avatar size={64} src={user.avatar} className="__avatar__image" />
         </div>
       </div>
     )
