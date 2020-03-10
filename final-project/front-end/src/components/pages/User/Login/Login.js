@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import { Form, Input, Button, Row, Col, Tooltip } from 'antd';
+import { Form, Input, Button, Row, Col, Tooltip, message } from 'antd';
 import './Login.style.scss';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { API } from '../../../../constants/api.constant';
+import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
+import { withCookies } from 'react-cookie';
+import { withRouter } from 'react-router-dom';
 
 const layout = {
   labelCol: {
@@ -18,23 +22,41 @@ const tailLayout = {
   },
 };
 
-export default class Login extends Component {
+class Login extends Component {
 
-  onFinish = values => {
-    console.log('Success:', values);
-    this.login(values);
-  };
-
-  onFinishFailed = errorInfo => {
-    console.log('Failed:', errorInfo);
-  };
-
-  login(account) {
-    const { username, password } = account;
-    if (username === 'tuevo' && password === 'asdasd') {
+  componentWillMount() {
+    const { cookies } = this.props;
+    const user = cookies.get(COOKIE_NAMES.user);
+    const token = cookies.get(COOKIE_NAMES.token);
+    if (user && token)
       this.props.history.push('/');
-    }
   }
+
+  login = async (values) => {
+    const params = {
+      username: values.username,
+      password: values.password
+    };
+
+    const res = await (await fetch(API.login, {
+      method: 'POST',
+      body: JSON.stringify(params),
+      headers: { 'Content-type': 'application/json; charset=UTF-8' }
+    })).json();
+
+    if (res.status !== 200) {
+      message.error(res.errors[0]);
+      return;
+    }
+    message.success(res.messages[0]);
+    const user = res.data.user;
+    const token = res.data.meta.token;
+
+    const { cookies } = this.props;
+    cookies.set(COOKIE_NAMES.user, user, { path: '/' });
+    cookies.set(COOKIE_NAMES.token, token, { path: '/' });
+    this.props.history.push('/');
+  };
 
   render() {
     return (
@@ -42,7 +64,7 @@ export default class Login extends Component {
         <div className="dark-bg"></div>
         <div className="login animated fadeIn">
           <div className="__header">
-            <img className="__company-logo" src={require('../../../assets/images/app-logo.png')} alt="logo" />
+            <img className="__company-logo" src={require('../../../../assets/images/app-logo.png')} alt="logo" />
             <div className="__company-brand">
               <div className="__name"><span>Mini Mart</span></div>
               <div className="__slogan"><span>Tiện Lợi mà Chất Lượng</span></div>
@@ -51,7 +73,7 @@ export default class Login extends Component {
           <Row className="__content">
             <Col span={11}>
               <div className="__staff-symbol">
-                <img src={require('../../../assets/images/staffs.png')} alt="staffs" />
+                <img src={require('../../../../assets/images/staffs.png')} alt="staffs" />
               </div>
             </Col>
             <Col span={13}>
@@ -63,8 +85,8 @@ export default class Login extends Component {
                 initialValues={{
                   remember: true,
                 }}
-                onFinish={this.onFinish}
-                onFinishFailed={this.onFinishFailed}
+                onFinish={this.login}
+                onFinishFailed={() => { message.error('Vui lòng nhập đầy đủ thông tin'); }}
               >
                 <Form.Item
                   name="username"
@@ -117,3 +139,5 @@ export default class Login extends Component {
     )
   }
 }
+
+export default withCookies(withRouter(Login));

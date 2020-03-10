@@ -1,23 +1,29 @@
 import React, { Component } from 'react';
 import { Row, Col, Avatar, Dropdown, Menu } from 'antd';
 import { UserOutlined, LockOutlined, LogoutOutlined } from '@ant-design/icons';
+import { withCookies } from 'react-cookie';
+import { withRouter } from 'react-router-dom';
+import { COOKIE_NAMES } from '../../../constants/cookie-name.constant';
 import './Toolbar.style.scss';
 
-export default class Toolbar extends Component {
+class Toolbar extends Component {
 
   hanleSelectMenuItem = key => {
     switch (key) {
       case 'LOGOUT':
         this.logout();
         break;
-    
+
       default:
         break;
     }
   }
 
   logout = () => {
-    window.location.href = '/login';
+    const { cookies } = this.props;
+    cookies.remove(COOKIE_NAMES.token);
+    cookies.remove(COOKIE_NAMES.user);
+    this.props.history.push('/login');
   }
 
   render() {
@@ -60,3 +66,4 @@ export default class Toolbar extends Component {
     )
   }
 }
+export default withCookies(withRouter(Toolbar));

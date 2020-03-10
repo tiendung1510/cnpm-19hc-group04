@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Layout, Menu } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import './Sidebar.style.scss';
 import UserInfo from './UserInfo/UserInfo';
 
 const { Sider } = Layout;
 
-export default class Sidebar extends Component {
+class Sidebar extends Component {
   render() {
     const { user, userPagesByRole } = this.props;
 
@@ -19,10 +19,9 @@ export default class Sidebar extends Component {
         pageIndex = index.toString();
     });
 
-    if (!pageIndex) {
-      window.location.href = userPagesByRole[0].path;
-      return;
-    }
+    // if (!pageIndex) {
+    //   window.location.href = userPagesByRole[0].path;
+    // }
 
     return (
       <Sider className="sidebar">
@@ -42,3 +41,4 @@ export default class Sidebar extends Component {
     )
   }
 }
+export default withRouter(Sidebar);

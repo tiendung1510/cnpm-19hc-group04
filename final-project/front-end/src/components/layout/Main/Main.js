@@ -2,21 +2,29 @@ import React, { Component } from 'react';
 import { Layout } from 'antd';
 import './Main.style.scss';
 import links from '../../../constants/sidebar.constant';
-import { Redirect, withRouter, Route } from 'react-router-dom';
+import { withRouter, Route } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
+import { COOKIE_NAMES } from '../../../constants/cookie-name.constant';
 import Toolbar from '../Toolbar/Toolbar';
 import Sidebar from '../Sidebar/Sidebar';
+import USER_ROLE from '../../../constants/user-role.constant';
 
 const { Footer, Content } = Layout;
 
 class Main extends Component {
-  isAuthenticated;
+  cookies;
 
-  constructor(props) {
-    super(props);
-    this.isAuthenticated = true;
+  componentWillMount() {
+    this.cookies = this.props.cookies;
+    const user = this.cookies.get(COOKIE_NAMES.user);
+    const token = this.cookies.get(COOKIE_NAMES.token);
+
+    if (!(user && token)) {
+      this.cookies.remove(COOKIE_NAMES.token);
+      this.cookies.remove(COOKIE_NAMES.user);
+      this.props.history.push('/login');
+    }
   }
-
   render() {
     const user = {
       _id: 'be7a0cde-613e-11ea-bc55-0242ac130003',
@@ -27,14 +35,14 @@ class Main extends Component {
       email: 'tuevo.it@gmail.com',
       phone: '0932659211',
       dateOfBirth: new Date(),
-      avatar: 'https://lh3.googleusercontent.com/a-/AAuE7mAr1etk5y5fnv3eDpJVxiapio6o8mkKDs1qQtCBiQ=s50',
+      avatar: 'https://spon.mdp.ac.id/pluginfile.php/1/theme_moove/marketing1icon/1582524735/icon-lecture.png',
       createdAt: new Date(),
       updatedAt: new Date()
     };
 
-    const userCommonPages = [...links.find(link => link.role === 'USER').pages];
+    const userCommonPages = [...links.find(link => link.role === USER_ROLE.USER.role).pages];
 
-    if (user.role === 'MANAGER')
+    if (user.role === USER_ROLE.MANAGER.rol)
       userCommonPages.length = 0;
 
     const userPagesByRole = userCommonPages.concat([...links.find(link => link.role === user.role).pages]);
@@ -43,18 +51,7 @@ class Main extends Component {
       return (
         <Route
           {...rest}
-          render={props =>
-            this.isAuthenticated ? (
-              <Component {...props} />
-            ) : (
-                <Redirect
-                  to={{
-                    pathname: '/login',
-                    state: { from: props.location }
-                  }}
-                />
-              )
-          }
+          render={props => <Component {...props} />}
         />
       )
     }
