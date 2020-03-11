@@ -1,0 +1,9 @@
+mongo:
+  user: tue_dev
+  password: tuedev123
+  uri: mongodb+srv://tue_dev:tuedev123@cloud-mongo-v9oj0.gcp.mongodb.net/mini-mart?retryWrites=true&w=majority
+
+app:
+  port: 7000
+
+privateKey: asdASD123!@#

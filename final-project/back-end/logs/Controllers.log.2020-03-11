@@ -1,0 +1,83 @@
+[2020-03-11 11:16:00.823] [INFO] Controllers - UserController::rederIndexPage::is called
+[2020-03-11 11:31:03.591] [INFO] Controllers - UserController::rederIndexPage::is called
+[2020-03-11 11:31:03.597] [ERROR] Controllers - UserController::rederIndexPage::error { inspect: [Function: inspect] }
+[2020-03-11 11:31:29.869] [INFO] Controllers - UserController::rederIndexPage::is called
+[2020-03-11 11:33:42.688] [INFO] Controllers - UserController::rederIndexPage::is called
+[2020-03-11 11:33:42.734] [ERROR] Controllers - UserController::rederIndexPage::error { inspect: [Function: inspect] }
+[2020-03-11 11:34:04.377] [INFO] Controllers - UserController::rederIndexPage::is called
+[2020-03-11 11:35:52.801] [INFO] Controllers - UserController::rederIndexPage::is called
+[2020-03-11 11:36:10.789] [INFO] Controllers - UserController::rederIndexPage::is called
+[2020-03-11 11:36:33.790] [INFO] Controllers - UserController::rederIndexPage::is called
+[2020-03-11 11:36:38.063] [INFO] Controllers - UserController::rederIndexPage::is called
+[2020-03-11 11:37:23.890] [INFO] Controllers - UserController::rederIndexPage::is called
+[2020-03-11 12:15:26.770] [INFO] Controllers - UserController::login::is called
+[2020-03-11 12:15:26.830] [INFO] Controllers - UserController::login::login sucess
+[2020-03-11 12:15:35.828] [INFO] Controllers - UserController::login::is called
+[2020-03-11 12:15:35.876] [INFO] Controllers - UserController::login::wrong password
+[2020-03-11 12:15:36.242] [INFO] Controllers - UserController::login::is called
+[2020-03-11 12:15:36.289] [INFO] Controllers - UserController::login::wrong password
+[2020-03-11 12:15:45.170] [INFO] Controllers - UserController::login::is called
+[2020-03-11 12:15:45.211] [INFO] Controllers - UserController::login::login sucess
+[2020-03-11 12:20:34.499] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:20:34.560] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:21:43.422] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:21:43.480] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:21:43.481] [ERROR] Controllers - UserController::login::error { inspect: [Function: inspect] }
+[2020-03-11 12:21:48.803] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:21:48.845] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:21:48.846] [ERROR] Controllers - UserController::login::error { inspect: [Function: inspect] }
+[2020-03-11 12:23:14.152] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:23:14.207] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:23:14.208] [ERROR] Controllers - UserController::login::error { inspect: [Function: inspect] }
+[2020-03-11 12:23:29.063] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:23:29.130] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:23:59.863] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:23:59.923] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:23:59.924] [ERROR] Controllers - UserController::login::error { inspect: [Function: inspect] }
+[2020-03-11 12:24:34.158] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:24:34.265] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:24:34.276] [ERROR] Controllers - UserController::login::error { inspect: [Function: inspect] }
+[2020-03-11 12:25:07.395] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:25:07.458] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:25:26.015] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:25:26.074] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:27:38.640] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:27:38.705] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:28:19.184] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:28:19.243] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:28:30.342] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:28:30.402] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:29:19.045] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:29:19.109] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:33:29.731] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:33:29.792] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:33:49.176] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:33:49.236] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:33:49.236] [ERROR] Controllers - UserController::login::error { inspect: [Function: inspect] }
+[2020-03-11 12:37:20.288] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:37:20.357] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:37:50.390] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:37:50.448] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:37:50.448] [ERROR] Controllers - UserController::login::error { inspect: [Function: inspect] }
+[2020-03-11 12:38:00.697] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:38:00.750] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:38:28.019] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:38:28.076] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:38:28.077] [ERROR] Controllers - UserController::login::error { inspect: [Function: inspect] }
+[2020-03-11 12:38:49.344] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:38:49.400] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:39:42.759] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:39:42.815] [INFO] Controllers - UserController::login::login success
+[2020-03-11 12:44:42.804] [INFO] Controllers - UserController::login::was called
+[2020-03-11 12:44:42.856] [INFO] Controllers - UserController::login::wrong username
+[2020-03-11 13:02:22.380] [INFO] Controllers - UserController::addUser::was called
+[2020-03-11 13:02:41.312] [INFO] Controllers - UserController::addUser::was called
+[2020-03-11 13:02:52.572] [INFO] Controllers - UserController::addUser::was called
+[2020-03-11 13:20:43.990] [INFO] Controllers - UserController::addUser::was called
+[2020-03-11 13:20:44.117] [INFO] Controllers - UserController::addUser::a new user was added
+[2020-03-11 13:23:24.034] [INFO] Controllers - UserController::login::was called
+[2020-03-11 13:23:24.096] [INFO] Controllers - UserController::login::login success
+[2020-03-11 13:24:15.349] [INFO] Controllers - UserController::login::was called
+[2020-03-11 13:24:15.409] [INFO] Controllers - UserController::login::login success
+[2020-03-11 13:24:53.857] [INFO] Controllers - UserController::login::was called
+[2020-03-11 13:24:53.914] [INFO] Controllers - UserController::login::login success
