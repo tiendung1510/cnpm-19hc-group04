@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Layout } from 'antd';
 import './Main.style.scss';
 import links from '../../../constants/sidebar.constant';
-import { withRouter, Route, Redirect } from 'react-router-dom';
+import { withRouter, Route } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
 import { COOKIE_NAMES } from '../../../constants/cookie-name.constant';
 import Toolbar from '../Toolbar/Toolbar';
@@ -15,7 +15,6 @@ const { Footer, Content } = Layout;
 
 class Main extends Component {
   cookies;
-  isAuthenticated;
 
   componentWillMount() {
     this.checkLoggedInUser();
@@ -29,9 +28,8 @@ class Main extends Component {
     if (!(user && token)) {
       this.cookies.remove(COOKIE_NAMES.token);
       this.cookies.remove(COOKIE_NAMES.user);
-      this.isAuthenticated = false;
+      window.location.href = '/login';
     } else {
-      this.isAuthenticated = true;
       this.props.login(user, token);
     }
   }
@@ -52,18 +50,7 @@ class Main extends Component {
       return (
         <Route
           {...rest}
-          render={props =>
-            this.isAuthenticated ? (
-              <Component {...props} />
-            ) : (
-                <Redirect
-                  to={{
-                    pathname: '/login',
-                    state: { from: props.location }
-                  }}
-                />
-              )
-          }
+          render={props => <Component {...props} />}
         />
       )
     }
