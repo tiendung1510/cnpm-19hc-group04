@@ -21,12 +21,6 @@ export default [
     role: 'USER',
     pages: [
       {
-        title: 'Lịch làm việc',
-        path: '/working-schedule',
-        icon: CalendarOutlined,
-        component: WorkSchedule
-      },
-      {
         title: 'Thông tin cá nhân',
         path: '/profile',
         icon: UserOutlined,
@@ -46,6 +40,12 @@ export default [
     role: "CASHIER",
     pages: [
       {
+        title: 'Lịch làm việc',
+        path: '/working-schedule',
+        icon: CalendarOutlined,
+        component: WorkSchedule
+      },
+      {
         title: 'Tính tiền cho khách',
         path: '/money-counting',
         icon: DollarOutlined,
@@ -62,6 +62,12 @@ export default [
   {
     role: "IMPORTER",
     pages: [
+      {
+        title: 'Lịch làm việc',
+        path: '/working-schedule',
+        icon: CalendarOutlined,
+        component: WorkSchedule
+      },
       {
         title: 'Quản lý sản phẩm',
         path: '/products',

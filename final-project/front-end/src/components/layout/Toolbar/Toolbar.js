@@ -50,7 +50,11 @@ class Toolbar extends Component {
               <Dropdown overlay={
                 <Menu onClick={e => this.handleSelectMenuItem(e.key)}>
                   {(avatarMenuItems || []).map((item) => (
-                    <Menu.Item key={item.key + '***' + item.path}>
+                    <Menu.Item key={item.key + '***' + item.path} 
+                    onClick={() => {
+                      this.props.setCurrentPageTitle(item.title, item.icon);
+                      this.props.setSidebarSelectedIndex(item.sidebarIndex);
+                    }}>
                       <item.icon />
                       {item.title}
                     </Menu.Item>
@@ -76,6 +80,6 @@ class Toolbar extends Component {
 
 const mapStateToProps = state => ({
   app: state.app
-})
+});
 
 export default connect(mapStateToProps, actions)(withCookies(withRouter(Toolbar)));

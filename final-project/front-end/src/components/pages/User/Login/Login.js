@@ -84,7 +84,7 @@ class Login extends Component {
               </div>
             </Col>
             <Col span={13}>
-              <p className="__main-title">HỆ THỐNG QUẢN LÝ</p>
+              <p className="__main-title">QUẢN LÝ SIÊU THỊ</p>
               <Form
                 className="__form"
                 {...layout}

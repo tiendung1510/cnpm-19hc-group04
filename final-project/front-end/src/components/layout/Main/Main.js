@@ -37,15 +37,10 @@ class Main extends Component {
 
   render() {
     const user = this.cookies.get(COOKIE_NAMES.user) || this.props.loggedInUser.user;
-    const commonPages = [...links.find(link => link.role === USER_ROLE.USER.role).pages];
-    const toolbarAvatarMenuItems = commonPages.filter((page, index) => index > 0);
-
-    if (user.role === USER_ROLE.MANAGER.role)
-      commonPages.length = 0;
-
-    const userPagesByRole = commonPages.concat([
-      ...links.find(link => link.role === user.role).pages]
-      .concat(toolbarAvatarMenuItems));
+    let pagesByUserRole = links.find(link => link.role === user.role).pages;
+    const commonPages = links.find(link => link.role === USER_ROLE.USER.role).pages
+      .map((page, index) => ({ ...page, sidebarIndex: pagesByUserRole.length + index }));
+    pagesByUserRole = [...pagesByUserRole].concat(commonPages);
 
     const PrivateRoute = ({ component: Component, ...rest }) => {
       return (
@@ -59,7 +54,7 @@ class Main extends Component {
     const renderContents = () => {
       return (
         <div>
-          {userPagesByRole.map((page, pageIndex) => {
+          {pagesByUserRole.map((page, pageIndex) => {
             return (
               <PrivateRoute
                 key={pageIndex}
@@ -76,9 +71,9 @@ class Main extends Component {
     return (
       <div className="main">
         <Layout>
-          <Sidebar user={user} userPagesByRole={userPagesByRole} />
+          <Sidebar user={user} pagesByUserRole={pagesByUserRole} />
           <Layout style={{ marginLeft: 200 }} className="animated fadeIn">
-            <Toolbar user={user} avatarMenuItems={toolbarAvatarMenuItems} />
+            <Toolbar user={user} avatarMenuItems={commonPages} />
             <Content className="__content">
               <div className="__content__inner">
                 {renderContents()}

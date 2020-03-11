@@ -5,6 +5,8 @@ import './Sidebar.style.scss';
 import UserInfo from './UserInfo/UserInfo';
 import { connect } from 'react-redux';
 import * as actions from '../../../redux/actions';
+import links from '../../../constants/sidebar.constant';
+import USER_ROLE from '../../../constants/user-role.constant';
 
 const { Sider } = Layout;
 
@@ -12,39 +14,52 @@ class Sidebar extends Component {
   pageIndex;
 
   componentWillMount() {
-    const { userPagesByRole } = this.props;
+    const { pagesByUserRole } = this.props;
     const href = window.location.href.split('?')[0];
     const position = href.split('/');
     const currentPath = position[position.length - 1];
 
-    userPagesByRole.forEach((page, index) => {
+    pagesByUserRole.forEach((page, index) => {
       if (page.path === `/${currentPath}`) {
-        this.pageIndex = index.toString();
-        const currentPage = userPagesByRole[this.pageIndex];
+        this.pageIndex = index;
+        const currentPage = pagesByUserRole[this.pageIndex];
+        this.props.setSidebarSelectedIndex(this.pageIndex);
         this.props.setCurrentPageTitle(currentPage.title, currentPage.icon);
       }
     });
 
     if (!this.pageIndex) {
-      this.pageIndex = '0';
-      const { title, icon, path } = userPagesByRole[this.pageIndex];
-      this.props.history.push(path);
+      this.pageIndex = 0;
+      const { title, icon, path } = pagesByUserRole[this.pageIndex];
+      this.props.setSidebarSelectedIndex(this.pageIndex);
       this.props.setCurrentPageTitle(title, icon);
+      this.props.history.push(path);
     }
   }
 
+  isCommonPage(path) {
+    const page = links.find(link => link.role === USER_ROLE.USER.role).pages.find(page => page.path === path);
+    if (page)
+      return true;
+    return false;
+  }
+
   render() {
-    const { user, userPagesByRole } = this.props;
+    const { user, pagesByUserRole } = this.props;
+    const { sidebarSelectedIndex } = this.props.app;
 
     return (
       <Sider className="sidebar">
         <UserInfo user={user} />
-        <Menu theme='light' mode='inline' defaultSelectedKeys={[this.pageIndex]}>
-          {userPagesByRole.map((page, pageIndex) => {
+        <Menu theme='light' mode='inline' selectedKeys={[sidebarSelectedIndex ? sidebarSelectedIndex.toString() : '0']}>
+          {pagesByUserRole.map((page, pageIndex) => {
             const Page = { Icon: page.icon };
             return (
               <Menu.Item key={pageIndex} className="animated slideInLeft"
-                onClick={() => { this.props.setCurrentPageTitle(page.title, page.icon) }}>
+                onClick={() => {
+                  this.props.setCurrentPageTitle(page.title, page.icon);
+                  this.props.setSidebarSelectedIndex(pageIndex);
+                }}>
                 <Page.Icon />
                 <span className='nav-text'>{page.title}</span>
                 <Link to={page.path} />
@@ -56,4 +71,9 @@ class Sidebar extends Component {
     )
   }
 }
-export default connect(null, actions)(withRouter(Sidebar));
+
+const mapStateToProps = state => ({
+  app: state.app
+});
+
+export default connect(mapStateToProps, actions)(withRouter(Sidebar));
