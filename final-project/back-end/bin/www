@@ -13,10 +13,10 @@ const server = http.createServer(app);
 server.on('listening', onListening);
 
 db(() => {
-  console.log('Connect database successfully !!!');
+  console.log('Connect mongoDB successfully !!!');
   server.listen(port);
 });
 
 function onListening() {
-  console.log('Server is running on port ', port);
+  console.log('Server is running on port', port);
 }
