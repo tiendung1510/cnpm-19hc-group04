@@ -6,4 +6,5 @@ mongo:
 app:
   port: 7000
 
-privateKey: asdASD123!@#
+jwt:
+  secret: asdADS123!@#
