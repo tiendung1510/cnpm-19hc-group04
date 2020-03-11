@@ -26,7 +26,7 @@ const tailLayout = {
 
 class Login extends Component {
 
-  componentWillMount() {
+  componentDidMount() {
     const { cookies } = this.props;
     const user = cookies.get(COOKIE_NAMES.user);
     const token = cookies.get(COOKIE_NAMES.token);
@@ -63,7 +63,6 @@ class Login extends Component {
     cookies.set(COOKIE_NAMES.user, user, { path: '/' });
     cookies.set(COOKIE_NAMES.token, token, { path: '/' });
     window.location.href = '/';
-    // this.props.history.push('/');
   };
 
   render() {

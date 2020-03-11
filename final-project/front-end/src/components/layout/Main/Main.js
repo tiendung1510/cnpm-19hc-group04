@@ -16,12 +16,13 @@ const { Footer, Content } = Layout;
 class Main extends Component {
   cookies;
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.cookies = this.props.cookies;
     this.checkLoggedInUser();
   }
 
   checkLoggedInUser() {
-    this.cookies = this.props.cookies;
     const user = this.cookies.get(COOKIE_NAMES.user);
     const token = this.cookies.get(COOKIE_NAMES.token);
 
