@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import 'antd/dist/antd.scss';
+import 'antd/dist/antd.css';
 import './assets/styles/animate.min.css';
 import Login from './components/pages/User/Login/Login';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
