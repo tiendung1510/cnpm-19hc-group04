@@ -31,7 +31,8 @@ const login = async (req, res, next) => {
       });
     }
 
-    if (user.password !== password) {
+    const isRightPassword = await bcrypt.compare(password, user.password);
+    if (!isRightPassword) {
       logger.info(`${CONTROLLER_NAME}::login::wrong password`);
       return res.status(HttpStatus.NOT_FOUND).json({
         status: HttpStatus.NOT_FOUND,
@@ -106,7 +107,19 @@ const addUser = async (req, res, next) => {
 const getUsers = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::addUser::was called`);
   try {
-    const users = await UserModel.find({});
+    let users = await UserModel.aggregate([
+      {
+        $project: {
+          _id: 1,
+          role: 1,
+          fullname: 1,
+          email: 1,
+          phone: 1,
+          dateOfBirth: 1,
+          avatar: 1
+        }
+      }
+    ]);
 
     logger.info(`${CONTROLLER_NAME}::getUsers::success`);
     return res.status(HttpStatus.OK).json({
@@ -140,8 +153,8 @@ const changePassword = async (req, res, next) => {
       });
     }
 
-    const isCurrentPassword = await bcrypt.compare(currentPassword, user.password);
-    if(!isCurrentPassword) {
+    const isRightPassword = await bcrypt.compare(currentPassword, user.password);
+    if (!isRightPassword) {
       logger.info(`${CONTROLLER_NAME}::changePassword::wrong current password`);
       return res.status(HttpStatus.NOT_FOUND).json({
         status: HttpStatus.NOT_FOUND,
