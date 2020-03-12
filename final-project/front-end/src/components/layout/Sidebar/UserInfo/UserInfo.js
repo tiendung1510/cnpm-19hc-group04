@@ -10,9 +10,9 @@ export default class UserInfo extends Component {
     const userRoleName = USER_ROLE[user.role].name;
     let userRoleStyle;
     switch (user.role) {
-      case USER_ROLE.CASHIER.role: userRoleStyle = '__wallpaper__role--cashier'; break;
-      case USER_ROLE.IMPORTER.role: userRoleStyle = '__wallpaper__role--importer'; break;
-      case USER_ROLE.MANAGER.role: userRoleStyle = '__wallpaper__role--manager'; break;
+      case USER_ROLE.CASHIER.type: userRoleStyle = '__wallpaper__role--cashier'; break;
+      case USER_ROLE.IMPORTER.type: userRoleStyle = '__wallpaper__role--importer'; break;
+      case USER_ROLE.MANAGER.type: userRoleStyle = '__wallpaper__role--manager'; break;
       default: break;
     }
 

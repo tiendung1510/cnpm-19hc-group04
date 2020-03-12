@@ -38,7 +38,7 @@ class Main extends Component {
   render() {
     const user = this.cookies.get(COOKIE_NAMES.user) || this.props.loggedInUser.user;
     let pagesByUserRole = links.find(link => link.role === user.role).pages;
-    const commonPages = links.find(link => link.role === USER_ROLE.USER.role).pages
+    const commonPages = links.find(link => link.role === USER_ROLE.USER.type).pages
       .map((page, index) => ({ ...page, sidebarIndex: pagesByUserRole.length + index }));
     pagesByUserRole = [...pagesByUserRole].concat(commonPages);
 

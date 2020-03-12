@@ -38,7 +38,7 @@ class Sidebar extends Component {
   }
 
   isCommonPage(path) {
-    const page = links.find(link => link.role === USER_ROLE.USER.role).pages.find(page => page.path === path);
+    const page = links.find(link => link.role === USER_ROLE.USER.type).pages.find(page => page.path === path);
     if (page)
       return true;
     return false;

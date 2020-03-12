@@ -1,18 +1,18 @@
 export default {
   CASHIER: {
-    role: 'CASHIER',
+    type: 'CASHIER',
     name: 'Thu ngân'
   },
   IMPORTER: {
-    role: 'IMPORTER',
+    type: 'IMPORTER',
     name: 'Nhập hàng'
   },
   MANAGER: {
-    role: 'MANAGER',
+    rtype: 'MANAGER',
     name: 'Manager'
   },
   USER: {
-    role: 'USER',
+    type: 'USER',
     name: 'Người dùng'
   }
 }
