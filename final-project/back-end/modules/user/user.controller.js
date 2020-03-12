@@ -7,10 +7,11 @@ const UserModel = require('./user.model');
 const { LoginValidationSchema } = require('./validations/login.schema');
 const { AddUserValidationSchema } = require('./validations/add-user.schema');
 const { ChangePasswordValidationSchema } = require('./validations/change-password.schema');
-const { MESSAGE, CONTROLLER_NAME, PASSWORD_SALT_ROUNDS } = require('./user.constant');
+const { USER_ROLE, MESSAGE, CONTROLLER_NAME, PASSWORD_SALT_ROUNDS } = require('./user.constant');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const bcrypt = require('bcrypt');
+const { checkUserPermisson } = require('./user.service');
 
 const login = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::login::was called`);
@@ -40,18 +41,14 @@ const login = async (req, res, next) => {
       });
     }
 
+    const loggedInUser = JSON.parse(JSON.stringify(user));
+    delete loggedInUser.password;
+
     logger.info(`${CONTROLLER_NAME}::login::success`);
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
       data: {
-        user: {
-          _id: user._id,
-          role: user.role,
-          fullname: user.fullname,
-          email: user.email,
-          phone: user.phone,
-          avatar: user.avatar
-        },
+        user: loggedInUser,
         meta: { token: jwt.sign({ _id: user._id }, config.get('jwt').secret) },
       },
       messages: [MESSAGE.SUCCESS.LOGIN_SUCCESS]
@@ -70,32 +67,55 @@ const addUser = async (req, res, next) => {
       return responseUtil.joiValidationResponse(error, res);
     }
 
-    const newUserInfo = JSON.parse(JSON.stringify(req.body));
-    const duplicatedUser = await UserModel.findOne({ username: newUserInfo.username });
+    const { fromUser } = req;
+    const isManager = await checkUserPermisson(fromUser._id, USER_ROLE.MANAGER.type);
+    if (!isManager) {
+      logger.info(`${CONTROLLER_NAME}::addUser::permission denied`);
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        status: HttpStatus.UNAUTHORIZED,
+        errors: [MESSAGE.ERROR.PERMISSION_DENIED]
+      });
+    }
 
+    const newUserInfo = req.body;
+    const isValidRole = USER_ROLE[newUserInfo.role] !== undefined;
+    if (!isValidRole) {
+      logger.info(`${CONTROLLER_NAME}::addUser::invalid user role`);
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        status: HttpStatus.BAD_REQUEST,
+        errors: [MESSAGE.ERROR.INVALID_USER_ROLE]
+      });
+    }
+
+    const duplicatedUser = await UserModel.findOne({ $or: [{ username: newUserInfo.username }, { email: newUserInfo.email }] });
     if (duplicatedUser) {
       if (duplicatedUser.username === newUserInfo.username) {
-        logger.info(`${CONTROLLER_NAME}::addUser::username is duplicated`);
+        logger.info(`${CONTROLLER_NAME}::addUser::duplicated username`);
         return res.status(HttpStatus.BAD_REQUEST).json({
           status: HttpStatus.BAD_REQUEST,
           errors: [MESSAGE.ERROR.DUPLICATED_USERNAME]
         });
       }
 
-      logger.info(`${CONTROLLER_NAME}::addUser::email is duplicated`);
-      return res.status(HttpStatus.BAD_REQUEST).json({
-        status: HttpStatus.BAD_REQUEST,
-        errors: [MESSAGE.ERROR.DUPLICATED_EMAIL]
-      });
+      if (duplicatedUser.email === newUserInfo.email) {
+        logger.info(`${CONTROLLER_NAME}::addUser::duplicated email`);
+        return res.status(HttpStatus.BAD_REQUEST).json({
+          status: HttpStatus.BAD_REQUEST,
+          errors: [MESSAGE.ERROR.DUPLICATED_EMAIL]
+        });
+      }
     }
 
+    const hashedPassword = await bcrypt.hash(newUserInfo.password, PASSWORD_SALT_ROUNDS);
+    newUserInfo.password = hashedPassword;
     const newUser = new UserModel(newUserInfo);
     await newUser.save();
+    delete newUserInfo.password;
 
     logger.info(`${CONTROLLER_NAME}::addUser::a new user was added`);
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
-      data: { user: newUser },
+      data: { user: newUserInfo },
       messages: [MESSAGE.SUCCESS.ADD_USER_SUCCESS]
     });
   } catch (error) {
