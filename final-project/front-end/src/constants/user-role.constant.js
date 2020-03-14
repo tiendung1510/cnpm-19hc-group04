@@ -8,8 +8,8 @@ export default {
     name: 'Nhập hàng'
   },
   MANAGER: {
-    rtype: 'MANAGER',
-    name: 'Manager'
+    type: 'MANAGER',
+    name: 'Quản lý'
   },
   USER: {
     type: 'USER',

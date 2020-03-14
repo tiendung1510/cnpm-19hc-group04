@@ -50,8 +50,18 @@ class Sidebar extends Component {
 
     return (
       <Sider className="sidebar">
+        <div className="sidebar__header">
+          <img className="sidebar__header__company-logo" src={require('../../../assets/images/app-logo.png')} alt="logo" />
+          <div className="sidebar__header__company-brand">
+            <div className="sidebar__header__company-brand__name"><span>Mini Mart</span></div>
+            <div className="sidebar__header__company-brand__slogan"><span>Tiện Lợi mà Chất Lượng</span></div>
+          </div>
+        </div>
         <UserInfo user={user} />
-        <Menu theme='light' mode='inline' selectedKeys={[sidebarSelectedIndex ? sidebarSelectedIndex.toString() : '0']}>
+        <Menu
+          theme='light'
+          mode='inline'
+          selectedKeys={[sidebarSelectedIndex ? sidebarSelectedIndex.toString() : '0']}>
           {pagesByUserRole.map((page, pageIndex) => {
             const Page = { Icon: page.icon };
             return (

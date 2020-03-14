@@ -3,15 +3,16 @@
   height: 60px;
   box-sizing: border-box;
   padding: 12px;
-  padding-left: 36px;
+  padding-left: 24px;
   background: white;
+  border: 1px solid #eee;
 
   .__page-title {
-    color: #ff8220;
+    color: #ff7420;
     font-size: 16px;
 
     .__page-title__text {
-      margin-left: 10px;
+      margin-left: 14px;
     }
   }
 

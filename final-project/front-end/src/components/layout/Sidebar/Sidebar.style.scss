@@ -5,29 +5,60 @@
   position: fixed;
   left: 0;
   background: white;
-}
+  box-sizing: border-box;
+  border-right: 1px solid #eee;
 
-.ant-menu-item {
-  color: rgba(0, 0, 0, 0.8) !important;
-  font-size: 12px !important;
-}
+  .sidebar__header {
+    height: 60px;
+    background: #ff7420;
+    padding: 20px;
+    display: flex;
+    align-items: center;
 
-.ant-menu-item-selected {
-  background: #fff6e6 !important;
-}
+    .sidebar__header__company-logo {
+      width: 18px;
+      margin-right: 7px;
+    }
 
-.ant-menu-vertical .ant-menu-item::after,
-.ant-menu-vertical-left .ant-menu-item::after,
-.ant-menu-vertical-right .ant-menu-item::after,
-.ant-menu-inline .ant-menu-item::after {
-  border-right-color: #ff8220;
-}
+    .sidebar__header__company-brand {
+      .sidebar__header__company-brand__name {
+        font-size: 10px;
+        letter-spacing: 2px;
+        color: white;
+        font-weight: bold;
+      }
 
-.ant-menu-root.ant-menu-vertical,
-.ant-menu-root.ant-menu-vertical-left,
-.ant-menu-root.ant-menu-vertical-right,
-.ant-menu-root.ant-menu-inline {
-  background: transparent;
-  width: 201px !important;
-  padding-right: 2px;
+      .sidebar__header__company-brand__slogan {
+        font-size: 7px;
+        font-style: italic;
+        margin-top: -3px;
+        color: white;
+      }
+    }
+  }
+
+  .ant-menu-item {
+    color: rgba(0, 0, 0, 0.8) !important;
+    font-size: 12px !important;
+  }
+
+  .ant-menu-item-selected {
+    background: #fff6e6 !important;
+  }
+
+  .ant-menu-vertical .ant-menu-item::after,
+  .ant-menu-vertical-left .ant-menu-item::after,
+  .ant-menu-vertical-right .ant-menu-item::after,
+  .ant-menu-inline .ant-menu-item::after {
+    border-right-color: #ff7420;
+  }
+
+  .ant-menu-root.ant-menu-vertical,
+  .ant-menu-root.ant-menu-vertical-left,
+  .ant-menu-root.ant-menu-vertical-right,
+  .ant-menu-root.ant-menu-inline {
+    background: transparent;
+    width: 201px !important;
+    padding-right: 2px;
+  }
 }

@@ -1,16 +1,9 @@
 .main {
   .__content {
-    margin: 12px;
-    overflow: initial;
+    overflow: hidden;
 
     .__content__inner {
-      padding: 24px;
       background: #fff;
-      min-height: 600px;
     }
-  }
-
-  .__footer {
-    text-align: center;
   }
 }

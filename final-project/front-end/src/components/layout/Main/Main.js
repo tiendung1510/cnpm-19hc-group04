@@ -11,7 +11,7 @@ import USER_ROLE from '../../../constants/user-role.constant';
 import * as actions from '../../../redux/actions';
 import { connect } from 'react-redux';
 
-const { Footer, Content } = Layout;
+const { Content } = Layout;
 
 class Main extends Component {
   cookies;
@@ -79,9 +79,6 @@ class Main extends Component {
                 {renderContents()}
               </div>
             </Content>
-            <Footer className="__footer">
-              Mini Mart &copy;2020 All right reserved.
-            </Footer>
           </Layout>
         </Layout>
       </div>
