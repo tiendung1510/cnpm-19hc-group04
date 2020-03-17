@@ -5,7 +5,8 @@ module.exports = {
       GET_SUPPLIERS_SUCCESS: 'Lấy danh sách nhà cung cấp thành công'
     },
     ERROR: {
-      SUPPLIER_NOT_FOUND: 'Không tìm thấy nhà cung cấp'
+      SUPPLIER_NOT_FOUND: 'Không tìm thấy nhà cung cấp',
+      DUPLICATED_SUPPLIER: 'Nhà cung cấp đã tồn tại'
     }
   },
   CONTROLLER_NAME: 'SupplierController'

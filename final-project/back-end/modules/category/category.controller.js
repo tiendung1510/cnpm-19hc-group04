@@ -63,7 +63,11 @@ const getCategories = async (req, res, next) => {
       });
     }
 
-    const categories = await CategoryModel.find({});
+    const categories = await CategoryModel.find({})
+      .populate({
+        path: 'products',
+        select: '-category'
+      });
 
     logger.info(`${CONTROLLER_NAME}::getCategories::success`);
     return res.status(HttpStatus.OK).json({

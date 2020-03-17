@@ -15,7 +15,7 @@ const supplierSchema = new Schema(
       type: String,
       default: null
     },
-    products: [{ type: Schema.Types.ObjectId, ref: 'Products' }]
+    products: [{ type: Schema.Types.ObjectId, ref: 'ProductModel' }]
   },
   { timestamps: true }
 );

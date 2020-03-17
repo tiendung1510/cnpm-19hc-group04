@@ -5,8 +5,8 @@ const AddProductValidationSchema = Joi.object().keys({
   image: Joi.string(),
   price: Joi.number(),
   availableQuantity: Joi.number(),
-  categoryID: Joi.string().required(),
-  supplierID: Joi.string().required()
+  category: Joi.string().required(),
+  supplier: Joi.string().required()
 });
 
 module.exports = {

@@ -19,9 +19,13 @@ const productSchema = new Schema(
       type: Number,
       default: 0
     },
-    categoryID: {
+    category: {
       type: Schema.Types.ObjectId,
-      ref: 'Categories'
+      ref: 'CategoryModel'
+    },
+    supplier: {
+      type: Schema.Types.ObjectId,
+      ref: 'SupplierModel'
     }
   },
   { timestamps: true }

@@ -13,7 +13,7 @@ const { USER_ROLE, USER_MESSAGE, CONTROLLER_NAME, PASSWORD_SALT_ROUNDS } = requi
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const bcrypt = require('bcrypt');
-const { checkUserPermisson, mapUserBasicInfo } = require('./user.service');
+const { checkUserPermisson, getCustomUserInfo } = require('./user.service');
 
 const login = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::login::was called`);
@@ -47,7 +47,7 @@ const login = async (req, res, next) => {
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
       data: {
-        user: mapUserBasicInfo(user),
+        user: getCustomUserInfo(user),
         meta: { token: jwt.sign({ _id: user._id }, config.get('jwt').secret) },
       },
       messages: [USER_MESSAGE.SUCCESS.LOGIN_SUCCESS]
@@ -114,7 +114,7 @@ const addUser = async (req, res, next) => {
     logger.info(`${CONTROLLER_NAME}::addUser::a new user was added`);
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
-      data: { user: mapUserBasicInfo(newUser) },
+      data: { user: getCustomUserInfo(newUser) },
       messages: [USER_MESSAGE.SUCCESS.ADD_USER_SUCCESS]
     });
   } catch (error) {
@@ -193,7 +193,7 @@ const updateProfile = async (req, res, next) => {
 
     logger.info(`${CONTROLLER_NAME}::updateProfile::an user was updated`);
     return res.status(HttpStatus.OK).json({
-      data: { user: mapUserBasicInfo(updatedUser) },
+      data: { user: getCustomUserInfo(updatedUser) },
       messages: [USER_MESSAGE.SUCCESS.UPDATE_PROFILE_SUCCESS]
     });
   } catch (error) {

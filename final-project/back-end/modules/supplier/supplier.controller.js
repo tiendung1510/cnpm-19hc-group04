@@ -28,6 +28,14 @@ const addSupplier = async (req, res, next) => {
     }
 
     const supplierInfo = req.body;
+    const duplicatedSupplier = await SupplierModel.findOne({ name: supplierInfo.name });
+    if (duplicatedSupplier) {
+      logger.info(`${CONTROLLER_NAME}::addSupplier::duplicated name`)
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        errors: [SUPPLIER_MESSAGE.ERROR.DUPLICATED_SUPPLIER]
+      })
+    }
+
     const newSupplier = new SupplierModel(supplierInfo);
     await newSupplier.save();
 
@@ -55,7 +63,11 @@ const getSuppliers = async (req, res, next) => {
       });
     }
 
-    const suppliers = await SupplierModel.find({});
+    const suppliers = await SupplierModel.find({})
+      .populate({
+        path: 'products',
+        select: '-supplier'
+      });
 
     logger.info(`${CONTROLLER_NAME}::getSuppliers::success`);
     return res.status(HttpStatus.OK).json({
