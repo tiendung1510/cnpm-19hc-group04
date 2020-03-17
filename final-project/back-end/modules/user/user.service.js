@@ -5,6 +5,14 @@ const checkUserPermisson = async (_id, role) => {
   return userByRole ? true : false;
 }
 
+const mapUserBasicInfo = (user) => {
+  const basicInfo = JSON.parse(JSON.stringify(user));
+  delete basicInfo.username;
+  delete basicInfo.password;
+  return basicInfo;
+}
+
 module.exports = {
-  checkUserPermisson
+  checkUserPermisson,
+  mapUserBasicInfo
 }

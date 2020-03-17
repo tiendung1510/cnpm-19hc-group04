@@ -1,16 +1,20 @@
 module.exports = {
   USER_ROLE: {
     CASHIER: {
-      type: 'CASHIER'
+      type: 'CASHIER',
+      salaryRate: 1
     },
     IMPORTER: {
-      type: 'IMPORTER'
+      type: 'IMPORTER',
+      salaryRate: 1.5
     },
     MANAGER: {
-      type: 'MANAGER'
+      type: 'MANAGER',
+      salaryRate: 2
     }
   },
-  MESSAGE: {
+  BASIC_SALARY: 5000000,
+  USER_MESSAGE: {
     ERROR: {
       USER_NOT_FOUND: 'Tài khoản hoặc mật khẩu không đúng',
       DUPLICATED_USERNAME: 'Tên người dùng đã được sử dụng',
@@ -24,7 +28,8 @@ module.exports = {
       LOGIN_SUCCESS: 'Đăng nhập thành công',
       ADD_USER_SUCCESS: 'Thêm người dùng thành công',
       GET_USERS_SUCCESS: 'Lấy danh sách người dùng thành công',
-      CHANGE_PASSWORD_SUCCESS: 'Đổi mật khẩu thành công'
+      CHANGE_PASSWORD_SUCCESS: 'Đổi mật khẩu thành công',
+      UPDATE_PROFILE_SUCCESS: 'Cập nhật thông tin thành công'
     }
   },
   CONTROLLER_NAME: 'UserController',

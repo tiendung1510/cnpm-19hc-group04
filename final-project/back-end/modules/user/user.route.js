@@ -7,5 +7,6 @@ router.get('/', checkTokenMiddleware, UserController.getUsers);
 router.post('/login', UserController.login);
 router.post('/', checkTokenMiddleware, UserController.addUser);
 router.put('/change-password', checkTokenMiddleware, UserController.changePassword);
+router.put('/:updatedUserID', checkTokenMiddleware, UserController.updateProfile);
 
 module.exports = router;

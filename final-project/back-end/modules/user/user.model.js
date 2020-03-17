@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-const USER_ROLE = require('./user.constant').USER_ROLE;
 const { Schema } = mongoose;
+const USER_ROLE = require('./user.constant').USER_ROLE;
+
 const userSchema = new Schema(
   {
     role: {
@@ -18,11 +19,11 @@ const userSchema = new Schema(
     },
     fullname: {
       type: String,
-      required: true
+      default: null
     },
     email: {
       type: String,
-      required: true
+      default: null
     },
     phone: {
       type: String,
@@ -39,13 +40,14 @@ const userSchema = new Schema(
     avatar: {
       type: String,
       default: null
+    },
+    salaryRate: {
+      type: Number,
+      default: 1
     }
   },
   { timestamps: true }
 );
-const UserModel = mongoose.model(
-  'UserModel',
-  userSchema,
-  'Users'
-)
+
+const UserModel = mongoose.model('UserModel', userSchema, 'Users');
 module.exports = UserModel;

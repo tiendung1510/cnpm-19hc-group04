@@ -3,15 +3,17 @@ const logger = log4js.getLogger('Controllers');
 const Joi = require('@hapi/joi');
 const responseUtil = require('../../utils/response.util');
 const HttpStatus = require("http-status-codes");
+const mongoose = require('mongoose');
 const UserModel = require('./user.model');
 const { LoginValidationSchema } = require('./validations/login.schema');
 const { AddUserValidationSchema } = require('./validations/add-user.schema');
+const { UpdateProfileValidationSchema } = require('./validations/update-profile.schema');
 const { ChangePasswordValidationSchema } = require('./validations/change-password.schema');
-const { USER_ROLE, MESSAGE, CONTROLLER_NAME, PASSWORD_SALT_ROUNDS } = require('./user.constant');
+const { USER_ROLE, USER_MESSAGE, CONTROLLER_NAME, PASSWORD_SALT_ROUNDS } = require('./user.constant');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const bcrypt = require('bcrypt');
-const { checkUserPermisson } = require('./user.service');
+const { checkUserPermisson, mapUserBasicInfo } = require('./user.service');
 
 const login = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::login::was called`);
@@ -28,7 +30,7 @@ const login = async (req, res, next) => {
       logger.info(`${CONTROLLER_NAME}::login::wrong username`);
       return res.status(HttpStatus.NOT_FOUND).json({
         status: HttpStatus.NOT_FOUND,
-        errors: [MESSAGE.ERROR.USER_NOT_FOUND]
+        errors: [USER_MESSAGE.ERROR.USER_NOT_FOUND]
       });
     }
 
@@ -37,21 +39,18 @@ const login = async (req, res, next) => {
       logger.info(`${CONTROLLER_NAME}::login::wrong password`);
       return res.status(HttpStatus.NOT_FOUND).json({
         status: HttpStatus.NOT_FOUND,
-        errors: [MESSAGE.ERROR.USER_NOT_FOUND]
+        errors: [USER_MESSAGE.ERROR.USER_NOT_FOUND]
       });
     }
-
-    const loggedInUser = JSON.parse(JSON.stringify(user));
-    delete loggedInUser.password;
 
     logger.info(`${CONTROLLER_NAME}::login::success`);
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
       data: {
-        user: loggedInUser,
+        user: mapUserBasicInfo(user),
         meta: { token: jwt.sign({ _id: user._id }, config.get('jwt').secret) },
       },
-      messages: [MESSAGE.SUCCESS.LOGIN_SUCCESS]
+      messages: [USER_MESSAGE.SUCCESS.LOGIN_SUCCESS]
     });
   } catch (error) {
     logger.error('UserController::login::error', error);
@@ -73,7 +72,7 @@ const addUser = async (req, res, next) => {
       logger.info(`${CONTROLLER_NAME}::addUser::permission denied`);
       return res.status(HttpStatus.BAD_REQUEST).json({
         status: HttpStatus.UNAUTHORIZED,
-        errors: [MESSAGE.ERROR.PERMISSION_DENIED]
+        errors: [USER_MESSAGE.ERROR.PERMISSION_DENIED]
       });
     }
 
@@ -83,7 +82,7 @@ const addUser = async (req, res, next) => {
       logger.info(`${CONTROLLER_NAME}::addUser::invalid user role`);
       return res.status(HttpStatus.BAD_REQUEST).json({
         status: HttpStatus.BAD_REQUEST,
-        errors: [MESSAGE.ERROR.INVALID_USER_ROLE]
+        errors: [USER_MESSAGE.ERROR.INVALID_USER_ROLE]
       });
     }
 
@@ -93,7 +92,7 @@ const addUser = async (req, res, next) => {
         logger.info(`${CONTROLLER_NAME}::addUser::duplicated username`);
         return res.status(HttpStatus.BAD_REQUEST).json({
           status: HttpStatus.BAD_REQUEST,
-          errors: [MESSAGE.ERROR.DUPLICATED_USERNAME]
+          errors: [USER_MESSAGE.ERROR.DUPLICATED_USERNAME]
         });
       }
 
@@ -101,22 +100,22 @@ const addUser = async (req, res, next) => {
         logger.info(`${CONTROLLER_NAME}::addUser::duplicated email`);
         return res.status(HttpStatus.BAD_REQUEST).json({
           status: HttpStatus.BAD_REQUEST,
-          errors: [MESSAGE.ERROR.DUPLICATED_EMAIL]
+          errors: [USER_MESSAGE.ERROR.DUPLICATED_EMAIL]
         });
       }
     }
 
     const hashedPassword = await bcrypt.hash(newUserInfo.password, PASSWORD_SALT_ROUNDS);
     newUserInfo.password = hashedPassword;
+    newUserInfo.salaryRate = USER_ROLE[newUserInfo.role].salaryRate;
     const newUser = new UserModel(newUserInfo);
     await newUser.save();
-    delete newUserInfo.password;
 
     logger.info(`${CONTROLLER_NAME}::addUser::a new user was added`);
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
-      data: { user: newUserInfo },
-      messages: [MESSAGE.SUCCESS.ADD_USER_SUCCESS]
+      data: { user: mapUserBasicInfo(newUser) },
+      messages: [USER_MESSAGE.SUCCESS.ADD_USER_SUCCESS]
     });
   } catch (error) {
     logger.error(`${CONTROLLER_NAME}::addUser::error`, error);
@@ -145,10 +144,60 @@ const getUsers = async (req, res, next) => {
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
       data: { users },
-      messages: [MESSAGE.SUCCESS.GET_USERS_SUCCESS]
+      messages: [USER_MESSAGE.SUCCESS.GET_USERS_SUCCESS]
     });
   } catch (error) {
     logger.error(`${CONTROLLER_NAME}::addUser::error`, error);
+    return next(error);
+  }
+}
+
+const updateProfile = async (req, res, next) => {
+  logger.info(`${CONTROLLER_NAME}::updateProfile::was called`);
+  try {
+    const { error } = Joi.validate(req.body, UpdateProfileValidationSchema);
+    if (error) {
+      return responseUtil.joiValidationResponse(error, res);
+    }
+
+    const { fromUser } = req;
+    const isManager = await checkUserPermisson(fromUser._id, USER_ROLE.MANAGER.type);
+    if (!isManager) {
+      logger.info(`${CONTROLLER_NAME}::updateProfile::permission denied`);
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        status: HttpStatus.UNAUTHORIZED,
+        errors: [USER_MESSAGE.ERROR.PERMISSION_DENIED]
+      });
+    }
+
+    const updatedUserInfo = req.body;
+    if (updatedUserInfo.role) {
+      const isValidRole = USER_ROLE[updatedUserInfo.role] !== undefined;
+      if (!isValidRole) {
+        logger.info(`${CONTROLLER_NAME}::updateProfile::invalid user role`);
+        return res.status(HttpStatus.BAD_REQUEST).json({
+          status: HttpStatus.BAD_REQUEST,
+          errors: [USER_MESSAGE.ERROR.INVALID_USER_ROLE]
+        });
+      }
+    }
+
+    const { updatedUserID } = req.params;
+    const updatedUser = await UserModel.findOne({ _id: mongoose.Types.ObjectId(updatedUserID) });
+    
+    for (key in updatedUserInfo)
+      updatedUser[key] = updatedUserInfo[key];
+
+    updatedUser.salaryRate = USER_ROLE[updatedUserInfo.role].salaryRate;
+    await updatedUser.save();
+
+    logger.info(`${CONTROLLER_NAME}::updateProfile::an user was updated`);
+    return res.status(HttpStatus.OK).json({
+      data: { user: mapUserBasicInfo(updatedUser) },
+      messages: [USER_MESSAGE.SUCCESS.UPDATE_PROFILE_SUCCESS]
+    });
+  } catch (error) {
+    logger.error(`${CONTROLLER_NAME}::updateProfile::error`);
     return next(error);
   }
 }
@@ -169,7 +218,7 @@ const changePassword = async (req, res, next) => {
       logger.info(`${CONTROLLER_NAME}::changePassword::confirmed password does not match`);
       return res.status(HttpStatus.BAD_REQUEST).json({
         status: HttpStatus.BAD_REQUEST,
-        errors: [MESSAGE.ERROR.CONFIRMED_NEW_PASSWORD_NOT_MATCHED]
+        errors: [USER_MESSAGE.ERROR.CONFIRMED_NEW_PASSWORD_NOT_MATCHED]
       });
     }
 
@@ -178,20 +227,20 @@ const changePassword = async (req, res, next) => {
       logger.info(`${CONTROLLER_NAME}::changePassword::wrong current password`);
       return res.status(HttpStatus.NOT_FOUND).json({
         status: HttpStatus.NOT_FOUND,
-        errors: [MESSAGE.ERROR.WRONG_CURRENT_PASSWORD]
+        errors: [USER_MESSAGE.ERROR.WRONG_CURRENT_PASSWORD]
       });
     }
 
     const hashedNewPassword = await bcrypt.hash(newPassword, PASSWORD_SALT_ROUNDS);
     user.password = hashedNewPassword;
-    user.save();
+    await user.save();
 
     logger.info(`${CONTROLLER_NAME}::changePassword::success`);
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
       data: {},
-      messages: [MESSAGE.SUCCESS.CHANGE_PASSWORD_SUCCESS]
-    })
+      messages: [USER_MESSAGE.SUCCESS.CHANGE_PASSWORD_SUCCESS]
+    });
   } catch (error) {
     logger.error(`${CONTROLLER_NAME}::changePassword::error`, error);
     return next(error);
@@ -202,5 +251,6 @@ module.exports = {
   login,
   addUser,
   getUsers,
+  updateProfile,
   changePassword
 };

@@ -16,14 +16,12 @@ module.exports = async (req, res, next) => {
   try {
     let userInfo = jwt.verify(token, config.get('jwt').secret);
     const user = await UserModel.findOne({ _id: userInfo._id });
-
     if (!user) {
       return res.status(HttpStatus.UNAUTHORIZED).json({
         status: HttpStatus.UNAUTHORIZED,
         errors: [GlobalConstant.MESSAGE.ERROR.INVALID_TOKEN]
       });
     }
-
     req.fromUser = user;
     return next();
   } catch (error) {
