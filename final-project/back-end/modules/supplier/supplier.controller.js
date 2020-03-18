@@ -21,7 +21,7 @@ const addSupplier = async (req, res, next) => {
     const isImporter = await checkUserPermisson(fromUser._id, USER_ROLE.IMPORTER.type);
     if (!isImporter) {
       logger.info(`${CONTROLLER_NAME}::addSupplier::permission denied`);
-      return res.status(HttpStatus.BAD_REQUEST).json({
+      return res.status(HttpStatus.UNAUTHORIZED).json({
         status: HttpStatus.UNAUTHORIZED,
         errors: [USER_MESSAGE.ERROR.PERMISSION_DENIED]
       });
@@ -32,6 +32,7 @@ const addSupplier = async (req, res, next) => {
     if (duplicatedSupplier) {
       logger.info(`${CONTROLLER_NAME}::addSupplier::duplicated name`)
       return res.status(HttpStatus.BAD_REQUEST).json({
+        status: HttpStatus.BAD_REQUEST,
         errors: [SUPPLIER_MESSAGE.ERROR.DUPLICATED_SUPPLIER]
       })
     }
@@ -41,6 +42,7 @@ const addSupplier = async (req, res, next) => {
 
     logger.info(`${CONTROLLER_NAME}::addSupplier::a new supplier was added`);
     return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
       data: { supplier: newSupplier },
       messages: [SUPPLIER_MESSAGE.SUCCESS.ADD_SUPPLIER_SUCCESS]
     })
@@ -57,20 +59,17 @@ const getSuppliers = async (req, res, next) => {
     const isCashier = await checkUserPermisson(fromUser._id, USER_ROLE.CASHIER.type);
     if (isCashier) {
       logger.info(`${CONTROLLER_NAME}::getSuppliers::permission denied`);
-      return res.status(HttpStatus.BAD_REQUEST).json({
+      return res.status(HttpStatus.UNAUTHORIZED).json({
         status: HttpStatus.UNAUTHORIZED,
         errors: [USER_MESSAGE.ERROR.PERMISSION_DENIED]
       });
     }
 
-    const suppliers = await SupplierModel.find({})
-      .populate({
-        path: 'products',
-        select: '-supplier'
-      });
+    const suppliers = await SupplierModel.find({}).populate('products', '-supplier');
 
     logger.info(`${CONTROLLER_NAME}::getSuppliers::success`);
     return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
       data: { suppliers },
       messages: [SUPPLIER_MESSAGE.SUCCESS.GET_SUPPLIERS_SUCCESS]
     })

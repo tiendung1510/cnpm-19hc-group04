@@ -2,14 +2,14 @@ const UserModel = require('../modules/user/user.model');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const HttpStatus = require('http-status-codes');
-const GlobalConstant = require('../constant/global.constant');
+const GLOBAL_CONSTANT = require('../constant/global.constant');
 
 module.exports = async (req, res, next) => {
-  const token = req.headers[GlobalConstant.TOKEN_NAME] || req.query[GlobalConstant.TOKEN_NAME];
+  const token = req.headers[GLOBAL_CONSTANT.TOKEN_NAME] || req.query[GLOBAL_CONSTANT.TOKEN_NAME];
   if (!token) {
     return res.status(HttpStatus.UNAUTHORIZED).json({
       status: HttpStatus.UNAUTHORIZED,
-      errors: [GlobalConstant.MESSAGE.ERROR.INVALID_TOKEN]
+      errors: [GLOBAL_CONSTANT.MESSAGE.ERROR.PERMISSION_DENIED]
     });
   }
 
@@ -19,7 +19,7 @@ module.exports = async (req, res, next) => {
     if (!user) {
       return res.status(HttpStatus.UNAUTHORIZED).json({
         status: HttpStatus.UNAUTHORIZED,
-        errors: [GlobalConstant.MESSAGE.ERROR.INVALID_TOKEN]
+        errors: [GLOBAL_CONSTANT.MESSAGE.ERROR.PERMISSION_DENIED]
       });
     }
     req.fromUser = user;
@@ -27,7 +27,7 @@ module.exports = async (req, res, next) => {
   } catch (error) {
     return res.status(HttpStatus.UNAUTHORIZED).json({
       status: HttpStatus.UNAUTHORIZED,
-      errors: [GlobalConstant.MESSAGE.ERROR.INVALID_TOKEN]
+      errors: [GLOBAL_CONSTANT.MESSAGE.ERROR.PERMISSION_DENIED]
     });
   }
 }

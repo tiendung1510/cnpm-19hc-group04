@@ -21,7 +21,7 @@ const addCategory = async (req, res, next) => {
     const isImporter = await checkUserPermisson(fromUser._id, USER_ROLE.IMPORTER.type);
     if (!isImporter) {
       logger.info(`${CONTROLLER_NAME}::addCategory::permission denied`);
-      return res.status(HttpStatus.BAD_REQUEST).json({
+      return res.status(HttpStatus.UNAUTHORIZED).json({
         status: HttpStatus.UNAUTHORIZED,
         errors: [USER_MESSAGE.ERROR.PERMISSION_DENIED]
       });
@@ -32,6 +32,7 @@ const addCategory = async (req, res, next) => {
     if (duplicatedCategory) {
       logger.info(`${CONTROLLER_NAME}::addCategory::duplicated name`);
       return res.status(HttpStatus.BAD_REQUEST).json({
+        status: HttpStatus.BAD_REQUEST,
         errors: [CATEGORY_MESSAGE.ERROR.DUPLICATED_CATEGORY]
       })
     }
@@ -41,6 +42,7 @@ const addCategory = async (req, res, next) => {
 
     logger.info(`${CONTROLLER_NAME}::addCategory::a new category was added`);
     return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
       data: { category: newCategory },
       messages: [CATEGORY_MESSAGE.SUCCESS.ADD_CATEGORY_SUCCESS]
     })
@@ -57,20 +59,17 @@ const getCategories = async (req, res, next) => {
     const isCashier = await checkUserPermisson(fromUser._id, USER_ROLE.CASHIER.type);
     if (isCashier) {
       logger.info(`${CONTROLLER_NAME}::getCategories::permission denied`);
-      return res.status(HttpStatus.BAD_REQUEST).json({
+      return res.status(HttpStatus.UNAUTHORIZED).json({
         status: HttpStatus.UNAUTHORIZED,
         errors: [USER_MESSAGE.ERROR.PERMISSION_DENIED]
       });
     }
 
-    const categories = await CategoryModel.find({})
-      .populate({
-        path: 'products',
-        select: '-category'
-      });
+    const categories = await CategoryModel.find({}).populate('products', '-category');
 
     logger.info(`${CONTROLLER_NAME}::getCategories::success`);
     return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
       data: { categories },
       messages: [CATEGORY_MESSAGE.SUCCESS.GET_CATEGORIES_SUCCESS]
     })

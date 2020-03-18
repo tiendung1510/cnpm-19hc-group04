@@ -10,8 +10,7 @@ const AddUserValidationSchema = Joi.object().keys({
   address: Joi.string(),
   dateOfBirth: Joi.string(),
   avatar: Joi.string()
-}
-);
+});
 
 module.exports = {
   AddUserValidationSchema
