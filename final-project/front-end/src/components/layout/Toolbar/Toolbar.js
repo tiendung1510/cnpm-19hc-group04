@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Avatar, Dropdown, Menu } from 'antd';
-import { LogoutOutlined } from '@ant-design/icons';
+import { LogoutOutlined, CaretDownFilled } from '@ant-design/icons';
 import { withCookies } from 'react-cookie';
 import { withRouter } from 'react-router-dom';
 import { COOKIE_NAMES } from '../../../constants/cookie-name.constant';
@@ -38,23 +38,25 @@ class Toolbar extends Component {
     return (
       <Row className="toolbar" justify="start" align="middle">
         <Col className="__page-title" span={18}>
-          <CurrentPage.Icon />
-          <span className="__page-title__text">{currentPageTitle}</span>
+          <Row align="center">
+            <Col span={1}><div className="__page-title__icon"><CurrentPage.Icon /></div></Col>
+            <Col span={23}><span className="__page-title__text">{currentPageTitle}</span></Col>
+          </Row>
         </Col>
         <Col span={6}>
           <Row className="__account" justify="center" align="middle">
-            <Col span={14}>
+            <Col span={13}>
               More user features here...
             </Col>
-            <Col span={10}>
+            <Col span={11}>
               <Dropdown overlay={
                 <Menu onClick={e => this.handleSelectMenuItem(e.key)}>
                   {(avatarMenuItems || []).map((item) => (
-                    <Menu.Item key={item.key + '***' + item.path} 
-                    onClick={() => {
-                      this.props.setCurrentPageTitle(item.title, item.icon);
-                      this.props.setSidebarSelectedIndex(item.sidebarIndex);
-                    }}>
+                    <Menu.Item key={item.key + '***' + item.path}
+                      onClick={() => {
+                        this.props.setCurrentPageTitle(item.title, item.icon);
+                        this.props.setSidebarSelectedIndex(item.sidebarIndex);
+                      }}>
                       <item.icon />
                       {item.title}
                     </Menu.Item>
@@ -67,7 +69,12 @@ class Toolbar extends Component {
               } className="__account__avatar-menu">
                 <Row align="middle">
                   <Col span={7}><Avatar size="default" src={user.avatar} /></Col>
-                  <Col span={17}><span>{user.fullname || ''}</span></Col>
+                  <Col span={17}>
+                    <Row>
+                      <Col span={16}><span>{user.fullname || ''}</span></Col>
+                      <Col span={8}><CaretDownFilled /></Col>
+                    </Row>
+                  </Col>
                 </Row>
               </Dropdown>
             </Col>

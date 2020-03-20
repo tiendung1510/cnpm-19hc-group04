@@ -41,7 +41,7 @@ class Login extends Component {
       password: values.password
     };
 
-    const res = await (await fetch(API.login, {
+    const res = await (await fetch(API.User.login, {
       method: 'POST',
       body: JSON.stringify(params),
       headers: { 'Content-type': 'application/json; charset=UTF-8' }
@@ -69,7 +69,7 @@ class Login extends Component {
     return (
       <div className="container">
         <div className="dark-bg"></div>
-        <div className="login animated fadeIn">
+        <div className="login animated fadeInUp">
           <div className="__header">
             <img className="__company-logo" src={require('../../../../assets/images/app-logo.png')} alt="logo" />
             <div className="__company-brand">
@@ -84,7 +84,7 @@ class Login extends Component {
               </div>
             </Col>
             <Col span={13}>
-              <p className="__main-title">QUẢN LÝ SIÊU THỊ</p>
+              <p className="__main-title">QUẢN LÝ MINI MART</p>
               <Form
                 className="__form"
                 {...layout}
@@ -140,7 +140,13 @@ class Login extends Component {
           <p className="__footer">Mini Mart &copy;2020 All right reserved.</p>
         </div>
 
-        <svg className="wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ff8220" fillOpacity={1} d="M0,160L1440,0L1440,320L0,320Z" /></svg>
+        <svg className="wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+          <path fill="url(#my-cool-gradient)" fillOpacity={1} d="M0,160L1440,0L1440,320L0,320Z" />
+          <linearGradient id="my-cool-gradient" x2="1" y2="1">
+            <stop offset="0%" stopColor="#ff5858" />
+            <stop offset="100%" stopColor="#f09819" />
+          </linearGradient>
+        </svg>
 
       </div>
     )

@@ -86,13 +86,13 @@ export default [
         component: Reporting
       },
       {
-        title: 'Quản lý nhân sự',
+        title: 'Quản lý nhân viên',
         path: '/staffs',
         icon: TeamOutlined,
         component: StaffManagement
       },
       {
-        title: 'Phân công làm việc',
+        title: 'Phân ca làm việc',
         path: '/work-assignment',
         icon: FileDoneOutlined,
         component: WorkAssignment

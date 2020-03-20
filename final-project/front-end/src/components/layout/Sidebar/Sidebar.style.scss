@@ -1,3 +1,5 @@
+$primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+
 .sidebar {
   overflow: hidden;
   overflow-y: auto;
@@ -10,29 +12,28 @@
 
   .sidebar__header {
     height: 60px;
-    background: #ff7420;
-    padding: 20px;
+    padding: 20px 0 20px 20px;
     display: flex;
     align-items: center;
 
     .sidebar__header__company-logo {
-      width: 18px;
+      width: 26px;
       margin-right: 7px;
     }
 
     .sidebar__header__company-brand {
       .sidebar__header__company-brand__name {
-        font-size: 10px;
+        font-size: 14px;
         letter-spacing: 2px;
-        color: white;
+        color: orangered;
         font-weight: bold;
       }
 
       .sidebar__header__company-brand__slogan {
-        font-size: 7px;
+        font-size: 9px;
         font-style: italic;
         margin-top: -3px;
-        color: white;
+        color: gray;
       }
     }
   }
@@ -43,14 +44,19 @@
   }
 
   .ant-menu-item-selected {
-    background: #fff6e6 !important;
+    background: none !important;
+    background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%) !important;
+    color: white !important;
+    text-shadow: $primaryTextShadow;
+    border-top-right-radius: 24px;
+    border-bottom-right-radius: 24px;
   }
 
   .ant-menu-vertical .ant-menu-item::after,
   .ant-menu-vertical-left .ant-menu-item::after,
   .ant-menu-vertical-right .ant-menu-item::after,
   .ant-menu-inline .ant-menu-item::after {
-    border-right-color: #ff7420;
+    border-right: 0;
   }
 
   .ant-menu-root.ant-menu-vertical,

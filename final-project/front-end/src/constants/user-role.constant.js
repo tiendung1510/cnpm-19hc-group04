@@ -1,15 +1,15 @@
 export default {
   CASHIER: {
     type: 'CASHIER',
-    name: 'Thu ngân'
+    name: 'NV Thu ngân'
   },
   IMPORTER: {
     type: 'IMPORTER',
-    name: 'Nhập hàng'
+    name: 'NV Nhập hàng'
   },
   MANAGER: {
     type: 'MANAGER',
-    name: 'Quản lý'
+    name: 'Người quản lý'
   },
   USER: {
     type: 'USER',
