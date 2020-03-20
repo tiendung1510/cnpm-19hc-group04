@@ -14,6 +14,16 @@ module.exports = {
     }
   },
   BASIC_SALARY: 5000000,
+  SEX: {
+    MALE: {
+      name: 'Nam',
+      value: 1
+    },
+    FEMALE: {
+      name: 'Nữ',
+      value: 2
+    }
+  },
   USER_MESSAGE: {
     ERROR: {
       WRONG_USERNAME_OR_PASSWORD: 'Tài khoản hoặc mật khẩu không đúng',
@@ -23,7 +33,8 @@ module.exports = {
       WRONG_CURRENT_PASSWORD: 'Mật khẩu hiện tại không chính xác',
       INVALID_USER_ROLE: 'Quyền người dùng không hợp lệ',
       PERMISSION_DENIED: 'Không có quyền thao tác',
-      USER_NOT_FOUND: 'Không tìm thấy nhân viên'
+      USER_NOT_FOUND: 'Không tìm thấy nhân viên',
+      INVALID_USER_SEX: 'Giới tính không hợp lệ'
     },
     SUCCESS: {
       LOGIN_SUCCESS: 'Đăng nhập thành công',

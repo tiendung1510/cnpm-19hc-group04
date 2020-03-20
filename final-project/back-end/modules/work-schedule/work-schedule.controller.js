@@ -6,6 +6,8 @@ const HttpStatus = require("http-status-codes");
 const { WORK_SCHEDULE_MESSAGE, CONTROLLER_NAME } = require('./work-schedule.constant');
 const { AddWorkScheduleValidationSchema } = require('./validations/add-work-schedule.schema');
 const WorkScheduleModel = require('./work-schedule.model');
+const WorkShiftModel = require('../work-shift/work-shift.model');
+const WorkAssignmentModel = require('../work-assignment/work-assignment.model');
 
 const addWorkSchedule = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::addWorkSchedule::was called`);
@@ -49,8 +51,9 @@ const addWorkSchedule = async (req, res, next) => {
     const newWorkSchedule = new WorkScheduleModel(newWorkScheduleInfo);
     await newWorkSchedule.save();
 
-    logger.info(`${CONTROLLER_NAME}::addWorkSchedule::success`);
+    logger.info(`${CONTROLLER_NAME}::addWorkSchedule::a work schedule was added`);
     return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
       data: { workSchedule: newWorkSchedule },
       messages: [WORK_SCHEDULE_MESSAGE.SUCCESS.ADD_WORK_SCHEDULE_SUCCESS]
     })
@@ -63,9 +66,37 @@ const addWorkSchedule = async (req, res, next) => {
 const getWorkSchedules = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::getWorkSchedules::was called`);
   try {
-    const workSchedules = await WorkScheduleModel.find({}).populate('workShifts', '-workSchedule');
+    let workSchedules = await WorkScheduleModel.find({}).populate('workShifts', '-workSchedule');
+    workSchedules = await Promise.all(
+      workSchedules.map(async (workSchedule) => {
+        const _workSchedule = JSON.parse(JSON.stringify(workSchedule));
+
+        let workShifts = await WorkShiftModel.find({ workSchedule: _workSchedule._id })
+          .populate('workAssignments', '-workShift');
+
+        workShifts = await Promise.all(
+          workShifts.map(async (ws) => {
+            const _ws = JSON.parse(JSON.stringify(ws));
+            let workAssignments = await WorkAssignmentModel.find({ workShift: _ws._id })
+              .populate('assigner', '_id fullname avatar role');
+              
+            workAssignments = JSON.parse(JSON.stringify(workAssignments));
+            for(let wa of workAssignments)
+              delete wa.workShift;
+
+            _ws.workAssignments = workAssignments;
+            return _ws;
+          })
+        );
+
+        _workSchedule.workShifts = workShifts;
+        return _workSchedule;
+      })
+    );
+
     logger.info(`${CONTROLLER_NAME}::getWorkSchedules::was called`);
     return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
       data: { workSchedules },
       messages: [WORK_SCHEDULE_MESSAGE.SUCCESS.GET_WORK_SCHEDULES_SUCCESS]
     })

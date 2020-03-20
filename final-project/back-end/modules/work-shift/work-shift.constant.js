@@ -6,7 +6,8 @@ module.exports = {
     },
     ERROR: {
       DUPLICATED_WORK_SHIFT: 'Ca làm việc đã tồn tại',
-      INVALID_WORK_SHIFT_TIME_RANGE: 'Khoảng thời gian của ca làm việc không hợp lệ'
+      INVALID_WORK_SHIFT_TIME_RANGE: 'Khoảng thời gian của ca làm việc không hợp lệ',
+      WORK_SHIFT_NOT_FOUND: 'Không tìm thấy ca làm việc'
     }
   },
   CONTROLLER_NAME: 'WorkShiftController'

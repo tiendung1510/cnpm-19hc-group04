@@ -24,7 +24,7 @@ const addProduct = async (req, res, next) => {
     }
 
     const productInfo = req.body;
-    const category = await CategoryModel.findOne({ _id: mongoose.Types.ObjectId(productInfo.category) });
+    const category = await CategoryModel.findOne({ _id: mongoose.Types.ObjectId(productInfo.categoryID) });
     if (!category) {
       logger.info(`${CONTROLLER_NAME}::addProduct::category not found`);
       return res.status(HttpStatus.NOT_FOUND).json({
@@ -33,7 +33,7 @@ const addProduct = async (req, res, next) => {
       });
     }
 
-    const supplier = await SupplierModel.findOne({ _id: mongoose.Types.ObjectId(productInfo.supplier) });
+    const supplier = await SupplierModel.findOne({ _id: mongoose.Types.ObjectId(productInfo.supplierID) });
     if (!supplier) {
       logger.info(`${CONTROLLER_NAME}::addProduct::supplier not found`);
       return res.status(HttpStatus.NOT_FOUND).json({
@@ -66,6 +66,11 @@ const addProduct = async (req, res, next) => {
         errors: [PRODUCT_MESSAGE.ERROR.INVALID_PRODUCT_PRICE]
       });
     }
+
+    productInfo.category = productInfo.categoryID;
+    productInfo.supplier = productInfo.supplierID;
+    delete productInfo.categoryID;
+    delete productInfo.supplierID;
 
     const newProduct = new ProductModel(productInfo);
     await newProduct.save();

@@ -5,15 +5,18 @@ const workAssigmentSchema = new Schema(
   {
     workShift: {
       type: Schema.Types.ObjectId,
-      href: 'WorkShiftModel'
+      ref: 'WorkShiftModel',
+      required: true
     },
     assigner: {
       type: Schema.Types.ObjectId,
-      href: 'UserModel'
+      ref: 'UserModel',
+      required: true
     },
     manager: {
       type: Schema.Types.ObjectId,
-      href: 'UserModel'
+      ref: 'UserModel',
+      required: true
     },
     description: {
       type: String,

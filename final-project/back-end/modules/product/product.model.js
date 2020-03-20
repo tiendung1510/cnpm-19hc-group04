@@ -21,11 +21,13 @@ const productSchema = new Schema(
     },
     category: {
       type: Schema.Types.ObjectId,
-      ref: 'CategoryModel'
+      ref: 'CategoryModel',
+      required: true
     },
     supplier: {
       type: Schema.Types.ObjectId,
-      ref: 'SupplierModel'
+      ref: 'SupplierModel',
+      required: true
     }
   },
   { timestamps: true }

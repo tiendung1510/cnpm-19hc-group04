@@ -19,7 +19,7 @@ const addWorkShift = async (req, res, next) => {
     }
 
     const workShiftInfo = req.body;
-    const workSchedule = await WorkScheduleModel.findOne({ _id: mongoose.Types.ObjectId(workShiftInfo.workSchedule) });
+    const workSchedule = await WorkScheduleModel.findOne({ _id: mongoose.Types.ObjectId(workShiftInfo.workScheduleID) });
     if (!workSchedule) {
       logger.info(`${CONTROLLER_NAME}::addWorkShift::work schedule not found`);
       return res.status(HttpStatus.NOT_FOUND).json({
@@ -44,7 +44,7 @@ const addWorkShift = async (req, res, next) => {
     }
 
     const duplicatedWorkShift = await WorkShiftModel.findOne({
-      workSchedule: workShiftInfo.workSchedule,
+      workSchedule: workShiftInfo.workScheduleID,
       startTime,
       endTime
     });
@@ -57,7 +57,7 @@ const addWorkShift = async (req, res, next) => {
     }
 
     const newWorkShift = new WorkShiftModel({
-      workSchedule: mongoose.Types.ObjectId(workShiftInfo.workSchedule),
+      workSchedule: mongoose.Types.ObjectId(workShiftInfo.workScheduleID),
       startTime,
       endTime
     });
@@ -66,8 +66,9 @@ const addWorkShift = async (req, res, next) => {
     workSchedule.workShifts.push(newWorkShift._id);
     await workSchedule.save();
 
-    logger.info(`${CONTROLLER_NAME}::addWorkShift::success`);
+    logger.info(`${CONTROLLER_NAME}::addWorkShift::a work shift was added`);
     return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
       data: { workShift: newWorkShift },
       messages: [WORK_SHIFT_MESSAGE.SUCCESS.ADD_WORK_SHIFT_SUCCESS]
     });
@@ -80,10 +81,13 @@ const addWorkShift = async (req, res, next) => {
 const getWorkShifts = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::getWorkShifts::was called`);
   try {
-    const workShifts = await WorkShiftModel.find({}).populate('workSchedule', '-workShifts');
+    const workShifts = await WorkShiftModel.find({})
+      .populate('workAssignments', '-workShift')
+      .populate('workSchedule', '-workShifts');
 
     logger.info(`${CONTROLLER_NAME}::getWorkShifts::success`);
     return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
       data: { workShifts },
       messages: [WORK_SHIFT_MESSAGE.SUCCESS.GET_WORK_SHIFTS_SUCCESS]
     });

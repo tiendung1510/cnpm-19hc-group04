@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const USER_ROLE = require('./user.constant').USER_ROLE;
+const { USER_ROLE } = require('./user.constant');
 
 const userSchema = new Schema(
   {
@@ -20,6 +20,10 @@ const userSchema = new Schema(
     fullname: {
       type: String,
       default: null
+    },
+    sex: {
+      type: String,
+      required: true
     },
     email: {
       type: String,
@@ -43,7 +47,7 @@ const userSchema = new Schema(
     },
     salaryRate: {
       type: Number,
-      default: 1
+      default: USER_ROLE.CASHIER.salaryRate
     }
   },
   { timestamps: true }

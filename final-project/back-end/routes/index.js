@@ -7,5 +7,6 @@ router.use('/categories', require('../modules/category/category.route'));
 router.use('/products', require('../modules/product/product.route'));
 router.use('/work-schedules', require('../modules/work-schedule/work-schedule.route'));
 router.use('/work-shifts', require('../modules/work-shift/work-shift.route'));
+router.use('/work-assignments', require('../modules/work-assignment/work-assignment.route'));
 
 module.exports = router;

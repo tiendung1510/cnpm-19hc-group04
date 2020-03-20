@@ -14,7 +14,8 @@ const workShiftSchema = new Schema(
     workSchedule: {
       type: Schema.Types.ObjectId,
       ref: 'WorkScheduleModel'
-    }
+    },
+    workAssignments: [{ type: Schema.Types.ObjectId, ref: 'WorkAssignmentModel' }]
   },
   { timestamps: true }
 );

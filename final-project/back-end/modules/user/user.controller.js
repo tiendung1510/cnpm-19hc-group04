@@ -9,7 +9,7 @@ const { LoginValidationSchema } = require('./validations/login.schema');
 const { AddUserValidationSchema } = require('./validations/add-user.schema');
 const { UpdateProfileValidationSchema } = require('./validations/update-profile.schema');
 const { ChangePasswordValidationSchema } = require('./validations/change-password.schema');
-const { USER_ROLE, USER_MESSAGE, CONTROLLER_NAME, PASSWORD_SALT_ROUNDS } = require('./user.constant');
+const { USER_ROLE, USER_MESSAGE, CONTROLLER_NAME, PASSWORD_SALT_ROUNDS, SEX } = require('./user.constant');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const bcrypt = require('bcrypt');
@@ -75,6 +75,16 @@ const addUser = async (req, res, next) => {
       });
     }
 
+    const isValidSex = SEX[newUserInfo.sex] !== undefined;
+    if (!isValidSex) {
+      logger.info(`${CONTROLLER_NAME}::addUser::invalid user sex`);
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        status: HttpStatus.BAD_REQUEST,
+        errors: [USER_MESSAGE.ERROR.INVALID_USER_SEX]
+      });
+    }
+    newUserInfo.sex = SEX[newUserInfo.sex].name;
+
     const duplicatedUser = await UserModel.findOne({ $or: [{ username: newUserInfo.username }, { email: newUserInfo.email }] });
     if (duplicatedUser) {
       if (duplicatedUser.username === newUserInfo.username) {
@@ -115,19 +125,19 @@ const addUser = async (req, res, next) => {
 const getUsers = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::getUsers::was called`);
   try {
-    let users = await UserModel.aggregate([
-      {
-        $project: {
-          _id: 1,
-          role: 1,
-          fullname: 1,
-          email: 1,
-          phone: 1,
-          dateOfBirth: 1,
-          avatar: 1
-        }
+    let users = await UserModel.aggregate([{
+      $project: {
+        _id: 1,
+        role: 1,
+        fullname: 1,
+        sex: 1,
+        email: 1,
+        phone: 1,
+        dateOfBirth: 1,
+        avatar: 1,
+        salaryRate: 1
       }
-    ]);
+    }]);
 
     logger.info(`${CONTROLLER_NAME}::getUsers::success`);
     return res.status(HttpStatus.OK).json({
@@ -161,6 +171,19 @@ const updateProfile = async (req, res, next) => {
       }
     }
 
+    if (updatedUserInfo.sex) {
+      const isValidSex = SEX[updatedUserInfo.sex] !== undefined;
+      if (!isValidSex) {
+        logger.info(`${CONTROLLER_NAME}::updateProfile::invalid user sex`);
+        return res.status(HttpStatus.BAD_REQUEST).json({
+          status: HttpStatus.BAD_REQUEST,
+          errors: [USER_MESSAGE.ERROR.INVALID_USER_SEX]
+        });
+      }
+
+      updatedUserInfo.sex = SEX[updatedUserInfo.sex].name;
+    }
+
     const { updatedUserID } = req.params;
     const updatedUser = await UserModel.findOne({ _id: mongoose.Types.ObjectId(updatedUserID) });
     if (!updatedUser) {
@@ -174,7 +197,7 @@ const updateProfile = async (req, res, next) => {
     for (const key in updatedUserInfo)
       updatedUser[key] = updatedUserInfo[key];
 
-    updatedUser.salaryRate = USER_ROLE[updatedUserInfo.role].salaryRate;
+    updatedUser.salaryRate = USER_ROLE[updatedUser.role].salaryRate;
     await updatedUser.save();
 
     logger.info(`${CONTROLLER_NAME}::updateProfile::an user was updated`);
