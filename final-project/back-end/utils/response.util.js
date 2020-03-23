@@ -28,7 +28,7 @@ const joiValidationResponse = (err, res) => {
     return detail.message;
   });
   const result = {
-    messages: messages,
+    errors: messages,
     data: {}
   };
   return res.status(HttpStatus.BAD_REQUEST).json(result);

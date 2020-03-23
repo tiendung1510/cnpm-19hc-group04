@@ -30,12 +30,12 @@ const addWorkShift = async (req, res, next) => {
 
     const startTime = new Date(workShiftInfo.startTime);
     const endTime = new Date(workShiftInfo.endTime);
-    const isValidTimeRage = (startTime.getDate() >= 1)
-      && (startTime < endTime)
+    const isValidTimeRange = (startTime.getDate() >= 1)
+      && (startTime.getTime() < endTime.getTime())
       && (startTime.getMonth() + 1 === workSchedule.month && startTime.getFullYear() === workSchedule.year)
       && (endTime.getMonth() + 1 === workSchedule.month && endTime.getFullYear() === workSchedule.year);
 
-    if (!isValidTimeRage) {
+    if (!isValidTimeRange) {
       logger.info(`${CONTROLLER_NAME}::addWorkShift::invalid time range`);
       return res.status(HttpStatus.BAD_REQUEST).json({
         status: HttpStatus.BAD_REQUEST,
@@ -56,7 +56,7 @@ const addWorkShift = async (req, res, next) => {
       });
     }
 
-    const newWorkShift = new WorkShiftModel({
+    let newWorkShift = new WorkShiftModel({
       workSchedule: mongoose.Types.ObjectId(workShiftInfo.workScheduleID),
       startTime,
       endTime
@@ -66,7 +66,9 @@ const addWorkShift = async (req, res, next) => {
     workSchedule.workShifts.push(newWorkShift._id);
     await workSchedule.save();
 
-    logger.info(`${CONTROLLER_NAME}::addWorkShift::a work shift was added`);
+    newWorkShift = await WorkShiftModel.findOne({ _id: newWorkShift._id }).populate('workSchedule', '-workShifts');
+
+    logger.info(`${CONTROLLER_NAME}::addWorkShift::a new work shift was added`);
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
       data: { workShift: newWorkShift },
@@ -97,7 +99,48 @@ const getWorkShifts = async (req, res, next) => {
   }
 }
 
+const removeWorkShift = async (req, res, next) => {
+  logger.info(`${CONTROLLER_NAME}::removeWorkShift::was called`);
+  try {
+    const { workShiftID } = req.params;
+    const workShift = await WorkShiftModel.findOne({ _id: mongoose.Types.ObjectId(workShiftID) })
+      .populate('workAssignments');
+    if (!workShift) {
+      logger.info(`${CONTROLLER_NAME}::removeWorkShift::work shift not found`);
+      return res.status(HttpStatus.NOT_FOUND).json({
+        status: HttpStatus.NOT_FOUND,
+        errors: [WORK_SHIFT_MESSAGE.ERROR.WORK_SHIFT_NOT_FOUND]
+      });
+    }
+
+    if (workShift.workAssignments.length > 0) {
+      logger.info(`${CONTROLLER_NAME}::removeWorkShift::still has assigner`);
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        status: HttpStatus.BAD_REQUEST,
+        errors: [WORK_SHIFT_MESSAGE.ERROR.ASSIGNED_WORK_SHIFT]
+      });
+    }
+
+    const workSchedule = await WorkScheduleModel.findOne({ _id: workShift.workSchedule });
+    workSchedule.workShifts = workSchedule.workShifts.filter(ws => ws !== workShift._id);
+    await workSchedule.save();
+
+    await WorkShiftModel.deleteOne({ _id: workShift._id });
+
+    logger.info(`${CONTROLLER_NAME}::removeWorkShift::a work shift was removed`);
+    return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
+      data: {},
+      messages: [WORK_SHIFT_MESSAGE.SUCCESS.REMOVE_WORK_SHIFT_SUCCESS]
+    })
+  } catch (error) {
+    logger.error(`${CONTROLLER_NAME}::removeWorkShift::error`);
+    return next(error);
+  }
+}
+
 module.exports = {
   addWorkShift,
-  getWorkShifts
+  getWorkShifts,
+  removeWorkShift
 }

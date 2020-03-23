@@ -5,5 +5,6 @@ const WorkShiftController = require('./work-shift.controller');
 
 router.get('/', checkTokenMiddleware, checkManagerRoleMiddleware, WorkShiftController.getWorkShifts);
 router.post('/', checkTokenMiddleware, checkManagerRoleMiddleware, WorkShiftController.addWorkShift);
+router.delete('/:workShiftID', checkTokenMiddleware, checkManagerRoleMiddleware, WorkShiftController.removeWorkShift);
 
 module.exports = router;

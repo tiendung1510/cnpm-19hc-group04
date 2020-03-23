@@ -125,19 +125,7 @@ const addUser = async (req, res, next) => {
 const getUsers = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::getUsers::was called`);
   try {
-    let users = await UserModel.aggregate([{
-      $project: {
-        _id: 1,
-        role: 1,
-        fullname: 1,
-        sex: 1,
-        email: 1,
-        phone: 1,
-        dateOfBirth: 1,
-        avatar: 1,
-        salaryRate: 1
-      }
-    }]);
+    let users = await UserModel.find({}, { username: 0, password: 0 });
 
     logger.info(`${CONTROLLER_NAME}::getUsers::success`);
     return res.status(HttpStatus.OK).json({

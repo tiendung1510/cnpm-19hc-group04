@@ -66,7 +66,22 @@ const addWorkSchedule = async (req, res, next) => {
 const getWorkSchedules = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::getWorkSchedules::was called`);
   try {
-    let workSchedules = await WorkScheduleModel.find({}).populate('workShifts', '-workSchedule');
+    const { year } = req.query;
+    const condition = { year: 2020 };
+    if (year) {
+      const isValidYear = !isNaN(year) && year >= 2020;
+      if (!isValidYear) {
+        logger.info(`${CONTROLLER_NAME}::getWorkSchedulesByYear::invalid year`);
+        return res.status(HttpStatus.BAD_REQUEST).json({
+          status: HttpStatus.BAD_REQUEST,
+          errors: [WORK_SCHEDULE_MESSAGE.ERROR.INVALID_WORK_YEAR]
+        });
+      }
+
+      condition.year = year;
+    }
+
+    let workSchedules = await WorkScheduleModel.find(condition).populate('workShifts', '-workSchedule');
     workSchedules = await Promise.all(
       workSchedules.map(async (workSchedule) => {
         const _workSchedule = JSON.parse(JSON.stringify(workSchedule));
@@ -74,15 +89,23 @@ const getWorkSchedules = async (req, res, next) => {
         let workShifts = await WorkShiftModel.find({ workSchedule: _workSchedule._id })
           .populate('workAssignments', '-workShift');
 
+        workShifts.sort((a, b) => {
+          const time1 = new Date(a.startTime).getTime();
+          const time2 = new Date(b.startTime).getTime();
+          return time1 - time2;
+        });
+
         workShifts = await Promise.all(
           workShifts.map(async (ws) => {
             const _ws = JSON.parse(JSON.stringify(ws));
-            let workAssignments = await WorkAssignmentModel.find({ workShift: _ws._id })
+
+            let workAssignments = await WorkAssignmentModel.find({ workShift: _ws._id }, { workShift: 0 })
               .populate('assigner', '_id fullname avatar role');
-              
-            workAssignments = JSON.parse(JSON.stringify(workAssignments));
-            for(let wa of workAssignments)
-              delete wa.workShift;
+            workAssignments.sort((a, b) => {
+              const time1 = new Date(a.createdAt).getTime();
+              const time2 = new Date(b.createdAt).getTime();
+              return time1 - time2;
+            });
 
             _ws.workAssignments = workAssignments;
             return _ws;
@@ -94,10 +117,17 @@ const getWorkSchedules = async (req, res, next) => {
       })
     );
 
+    workSchedules.sort((cur, next) => cur.month - next.month);
+
+    const availableYears = await WorkScheduleModel.find({}, { year: 1, _id: 0 }).distinct('year');
+
     logger.info(`${CONTROLLER_NAME}::getWorkSchedules::was called`);
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
-      data: { workSchedules },
+      data: {
+        workSchedules,
+        availableYears
+      },
       messages: [WORK_SCHEDULE_MESSAGE.SUCCESS.GET_WORK_SCHEDULES_SUCCESS]
     })
   } catch (error) {
