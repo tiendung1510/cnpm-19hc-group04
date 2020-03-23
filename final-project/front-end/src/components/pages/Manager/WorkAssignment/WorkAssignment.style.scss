@@ -25,6 +25,7 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     height: $leftSidebarHeight;
     background: #ff8220;
     padding: 20px 10px;
+    padding-left: 25px;
 
     .work-assignment__left-sidebar__year-selection {
       .ant-select {
@@ -51,21 +52,10 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
       font-weight: bold;
       font-size: 12px;
     }
-
-    .work-assignment__left-sidebar__btn-add-work-schedule {
-      width: 100%;
-      color: #ff8220;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-      font-weight: bold;
-      border-radius: 24px;
-      font-size: 12px;
-      min-height: 35px;
-      transition: 0.2s;
-    }
-
+    
     .work-assignment__left-sidebar__list-tasks {
       .work-assignment__left-sidebar__list-tasks__wrapper {
-        height: 66.5 / 100 * $leftSidebarHeight;
+        height: 65 / 100 * $leftSidebarHeight;
         background: white;
         border-radius: 3px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -89,6 +79,15 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 
         .work-assignment__left-sidebar__list-tasks__item__task-name {
           margin-left: 10px;
+          display: block;
+        }
+
+        .work-assignment__left-sidebar__list-tasks__item__btn-remove {
+          color: rgba($color: #000000, $alpha: 0.2);
+          font-size: 12px;
+          font-weight: bold;
+          height: 100%;
+          @extend .centered-content;
         }
 
         &.work-assignment__left-sidebar__list-tasks__item--selected {
@@ -120,7 +119,7 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         padding: 10px;
         padding-top: 30px;
         height: 100%;
-        width: 27%;
+        width: 30%;
         background: white;
         position: absolute;
         z-index: 3;
@@ -182,26 +181,9 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
           }
         }
 
-        .work-assignment__content__task-work-day-panel__panel__btn-open-list-staffs {
-          color: #ff8220;
-          width: 100%;
-          display: table;
-          margin: 0 auto;
-          margin-top: -4px;
-        }
-
         .work-assignment__content__task-work-day-panel__panel__main {
           padding-top: $blockPaddingTop;
           padding-left: 5px;
-
-          .work-assignment__content__task-work-day-panel__panel__main__done-rate {
-            padding-top: $blockPaddingTop;
-
-            .ant-progress-success-bg,
-            .ant-progress-bg {
-              background: #ff8220 !important;
-            }
-          }
 
           .work-assignment__content__task-work-day-panel__panel__main__title {
             font-size: 12px;
@@ -210,9 +192,6 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 
           .work-assignment__content__task-work-day-panel__panel__main__list-staffs {
             margin-top: -5px;
-            .work-assignment__content__task-work-day-panel__panel__main__list-staffs__search-input {
-              margin: 5px 0 10px 0;
-            }
 
             .work-assignment__content__task-work-day-panel__panel__main__list-staffs__note {
               padding-top: 5px;
@@ -251,6 +230,7 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
               overflow-y: auto;
               background: #f8f8f8;
               padding-top: 10px;
+              margin-top: 5px;
               @extend .styled-scrollbar;
             }
 
@@ -260,7 +240,7 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
             }
 
             .work-assignment__content__task-work-day-panel__panel__main__list-staffs__wrapper {
-              height: 280px;
+              height: 275px;
 
               .work-assignment__content__task-work-day-panel__panel__main__list-staffs__staff {
                 display: flex;
@@ -269,28 +249,13 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
                 width: 100%;
                 background: white;
                 padding: 15px;
-                padding-bottom: 0;
+                padding-bottom: 10px;
                 border: 1px solid #eee;
                 border-radius: 3px;
               }
             }
 
-            $doneStatusFontSize: 10px;
-            .work-assignment__content__task-work-day-panel__panel__main__list-staffs__done-status {
-              font-size: $doneStatusFontSize;
-              height: 100%;
-              @extend .centered-content;
-            }
-            .work-assignment__content__task-work-day-panel__panel__main__list-staffs__done-status--done {
-              color: rgba($color: #000000, $alpha: 0.5);
-              @extend .work-assignment__content__task-work-day-panel__panel__main__list-staffs__done-status;
-            }
-            .work-assignment__content__task-work-day-panel__panel__main__list-staffs__done-status--not-yet {
-              color: #dc143c;
-              @extend .work-assignment__content__task-work-day-panel__panel__main__list-staffs__done-status;
-            }
-
-            .work-assignment__content__task-work-day-panel__panel__main__list-staffs__btn-more,
+            .work-assignment__content__task-work-day-panel__panel__main__list-staffs__btn-unassign,
             .work-assignment__content__task-work-day-panel__panel__main__list-staffs__btn-close {
               color: rgba($color: #000000, $alpha: 0.4);
               font-size: 12px;
@@ -315,14 +280,14 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     $contentHeaderColor: white;
 
     .work-assignment__content__header {
-      height: 15%;
+      height: 17%;
       padding: 20px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       box-sizing: border-box;
       background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
-      border-bottom: 4px solid #fff6e6;
+      border-bottom: 4px solid white;
       position: relative;
 
       .work-assignment__content__header__dark-bg {
@@ -351,7 +316,7 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     }
 
     .work-assignment__content__body {
-      margin-top: -4%;
+      margin-top: -5%;
       position: relative;
       z-index: 2;
 
@@ -372,17 +337,19 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
           font-weight: bold;
         }
         .ant-tabs-ink-bar {
-          background: $contentHeaderColor;
+          background: #ffb833;
           height: 3px;
         }
 
         .work-assignment__content__body__tabs__work-schedule {
           padding: 20px;
+          background: white;
+          
           .work-assignment__content__body__tabs__work-schedule__work-day {
             padding: 10px;
             padding-right: 5px;
             padding-bottom: 0;
-            height: 90px;
+            height: 85px;
             background: #f8f8f8;
             border: 1px solid #eee;
             cursor: pointer;
@@ -430,7 +397,7 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
               display: flex;
               justify-content: flex-end;
               align-items: center;
-              height: 60px;
+              height: 50px;
               .work-assignment__content__body__tabs__work-schedule__work-day__staffs__avatar--plus {
                 width: 16px;
                 height: 16px;

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Row, Col, Tabs, Select, List, Avatar, Button, Tooltip } from 'antd';
-import { PlusCircleOutlined, UsergroupAddOutlined, MoreOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { Row, Col, Tabs, Select, List, Avatar, Button, Modal, message, Tooltip } from 'antd';
+import { CloseCircleOutlined, ExclamationCircleOutlined, LogoutOutlined } from '@ant-design/icons';
 import USER_ROLE from '../../../../constants/user-role.constant';
 import './WorkAssignment.style.scss';
-import * as monent from 'moment';
+import * as moment from 'moment';
 import * as _ from 'lodash';
 import WEEK_DAY from '../../../../constants/week-day.constant';
 import { withCookies } from 'react-cookie';
@@ -12,9 +12,13 @@ import * as actions from '../../../../redux/actions';
 import { API } from '../../../../constants/api.constant';
 import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
 import PageBase from '../../../utilities/PageBase/PageBase';
+import BtnAddWorkSchedule from './BtnAddWorkSchedule/BtnAddWorkSchedule';
+import BtnAddWorkShift from './BtnAddWorkShift/BtnAddWorkShift';
+import BtnAddWorkShiftAssigner from './BtnAddWorkShiftAssigner/BtnAddWorkShiftAssigner';
 
 const { TabPane } = Tabs;
 const { Option } = Select;
+const { confirm } = Modal;
 
 class WorkAssignment extends PageBase {
   constructor(props) {
@@ -26,46 +30,136 @@ class WorkAssignment extends PageBase {
       },
       selectedWorkDay: {},
       selectedWorkShift: {},
-      workSchedules: []
+      selectedWorkYear: null,
+      workSchedules: [],
+      listWorkYears: [],
+      listStaffs: []
     }
   }
 
   componentDidMount() {
-    this.loadWorkSchedules();
+    this.loadStaffs();
+    this.loadWorkSchedules(null);
   }
 
-  loadWorkSchedules = async () => {
+  loadStaffs = async () => {
     this.props.setAppLoading(true);
-    const res = await (await fetch(
-      API.Manager.getWorkSchedules,
-      {
+    const res = await (
+      await fetch(
+        API.Manager.StaffManagement.getListStaffs,
+        {
+          method: 'GET',
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+            'token': this.props.cookies.get(COOKIE_NAMES.token)
+          },
+          signal: this.abortController.signal
+        }
+      )
+    ).json();
+
+    if (res.status === 200) {
+      const { users } = res.data;
+      this.setState({ listStaffs: users });
+    } else {
+      message.error(res.errors[0]);
+    }
+
+    this.props.setAppLoading(false);
+  }
+
+  refreshAllCurrenStates() {
+    this.setState({
+      selectedWorkSchedule: {
+        index: 0,
+        workDays: []
+      },
+      selectedWorkDay: {},
+      selectedWorkShift: {},
+      selectedWorkYear: null,
+      workSchedules: [],
+      listWorkYears: []
+    });
+  }
+
+  loadWorkSchedules = async (workYear) => {
+    this.props.setAppLoading(true);
+    this.refreshAllCurrenStates();
+
+    let url = API.Manager.WorkSchedule.getWorkSchedules;
+    if (workYear) {
+      url += `?year=${workYear}`;
+    }
+
+    const res = await (
+      await fetch(url, {
         method: 'GET',
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
           'token': this.props.cookies.get(COOKIE_NAMES.token)
         },
         signal: this.abortController.signal
-      }
-    )).json();
+      })
+    ).json();
 
     this.props.setAppLoading(false);
-    const _workSchedules = res.data.workSchedules;
-    let { selectedWorkSchedule, workSchedules } = this.state;
-    selectedWorkSchedule = { ...selectedWorkSchedule, ..._workSchedules[0] };
-    workSchedules = [..._workSchedules];
-    this.setState({ selectedWorkSchedule, workSchedules });
+    const { workSchedules, availableYears } = res.data
+    const listWorkYears = availableYears.map(y => ({ text: 'Năm ' + y, value: y }));
+    let { selectedWorkSchedule } = this.state;
+    selectedWorkSchedule = { ...selectedWorkSchedule, ...workSchedules[0] };
 
+    this.setState({
+      selectedWorkSchedule,
+      workSchedules,
+      listWorkYears,
+      selectedWorkYear: workYear || listWorkYears[0].value
+    });
+
+    let isWorkShiftFound = false;
     for (let i = 0; i < selectedWorkSchedule.workDays.length; i++) {
       for (let j = 0; j < selectedWorkSchedule.workDays[i].length; j++) {
         if (selectedWorkSchedule.workDays[i][j].staffs.length > 0) {
+          let { selectedWorkShift } = this.state;
           const selectedWorkDay = selectedWorkSchedule.workDays[i][j];
-          let selectedWorkShift = selectedWorkDay.workShifts[0];
+
+          selectedWorkShift = selectedWorkDay.workShifts[0];
           selectedWorkShift.index = 0;
-          this.setState({ selectedWorkDay, selectedWorkShift })
+          isWorkShiftFound = true;
+
+          this.setState({
+            selectedWorkDay,
+            selectedWorkShift
+          });
+
           break;
         }
       }
     }
+
+    if (!isWorkShiftFound) {
+      const selectedWorkDay = selectedWorkSchedule.workDays[0][0];
+
+      let selectedWorkShift = selectedWorkDay.workShifts[0];
+      if (selectedWorkShift) {
+        selectedWorkShift.index = 0;
+      } else {
+        selectedWorkShift = { index: 0 }
+      }
+
+      this.setState({
+        selectedWorkDay,
+        selectedWorkShift
+      })
+    }
+  }
+
+  reloadWorkSchedules(workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift) {
+    this.setState({
+      workSchedules,
+      selectedWorkSchedule,
+      selectedWorkDay,
+      selectedWorkShift
+    })
   }
 
   toggleTaskWorkDayPanel() {
@@ -82,7 +176,7 @@ class WorkAssignment extends PageBase {
 
   generateWorkDays(workSchedule) {
     const { month, year, workShifts } = workSchedule;
-    const workDaysLength = monent(`${month}-${year}`, 'M-YYYY').daysInMonth();
+    const workDaysLength = moment(`${month}-${year}`, 'M-YYYY').daysInMonth();
     let workDays = [];
     let temp = [];
     let assigners = [];
@@ -141,7 +235,7 @@ class WorkAssignment extends PageBase {
   }
 
   getWeekDay(day, month, year) {
-    const weekDayNumber = monent(`${day}-${month}-${year}`, 'DD-MM-YYYY').day();
+    const weekDayNumber = moment(`${day}-${month}-${year}`, 'DD-MM-YYYY').day();
     switch (weekDayNumber) {
       case 1: return WEEK_DAY.MONDAY;
       case 2: return WEEK_DAY.TUESDAY;
@@ -154,37 +248,20 @@ class WorkAssignment extends PageBase {
     }
   }
 
-  getListMonths() {
-    let months = [];
-    for (let i = 1; i <= 12; i++)
-      months.push({
-        text: 'Tháng ' + i,
-        value: i
-      });
-    return months;
-  }
-
-  getListYears() {
-    const { workSchedules } = this.state;
-    return _.uniqBy(workSchedules, w => w.year).map(w => ({ text: 'Năm ' + w.year, value: w.year }));
-  }
-
   handleSelectWorkSchedule(selectedWorkSchedule, index) {
     selectedWorkSchedule.index = index;
     selectedWorkSchedule.workDays = this.generateWorkDays(selectedWorkSchedule);
 
+    let isWorkShiftFound = false;
     for (let i = 0; i < selectedWorkSchedule.workDays.length; i++) {
       for (let j = 0; j < selectedWorkSchedule.workDays[i].length; j++) {
         if (selectedWorkSchedule.workDays[i][j].staffs.length > 0) {
           let { selectedWorkShift } = this.state;
           const selectedWorkDay = selectedWorkSchedule.workDays[i][j];
 
-          if (selectedWorkDay.workShifts.length > 0) {
-            selectedWorkShift = selectedWorkDay.workShifts[0];
-            selectedWorkShift.index = 0;
-          } else {
-            selectedWorkShift = {}
-          }
+          selectedWorkShift = selectedWorkDay.workShifts[0];
+          selectedWorkShift.index = 0;
+          isWorkShiftFound = true;
 
           this.setState({
             selectedWorkDay,
@@ -194,6 +271,22 @@ class WorkAssignment extends PageBase {
           break;
         }
       }
+    }
+
+    if (!isWorkShiftFound) {
+      const selectedWorkDay = selectedWorkSchedule.workDays[0][0];
+
+      let selectedWorkShift = selectedWorkDay.workShifts[0];
+      if (selectedWorkShift) {
+        selectedWorkShift.index = 0;
+      } else {
+        selectedWorkShift = { index: 0 }
+      }
+
+      this.setState({
+        selectedWorkDay,
+        selectedWorkShift
+      })
     }
 
     this.setState({ selectedWorkSchedule });
@@ -222,75 +315,240 @@ class WorkAssignment extends PageBase {
     this.setState({ selectedWorkShift: workShift });
   }
 
+  openRemoveWorkShiftConfirm(workShiftID) {
+    const that = this;
+    confirm({
+      title: 'Bạn có muốn hủy ca làm việc này?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Chỉ có thể hủy ca làm việc khi không còn nhân viên nào được phân công.',
+      okText: 'Đồng ý',
+      okType: 'danger',
+      cancelText: 'Không, cảm ơn',
+      async onOk() {
+        that.props.setAppLoading(true);
+        const res = await(
+          await fetch(
+            API.Manager.WorkShift.removeWorkShift.replace('{workShiftID}', workShiftID),
+            {
+              method: 'DELETE',
+              headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                'token': that.props.cookies.get(COOKIE_NAMES.token)
+              },
+              signal: that.abortController.signal
+            }
+          )
+        ).json();
+
+        if (res.status !== 200) {
+          that.props.setAppLoading(false);
+          message.error(res.errors[0]);
+          return;
+        }
+
+        let { selectedWorkShift, selectedWorkDay, selectedWorkSchedule, workSchedules } = that.state;
+
+        selectedWorkDay.workShifts = selectedWorkDay.workShifts.filter(ws => ws._id !== workShiftID);
+        if (selectedWorkDay.workShifts.length > 0) {
+          selectedWorkShift = selectedWorkDay.workShifts[0];
+          selectedWorkShift.index = 0;
+        } else {
+          selectedWorkShift = { index: 0 }
+        }
+
+        for (const week of selectedWorkSchedule.workDays) {
+          for (let day of week) {
+            if (day.workDayInMonth === selectedWorkDay.workDayInMonth) {
+              day = selectedWorkDay;
+              break;
+            }
+          }
+        }
+        selectedWorkSchedule.workShifts = selectedWorkSchedule.workShifts.filter(ws => ws._id !== workShiftID);
+
+        for (let i = 0; i < workSchedules.length; i++) {
+          if (workSchedules[i]._id === selectedWorkSchedule._id) {
+            workSchedules[i] = selectedWorkSchedule;
+            break;
+          }
+        }
+
+        that.reloadWorkSchedules(workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift);
+        message.success(res.messages[0]);
+        that.props.setAppLoading(false);
+      },
+      onCancel() { },
+    });
+  }
+
+  openRemoveWorkScheduleConfirm(workScheduleID) {
+    confirm({
+      title: 'Bạn có muốn hủy lịch làm việc này?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Toàn bộ ca làm việc và nhân viên được phân công sẽ bị hủy.',
+      okText: 'Đồng ý',
+      okType: 'danger',
+      cancelText: 'Không, cảm ơn',
+      onOk() {
+        console.log(workScheduleID);
+      },
+      onCancel() { },
+    });
+  }
+
+  openRemoveWorkShiftAssignerConfirm(assinger) {
+    const that = this;
+    confirm({
+      title: `Bạn có muốn hủy phân công ${assinger.fullname}?`,
+      icon: <ExclamationCircleOutlined />,
+      okText: 'Đồng ý',
+      okType: 'danger',
+      cancelText: 'Không, cảm ơn',
+      async onOk() {
+        that.props.setAppLoading(true);
+        const { selectedWorkShift, selectedWorkDay, selectedWorkSchedule, workSchedules } = that.state;
+        const { workAssignments } = selectedWorkShift;
+        const workAssignment = workAssignments.find(wa => wa.assigner._id === assinger._id);
+        const workAssignmentID = workAssignment._id;
+
+        const res = await (
+          await fetch(
+            API.Manager.WorkAssignment.removeWorkAssignment.replace('{workAssignmentID}', workAssignmentID),
+            {
+              method: 'DELETE',
+              headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                'token': that.props.cookies.get(COOKIE_NAMES.token)
+              },
+              signal: that.abortController.signal
+            }
+          )
+        ).json();
+
+        if (res.status !== 200) {
+          that.props.setAppLoading(false);
+          message.error(res.errors[0]);
+          return;
+        }
+
+        selectedWorkShift.workAssignments = selectedWorkShift.workAssignments.filter(wa => wa._id !== workAssignmentID);
+
+        for (let ws of selectedWorkDay.workShifts) {
+          if (ws._id === selectedWorkShift._id) {
+            ws = selectedWorkShift;
+            break;
+          }
+        }
+
+        for (const week of selectedWorkSchedule.workDays) {
+          for (let day of week) {
+            if (day.workDayInMonth === selectedWorkDay.workDayInMonth) {
+              day = selectedWorkDay;
+              break;
+            }
+          }
+        }
+
+        for (let wsc of workSchedules) {
+          if (wsc._id === selectedWorkSchedule._id) {
+            wsc = selectedWorkSchedule;
+            break;
+          }
+        }
+
+        that.reloadWorkSchedules(workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift);
+        message.success(res.messages[0]);
+        that.props.setAppLoading(false);
+      },
+      onCancel() { },
+    });
+  }
+
+  handleSelectYear(year) {
+    this.setState({ selectedWorkYear: year });
+    this.loadWorkSchedules(year);
+  }
+
   render() {
-    let { workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift } = this.state;
+    let {
+      workSchedules,
+      selectedWorkSchedule,
+      selectedWorkDay,
+      selectedWorkShift,
+      listWorkYears,
+      selectedWorkYear,
+      listStaffs
+    } = this.state;
+
     selectedWorkSchedule.workDays = this.generateWorkDays(selectedWorkSchedule);
-    const listYears = this.getListYears();
 
     return (
       <div className="work-assignment">
         <Row>
-          <Col className="work-assignment__left-sidebar" span={4}>
-            <div>
-              <Button
-                className="work-assignment__left-sidebar__btn-add-work-schedule"
-                icon={<PlusCircleOutlined />}>Thêm lịch làm việc</Button>
+          <Col className="work-assignment__left-sidebar" span={5}>
+            <BtnAddWorkSchedule reloadWorkSchedules={selectedYear => this.loadWorkSchedules(selectedYear)} />
 
-              <div className="work-assignment__left-sidebar__year-selection">
-                <div className="work-assignment__left-sidebar__title">
-                  <span>Năm làm việc</span>
-                </div>
-                <div>
-                  {
-                    (listYears || []).length > 0 ? (
-                      <Select defaultValue={listYears[0].value} onChange={e => console.log(e)}>
-                        {listYears.map((y, i) => (
-                          <Option key={i} value={y.value}>{y.text}</Option>
-                        ))}
-                      </Select>
-                    ) : <></>
-                  }
-                </div>
+            <div className="work-assignment__left-sidebar__year-selection">
+              <div className="work-assignment__left-sidebar__title">
+                <span>Năm làm việc</span>
+              </div>
+              <div>
+                {
+                  (listWorkYears || []).length > 0 ? (
+                    <Select defaultValue={selectedWorkYear} onChange={e => this.handleSelectYear(e)}>
+                      {listWorkYears.map((y, i) => (
+                        <Option key={i} value={y.value}>{y.text}</Option>
+                      ))}
+                    </Select>
+                  ) : <></>
+                }
+              </div>
+            </div>
+
+            <div className="work-assignment__left-sidebar__list-tasks">
+
+              <div className="work-assignment__left-sidebar__title">
+                <span>Tháng làm việc</span>
               </div>
 
-              <div className="work-assignment__left-sidebar__list-tasks">
-
-                <div className="work-assignment__left-sidebar__title">
-                  <span>Tháng làm việc</span>
-                </div>
-
-                <div className="work-assignment__left-sidebar__list-tasks__wrapper">
-                  <List
-                    size="small"
-                    dataSource={workSchedules}
-                    renderItem={(item, index) => {
-                      return (
-                        <List.Item
-                          className={
-                            `work-assignment__left-sidebar__list-tasks__item animated fadeIn
+              <div className="work-assignment__left-sidebar__list-tasks__wrapper">
+                <List
+                  size="small"
+                  dataSource={workSchedules}
+                  renderItem={(item, index) => {
+                    return (
+                      <List.Item
+                        className={
+                          `work-assignment__left-sidebar__list-tasks__item animated fadeIn
                           ${index === selectedWorkSchedule.index ? 'work-assignment__left-sidebar__list-tasks__item--selected' : ''}`
-                          }
-                          onClick={() => this.handleSelectWorkSchedule(item, index)}>
-                          <Row>
-                            <Col span={24}>
-                              <span className="work-assignment__left-sidebar__list-tasks__item__task-name">Tháng {item.month}</span>
-                            </Col>
-                          </Row>
-                        </List.Item>
-                      )
-                    }}
-                  />
-                </div>
+                        }
+                        onClick={() => this.handleSelectWorkSchedule(item, index)}>
+                        <Row style={{ width: '95%' }}>
+                          <Col span={22}>
+                            <span className="work-assignment__left-sidebar__list-tasks__item__task-name">Tháng {item.month}</span>
+                          </Col>
+                          <Col span={2}>
+                            <Button
+                              onClick={() => this.openRemoveWorkScheduleConfirm(item._id)}
+                              className="work-assignment__left-sidebar__list-tasks__item__btn-remove"
+                              type="link"
+                              icon={<CloseCircleOutlined />} />
+                          </Col>
+                        </Row>
+                      </List.Item>
+                    )
+                  }}
+                />
               </div>
             </div>
           </Col>
-          <Col className="work-assignment__content" span={20}>
+          <Col className="work-assignment__content" span={19}>
             <div className="work-assignment__content__task-work-day-panel">
               <div className="work-assignment__content__task-work-day-panel__panel">
 
                 <div className="work-assignment__content__task-work-day-panel__panel__main">
                   <h3>{
-                    `${selectedWorkDay.workWeekDay ? selectedWorkDay.workWeekDay + ', ' : ''} ${selectedWorkDay.workYear ? monent(new Date(selectedWorkDay.workYear, selectedWorkDay.workMonth - 1, selectedWorkDay.workDayInMonth)).format('DD/MM/YYYY') : ''}`
+                    `${selectedWorkDay.workWeekDay ? selectedWorkDay.workWeekDay + ', ' : ''} ${selectedWorkDay.workYear ? moment(new Date(selectedWorkDay.workYear, selectedWorkDay.workMonth - 1, selectedWorkDay.workDayInMonth)).format('DD/MM/YYYY') : ''}`
                   }</h3>
 
                   <div
@@ -301,12 +559,17 @@ class WorkAssignment extends PageBase {
                           Ca làm việc trong ngày</span>
                       </Col>
                       <Col span={3}>
-                        <Tooltip placement="bottom" title="Thêm ca làm việc">
-                          <Button
-                            className="work-assignment__content__task-work-day-panel__panel__btn-open-list-staffs"
-                            type="link"
-                            icon={<PlusCircleOutlined />} />
-                        </Tooltip>
+                        <BtnAddWorkShift
+                          workSchedules={[...workSchedules]}
+                          selectedWorkSchedule={{ ...selectedWorkSchedule }}
+                          selectedWorkDay={{ ...selectedWorkDay }}
+                          selectedWorkShift={{ ...selectedWorkShift }}
+                          reloadWorkSchedules={
+                            (workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift) => {
+                              this.reloadWorkSchedules(workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift)
+                            }
+                          }
+                        />
                       </Col>
                     </Row>
                     <div className="work-assignment__content__task-work-day-panel__panel__main__list-work-shifts__wrapper">
@@ -324,13 +587,14 @@ class WorkAssignment extends PageBase {
                             >
                               <Col span={22}>
                                 <span>
-                                  Từ {monent(ws.startTime).format('HH:mm')} đến {monent(ws.endTime).format('HH:mm')}
+                                  Từ {moment(ws.startTime).format('HH:mm')} đến {moment(ws.endTime).format('HH:mm')}
                                 </span>
                               </Col>
                               <Col span={2}>
                                 <Button
                                   className="work-assignment__content__task-work-day-panel__panel__main__list-staffs__btn-close"
                                   type="link"
+                                  onClick={() => this.openRemoveWorkShiftConfirm(ws._id)}
                                   icon={<CloseCircleOutlined />} />
                               </Col>
                             </Row>
@@ -354,10 +618,10 @@ class WorkAssignment extends PageBase {
                         <ul
                           className="work-assignment__content__task-work-day-panel__panel__main__list-work-shifts__time--value">
                           <li>{
-                            selectedWorkShift.startTime ? monent(selectedWorkShift.startTime).format('HH:mm') : ''
+                            selectedWorkShift.startTime ? moment(selectedWorkShift.startTime).format('HH:mm') : ''
                           }</li>
                           <li>{
-                            selectedWorkShift.endTime ? monent(selectedWorkShift.endTime).format('HH:mm') : ''
+                            selectedWorkShift.endTime ? moment(selectedWorkShift.endTime).format('HH:mm') : ''
                           }</li>
                         </ul>
                       </Col>
@@ -371,12 +635,20 @@ class WorkAssignment extends PageBase {
                             })</span>
                         </Col>
                         <Col span={3}>
-                          <Tooltip placement="bottom" title="Thêm nhân viên">
-                            <Button
-                              className="work-assignment__content__task-work-day-panel__panel__btn-open-list-staffs"
-                              type="link"
-                              icon={<UsergroupAddOutlined />} />
-                          </Tooltip>
+                          <BtnAddWorkShiftAssigner
+                            workSchedules={[...workSchedules]}
+                            selectedWorkSchedule={{ ...selectedWorkSchedule }}
+                            selectedWorkDay={{ ...selectedWorkDay }}
+                            selectedWorkShift={{ ...selectedWorkShift }}
+                            staffs={listStaffs.filter(
+                              s => !(selectedWorkShift.workAssignments || []).find(wa => wa.assigner._id === s._id) && s.role !== USER_ROLE.MANAGER.type)
+                            }
+                            reloadWorkSchedules={
+                              (workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift) => {
+                                this.reloadWorkSchedules(workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift)
+                              }
+                            }
+                          />
                         </Col>
                       </Row>
 
@@ -396,15 +668,16 @@ class WorkAssignment extends PageBase {
                                     />
                                   </Col>
                                   <Col span={2}>
-                                    <Button
-                                      className="work-assignment__content__task-work-day-panel__panel__main__list-staffs__btn-more"
-                                      type="link"
-                                      icon={<MoreOutlined />} />
+                                    <Tooltip placement="bottom" title="Hủy phân công">
+                                      <Button
+                                        className="work-assignment__content__task-work-day-panel__panel__main__list-staffs__btn-unassign"
+                                        type="link"
+                                        icon={<LogoutOutlined />}
+                                        onClick={() => this.openRemoveWorkShiftAssignerConfirm(wa.assigner)}
+                                      />
+                                    </Tooltip>
                                   </Col>
                                 </Row>
-                                <p className="work-assignment__content__task-work-day-panel__panel__main__list-staffs__note">
-                                  {wa.description}
-                                </p>
                               </div>
                             </List.Item>
                           )}
@@ -468,9 +741,6 @@ class WorkAssignment extends PageBase {
                       ))}
                     </Row>
                   ))}
-                </TabPane>
-                <TabPane tab="Đã phân công (3)" key="2">
-                  Content of Tab Pane 2
                 </TabPane>
               </Tabs>
             </div>

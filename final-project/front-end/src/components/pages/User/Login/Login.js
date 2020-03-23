@@ -69,7 +69,7 @@ class Login extends Component {
     return (
       <div className="container">
         <div className="dark-bg"></div>
-        <div className="login animated fadeInUp">
+        <div className="login animated slideInUp">
           <div className="__header">
             <img className="__company-logo" src={require('../../../../assets/images/app-logo.png')} alt="logo" />
             <div className="__company-brand">

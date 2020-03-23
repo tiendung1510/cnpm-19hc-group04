@@ -5,6 +5,20 @@ export const API = {
     login: `${secret.API_URL}/users/login`
   },
   Manager: {
-    getWorkSchedules: `${secret.API_URL}/work-schedules`
+    StaffManagement: {
+      getListStaffs: `${secret.API_URL}/users`
+    },
+    WorkSchedule: {
+      getWorkSchedules: `${secret.API_URL}/work-schedules`,
+      addWorkSchedule: `${secret.API_URL}/work-schedules`
+    },
+    WorkShift: {
+      addWorkShift: `${secret.API_URL}/work-shifts`,
+      removeWorkShift: `${secret.API_URL}/work-shifts/{workShiftID}`
+    },
+    WorkAssignment: {
+      addWorkAssignments: `${secret.API_URL}/work-assignments`,
+      removeWorkAssignment: `${secret.API_URL}/work-assignments/{workAssignmentID}`
+    }
   }
 }
