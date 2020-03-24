@@ -1,7 +1,7 @@
 import React from 'react';
 import PageBase from '../../../utilities/PageBase/PageBase';
 import './StaffManagement.style.scss';
-import { SearchOutlined, UserAddOutlined, TeamOutlined, EditOutlined, UserDeleteOutlined, CalendarOutlined, PlusOutlined } from '@ant-design/icons';
+import { SearchOutlined, TeamOutlined, EditOutlined, UserDeleteOutlined, CalendarOutlined, PlusOutlined } from '@ant-design/icons';
 import { Input, Row, Col, Select, Table, Button, Avatar, Tooltip, message } from 'antd';
 import { withCookies } from 'react-cookie';
 import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';

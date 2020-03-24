@@ -162,7 +162,9 @@ class BtnAddWorkShiftAssigner extends PageBase {
           <div className="add-work-shift-assigner__list-staffs">
             <Row className="add-work-shift-assigner__list-staffs__header">
               <Col span={21} className="add-work-shift-assigner__list-staffs__header__col-1">
-                <span>Chọn tất cả</span>
+                {staffs.length > 0 ? (
+                  <span>Chọn tất cả</span>
+                ) : <></>}
               </Col>
               <Col span={3} className="add-work-shift-assigner__list-staffs__header__col-2">
                 {staffs.length > 0 ? (
