@@ -326,7 +326,7 @@ class WorkAssignment extends PageBase {
       cancelText: 'Không, cảm ơn',
       async onOk() {
         that.props.setAppLoading(true);
-        const res = await(
+        const res = await (
           await fetch(
             API.Manager.WorkShift.removeWorkShift.replace('{workShiftID}', workShiftID),
             {
@@ -382,15 +382,85 @@ class WorkAssignment extends PageBase {
   }
 
   openRemoveWorkScheduleConfirm(workScheduleID) {
+    const that = this;
     confirm({
       title: 'Bạn có muốn hủy lịch làm việc này?',
       icon: <ExclamationCircleOutlined />,
-      content: 'Toàn bộ ca làm việc và nhân viên được phân công sẽ bị hủy.',
+      content: 'Chỉ có thể hủy lịch làm việc khi tất cả các ngày đều chưa có ca làm việc.',
       okText: 'Đồng ý',
       okType: 'danger',
       cancelText: 'Không, cảm ơn',
-      onOk() {
-        console.log(workScheduleID);
+      async onOk() {
+        that.props.setAppLoading(true);
+        const res = await (
+          await fetch(
+            API.Manager.WorkSchedule.removeWorkSchedule.replace('{workScheduleID}', workScheduleID),
+            {
+              method: 'DELETE',
+              headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                'token': that.props.cookies.get(COOKIE_NAMES.token)
+              },
+              signal: that.abortController.signal
+            }
+          )
+        ).json();
+
+        if (res.status !== 200) {
+          that.props.setAppLoading(false);
+          message.error(res.errors[0]);
+          return;
+        }
+
+        let {
+          workSchedules,
+          selectedWorkSchedule,
+          selectedWorkDay,
+          selectedWorkShift
+        } = that.state;
+
+        workSchedules = workSchedules.filter(wsc => wsc._id !== workScheduleID);
+
+        if (workSchedules.length === 0) {
+          let { listWorkYears, selectedWorkYear } = that.state;
+          listWorkYears = listWorkYears.filter(y => y !== selectedWorkYear);
+          that.loadWorkSchedules(listWorkYears[0].value);
+          message.success(res.messages[0]);
+          return;
+        }
+
+        workSchedules.sort((a, b) => a.month - b.month);
+
+        selectedWorkSchedule = workSchedules[0];
+        selectedWorkSchedule.index = 0;
+        selectedWorkSchedule.workDays = that.generateWorkDays(selectedWorkSchedule);
+
+        let isWorkShiftFound = false;
+        for (let i = 0; i < selectedWorkSchedule.workDays.length; i++) {
+          for (let j = 0; j < selectedWorkSchedule.workDays[i].length; j++) {
+            if (selectedWorkSchedule.workDays[i][j].staffs.length > 0) {
+              selectedWorkDay = selectedWorkSchedule.workDays[i][j];
+              selectedWorkShift = selectedWorkDay.workShifts[0];
+              selectedWorkShift.index = 0;
+              isWorkShiftFound = true;
+              break;
+            }
+          }
+        }
+
+        if (!isWorkShiftFound) {
+          selectedWorkDay = selectedWorkSchedule.workDays[0][0];
+          let selectedWorkShift = selectedWorkDay.workShifts[0];
+          if (selectedWorkShift) {
+            selectedWorkShift.index = 0;
+          } else {
+            selectedWorkShift = { index: 0 }
+          }
+        }
+
+        that.reloadWorkSchedules(workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift);
+        message.success(res.messages[0]);
+        that.props.setAppLoading(false);
       },
       onCancel() { },
     });
@@ -485,7 +555,7 @@ class WorkAssignment extends PageBase {
     return (
       <div className="work-assignment">
         <Row>
-          <Col className="work-assignment__left-sidebar" span={5}>
+          <Col className="work-assignment__left-sidebar" span={4}>
             <BtnAddWorkSchedule reloadWorkSchedules={selectedYear => this.loadWorkSchedules(selectedYear)} />
 
             <div className="work-assignment__left-sidebar__year-selection">
@@ -523,7 +593,7 @@ class WorkAssignment extends PageBase {
                           ${index === selectedWorkSchedule.index ? 'work-assignment__left-sidebar__list-tasks__item--selected' : ''}`
                         }
                         onClick={() => this.handleSelectWorkSchedule(item, index)}>
-                        <Row style={{ width: '95%' }}>
+                        <Row style={{ width: '90%' }}>
                           <Col span={22}>
                             <span className="work-assignment__left-sidebar__list-tasks__item__task-name">Tháng {item.month}</span>
                           </Col>
@@ -542,7 +612,7 @@ class WorkAssignment extends PageBase {
               </div>
             </div>
           </Col>
-          <Col className="work-assignment__content" span={19}>
+          <Col className="work-assignment__content" span={20}>
             <div className="work-assignment__content__task-work-day-panel">
               <div className="work-assignment__content__task-work-day-panel__panel">
 
@@ -726,15 +796,36 @@ class WorkAssignment extends PageBase {
                             `}>{col.workWeekDay}</span>
                           <div className="work-assignment__content__body__tabs__work-schedule__work-day__staffs">
                             {col.staffs.slice(0, 2).map(staff => (
-                              <Avatar
+                              <Tooltip
                                 key={staff._id}
-                                size={16}
-                                className="work-assignment__content__body__tabs__work-schedule__work-day__staffs__avatar"
-                                src={staff.avatar} />))}
+                                placement="bottom"
+                                title={staff.fullname}
+                              >
+                                <Avatar
+                                  key={staff._id}
+                                  size={16}
+                                  className="work-assignment__content__body__tabs__work-schedule__work-day__staffs__avatar"
+                                  src={staff.avatar} />
+                              </Tooltip>
+                            ))}
                             {col.staffs.length > 2 ? (
-                              <div className="work-assignment__content__body__tabs__work-schedule__work-day__staffs__avatar--plus">
-                                <span>+{col.staffs.slice(2).length}</span>
-                              </div>
+                              <Tooltip
+                                placement="bottom"
+                                title={col.staffs.slice(2).map(staff => (
+                                  <Row gutter={7} key={staff._id}>
+                                    <Col><Avatar
+                                      style={{ marginTop: -3 }}
+                                      key={staff._id}
+                                      size={16}
+                                      src={staff.avatar} /></Col>
+                                    <Col><span>{staff.fullname}</span></Col>
+                                  </Row>
+                                ))}
+                              >
+                                <div className="work-assignment__content__body__tabs__work-schedule__work-day__staffs__avatar--plus">
+                                  <span>+{col.staffs.slice(2).length}</span>
+                                </div>
+                              </Tooltip>
                             ) : <></>}
                           </div>
                         </Col>

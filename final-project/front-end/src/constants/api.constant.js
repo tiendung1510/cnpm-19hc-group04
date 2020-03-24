@@ -10,7 +10,8 @@ export const API = {
     },
     WorkSchedule: {
       getWorkSchedules: `${secret.API_URL}/work-schedules`,
-      addWorkSchedule: `${secret.API_URL}/work-schedules`
+      addWorkSchedule: `${secret.API_URL}/work-schedules`,
+      removeWorkSchedule: `${secret.API_URL}/work-schedules/{workScheduleID}`
     },
     WorkShift: {
       addWorkShift: `${secret.API_URL}/work-shifts`,

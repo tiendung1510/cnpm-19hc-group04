@@ -37,18 +37,18 @@ class Toolbar extends Component {
 
     return (
       <Row className="toolbar" justify="start" align="middle">
-        <Col className="__page-title" span={18}>
+        <Col className="__page-title" span={16}>
           <Row align="center">
             <Col span={1}><div className="__page-title__icon"><CurrentPage.Icon /></div></Col>
             <Col span={23}><span className="__page-title__text">{currentPageTitle}</span></Col>
           </Row>
         </Col>
-        <Col span={6}>
+        <Col span={8}>
           <Row className="__account" justify="center" align="middle">
-            <Col span={13}>
+            <Col span={16}>
               More user features here...
             </Col>
-            <Col span={11}>
+            <Col span={8}>
               <Dropdown overlay={
                 <Menu onClick={e => this.handleSelectMenuItem(e.key)}>
                   {(avatarMenuItems || []).map((item) => (
@@ -68,12 +68,9 @@ class Toolbar extends Component {
                 </Menu>
               } className="__account__avatar-menu">
                 <Row align="middle">
-                  <Col span={7}><Avatar size="default" src={user.avatar} /></Col>
-                  <Col span={17}>
-                    <Row>
-                      <Col span={16}><span>{user.fullname || ''}</span></Col>
-                      <Col span={8}><CaretDownFilled /></Col>
-                    </Row>
+                  <Col span={5}><Avatar size="default" src={user.avatar} /></Col>
+                  <Col span={19}>
+                    <span style={{ margin: '0 10px' }}>{user.fullname || ''}</span><CaretDownFilled />
                   </Col>
                 </Row>
               </Dropdown>
