@@ -8,6 +8,7 @@ const { AddWorkScheduleValidationSchema } = require('./validations/add-work-sche
 const WorkScheduleModel = require('./work-schedule.model');
 const WorkShiftModel = require('../work-shift/work-shift.model');
 const WorkAssignmentModel = require('../work-assignment/work-assignment.model');
+const mongoose = require('mongoose');
 
 const addWorkSchedule = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::addWorkSchedule::was called`);
@@ -121,7 +122,7 @@ const getWorkSchedules = async (req, res, next) => {
 
     const availableYears = await WorkScheduleModel.find({}, { year: 1, _id: 0 }).distinct('year');
 
-    logger.info(`${CONTROLLER_NAME}::getWorkSchedules::was called`);
+    logger.info(`${CONTROLLER_NAME}::getWorkSchedules::success`);
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
       data: {
@@ -136,7 +137,45 @@ const getWorkSchedules = async (req, res, next) => {
   }
 }
 
+const removeWorkSchedule = async (req, res, next) => {
+  logger.info(`${CONTROLLER_NAME}::removeWorkSchedule::was called`);
+  try {
+    const { workScheduleID } = req.params;
+    const workSchedule = await WorkScheduleModel.findOne({ _id: mongoose.Types.ObjectId(workScheduleID) })
+      .populate('workShifts');
+
+    if (!workSchedule) {
+      logger.info(`${CONTROLLER_NAME}::removeWorkSchedule::work schedule not found`);
+      return res.status(HttpStatus.NOT_FOUND).json({
+        status: HttpStatus.NOT_FOUND,
+        errors: [WORK_SCHEDULE_MESSAGE.ERROR.WORK_SCHEDULE_NOT_FOUND]
+      });
+    }
+
+    if (workSchedule.workShifts.length > 0) {
+      logger.info(`${CONTROLLER_NAME}::removeWorkSchedule::still has work shift`);
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        status: HttpStatus.BAD_REQUEST,
+        errors: [WORK_SCHEDULE_MESSAGE.ERROR.WORK_SCHEDULE_HAS_WORK_SHIFT]
+      });
+    }
+
+    await WorkScheduleModel.deleteOne({ _id: workSchedule._id });
+
+    logger.info(`${CONTROLLER_NAME}::removeWorkSchedule::a work schedule was removed`);
+    return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
+      data: {},
+      messages: [WORK_SCHEDULE_MESSAGE.SUCCESS.REMOVE_WORK_SCHEDULE_SUCCESS]
+    })
+  } catch (error) {
+    logger.error(`${CONTROLLER_NAME}::removeWorkSchedule::error`);
+    return next(error);
+  }
+}
+
 module.exports = {
   addWorkSchedule,
-  getWorkSchedules
+  getWorkSchedules,
+  removeWorkSchedule
 }
