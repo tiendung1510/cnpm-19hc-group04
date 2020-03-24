@@ -70,8 +70,8 @@ class Sidebar extends Component {
                   this.props.setCurrentPageTitle(page.title, page.icon);
                   this.props.setSidebarSelectedIndex(pageIndex);
                 }}>
-                <Page.Icon />
-                <span className='nav-text'>{page.title}</span>
+                <Page.Icon style={{ color: '#ff8220' }} />
+                <span className="sidebar__nav-title">{page.title}</span>
                 <Link to={page.path} />
               </Menu.Item>
             )

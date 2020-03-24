@@ -29,7 +29,7 @@ export default class UserInfo extends Component {
           </div>
         </div>
         <div className="__avatar">
-          <Avatar size={64} src={user.avatar} className="__avatar__image" />
+          <Avatar size={58} src={user.avatar} className="__avatar__image" />
         </div>
       </div>
     )

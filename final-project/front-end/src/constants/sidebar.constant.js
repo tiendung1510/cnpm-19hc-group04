@@ -1,4 +1,3 @@
-import WorkSchedule from '../components/pages/User/WorkSchedule/WorkSchedule';
 import Profile from '../components/pages/User/Profile/Profile';
 import ChangePassword from '../components/pages/User/ChangePassword/ChangePassword';
 
@@ -13,7 +12,7 @@ import WorkAssignment from '../components/pages/Manager/WorkAssignment/WorkAssig
 import SupplierManagement from '../components/pages/Manager/SupplierManagement/SupplierManagement';
 
 import {
-  DollarOutlined, QuestionCircleOutlined, CalendarOutlined, InboxOutlined, BarChartOutlined, TeamOutlined, FileDoneOutlined, RocketOutlined, UserOutlined, LockOutlined,
+  DollarOutlined, QuestionCircleOutlined, InboxOutlined, BarChartOutlined, TeamOutlined, FileDoneOutlined, RocketOutlined, UserOutlined, LockOutlined,
 } from '@ant-design/icons';
 
 export default [
@@ -40,12 +39,6 @@ export default [
     role: "CASHIER",
     pages: [
       {
-        title: 'Lịch làm việc',
-        path: '/working-schedule',
-        icon: CalendarOutlined,
-        component: WorkSchedule
-      },
-      {
         title: 'Tính tiền cho khách',
         path: '/money-counting',
         icon: DollarOutlined,
@@ -63,12 +56,6 @@ export default [
     role: "IMPORTER",
     pages: [
       {
-        title: 'Lịch làm việc',
-        path: '/working-schedule',
-        icon: CalendarOutlined,
-        component: WorkSchedule
-      },
-      {
         title: 'Quản lý sản phẩm',
         path: '/products',
         icon: InboxOutlined,
@@ -79,12 +66,6 @@ export default [
   {
     role: "MANAGER",
     pages: [
-      {
-        title: 'Báo cáo - Thống kê',
-        path: '/reporting',
-        icon: BarChartOutlined,
-        component: Reporting
-      },
       {
         title: 'Quản lý nhân viên',
         path: '/staffs',
@@ -98,10 +79,16 @@ export default [
         component: WorkAssignment
       },
       {
-        title: 'Nhà cung cấp',
+        title: 'Liên hệ nhà cung cấp',
         path: '/suppliers',
         icon: RocketOutlined,
         component: SupplierManagement
+      },
+      {
+        title: 'In báo cáo - thống kê',
+        path: '/reporting',
+        icon: BarChartOutlined,
+        component: Reporting
       }
     ]
   }

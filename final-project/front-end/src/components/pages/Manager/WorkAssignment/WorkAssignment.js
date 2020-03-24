@@ -320,7 +320,7 @@ class WorkAssignment extends PageBase {
     confirm({
       title: 'Bạn có muốn hủy ca làm việc này?',
       icon: <ExclamationCircleOutlined />,
-      content: 'Chỉ có thể hủy ca làm việc khi không còn nhân viên nào được phân công.',
+      content: 'Ca làm việc chỉ có thể hủy khi không còn nhân viên nào được phân công.',
       okText: 'Đồng ý',
       okType: 'danger',
       cancelText: 'Không, cảm ơn',
@@ -386,7 +386,7 @@ class WorkAssignment extends PageBase {
     confirm({
       title: 'Bạn có muốn hủy lịch làm việc này?',
       icon: <ExclamationCircleOutlined />,
-      content: 'Chỉ có thể hủy lịch làm việc khi tất cả các ngày đều chưa có ca làm việc.',
+      content: 'Lịch làm việc chỉ có thể hủy khi tất cả các ngày trong tháng đều chưa có ca làm việc.',
       okText: 'Đồng ý',
       okType: 'danger',
       cancelText: 'Không, cảm ơn',
@@ -469,7 +469,7 @@ class WorkAssignment extends PageBase {
   openRemoveWorkShiftAssignerConfirm(assinger) {
     const that = this;
     confirm({
-      title: `Bạn có muốn hủy phân công ${assinger.fullname}?`,
+      title: `Bạn có muốn hủy phân công ${assinger.fullname} trong ca làm việc này?`,
       icon: <ExclamationCircleOutlined />,
       okText: 'Đồng ý',
       okType: 'danger',
@@ -553,7 +553,7 @@ class WorkAssignment extends PageBase {
     selectedWorkSchedule.workDays = this.generateWorkDays(selectedWorkSchedule);
 
     return (
-      <div className="work-assignment">
+      <div className="work-assignment animated fadeIn">
         <Row>
           <Col className="work-assignment__left-sidebar" span={4}>
             <BtnAddWorkSchedule reloadWorkSchedules={selectedYear => this.loadWorkSchedules(selectedYear)} />
@@ -562,7 +562,7 @@ class WorkAssignment extends PageBase {
               <div className="work-assignment__left-sidebar__title">
                 <span>Năm làm việc</span>
               </div>
-              <div>
+              <div style={{ minHeight: 37 }}>
                 {
                   (listWorkYears || []).length > 0 ? (
                     <Select defaultValue={selectedWorkYear} onChange={e => this.handleSelectYear(e)}>
@@ -570,7 +570,7 @@ class WorkAssignment extends PageBase {
                         <Option key={i} value={y.value}>{y.text}</Option>
                       ))}
                     </Select>
-                  ) : <></>
+                  ) : null
                 }
               </div>
             </div>
