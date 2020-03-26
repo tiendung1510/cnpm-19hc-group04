@@ -13,7 +13,6 @@ const { USER_ROLE, USER_MESSAGE, CONTROLLER_NAME, PASSWORD_SALT_ROUNDS, SEX } = 
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const bcrypt = require('bcrypt');
-const { getCustomUserInfo } = require('./user.service');
 
 const login = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::login::was called`);
@@ -46,7 +45,7 @@ const login = async (req, res, next) => {
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
       data: {
-        user: getCustomUserInfo(user),
+        user,
         meta: { token: jwt.sign({ _id: user._id }, config.get('jwt').secret) },
       },
       messages: [USER_MESSAGE.SUCCESS.LOGIN_SUCCESS]
@@ -113,7 +112,7 @@ const addUser = async (req, res, next) => {
     logger.info(`${CONTROLLER_NAME}::addUser::a new user was added`);
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
-      data: { user: getCustomUserInfo(newUser) },
+      data: { user: newUser },
       messages: [USER_MESSAGE.SUCCESS.ADD_USER_SUCCESS]
     });
   } catch (error) {
@@ -125,7 +124,27 @@ const addUser = async (req, res, next) => {
 const getUsers = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::getUsers::was called`);
   try {
-    let users = await UserModel.find({}, { username: 0, password: 0 });
+    let condition = {};
+    const { role } = req.query;
+    if (role) {
+      const isValidRole = USER_ROLE[role] !== undefined;
+      if (!isValidRole) {
+        logger.info(`${CONTROLLER_NAME}::getUsers::invalid role`);
+        return res.status(HttpStatus.BAD_REQUEST).json({
+          status: HttpStatus.BAD_REQUEST,
+          errors: [USER_MESSAGE.ERROR.INVALID_USER_ROLE]
+        });
+      }
+
+      condition.role = role;
+    }
+
+    let users = await UserModel.find(condition, { password: 0 });
+    users.sort((a, b) => {
+      const time1 = new Date(a.createdAt).getTime();
+      const time2 = new Date(b.createdAt).getTime();
+      return time2 - time1;
+    });
 
     logger.info(`${CONTROLLER_NAME}::getUsers::success`);
     return res.status(HttpStatus.OK).json({
@@ -191,7 +210,7 @@ const updateProfile = async (req, res, next) => {
     logger.info(`${CONTROLLER_NAME}::updateProfile::an user was updated`);
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
-      data: { user: getCustomUserInfo(updatedUser) },
+      data: { user: updatedUser },
       messages: [USER_MESSAGE.SUCCESS.UPDATE_PROFILE_SUCCESS]
     });
   } catch (error) {
