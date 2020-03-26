@@ -78,7 +78,6 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 
       .work-assignment__left-sidebar__list-tasks__item {
         transition: 0.2s;
-        border-left: 4px solid white;
 
         .work-assignment__left-sidebar__list-tasks__item__task-name {
           margin-left: 10px;
@@ -94,8 +93,8 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
 
         &.work-assignment__left-sidebar__list-tasks__item--selected {
-          border-left-color: #ff8220;
-          background: #ff8220;
+          background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
+          text-shadow: $primaryTextShadow;
           color: white;
           font-weight: bold;
         }
@@ -112,6 +111,7 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     height: 87vh;
     position: relative;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    border-radius: 5px;
     border-top-left-radius: 12px;
     overflow: hidden;
 
@@ -412,7 +412,7 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
                 color: white;
                 border-radius: 50%;
                 font-size: 10px;
-                padding: 0 2px;
+                padding: 3px 0 2px 0;
                 font-size: 9px;
                 display: inline-block;
                 display: flex;

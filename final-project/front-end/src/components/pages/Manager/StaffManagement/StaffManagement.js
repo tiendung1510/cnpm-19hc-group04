@@ -1,8 +1,8 @@
 import React from 'react';
 import PageBase from '../../../utilities/PageBase/PageBase';
 import './StaffManagement.style.scss';
-import { SearchOutlined, TeamOutlined, EditOutlined, UserDeleteOutlined, CalendarOutlined, PlusOutlined } from '@ant-design/icons';
-import { Input, Row, Col, Select, Table, Button, Avatar, Tooltip, message } from 'antd';
+import { SearchOutlined, UserDeleteOutlined, TeamOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Input, Row, Col, Select, Table, Avatar, message, Skeleton, Modal } from 'antd';
 import { withCookies } from 'react-cookie';
 import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
 import { API } from '../../../../constants/api.constant';
@@ -10,27 +10,39 @@ import { connect } from 'react-redux';
 import * as actions from '../../../../redux/actions';
 import moment from 'moment';
 import USER_ROLES from '../../../../constants/user-role.constant';
+import AddStaffDialog from './AddStaffDialog/AddStaffDialog';
+import UpdateStaffDialog from './UpdateStaffDialog/UpdateStaffDialog';
 
 const { Option } = Select;
+const { confirm } = Modal;
 
 class StaffManagement extends PageBase {
   constructor(props) {
     super(props);
     this.state = {
       staffs: [],
-      selectedStaff: null
+      filteredStaffs: [],
+      selectedStaff: null,
+      searchStaffText: '',
+      filteredStaffRole: null
     }
   }
 
   componentDidMount() {
-    this.loadStaffs();
+    this.loadStaffs(null, null);
   }
 
-  loadStaffs = async () => {
+  loadStaffs = async (role, defaultStaff) => {
     this.props.setAppLoading(true);
+
+    let url = API.Manager.StaffManagement.getListStaffs;
+    if (role) {
+      url += `?role=${role}`;
+    }
+
     const res = await (
       await fetch(
-        API.Manager.StaffManagement.getListStaffs,
+        url,
         {
           method: 'GET',
           headers: {
@@ -44,7 +56,25 @@ class StaffManagement extends PageBase {
 
     if (res.status === 200) {
       const { users } = res.data;
-      this.setState({ staffs: users });
+      let { filteredStaffs, selectedStaff } = this.state;
+
+      if (!role) {
+        filteredStaffs = [...users];
+      } else {
+        filteredStaffs = users.filter(u => u.role === role);
+      }
+
+      if (filteredStaffs.length > 0) {
+        if (defaultStaff) {
+          selectedStaff = defaultStaff;
+        } else {
+          selectedStaff = filteredStaffs[0];
+        }
+      } else {
+        selectedStaff = null;
+      }
+
+      this.setState({ staffs: users, filteredStaffs, selectedStaff });
     } else {
       message.error(res.errors[0]);
     }
@@ -56,38 +86,112 @@ class StaffManagement extends PageBase {
     this.setState({ selectedStaff: record });
   }
 
+  filterListStaffsByRole(role) {
+    let { filteredStaffs, staffs, selectedStaff } = this.state;
+    if (!role) {
+      filteredStaffs = [...staffs];
+    } else {
+      filteredStaffs = staffs.filter(s => s.role === role);
+    }
+
+    if (filteredStaffs.length > 0) {
+      selectedStaff = filteredStaffs[0];
+    } else {
+      selectedStaff = null;
+    }
+
+    this.setState({ filteredStaffs, filteredStaffRole: role, selectedStaff });
+  }
+
+  openRemoveStaffConfirm(staff) {
+    const that = this;
+    confirm({
+      title: `Bạn có muốn xóa ${staff.fullname} khỏi hệ thống?`,
+      icon: <ExclamationCircleOutlined />,
+      content: '',
+      okText: 'Đồng ý',
+      okType: 'danger',
+      cancelText: 'Không, cảm ơn',
+      onOk() {
+        const staffID = staff._id;
+        let { staffs, filteredStaffRole, filteredStaffs, selectedStaff } = that.state;
+        staffs = staffs.filter(s => s._id !== staffID);
+        staffs.sort((a, b) => {
+          const time1 = new Date(a.createdAt).getTime();
+          const time2 = new Date(b.createdAt).getTime();
+          return time2 - time1;
+        });
+
+        filteredStaffs = staffs.filter(s => {
+          if (filteredStaffRole)
+            return s.role === filteredStaffRole;
+          return true;
+        });
+        if (filteredStaffs.length > 0) {
+          selectedStaff = filteredStaffs[0];
+        } else {
+          selectedStaff = null;
+        }
+
+        that.setState({ staffs, selectedStaff, filteredStaffs });
+        message.success('Xóa nhân viên thành công');
+      },
+      onCancel() { },
+    });
+  }
+
+  onChangeSearchStaffInput(text) {
+    this.setState({ searchStaffText: text });
+
+    if (!text) {
+      this.filterListStaffsByRole(this.state.filteredStaffRole);
+    } else {
+      let { filteredStaffs } = this.state;
+      filteredStaffs = filteredStaffs
+        .filter(s => {
+          const keys = [...Object.keys(s)].filter(k => typeof (s[k]) === 'string');
+          for (const k of keys) {
+            if (s[k].toLowerCase().includes(text.toLowerCase()))
+              return true;
+          }
+          return false;
+        });
+
+      this.setState({ filteredStaffs });
+    }
+  }
+
   render() {
-    let { staffs, selectedStaff } = this.state;
-    staffs = staffs
-      .filter(s => s.role !== USER_ROLES.MANAGER.type)
-      .map((s, i) => {
-        let staff = JSON.parse(JSON.stringify(s));
-        staff.key = i;
-        return staff;
-      });
+    let { filteredStaffs, selectedStaff } = this.state;
+    filteredStaffs = filteredStaffs.map((s, i) => {
+      let staff = JSON.parse(JSON.stringify(s));
+      staff.key = i;
+      return staff;
+    });
 
     let columns;
-    if (staffs.length === 0) {
+    if (filteredStaffs.length === 0) {
       columns = [];
       selectedStaff = null;
     } else {
       if (!selectedStaff) {
-        selectedStaff = staffs[0];
+        selectedStaff = filteredStaffs[0];
       }
 
-      columns = Object.keys(staffs[0]).filter(k => !['_id', 'avatar', 'updatedAt', '__v', 'key', 'role'].includes(k));
+      columns = Object.keys(filteredStaffs[0]).filter(k => !['_id', 'avatar', 'updatedAt', '__v', 'key'].includes(k));
       columns = columns.map(k => {
         let title, colIndex;
         switch (k) {
-          case 'fullname': title = 'Họ & tên'; colIndex = 0; break;
-          // case 'role': title = 'Loại NV'; colIndex = 1; break;
-          case 'dateOfBirth': title = 'Ngày sinh'; colIndex = 2; break;
-          case 'sex': title = 'Giới tính'; colIndex = 3; break;
-          case 'email': title = 'Email'; colIndex = 4; break;
-          case 'phone': title = 'Điện thoại'; colIndex = 5; break;
-          case 'address': title = 'Địa chỉ'; colIndex = 6; break;
-          case 'salaryRate': title = 'HS lương'; colIndex = 7; break;
-          case 'createdAt': title = 'Ngày tham gia'; colIndex = 8; break;
+          case 'fullname': title = 'Nhân viên'; colIndex = 0; break;
+          case 'username': title = 'Tên TK'; colIndex = 1; break;
+          case 'role': title = 'Chức vụ'; colIndex = 2; break;
+          case 'dateOfBirth': title = 'Ngày sinh'; colIndex = 3; break;
+          case 'sex': title = 'Giới tính'; colIndex = 4; break;
+          case 'email': title = 'Email'; colIndex = 5; break;
+          case 'phone': title = 'Điện thoại'; colIndex = 6; break;
+          case 'address': title = 'Địa chỉ'; colIndex = 7; break;
+          case 'salaryRate': title = 'HS lương'; colIndex = 8; break;
+          case 'createdAt': title = 'Ngày tham gia'; colIndex = 9; break;
           default: break;
         }
 
@@ -102,21 +206,40 @@ class StaffManagement extends PageBase {
           column.render = (text, record) => (
             <Row align="middle" style={{ width: '100%' }}>
               <Col span={6}><Avatar src={record.avatar} size={24} /></Col>
-              <Col span={18}><span style={{ fontWeight: 'bold' }}>{text}</span></Col>
+              <Col span={18}><span style={{ marginLeft: 7, fontWeight: 'bold' }}>{text}</span></Col>
             </Row>
           );
-          column.width = 130;
-        }
-
-        if (k === 'address') {
           column.width = 150;
         }
 
-        if (k === 'email') {
-          column.width = 130;
+        if (k === 'role') {
+          column.render = (text, record) => {
+            let className;
+            if (text === USER_ROLES.MANAGER.type)
+              className = 'staff-management__role-badge staff-management__role-badge--manager';
+            if (text === USER_ROLES.CASHIER.type)
+              className = 'staff-management__role-badge staff-management__role-badge--cashier';
+            if (text === USER_ROLES.IMPORTER.type)
+              className = 'staff-management__role-badge staff-management__role-badge--importer';
+
+            return (<span className={className}>{USER_ROLES[text].name}</span>)
+          };
+          column.width = 120;
         }
 
-        if (k === 'sex' || k === 'salaryRate' || k === 'dateOfBirth') {
+        if (k === 'address') {
+          column.width = 180;
+        }
+
+        if (k === 'email' || k === 'createdAt') {
+          column.width = 140;
+        }
+
+        if (k === 'salaryRate' || k === 'dateOfBirth' || k === 'phone') {
+          column.width = 100;
+        }
+
+        if (k === 'sex') {
           column.width = 80;
         }
 
@@ -137,13 +260,27 @@ class StaffManagement extends PageBase {
             <Col span={4}>
               <div className="staff-management__body__staffs__sidebar">
                 <div className="staff-management__body__staffs__sidebar__staff-details">
-                  <Avatar
-                    className="staff-management__body__staffs__sidebar__staff-details__avatar"
-                    size={50}
-                    src={selectedStaff ? selectedStaff.avatar : 'https://cdn.wrytin.com/images/avatar/s/256/default.jpeg'} />
+                  {selectedStaff ? (
+                    <Avatar
+                      className="staff-management__body__staffs__sidebar__staff-details__avatar"
+                      size={50}
+                      src={selectedStaff ? selectedStaff.avatar : 'https://cdn.wrytin.com/images/avatar/s/256/default.jpeg'}
+                    />
+                  ) : (
+                      <div className="staff-management__body__staffs__sidebar__staff-details__avatar">
+                        <Skeleton.Avatar
+                          active={true} size={50}
+                          shape="circle"
+                        />
+                      </div>
+                    )}
                   <div className="staff-management__body__staffs__sidebar__staff-details__basic-info">
                     <div className="staff-management__body__staffs__sidebar__staff-details__basic-info__name">
-                      <span>{selectedStaff ? selectedStaff.fullname : ''}</span>
+                      <span>
+                        {selectedStaff ? selectedStaff.fullname : (
+                          <Skeleton.Input style={{ width: 100, height: 20 }} active={true} size="small" />
+                        )}
+                      </span>
                     </div>
                     <div className="staff-management__body__staffs__sidebar__staff-details__basic-info__role">
                       <span>{selectedStaff ? USER_ROLES[selectedStaff.role].name : ''}</span>
@@ -153,37 +290,26 @@ class StaffManagement extends PageBase {
 
                 <ul className="staff-management__body__staffs__sidebar__staff-features">
                   <li className="staff-management__body__staffs__sidebar__staff-features__feature">
-                    <Row align="middle">
-                      <Col span={2}>
-                        <EditOutlined className="staff-management__body__staffs__sidebar__staff-features__feature__icon" />
-                      </Col>
-                      <Col span={22} className="staff-management__body__staffs__sidebar__staff-features__feature__info">
-                        <span className="staff-management__body__staffs__sidebar__staff-features__feature__info__name">
-                          Chỉnh sửa thông tin</span>
-                      </Col>
-                    </Row>
+                    <UpdateStaffDialog
+                      selectedStaff={selectedStaff}
+                      reloadStaffs={updatedStaff => this.loadStaffs(this.state.filteredStaffRole, updatedStaff)}
+                    />
                   </li>
-                  <li className="staff-management__body__staffs__sidebar__staff-features__feature">
-                    <Row align="middle">
-                      <Col span={2}>
-                        <CalendarOutlined className="staff-management__body__staffs__sidebar__staff-features__feature__icon" />
-                      </Col>
-                      <Col span={22} className="staff-management__body__staffs__sidebar__staff-features__feature__info">
-                        <span className="staff-management__body__staffs__sidebar__staff-features__feature__info__name">
-                          In lịch làm việc trong tuần</span>
-                      </Col>
-                    </Row>
-                  </li>
-                  <li className="staff-management__body__staffs__sidebar__staff-features__feature">
-                    <Row align="middle">
-                      <Col span={2}>
-                        <UserDeleteOutlined className="staff-management__body__staffs__sidebar__staff-features__feature__icon" />
-                      </Col>
-                      <Col span={22} className="staff-management__body__staffs__sidebar__staff-features__feature__info">
-                        <span className="staff-management__body__staffs__sidebar__staff-features__feature__info__name">
-                          Xóa khỏi hệ thống</span>
-                      </Col>
-                    </Row>
+                  <li
+                    className="staff-management__body__staffs__sidebar__staff-features__feature"
+                    onClick={() => this.openRemoveStaffConfirm(selectedStaff)}
+                  >
+                    {selectedStaff ? (
+                      <Row align="middle">
+                        <Col span={2}>
+                          <UserDeleteOutlined className="staff-management__body__staffs__sidebar__staff-features__feature__icon" />
+                        </Col>
+                        <Col span={22} className="staff-management__body__staffs__sidebar__staff-features__feature__info">
+                          <span className="staff-management__body__staffs__sidebar__staff-features__feature__info__name">
+                            Xóa khỏi hệ thống</span>
+                        </Col>
+                      </Row>
+                    ) : (<Skeleton.Input style={{ width: '88%', height: 20 }} active={true} size="small" />)}
                   </li>
                 </ul>
 
@@ -193,20 +319,12 @@ class StaffManagement extends PageBase {
               <div className="staff-management__body__staffs__content">
                 <div className="staff-management__body__staffs__content__toolbar">
                   <Row style={{ width: '100%' }} align="middle">
-                    <Col span={18}>
-                      <div className="staff-management__body__staffs__content__toolbar__title">
-                        <TeamOutlined className="staff-management__body__staffs__content__toolbar__title__icon" />
-                        <span className="staff-management__body__staffs__content__toolbar__title__text">
-                          Nhân viên:
-                          <span
-                            className="staff-management__body__staffs__content__toolbar__title__text__staff-total">
-                            {staffs.length}
-                          </span>
-                        </span>
-                      </div>
-                    </Col>
-                    <Col span={6}>
-                      <Input prefix={<SearchOutlined style={{ marginRight: 5 }} />} placeholder="Tìm kiếm nhân viên..." />
+                    <Col span={7}>
+                      <Input
+                        prefix={<SearchOutlined style={{ marginRight: 5 }} />}
+                        placeholder="Tìm kiếm nhân viên..."
+                        onChange={e => this.onChangeSearchStaffInput(e.target.value)}
+                      />
                     </Col>
                   </Row>
                 </div>
@@ -214,19 +332,30 @@ class StaffManagement extends PageBase {
                   <div className="staff-management__body__staffs__content__list-staffs__header">
                     <div className="staff-management__body__staffs__content__list-staffs__header__dark-bg"></div>
                     <Row>
-                      <Col span={6} >
-                        <div className="staff-management__body__staffs__content__list-staffs__header__role-selection">
-                          <Select defaultValue="CASHIER" style={{ width: 220 }}>
-                            <Option value="CASHIER">Nhân viên thu ngân</Option>
-                            <Option value="IMPORTER">Nhân viên nhập hàng</Option>
+                      <Col span={6}>
+                        <div
+                          className="staff-management__body__staffs__content__list-staffs__header__role-selection">
+                          <Select
+                            defaultValue={null}
+                            style={{ width: 200 }}
+                            onChange={value => this.filterListStaffsByRole(value)}
+                          >
+                            <Option value={null}>Tất cả nhân viên</Option>
+                            <Option value={USER_ROLES.CASHIER.type}>{USER_ROLES.CASHIER.name}</Option>
+                            <Option value={USER_ROLES.IMPORTER.type}>{USER_ROLES.IMPORTER.name}</Option>
+                            <Option value={USER_ROLES.MANAGER.type}>{USER_ROLES.MANAGER.name}</Option>
                           </Select>
+                          <div className="staff-management__body__staffs__content__list-staffs__header__role-selection__staft-total-by-role">
+                            <TeamOutlined style={{ marginRight: 7 }} />
+                            <span>{filteredStaffs.length}</span>
+                          </div>
                         </div>
                       </Col>
                       <Col span={18}>
-                        <div className="staff-management__body__staffs__content__list-staffs__header__buttons">
-                          <Tooltip placement="bottom" title="Thêm nhân viên">
-                            <Button shape="circle" type="link" icon={<PlusOutlined />} />
-                          </Tooltip>
+                        <div className="staff-management__body__staffs__content__list-staffs__header__dialogs">
+                          <AddStaffDialog
+                            reloadStaffs={newStaff => this.loadStaffs(this.state.filteredStaffRole, newStaff)}
+                          />
                         </div>
                       </Col>
                     </Row>
@@ -234,9 +363,8 @@ class StaffManagement extends PageBase {
                   <Row className="staff-management__body__staffs__content__list-staffs__wrapper">
                     <Table
                       columns={columns}
-                      dataSource={staffs}
-                      pagination={{ pageSize: 50 }}
-                      scroll={{ y: 340 }}
+                      dataSource={filteredStaffs}
+                      scroll={{ y: 410 }}
                       onRow={(record) => {
                         return {
                           onClick: () => this.onClickListStaffsRow(record)

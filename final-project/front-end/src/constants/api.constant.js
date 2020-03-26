@@ -2,11 +2,14 @@ import secret from '../config/secret';
 
 export const API = {
   User: {
-    login: `${secret.API_URL}/users/login`
+    login: `${secret.API_URL}/users/login`,
+    changePassword: `${secret.API_URL}/users/change-password`
   },
   Manager: {
     StaffManagement: {
-      getListStaffs: `${secret.API_URL}/users`
+      getListStaffs: `${secret.API_URL}/users`,
+      addStaff:`${secret.API_URL}/users`,
+      updateStaffProfile: `${secret.API_URL}/users/{updatedUserID}`
     },
     WorkSchedule: {
       getWorkSchedules: `${secret.API_URL}/work-schedules`,

@@ -9,7 +9,7 @@ export default {
   },
   MANAGER: {
     type: 'MANAGER',
-    name: 'Người quản lý'
+    name: 'NV Quản lý'
   },
   USER: {
     type: 'USER',

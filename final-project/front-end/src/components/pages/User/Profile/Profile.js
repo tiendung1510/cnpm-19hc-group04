@@ -32,7 +32,7 @@ class Profile extends Component {
           <div className="profile__main__header">
             <Avatar
               className="profile__main__header__user-avatar"
-              size={70}
+              size={65}
               src={user.avatar} />
             <div className="profile__main__header__user-info">
               <div className="profile__main__header__user-info__name"><span>{user.fullname}</span></div>

@@ -44,7 +44,7 @@ class Toolbar extends Component {
           </Row>
         </Col>
         <Col span={8}>
-          <Row className="__account" justify="center" align="middle">
+          <Row className="__account" justify="end" align="middle">
             <Col span={14}></Col>
             <Col span={10}>
               <Dropdown overlay={
@@ -66,7 +66,7 @@ class Toolbar extends Component {
                 </Menu>
               } className="__account__avatar-menu">
                 <Row align="middle">
-                  <Col span={4}><Avatar size="default" src={user.avatar} /></Col>
+                  <Col span={4}><Avatar size={30} src={user.avatar} /></Col>
                   <Col span={20}>
                     <span style={{ margin: '0 10px' }}>{user.fullname || ''}</span><CaretDownFilled />
                   </Col>

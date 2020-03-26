@@ -3,15 +3,21 @@
   $boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.23);
   $primaryBorderColor: #eee;
+  $textShadow1: 1px 1px 2px
+    rgba(
+      $color: #000000,
+      $alpha: 0.4
+    );
 
   .styled-scrollbar {
     &::-webkit-scrollbar {
       width: 5px;
+      height: 5px;
     }
 
     &::-webkit-scrollbar-thumb {
       background-color: rgba($color: #000000, $alpha: 0.2);
-      border-radius: 3px;
+      border-radius: 5px;
     }
   }
 
@@ -19,6 +25,33 @@
   padding: $primaryPadding;
   padding-top: 0.4 * $primaryPadding;
   background: #fff6e6;
+
+  .staff-management__role-badge {
+    font-weight: bold;
+    font-size: 9px;
+    border-radius: 12px;
+    display: block;
+    width: 72px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.staff-management__role-badge--cashier {
+      background: #4bb543;
+      color: white;
+    }
+
+    &.staff-management__role-badge--manager {
+      background: #ff6f61;
+      color: white;
+    }
+
+    &.staff-management__role-badge--importer {
+      background: #039be5;
+      color: white;
+    }
+  }
 
   .staff-management__body {
     padding-top: 20px;
@@ -42,22 +75,22 @@
         border-right: 1px solid $primaryBorderColor;
 
         .staff-management__body__staffs__sidebar__staff-details {
-          padding-top: 2 * $primaryPadding;
+          padding-top: 3 * $primaryPadding;
           width: 100%;
-          height: 30%;
+          height: 32%;
           display: flex;
           flex-direction: column;
           align-items: center;
 
           .staff-management__body__staffs__sidebar__staff-details__avatar {
-            margin: 10px 0;
+            margin: 10px 0 5px 0;
           }
 
           .staff-management__body__staffs__sidebar__staff-details__basic-info {
             text-align: center;
             .staff-management__body__staffs__sidebar__staff-details__basic-info__role {
               font-size: 9px;
-              color: rgba($color: #000000, $alpha: 0.3);
+              color: rgba($color: #000000, $alpha: 0.4);
             }
           }
         }
@@ -65,15 +98,23 @@
         .staff-management__body__staffs__sidebar__staff-features {
           list-style: none;
           padding-left: $primaryPadding;
+          padding: 0 10px;
           .staff-management__body__staffs__sidebar__staff-features__feature {
             cursor: pointer;
-            color: #ff8220;
-            padding-bottom: 20px;
+            padding: 5px 10px;
+            background: #f1f3f5;
+            color: gray;
+            margin-bottom: 10px;
+            border-radius: 3px;
+            transition: 0.2s;
 
             &:hover {
+              background: #ff8220;
+              color: white;
               .staff-management__body__staffs__sidebar__staff-features__feature__info
                 .staff-management__body__staffs__sidebar__staff-features__feature__info__name {
-                color: #ff8220;
+                color: white;
+                font-weight: bold;
               }
             }
 
@@ -84,8 +125,7 @@
 
               .staff-management__body__staffs__sidebar__staff-features__feature__info__name {
                 font-size: 11px;
-                color: rgba($color: #000000, $alpha: 0.5);
-                transition: 0.2s;
+                color: rgba($color: #000000, $alpha: 0.7);
               }
 
               .staff-management__body__staffs__sidebar__staff-features__feature__info__description {
@@ -100,12 +140,18 @@
       .staff-management__body__staffs__content {
         box-sizing: border-box;
         height: 100%;
+        background: #eee;
+        border-bottom-right-radius: 5px;
+        border-top-right-radius: 5px;
+        overflow: hidden;
+
         .staff-management__body__staffs__content__toolbar {
           width: 100%;
           height: 60px;
-          padding: 10px 20px;
+          padding: 10px;
           display: flex;
           align-items: center;
+          background: white;
 
           .staff-management__body__staffs__content__toolbar__title {
             margin: 0;
@@ -132,12 +178,24 @@
         }
 
         .staff-management__body__staffs__content__list-staffs {
+          position: relative;
+          height: 100%;
           .staff-management__body__staffs__content__list-staffs__header {
             padding: $primaryPadding;
             background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
             //background: #ff8220;
-            position: relative;
-            height: 200px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 40.4%;
+            width: 100%;
+
+            .staff-management__body__staffs__content__list-staffs__header__dialogs {
+              display: flex;
+              justify-content: flex-end;
+              align-items: center;
+              height: 50px;
+            }
 
             .staff-management__body__staffs__content__list-staffs__header__dark-bg {
               position: absolute;
@@ -151,33 +209,43 @@
             $headerTextColor: white;
 
             .staff-management__body__staffs__content__list-staffs__header__role-selection {
+              display: flex;
+              align-items: center;
+
+              .staff-management__body__staffs__content__list-staffs__header__role-selection__staft-total-by-role {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 14px;
+                margin-top: 20px;
+                margin-left: 20px;
+                padding: 1px 10px;
+                color: white;
+                background: orange;
+                font-weight: bold;
+                border-radius: 24px;
+              }
+
               .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
                 border: 0;
-                border-bottom: 1px solid white;
+                border-bottom: 1px solid #dcdcdc;
                 background: transparent;
                 color: $headerTextColor;
+                text-shadow: $textShadow1;
+                font-weight: bold;
                 height: 40px;
                 font-size: 16px;
-                padding: 5px 0;
+                padding: 0;
+                padding-top: 11px;
                 border-radius: 0;
+                outline-style: none;
+                box-shadow: none;
               }
 
               .ant-select-arrow {
-                color: $headerTextColor;
+                color: #dcdcdc;
                 right: 5px;
-              }
-            }
-
-            .staff-management__body__staffs__content__list-staffs__header__buttons {
-              display: flex;
-              justify-content: flex-end;
-              align-items: center;
-              height: 50px;
-              button {
-                color: $headerTextColor;
-                font-size: 16px;
-                background: #ffb853;
-                box-shadow: $boxShadow1;
+                top: 27px;
               }
             }
           }
@@ -187,32 +255,39 @@
             width: 97%;
             box-shadow: $boxShadow1;
             background: white;
-            display: table;
-            margin: 0 auto;
             border-radius: 5px;
-            margin-top: -105px;
+            position: absolute;
+            z-index: 4;
+            left: 1.5%;
+            top: 15%;
 
             $tableFontSize: 10px;
 
             .staff-management__body__staffs__content__list-staffs__selected-row {
               background: #fff6e6;
-              color: #ff8220;
+              color: rgba($color: #000000, $alpha: 0.85);
             }
 
             .ant-table thead > tr > th {
               font-size: $tableFontSize;
+              color: #ff8220;
+              font-weight: bold;
             }
 
             .ant-table tbody > tr {
               transition: 0.2s;
-              &:hover {
-                color: #ff8220;
-              }
 
               td {
                 font-size: $tableFontSize;
                 cursor: pointer;
                 transition: 0.2s;
+
+                .ant-empty-normal {
+                  height: 330px;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                }
               }
             }
 
@@ -223,6 +298,12 @@
             .ant-table-wrapper {
               border-radius: 5px;
               overflow: hidden;
+              width: 100%;
+            }
+
+            .ant-table-body {
+              height: 410px;
+              @extend .styled-scrollbar;
             }
 
             .ant-table-pagination.ant-pagination {
