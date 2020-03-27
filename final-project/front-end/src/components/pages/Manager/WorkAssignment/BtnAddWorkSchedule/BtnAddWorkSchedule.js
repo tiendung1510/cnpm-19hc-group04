@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button, Calendar, message } from 'antd';
-import { CalendarFilled } from '@ant-design/icons';
+import { CalendarOutlined } from '@ant-design/icons';
 import './BtnAddWorkSchedule.style.scss';
 import MONTHS from '../../../../../constants/months.constant';
 import { API } from '../../../../../constants/api.constant';
@@ -19,7 +19,7 @@ class BtnAddWorkSchedule extends PageBase {
   }
 
   setModalVisible(isVisible) {
-    if(!isVisible) {
+    if (!isVisible) {
       this.setState({
         selectedDate: null
       });
@@ -89,7 +89,7 @@ class BtnAddWorkSchedule extends PageBase {
       <div className="add-work-schedule-dialog">
         <Button
           className="add-work-schedule-dialog__btn-open"
-          icon={<CalendarFilled />}
+          icon={<CalendarOutlined />}
           type="primary"
           onClick={() => this.setModalVisible(true)} >
           Thêm lịch làm việc

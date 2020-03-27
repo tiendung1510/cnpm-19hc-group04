@@ -85,7 +85,7 @@ export default [
         component: SupplierManagement
       },
       {
-        title: 'In báo cáo - thống kê',
+        title: 'Báo cáo - thống kê',
         path: '/reporting',
         icon: BarChartOutlined,
         component: Reporting

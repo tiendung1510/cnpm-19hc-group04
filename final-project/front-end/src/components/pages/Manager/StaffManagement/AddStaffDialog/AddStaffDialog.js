@@ -28,7 +28,7 @@ class AddStaffDialog extends PageBase {
   }
 
   setDialogVisible(isVisible) {
-    if(!isVisible) {
+    if (!isVisible) {
       this.formRef.current.resetFields();
     }
     this.setState({ isVisible });
@@ -137,7 +137,7 @@ class AddStaffDialog extends PageBase {
                     }
                   ]}
                 >
-                  <Input placeholder="Tối đa 30 kí tự" />
+                  <Input placeholder="Tối đa 30 kí tự" autoFocus={true} />
                 </Form.Item>
 
                 <Form.Item

@@ -69,22 +69,22 @@ class Login extends Component {
     return (
       <div className="container">
         <div className="dark-bg"></div>
-        <div className="login animated fadeInUp">
-          <div className="__header">
-            <img className="__company-logo" src={require('../../../../assets/images/app-logo.png')} alt="logo" />
-            <div className="__company-brand">
-              <div className="__name"><span>Mini Mart</span></div>
-              <div className="__slogan"><span>Tiện Lợi mà Chất Lượng</span></div>
-            </div>
+        <div className="__header">
+          <img className="__company-logo" src={require('../../../../assets/images/app-logo.png')} alt="logo" />
+          <div className="__company-brand">
+            <div className="__name"><span>Mini Mart</span></div>
+            <div className="__slogan"><span>Tiện Lợi mà Chất Lượng</span></div>
           </div>
+        </div>
+        <div className="login animated fadeInRight">
           <Row className="__content">
-            <Col span={11}>
+            <Col span={9}>
               <div className="__staff-symbol">
                 <img src={require('../../../../assets/images/staffs.png')} alt="staffs" />
               </div>
             </Col>
-            <Col span={13}>
-              <p className="__main-title">QUẢN LÝ MINI MART</p>
+            <Col span={15}>
+              <p className="__main-title">Quản trị Mini Mart</p>
               <Form
                 className="__form"
                 {...layout}
@@ -137,16 +137,18 @@ class Login extends Component {
             </Col>
           </Row>
 
-          <p className="__footer">Mini Mart &copy;2020 All right reserved.</p>
         </div>
 
         <svg className="wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-          <path fill="url(#my-cool-gradient)" fillOpacity={1} d="M0,160L1440,0L1440,320L0,320Z" />
+          {/* <path fill="url(#my-cool-gradient)" fillOpacity={1} d="M0,160L1440,0L1440,320L0,320Z" />
           <linearGradient id="my-cool-gradient" x2="1" y2="1">
             <stop offset="0%" stopColor="#ff5858" />
             <stop offset="100%" stopColor="#f09819" />
-          </linearGradient>
+          </linearGradient> */}
+          <path fill="#ff8220" fillOpacity={1} d="M0,160L1440,0L1440,320L0,320Z" />
         </svg>
+
+        <p className="__footer">Mini Mart &copy;2020 All right reserved.</p>
 
       </div>
     )

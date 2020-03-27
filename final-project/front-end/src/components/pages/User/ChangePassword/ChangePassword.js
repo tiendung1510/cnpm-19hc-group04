@@ -102,7 +102,7 @@ class ChangePassword extends PageBase {
             </Form.Item>
 
             <Form.Item
-              label="Nhập lại mật khẩu mới"
+              label="Nhập lại mật khẩu"
               name="confirmedNewPassword"
               rules={[
                 {

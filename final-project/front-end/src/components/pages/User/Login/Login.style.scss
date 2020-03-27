@@ -27,6 +27,41 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(4px);
   }
 
+  .__header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 15%;
+
+    .__company-logo {
+      width: 25px;
+      margin-right: 7px;
+      margin-top: -1px;
+    }
+
+    .__company-brand {
+      .__name {
+        font-size: 13px;
+        letter-spacing: 2px;
+        color: orange;
+        font-weight: bold;
+      }
+
+      .__slogan {
+        font-size: 8px;
+        font-style: italic;
+        margin-top: -3px;
+        color: white;
+      }
+    }
+  }
+
   .wave {
     position: absolute;
     z-index: 2;
@@ -36,12 +71,11 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
   .login {
     position: relative;
     z-index: 3;
-    width: 40%;
-    height: 55%;
-    padding-right: 50px;
+    width: 38%;
+    height: 50%;
     background: rgba(255, 255, 255, 0.2);
     @extend .centered-content;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
     border-radius: 5px;
     background: white;
     position: relative;
@@ -49,13 +83,17 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     .__content {
       width: 100%;
       padding-top: 20px;
+      padding-right: 60px;
+      position: relative;
+      z-index: 10;
 
       .__main-title {
         text-align: center;
         font-size: 20px;
-        padding-bottom: 10px;
+        padding-bottom: 20px;
         font-weight: bold;
         color: #ff8220;
+        letter-spacing: 2px;
       }
 
       .__form {
@@ -111,42 +149,15 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
       }
     }
+  }
 
-    .__header {
-      position: absolute;
-      top: 0;
-      left: 0;
-      padding: 20px;
-      display: flex;
-      align-items: center;
-
-      .__company-logo {
-        width: 25px;
-        margin-right: 7px;
-        margin-top: -1px;
-      }
-
-      .__company-brand {
-        .__name {
-          font-size: 13px;
-          letter-spacing: 2px;
-          color: orangered;
-          font-weight: bold;
-        }
-
-        .__slogan {
-          font-size: 8px;
-          font-style: italic;
-          margin-top: -3px;
-        }
-      }
-    }
-
-    .__footer {
-      position: absolute;
-      bottom: 0;
-      left: 36%;
-      font-size: 12px;
-    }
+  .__footer {
+    position: absolute;
+    z-index: 3;
+    bottom: 1%;
+    width: 100vw;
+    text-align: center;
+    font-size: 12px;
+    color: white;
   }
 }
