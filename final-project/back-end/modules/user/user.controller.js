@@ -13,6 +13,8 @@ const { USER_ROLE, USER_MESSAGE, CONTROLLER_NAME, PASSWORD_SALT_ROUNDS, SEX } = 
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const bcrypt = require('bcrypt');
+const WorkAssignmentModel = require('../work-assignment/work-assignment.model');
+const moment = require('moment');
 
 const login = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::login::was called`);
@@ -145,6 +147,41 @@ const getUsers = async (req, res, next) => {
       const time2 = new Date(b.createdAt).getTime();
       return time2 - time1;
     });
+
+    const startDate = new Date(moment().startOf('day').subtract(moment().isoWeekday() - 1, 'days')).getTime();
+    const endDate = new Date(moment().endOf('day').add(7 - moment().isoWeekday(), 'days')).getTime();
+    users = await Promise.all(
+      users.map(async (u) => {
+        let _u = JSON.parse(JSON.stringify(u));
+        let workAssignments = await WorkAssignmentModel.find({ assigner: u._id })
+          .populate('workShift');
+
+        workAssignments = (workAssignments || []).map(wa => {
+          let _wa = JSON.parse(JSON.stringify(wa));
+          const workShift = JSON.parse(JSON.stringify(_wa.workShift));
+          _wa.startTime = workShift.startTime;
+          _wa.endTime = workShift.endTime;
+          delete _wa.workShift;
+          return _wa;
+        });
+
+        // Find work assignments in this week
+        workAssignments = workAssignments.filter(wa => {
+          const startTime = new Date(wa.startTime).getTime();
+          const endTime = new Date(wa.endTime).getTime();
+          return startTime >= startDate && endTime <= endDate;
+        });
+
+        workAssignments.sort((a, b) => {
+          const date1 = new Date(a.startTime).getTime();
+          const date2 = new Date(b.startTime).getTime();
+          return date1 - date2;
+        });
+
+        _u.workAssignments = workAssignments;
+        return _u;
+      })
+    );
 
     logger.info(`${CONTROLLER_NAME}::getUsers::success`);
     return res.status(HttpStatus.OK).json({
