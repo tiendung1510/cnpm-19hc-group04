@@ -76,7 +76,7 @@ class Login extends Component {
             <div className="__slogan"><span>Tiện Lợi mà Chất Lượng</span></div>
           </div>
         </div>
-        <div className="login animated fadeInRight">
+        <div className="login animated fadeIn">
           <Row className="__content">
             <Col span={9}>
               <div className="__staff-symbol">

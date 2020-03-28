@@ -9,7 +9,8 @@ export const API = {
     StaffManagement: {
       getListStaffs: `${secret.API_URL}/users`,
       addStaff:`${secret.API_URL}/users`,
-      updateStaffProfile: `${secret.API_URL}/users/{updatedUserID}`
+      updateStaffProfile: `${secret.API_URL}/users/{updatedUserID}`,
+      removeStaff: `${secret.API_URL}/users/{deletedUserID}`
     },
     WorkSchedule: {
       getWorkSchedules: `${secret.API_URL}/work-schedules`,

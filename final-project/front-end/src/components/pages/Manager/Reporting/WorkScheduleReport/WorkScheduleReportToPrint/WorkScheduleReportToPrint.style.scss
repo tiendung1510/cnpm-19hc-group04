@@ -1,3 +1,11 @@
+.work-schedule-report-to-print__empty {
+  height: 530px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .work-schedule-report-to-print {
   padding: 40px;
   background: white;
@@ -127,8 +135,9 @@
       }
 
       .work-schedule-report-to-print__content__manager-confirm__signature {
-        margin: 20px;
-        margin-bottom: 0;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        
         img {
           width: 150px;
         }

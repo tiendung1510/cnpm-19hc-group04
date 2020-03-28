@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, Modal, Avatar, Input, Radio, Row, Col, Empty, Button } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined, PrinterFilled } from '@ant-design/icons';
 import { withCookies } from 'react-cookie';
 import './WorkScheduleReport.style.scss';
 import USER_ROLES from '../../../../../constants/user-role.constant';
@@ -38,11 +38,6 @@ class WorkScheduleReport extends Component {
     }
 
     this.setState({ isVisible });
-  }
-
-  printReport() {
-    const staffID = this.state.selectedStaff;
-    console.log(staffID);
   }
 
   onSelectStaff(staffID) {
@@ -160,7 +155,10 @@ class WorkScheduleReport extends Component {
               <ReactToPrint
                 trigger={() => (
                   <div className="reporting__work-schedule-report__content__btn-print">
-                    <Button type="primary" disabled={!selectedStaff}>In báo cáo</Button>
+                    <Button type="primary" disabled={!selectedStaff}>
+                      <PrinterFilled />
+                      In lịch làm việc
+                    </Button>
                   </div>
                 )}
                 content={() => this.componentToPrintRef}
@@ -168,8 +166,8 @@ class WorkScheduleReport extends Component {
 
             </Col>
 
-            <Col span={15}>
-              <div className="reporting__work-schedule-report__content__print-preview">
+            <Col span={15} className="reporting__work-schedule-report__content__print-preview">
+              <div className="reporting__work-schedule-report__content__print-preview__wrapper">
                 <WorkScheduleReportToPrint
                   ref={el => (this.componentToPrintRef = el)}
                   staff={selectedStaff ? filteredStaffs.find(s => s._id === selectedStaff) : null}

@@ -74,7 +74,7 @@ class Reporting extends PageBase {
     return (
       <div className="reporting animated fadeIn">
         <div className="reporting__menu">
-          <Row justify="center" align="middle" gutter={[60, 60]} style={{ width: '100%' }}>
+          <Row justify="center" align="middle" gutter={[70, 70]} style={{ width: '100%' }}>
             <Col span={8}>
               <WorkScheduleReport
                 staffs={this.state.staffs}

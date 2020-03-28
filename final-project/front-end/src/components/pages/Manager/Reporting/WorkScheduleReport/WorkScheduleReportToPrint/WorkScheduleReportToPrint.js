@@ -1,187 +1,12 @@
 import React, { Component } from 'react';
 import { withCookies } from 'react-cookie';
-import { Row, Col, Table } from 'antd';
+import { Row, Col, Table, Empty } from 'antd';
 import './WorkScheduleReportToPrint.style.scss';
 import USER_ROLES from '../../../../../../constants/user-role.constant';
 import moment from 'moment';
 import { COOKIE_NAMES } from '../../../../../../constants/cookie-name.constant';
 
-const dataSource = [
-  {
-    monday: [
-      {
-        startTime: moment(new Date()).format('HH:mm'),
-        endTime: moment(new Date()).format('HH:mm')
-      },
-      {
-        startTime: moment(new Date()).format('HH:mm'),
-        endTime: moment(new Date()).format('HH:mm')
-      },
-      {
-        startTime: moment(new Date()).format('HH:mm'),
-        endTime: moment(new Date()).format('HH:mm')
-      }
-    ],
-    tuesday: [
-      {
-        startTime: moment(new Date()).format('HH:mm'),
-        endTime: moment(new Date()).format('HH:mm')
-      }
-    ],
-    wednesday: [
-      {
-        startTime: moment(new Date()).format('HH:mm'),
-        endTime: moment(new Date()).format('HH:mm')
-      },
-      {
-        startTime: moment(new Date()).format('HH:mm'),
-        endTime: moment(new Date()).format('HH:mm')
-      },
-      {
-        startTime: moment(new Date()).format('HH:mm'),
-        endTime: moment(new Date()).format('HH:mm')
-      }
-    ],
-    thursday: [
-      {
-        startTime: moment(new Date()).format('HH:mm'),
-        endTime: moment(new Date()).format('HH:mm')
-      }
-    ],
-    friday: [
-      {
-        startTime: moment(new Date()).format('HH:mm'),
-        endTime: moment(new Date()).format('HH:mm')
-      },
-      {
-        startTime: moment(new Date()).format('HH:mm'),
-        endTime: moment(new Date()).format('HH:mm')
-      },
-      {
-        startTime: moment(new Date()).format('HH:mm'),
-        endTime: moment(new Date()).format('HH:mm')
-      }
-    ],
-    saturday: [
-      {
-        startTime: moment(new Date()).format('HH:mm'),
-        endTime: moment(new Date()).format('HH:mm')
-      },
-      {
-        startTime: moment(new Date()).format('HH:mm'),
-        endTime: moment(new Date()).format('HH:mm')
-      }
-    ],
-    sunday: [
-      {
-        startTime: moment(new Date()).format('HH:mm'),
-        endTime: moment(new Date()).format('HH:mm')
-      },
-      {
-        startTime: moment(new Date()).format('HH:mm'),
-        endTime: moment(new Date()).format('HH:mm')
-      },
-      {
-        startTime: moment(new Date()).format('HH:mm'),
-        endTime: moment(new Date()).format('HH:mm')
-      }
-    ]
-  }
-];
-
-const columns = [
-  {
-    title: record => {
-      const date = new Date();
-      return `Thứ 2 (${date.getDate()}/${date.getMonth()})`;
-    },
-    dataIndex: 'monday',
-    key: 'monday',
-    render: data => (
-      <ul>{data.map(item => (
-        <li><span>{`${item.startTime} - ${item.endTime}`}</span></li>
-      ))}</ul>
-    )
-  },
-  {
-    title: record => {
-      const date = new Date();
-      return `Thứ 3 (${date.getDate()}/${date.getMonth()})`;
-    },
-    dataIndex: 'tuesday',
-    key: 'tuesday',
-    render: data => (
-      <ul>{data.map(item => (
-        <li><span>{`${item.startTime} - ${item.endTime}`}</span></li>
-      ))}</ul>
-    )
-  },
-  {
-    title: record => {
-      const date = new Date();
-      return `Thứ 4 (${date.getDate()}/${date.getMonth()})`;
-    },
-    dataIndex: 'wednesday',
-    key: 'wednesday',
-    render: data => (
-      <ul>{data.map(item => (
-        <li><span>{`${item.startTime} - ${item.endTime}`}</span></li>
-      ))}</ul>
-    )
-  },
-  {
-    title: record => {
-      const date = new Date();
-      return `Thứ 5 (${date.getDate()}/${date.getMonth()})`;
-    },
-    dataIndex: 'thursday',
-    key: 'thursday',
-    render: data => (
-      <ul>{data.map(item => (
-        <li><span>{`${item.startTime} - ${item.endTime}`}</span></li>
-      ))}</ul>
-    )
-  },
-  {
-    title: record => {
-      const date = new Date();
-      return `Thứ 6 (${date.getDate()}/${date.getMonth()})`;
-    },
-    dataIndex: 'friday',
-    key: 'friday',
-    render: data => (
-      <ul>{data.map(item => (
-        <li><span>{`${item.startTime} - ${item.endTime}`}</span></li>
-      ))}</ul>
-    )
-  },
-  {
-    title: record => {
-      const date = new Date();
-      return `Thứ 7 (${date.getDate()}/${date.getMonth()})`;
-    },
-    dataIndex: 'saturday',
-    key: 'saturday',
-    render: data => (
-      <ul>{data.map(item => (
-        <li><span>{`${item.startTime} - ${item.endTime}`}</span></li>
-      ))}</ul>
-    )
-  },
-  {
-    title: record => {
-      const date = new Date();
-      return `Chủ nhật (${date.getDate()}/${date.getMonth()})`;
-    },
-    dataIndex: 'sunday',
-    key: 'sunday',
-    render: data => (
-      <ul>{data.map(item => (
-        <li><span>{`${item.startTime} - ${item.endTime}`}</span></li>
-      ))}</ul>
-    )
-  }
-];
+const weekDays = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật'];
 
 class WorkScheduleReportToPrint extends Component {
   render() {
@@ -189,7 +14,126 @@ class WorkScheduleReportToPrint extends Component {
     let { staff } = this.props;
 
     if (!staff)
-      return <></>;
+      return (<Empty description="Không tìm thấy lịch làm việc" className="work-schedule-report-to-print__empty" />);
+
+    const dataSource = [
+      {
+        key: '0',
+        workShifts: [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ]
+      }
+    ];
+    for (const wa of staff.workAssignments) {
+      const weekday = moment(wa.startTime).isoWeekday() - 1;
+      dataSource[0].workShifts[weekday].push(wa);
+    }
+
+    const columns = [
+      {
+        title: '',
+        dataIndex: 'workShifts',
+        key: 'workShifts',
+        render: (text, record) => {
+          return (
+            <ul>{record.workShifts[0].map((ws, index) => (
+              <li key={`${index}_0`}>{`${moment(ws.startTime).format('HH:mm')} - ${moment(ws.endTime).format('HH:mm')}`}</li>
+            ))}</ul>
+          )
+        }
+      },
+      {
+        title: '',
+        dataIndex: 'workShifts',
+        key: 'workShifts',
+        render: (text, record) => {
+          return (
+            <ul>{record.workShifts[1].map((ws, index) => (
+              <li key={`${index}_1`}>{`${moment(ws.startTime).format('HH:mm')} - ${moment(ws.endTime).format('HH:mm')}`}</li>
+            ))}</ul>
+          )
+        }
+      },
+      {
+        title: '',
+        dataIndex: 'workShifts',
+        key: 'workShifts',
+        render: (text, record) => {
+          return (
+            <ul>{record.workShifts[2].map((ws, index) => (
+              <li key={`${index}_2`}>{`${moment(ws.startTime).format('HH:mm')} - ${moment(ws.endTime).format('HH:mm')}`}</li>
+            ))}</ul>
+          )
+        }
+      },
+      {
+        title: '',
+        dataIndex: 'workShifts',
+        key: 'workShifts',
+        render: (text, record) => {
+          return (
+            <ul>{record.workShifts[3].map((ws, index) => (
+              <li key={`${index}_3`}>{`${moment(ws.startTime).format('HH:mm')} - ${moment(ws.endTime).format('HH:mm')}`}</li>
+            ))}</ul>
+          )
+        }
+      },
+      {
+        title: '',
+        dataIndex: 'workShifts',
+        key: 'workShifts',
+        render: (text, record) => {
+          return (
+            <ul>{record.workShifts[4].map((ws, index) => (
+              <li key={`${index}_4`}>{`${moment(ws.startTime).format('HH:mm')} - ${moment(ws.endTime).format('HH:mm')}`}</li>
+            ))}</ul>
+          )
+        }
+      },
+      {
+        title: '',
+        dataIndex: 'workShifts',
+        key: 'workShifts',
+        render: (text, record) => {
+          return (
+            <ul>{record.workShifts[5].map((ws, index) => (
+              <li key={`${index}_5`}>{`${moment(ws.startTime).format('HH:mm')} - ${moment(ws.endTime).format('HH:mm')}`}</li>
+            ))}</ul>
+          )
+        }
+      },
+      {
+        title: '',
+        dataIndex: 'workShifts',
+        key: 'workShifts',
+        render: (text, record) => {
+          return (
+            <ul>{record.workShifts[6].map((ws, index) => (
+              <li key={`${index}_6`}>{`${moment(ws.startTime).format('HH:mm')} - ${moment(ws.endTime).format('HH:mm')}`}</li>
+            ))}</ul>
+          )
+        }
+      }
+    ];
+    const startDate = moment().startOf('day').subtract(moment().isoWeekday() - 1, 'days');
+    const endDate = moment().endOf('day').add(7 - moment().isoWeekday(), 'days');
+    let dates = [];
+
+    for (let i = 0; i < 7; i++) {
+      const date = moment(startDate).add(i, 'days').format('DD/MM');
+      dates.push(date);
+    }
+
+    for (const i in columns) {
+      let title = weekDays[i];
+      columns[i].title = `${title} (${dates[i]})`;
+    }
 
     return (
       <div className="work-schedule-report-to-print">
@@ -216,7 +160,7 @@ class WorkScheduleReportToPrint extends Component {
           <div className="work-schedule-report-to-print__header__title">
             <h2>Lịch làm việc trong tuần</h2>
             <span className="work-schedule-report-to-print__header__title__date-range">
-              (Từ ngày 21/03/2020 đến ngày 27/03/2020)
+              (Từ ngày {startDate.format('DD/MM/YYYY')} đến ngày {endDate.format('DD/MM/YYYY')})
             </span>
           </div>
         </div>
@@ -269,7 +213,7 @@ class WorkScheduleReportToPrint extends Component {
             <Col span={10} align="middle">
               <span className="work-schedule-report-to-print__content__manager-confirm__stand-for">TM. Người quản lý</span>
               <div className="work-schedule-report-to-print__content__manager-confirm__signature">
-                <img src="https://files.slack.com/files-pri/THXMMTH2T-F010LJC6MAP/signature.png" alt="signature" />
+                <img src="https://files.slack.com/files-pri/THXMMTH2T-F0110T0NABG/signature__1_.png" alt="signature" />
               </div>
               <span className="work-schedule-report-to-print__content__manager-confirm__fullname">{manager.fullname}</span>
             </Col>

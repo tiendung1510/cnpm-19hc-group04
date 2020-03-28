@@ -112,8 +112,30 @@ class StaffManagement extends PageBase {
       okText: 'Đồng ý',
       okType: 'danger',
       cancelText: 'Không, cảm ơn',
-      onOk() {
+      async onOk() {
+        that.props.setAppLoading(true);
+
         const staffID = staff._id;
+        const res = await (
+          await fetch(
+            API.Manager.StaffManagement.removeStaff.replace('{deletedUserID}', staffID),
+            {
+              method: 'DELETE',
+              headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                'token': that.props.cookies.get(COOKIE_NAMES.token)
+              },
+              signal: that.abortController.signal
+            }
+          )
+        ).json();
+
+        that.props.setAppLoading(false);
+        if (res.status !== 200) {
+          message.error(res.errors[0]);
+          return;
+        }
+
         let { staffs, filteredStaffRole, filteredStaffs, selectedStaff } = that.state;
         staffs = staffs.filter(s => s._id !== staffID);
         staffs.sort((a, b) => {
@@ -134,7 +156,7 @@ class StaffManagement extends PageBase {
         }
 
         that.setState({ staffs, selectedStaff, filteredStaffs });
-        message.success('Xóa nhân viên thành công');
+        message.success(res.messages[0]);
       },
       onCancel() { },
     });
@@ -178,7 +200,8 @@ class StaffManagement extends PageBase {
         selectedStaff = filteredStaffs[0];
       }
 
-      columns = Object.keys(filteredStaffs[0]).filter(k => !['_id', 'avatar', 'updatedAt', '__v', 'key'].includes(k));
+      columns = Object.keys(filteredStaffs[0])
+        .filter(k => !['_id', 'avatar', 'updatedAt', '__v', 'key', 'workAssignments'].includes(k));
       columns = columns.map(k => {
         let title, colIndex;
         switch (k) {

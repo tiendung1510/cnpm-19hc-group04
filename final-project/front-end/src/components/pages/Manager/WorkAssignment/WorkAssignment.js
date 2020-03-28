@@ -505,7 +505,7 @@ class WorkAssignment extends PageBase {
 
         for (let ws of selectedWorkDay.workShifts) {
           if (ws._id === selectedWorkShift._id) {
-            ws = selectedWorkShift;
+            ws.workAssignments = selectedWorkShift.workAssignments;
             break;
           }
         }
