@@ -119,7 +119,7 @@ class MoneyCounting extends PageBase {
     const { scannedProduct, checkedOutProducts, priceTotal } = this.state;
 
     return (
-      <div className="money-counting">
+      <div className="money-counting animated fadeIn">
         <audio ref={ref => { this.soundRef = ref; }} src={checkoutSound} controls autoPlay style={{ display: 'none' }} />
         <div className="money-counting__panel">
           <Row>
