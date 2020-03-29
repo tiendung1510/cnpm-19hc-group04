@@ -48,7 +48,7 @@ const columns = [
     key: 'category',
   },
   {
-    title: 'Nhà phân phối',
+    title: 'Nhà cung cấp',
     dataIndex: 'supplier',
     key: 'supplier',
   }
@@ -127,7 +127,7 @@ class MoneyCounting extends PageBase {
               <div className="money-counting__panel__left">
                 <div className="money-counting__panel__left__product-scanning">
                   <QrReader
-                    delay={2000}
+                    delay={1500}
                     onError={error => this.handleError(error)}
                     onScan={data => this.handleScan(data)}
                     className="money-counting__panel__left__product-scanning__scanner"

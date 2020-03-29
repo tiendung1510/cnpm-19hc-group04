@@ -88,6 +88,7 @@ class StaffManagement extends PageBase {
 
   filterListStaffsByRole(role) {
     let { filteredStaffs, staffs, selectedStaff } = this.state;
+
     if (!role) {
       filteredStaffs = [...staffs];
     } else {
@@ -185,6 +186,7 @@ class StaffManagement extends PageBase {
 
   render() {
     let { filteredStaffs, selectedStaff } = this.state;
+
     filteredStaffs = filteredStaffs.map((s, i) => {
       let staff = JSON.parse(JSON.stringify(s));
       staff.key = i;
@@ -232,7 +234,7 @@ class StaffManagement extends PageBase {
               <Col span={18}><span style={{ marginLeft: 7, fontWeight: 'bold' }}>{text}</span></Col>
             </Row>
           );
-          column.width = 150;
+          column.width = 160;
         }
 
         if (k === 'role') {
@@ -332,7 +334,7 @@ class StaffManagement extends PageBase {
                             Xóa khỏi hệ thống</span>
                         </Col>
                       </Row>
-                    ) : (<Skeleton.Input style={{ width: '88%', height: 20 }} active={true} size="small" />)}
+                    ) : (<Skeleton.Input style={{ width: '100%', height: 20 }} active={true} size="small" />)}
                   </li>
                 </ul>
 
@@ -387,7 +389,8 @@ class StaffManagement extends PageBase {
                     <Table
                       columns={columns}
                       dataSource={filteredStaffs}
-                      scroll={{ y: 410 }}
+                      pagination={false}
+                      scroll={{ y: 445 }}
                       onRow={(record) => {
                         return {
                           onClick: () => this.onClickListStaffsRow(record)

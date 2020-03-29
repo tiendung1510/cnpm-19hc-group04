@@ -267,7 +267,7 @@ class UpdateStaffDialog extends PageBase {
             </Modal>
 
           </div>
-        ) : (<Skeleton.Input style={{ width: '88%', height: 20 }} active={true} size="small" />)}
+        ) : (<Skeleton.Input style={{ width: '100%', height: 20 }} active={true} size="small" />)}
       </div>
     )
   }

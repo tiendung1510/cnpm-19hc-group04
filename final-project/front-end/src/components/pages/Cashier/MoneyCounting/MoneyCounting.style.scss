@@ -3,7 +3,7 @@ $boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 .money-counting {
   height: 100vh;
   background: #ff8220;
-  padding: 15px 30px;
+  padding: 0 15px;
 
   .centered-content {
     display: flex;
@@ -30,7 +30,7 @@ $boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 
   .money-counting__panel {
     background: white;
-    height: 91%;
+    height: 90%;
     border-radius: 5px;
     overflow: hidden;
     box-shadow: $boxShadow1;
@@ -121,7 +121,7 @@ $boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 
             &:disabled {
               background: #eee;
-              color: gray;
+              color: silver;
               box-shadow: none;
             }
           }
@@ -188,7 +188,7 @@ $boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
           .ant-table {
             tbody > tr {
               td {
-                font-size: $tableFontSize;
+                font-size: $tableFontSize - 1;
               }
 
               &:hover {

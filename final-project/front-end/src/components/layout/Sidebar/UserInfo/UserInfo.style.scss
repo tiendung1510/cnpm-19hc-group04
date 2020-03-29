@@ -35,13 +35,23 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      border-radius: 3px;
+      border-radius: 2px;
 
       color: white;
       background: rgba($color: #fff, $alpha: 0.3);
 
       span {
         margin-top: -1px;
+      }
+
+      &.__wallpaper__role--cashier {
+        background: #4bb543;
+      }
+      &.__wallpaper__role--importer {
+        background: #039be5;
+      }
+      &.__wallpaper__role--manager {
+        background: #ff6f61;
       }
     }
 
