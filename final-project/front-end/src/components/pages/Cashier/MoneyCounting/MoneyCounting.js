@@ -43,7 +43,7 @@ const columns = [
     )
   },
   {
-    title: 'Thể loại',
+    title: 'Danh mục',
     dataIndex: 'category',
     key: 'category',
   },

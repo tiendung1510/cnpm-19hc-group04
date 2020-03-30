@@ -100,7 +100,7 @@ class Login extends Component {
                   rules={[
                     {
                       required: true,
-                      message: 'Vui lòng nhập tài khoản!',
+                      message: 'Vui lòng nhập tài khoản',
                     },
                   ]}
                 >
@@ -112,7 +112,7 @@ class Login extends Component {
                   rules={[
                     {
                       required: true,
-                      message: 'Vui lòng nhập mật khẩu!',
+                      message: 'Vui lòng nhập mật khẩu',
                     },
                   ]}
                 >

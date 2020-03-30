@@ -25,5 +25,12 @@ export const API = {
       addWorkAssignments: `${secret.API_URL}/work-assignments`,
       removeWorkAssignment: `${secret.API_URL}/work-assignments/{workAssignmentID}`
     }
+  },
+  Importer: {
+    ProductManagement: {
+      addCategory: `${secret.API_URL}/categories`,
+      getCategories: `${secret.API_URL}/categories`,
+      getCategoryProducts: `${secret.API_URL}/categories/{categoryID}/products`
+    }
   }
 }

@@ -1,0 +1,32 @@
+.product-management__add-category-dialog {
+  .product-management__add-category-dialog__btn-open-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .product-management__add-category-dialog__btn-open-wrapper__btn {
+      color: #ff8220;
+      font-size: 20px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+  }
+}
+.product-management__add-category-dialog__content {
+  width: 100%;
+
+  .ant-form-item {
+    label {
+      color: rgba($color: #000000, $alpha: 0.5);
+    }
+
+    .ant-form-item-control-input {
+      width: 100%;
+    }
+  }
+
+  .ant-form-item-has-error .ant-form-item-explain,
+  .ant-form-item-has-error .ant-form-item-split {
+    font-size: 10px;
+  }
+}

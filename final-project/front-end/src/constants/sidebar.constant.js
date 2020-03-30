@@ -12,7 +12,7 @@ import WorkAssignment from '../components/pages/Manager/WorkAssignment/WorkAssig
 import SupplierManagement from '../components/pages/Manager/SupplierManagement/SupplierManagement';
 
 import {
-  DollarOutlined, QuestionCircleOutlined, InboxOutlined, BarChartOutlined, TeamOutlined, FileDoneOutlined, RocketOutlined, UserOutlined, LockOutlined,
+  DollarOutlined, QuestionCircleOutlined, InboxOutlined, BarChartOutlined, TeamOutlined, FileDoneOutlined, UserOutlined, LockOutlined, ShopOutlined
 } from '@ant-design/icons';
 
 export default [
@@ -81,7 +81,7 @@ export default [
       {
         title: 'Liên hệ nhà cung cấp',
         path: '/suppliers',
-        icon: RocketOutlined,
+        icon: ShopOutlined,
         component: SupplierManagement
       },
       {
