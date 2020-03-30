@@ -4,10 +4,11 @@ const Joi = require('@hapi/joi');
 const responseUtil = require('../../utils/response.util');
 const HttpStatus = require("http-status-codes");
 const { CATEGORY_MESSAGE, CONTROLLER_NAME } = require('./category.constant');
-const { USER_ROLE, USER_MESSAGE } = require('../user/user.constant');
 const { AddCategoryValidationSchema } = require('./validations/add-category.schema');
-const { checkUserPermisson } = require('../user/user.service');
 const CategoryModel = require('./category.model');
+const mongoose = require('mongoose');
+const ProductModel = require('../product/product.model');
+const CollectionSortingService = require('../../services/collection-sorting');
 
 const addCategory = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::addCategory::was called`);
@@ -15,16 +16,6 @@ const addCategory = async (req, res, next) => {
     const { error } = Joi.validate(req.body, AddCategoryValidationSchema);
     if (error) {
       return responseUtil.joiValidationResponse(error, res);
-    }
-
-    const { fromUser } = req;
-    const isImporter = await checkUserPermisson(fromUser._id, USER_ROLE.IMPORTER.type);
-    if (!isImporter) {
-      logger.info(`${CONTROLLER_NAME}::addCategory::permission denied`);
-      return res.status(HttpStatus.UNAUTHORIZED).json({
-        status: HttpStatus.UNAUTHORIZED,
-        errors: [USER_MESSAGE.ERROR.PERMISSION_DENIED]
-      });
     }
 
     const categoryInfo = req.body;
@@ -55,31 +46,70 @@ const addCategory = async (req, res, next) => {
 const getCategories = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::getCategories::was called`);
   try {
-    const { fromUser } = req;
-    const isCashier = await checkUserPermisson(fromUser._id, USER_ROLE.CASHIER.type);
-    if (isCashier) {
-      logger.info(`${CONTROLLER_NAME}::getCategories::permission denied`);
-      return res.status(HttpStatus.UNAUTHORIZED).json({
-        status: HttpStatus.UNAUTHORIZED,
-        errors: [USER_MESSAGE.ERROR.PERMISSION_DENIED]
+    let categories = await CategoryModel.find({}).populate('products', '-category');
+
+    categories = await Promise.all(
+      categories.map(async (category) => {
+        const products = await Promise.all(
+          category.products.map(async (p) => {
+            const product = await ProductModel.findOne({ _id: p._id }).populate('supplier', '-products');
+            return product;
+          })
+        );
+        category.products = products;
+        CollectionSortingService.sortByCreatedAt(category.products, 'desc');
+        return category;
+      })
+    );
+
+logger.info(`${CONTROLLER_NAME}::getCategories::success`);
+return res.status(HttpStatus.OK).json({
+  status: HttpStatus.OK,
+  data: { categories },
+  messages: [CATEGORY_MESSAGE.SUCCESS.GET_CATEGORIES_SUCCESS]
+})
+  } catch (error) {
+  logger.error(`${CONTROLLER_NAME}::getCategories::error`);
+  return next(error);
+}
+}
+
+const getCategoryProducts = async (req, res, next) => {
+  logger.info(`${CONTROLLER_NAME}::getCategoryProducts::was called`);
+  try {
+    const { categoryID } = req.params;
+    const category = await CategoryModel.findOne({ _id: mongoose.Types.ObjectId(categoryID) }).populate('products');
+    if (!category) {
+      logger.info(`${CONTROLLER_NAME}::getCategoryProducts::not found`);
+      return res.status(HttpStatus.NOT_FOUND).json({
+        status: HttpStatus.NOT_FOUND,
+        errors: [CATEGORY_MESSAGE.ERROR.CATEGORY_NOT_FOUND]
       });
     }
 
-    const categories = await CategoryModel.find({}).populate('products', '-category');
+    category.products = await Promise.all(
+      category.products.map(async (p) => {
+        const product = await ProductModel.findOne({ _id: p._id }).populate('supplier', '-products');
+        return product;
+      })
+    );
 
-    logger.info(`${CONTROLLER_NAME}::getCategories::success`);
+    CollectionSortingService.sortByCreatedAt(category.products, 'desc');
+
+    logger.info(`${CONTROLLER_NAME}::getCategoryProducts::success`);
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
-      data: { categories },
-      messages: [CATEGORY_MESSAGE.SUCCESS.GET_CATEGORIES_SUCCESS]
+      data: { products: category.products },
+      messages: [CATEGORY_MESSAGE.SUCCESS.GET_CATEGORY_PRODUCTS]
     })
   } catch (error) {
-    logger.error(`${CONTROLLER_NAME}::getCategories::error`);
+    logger.error(`${CONTROLLER_NAME}::getCategoryProducts::error`);
     return next(error);
   }
 }
 
 module.exports = {
   addCategory,
-  getCategories
+  getCategories,
+  getCategoryProducts
 }
