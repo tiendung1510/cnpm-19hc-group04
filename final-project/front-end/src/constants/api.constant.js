@@ -30,7 +30,11 @@ export const API = {
     ProductManagement: {
       addCategory: `${secret.API_URL}/categories`,
       getCategories: `${secret.API_URL}/categories`,
-      getCategoryProducts: `${secret.API_URL}/categories/{categoryID}/products`
+      getCategoryProducts: `${secret.API_URL}/categories/{categoryID}/products`,
+      updateCategory: `${secret.API_URL}/categories/{categoryID}`,
+      removeCategory: `${secret.API_URL}/categories/{categoryID}`,
+      
+      getSuppliers: `${secret.API_URL}/suppliers`,
     }
   }
 }

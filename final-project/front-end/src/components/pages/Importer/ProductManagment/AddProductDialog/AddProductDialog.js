@@ -3,9 +3,10 @@ import './AddProductDialog.style.scss';
 import { withCookies } from 'react-cookie';
 import { connect } from 'react-redux';
 import * as actions from '../../../../../redux/actions';
-import { Button, Modal, Form, Input, InputNumber, message } from 'antd';
+import { Button, Modal, Form, Input, InputNumber, message, Select, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import ImageUploader from '../../../../utilities/ImageUploader/ImageUploader';
+import * as _ from 'lodash';
 
 const layout = {
   labelCol: { span: 6 },
@@ -35,12 +36,8 @@ class AddProductDialog extends Component {
   }
 
   onFinish(values) {
-    this.props.setAppLoading(true);
     const params = { ...values };
 
-    //Call API
-
-    this.props.setAppLoading(false);
     const product = {
       "name": "Sữa bò tươi không đường",
       "image": "https://product.hstatic.net/1000074072/product/1l-ko-d__ng-min.png",
@@ -72,12 +69,15 @@ class AddProductDialog extends Component {
       if (k !== 'supplier') {
         product[k] = params[k];
       } else {
-        product[k].name = params[k];
+        const index = _.findIndex(this.props.suppliers, s => s._id === params[k]);
+        if (index < 0)
+          return;
+        product[k] = { ...this.props.suppliers[index] };
       }
     }
 
     this.setDialogVisible(false);
-    this.props.addToListProducts(product);
+    this.props.addToListProducts({ ...product });
     message.success('SUCCESS');
   }
 
@@ -85,15 +85,17 @@ class AddProductDialog extends Component {
     const { selectedCategory } = this.props;
     return (
       <div className="product-management__add-product-dialog">
-        <Button
-          shape="circle"
-          icon={<PlusOutlined />}
-          className="product-management__add-product-dialog__btn-open"
-          onClick={() => this.setDialogVisible(true)}
-        />
+        <Tooltip title="Thêm sản phẩm mới" placement="left">
+          <Button
+            shape="circle"
+            icon={<PlusOutlined />}
+            className="product-management__add-product-dialog__btn-open animated bounceIn"
+            onClick={() => this.setDialogVisible(true)}
+          />
+        </Tooltip>
 
         <Modal
-          title={<span style={{ color: '#ff8220' }}>{`${selectedCategory.name} | Thêm sản phẩm mới`}</span>}
+          title={<span style={{ color: '#ff8220', fontWeight: 'bold' }}>{`${selectedCategory.name} | Thêm sản phẩm mới`}</span>}
           visible={this.state.isVisible}
           onOk={() => this.onOK()}
           onCancel={() => this.setDialogVisible(false)}
@@ -113,7 +115,12 @@ class AddProductDialog extends Component {
             </div>
             <Form
               {...layout}
-              ref={current => { this.formRef.current = current; }}
+              ref={current => {
+                this.formRef.current = current;
+                if (this.formRef.current) {
+                  this.formRef.current.setFieldsValue({ supplier: this.props.suppliers[0]._id })
+                }
+              }}
               className="product-management__add-product-dialog__content__form"
               onFinish={values => this.onFinish(values)}
               onFinishFailed={() => message.error('Thông tin sản phẩm chưa đầy đủ, vui lòng kiểm tra lại.')}
@@ -137,14 +144,13 @@ class AddProductDialog extends Component {
               <Form.Item
                 name="supplier"
                 label="Nhà cung cấp"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Vui lòng nhập tên nhà cung cấp'
-                  }
-                ]}
+                rules={[{ required: true }]}
               >
-                <Input placeholder="Tối đa 50 kí tự" />
+                <Select>
+                  {this.props.suppliers.map(s => (
+                    <Select.Option value={s._id} key={s._id}>{s.name}</Select.Option>
+                  ))}
+                </Select>
               </Form.Item>
 
               <Form.Item

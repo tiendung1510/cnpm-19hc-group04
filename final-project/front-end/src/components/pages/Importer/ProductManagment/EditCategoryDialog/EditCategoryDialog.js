@@ -1,12 +1,11 @@
 import React from 'react';
 import { withCookies } from 'react-cookie';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../redux/actions';
-import { PlusCircleFilled } from '@ant-design/icons';
-import './AddCategoryDialog.style.scss';
 import { Modal, Form, Input, Button, message } from 'antd';
-import { COOKIE_NAMES } from '../../../../../constants/cookie-name.constant';
+import './EditCategoryDialog.style.scss';
+import * as actions from '../../../../../redux/actions';
 import { API } from '../../../../../constants/api.constant';
+import { COOKIE_NAMES } from '../../../../../constants/cookie-name.constant';
 import PageBase from '../../../../utilities/PageBase/PageBase';
 
 const layout = {
@@ -14,7 +13,7 @@ const layout = {
   wrapperCol: { span: 18 },
 };
 
-class AddCategoryDialog extends PageBase {
+class EditCategoryDialog extends PageBase {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,20 +23,23 @@ class AddCategoryDialog extends PageBase {
   }
 
   setDialogVisible(isVisible) {
+    if (!isVisible && this.formRef.current) {
+      this.formRef.current.resetFields();
+    }
     this.setState({ isVisible });
   }
 
   onOk() {
-    document.getElementById('add-category-dialog-btn-submit').click();
+    document.getElementById('edit-category-dialog-btn-submit').click();
   }
 
   async onFinish(values) {
-    this.props.setAppLoading(true);
-    const res = await (
+    this.props.setAppLoading(false);
+    const res = await(
       await fetch(
-        API.Importer.ProductManagement.addCategory,
+        API.Importer.ProductManagement.updateCategory.replace('{categoryID}', this.props.category._id),
         {
-          method: 'POST',
+          method: 'PUT',
           body: JSON.stringify(values),
           headers: {
             'Content-type': 'application/json; charset=UTF-8',
@@ -54,40 +56,43 @@ class AddCategoryDialog extends PageBase {
       return;
     }
 
-    this.props.addToListCategories(res.data.category);
+    const { category } = this.props;
+    category.name = values.name;
+    this.props.updateCategoryInList(category);
     this.setDialogVisible(false);
     message.success(res.messages[0]);
   }
 
   render() {
+    const { category } = this.props;
     return (
-      <div className="product-management__add-category-dialog">
-        <div className="product-management__add-category-dialog__btn-open-wrapper">
-          <PlusCircleFilled
-            className="product-management__add-category-dialog__btn-open-wrapper__btn"
-            onClick={() => this.setDialogVisible(true)}
-          />
-        </div>
-
+      <div className="product-management__edit-category-dialog">
+        <Button
+          type="link"
+          className="product-management__edit-category-dialog__btn-open"
+          onClick={() => this.setDialogVisible(true)}
+        >Chỉnh sửa</Button>
         <Modal
-          className="product-management__add-category-dialog__content"
-          title={<span style={{ color: '#ff8220' }}>Thêm danh mục sản phẩm</span>}
+          className="product-management__edit-category-dialog__content"
+          title={<span style={{ color: '#ff8220' }}>{`Danh mục ${category.name} | Sửa thông tin`}</span>}
           centered
           visible={this.state.isVisible}
           onOk={() => this.onOk()}
-          onCancel={() => {
-            this.setDialogVisible(false);
-            if (this.formRef.current) {
-              this.formRef.current.resetFields();
-            }
-          }}
-          okText="Hoàn tất"
+          onCancel={() => this.setDialogVisible(false)}
+          okText="Lưu thay đổi"
           cancelText="Hủy bỏ"
           okButtonProps={{ style: { background: '#ff8220', border: 0 } }}
         >
           <Form
             {...layout}
-            ref={current => this.formRef.current = current}
+            ref={current => {
+              this.formRef.current = current;
+              if (this.formRef.current) {
+                this.formRef.current.setFieldsValue({
+                  name: this.props.category.name
+                });
+              }
+            }}
             onFinish={values => this.onFinish(values)}
             onFinishFailed={() => message.error('Chưa nhập đầy đủ thông tin, vui lòng kiểm tra lại.')}
           >
@@ -99,7 +104,7 @@ class AddCategoryDialog extends PageBase {
               <Input placeholder="Tối đa 30 kí tự" autoFocus={true} />
             </Form.Item>
             <Form.Item style={{ display: 'none' }}>
-              <Button id="add-category-dialog-btn-submit" htmlType="submit" />
+              <Button id="edit-category-dialog-btn-submit" htmlType="submit" />
             </Form.Item>
           </Form>
         </Modal>
@@ -107,4 +112,4 @@ class AddCategoryDialog extends PageBase {
     )
   }
 }
-export default connect(null, actions)(withCookies(AddCategoryDialog));
+export default connect(null, actions)(withCookies(EditCategoryDialog));

@@ -1,7 +1,7 @@
 import React from 'react';
 import './ProductManagement.style.scss';
-import { Row, Col, Input, List, Button, Table, Badge, Form, message, InputNumber, Modal, Empty, Dropdown, Menu } from 'antd';
-import { SearchOutlined, CloseOutlined, BellFilled, ExclamationCircleOutlined, ShopFilled, EditOutlined } from '@ant-design/icons';
+import { Row, Col, Input, List, Button, Table, Badge, Form, message, InputNumber, Modal, Empty, Dropdown, Menu, Select } from 'antd';
+import { SearchOutlined, CloseOutlined, BellFilled, ExclamationCircleOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import NumberFormat from 'react-number-format';
 import ImageUploader from '../../../utilities/ImageUploader/ImageUploader';
@@ -15,6 +15,8 @@ import { API } from '../../../../constants/api.constant';
 import PageBase from '../../../utilities/PageBase/PageBase';
 import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
 import { sortByCreatedAt } from '../../../../services/collection-sorting.service';
+import EditCategoryDialog from './EditCategoryDialog/EditCategoryDialog';
+import SupplierDialog from './SupplierDialog/SupplierDialog';
 
 const { confirm } = Modal;
 
@@ -37,13 +39,57 @@ class ProductManagement extends PageBase {
       categories: [],
       categorySearchText: '',
       filteredCategories: [],
+      suppliers: [],
+      isLoading: true
     }
 
     this.productDetailsFormRef = React.createRef();
   }
 
-  componentDidMount() {
-    this.loadCategories();
+  async componentDidMount() {
+    const results = await Promise.all([
+      this.loadCategories(),
+      this.loadSuppliers()
+    ]);
+
+    const categories = results[0];
+    const suppliers = results[1];
+    let { selectedCategory } = this.state;
+    selectedCategory = categories.length > 0 ? { ...categories[0] } : {};
+    this.loadCategoryProducts(selectedCategory);
+
+    this.setState({
+      categories,
+      filteredCategories: categories,
+      selectedCategory,
+      suppliers,
+      selectedSupplier: suppliers.length > 0 ? { ...suppliers[0] } : {},
+      isLoading: false
+    });
+  }
+
+  async loadSuppliers() {
+    this.props.setAppLoading(true);
+    const res = await (
+      await fetch(
+        API.Importer.ProductManagement.getSuppliers,
+        {
+          method: 'GET',
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+            'token': this.props.cookies.get(COOKIE_NAMES.token)
+          },
+          signal: this.abortController.signal
+        }
+      )
+    ).json();
+
+    this.props.setAppLoading(false);
+    if (res.status !== 200) {
+      return Promise.reject(res.errors[0]);
+    }
+
+    return Promise.resolve(res.data.suppliers);
   }
 
   async loadCategories() {
@@ -64,21 +110,10 @@ class ProductManagement extends PageBase {
 
     this.props.setAppLoading(false);
     if (res.status !== 200) {
-      message.error(res.errors[0]);
-      return;
+      return Promise.reject(res.errors[0]);
     }
 
-    const { categories } = res.data;
-    let { selectedCategory } = this.state;
-    selectedCategory = categories.length > 0 ? { ...categories[0] } : {};
-
-    this.setState({
-      categories: [...categories],
-      filteredCategories: [...categories],
-      selectedCategory
-    });
-
-    this.loadCategoryProducts(selectedCategory);
+    return Promise.resolve(res.data.categories);
   }
 
   loadCategoryProducts(category) {
@@ -91,7 +126,7 @@ class ProductManagement extends PageBase {
   }
 
   handleSelectProduct(product) {
-    this.setState({ selectedProduct: { ...product } });
+    this.setState({ selectedProduct: this.state.products.find(p => p._id === product._id) });
     this.toggleProductDetailsPanel(true);
   }
 
@@ -102,19 +137,39 @@ class ProductManagement extends PageBase {
     }
   }
 
+  updateCategoryInList(category) {
+    const { categories } = this.state;
+    const index = _.findIndex(categories, p => p._id === category._id);
+    categories[index] = { ...category };
+
+    const text = this.state.categorySearchText;
+    let { filteredCategories, selectedCategory } = this.state;
+    if (!text) {
+      filteredCategories = [...categories];
+    } else {
+      filteredCategories = categories.filter(c => c.name.toLowerCase().includes(text.toLowerCase()));
+    }
+
+    selectedCategory = { ...category }
+    this.loadCategoryProducts(selectedCategory);
+
+    this.setState({
+      filteredCategories,
+      selectedCategory,
+      categories
+    });
+  }
+
   updateProductDetails(values) {
     this.props.setAppLoading(true);
     const params = { ...values };
+    params.supplier = this.state.suppliers.find(s => s._id === params.supplier);
 
     //product was updated
     this.props.setAppLoading(false);
     let { products, selectedProduct, selectedCategory } = this.state;
     for (const key in params) {
-      if (key !== 'supplier') {
-        selectedProduct[key] = params[key];
-      } else {
-        selectedProduct[key].name = params[key];
-      }
+      selectedProduct[key] = params[key];
     }
 
     const index = _.findIndex(products, p => p._id === selectedProduct._id);
@@ -122,12 +177,9 @@ class ProductManagement extends PageBase {
       products[index] = { ...selectedProduct };
     }
 
-
     selectedCategory.products = products;
     this.loadCategoryProducts(selectedCategory);
-
     this.setState({ selectedProduct });
-
     this.toggleProductDetailsPanel(false);
     message.success('Cập nhật sản phẩm thành công');
   }
@@ -252,21 +304,38 @@ class ProductManagement extends PageBase {
       cancelText: 'Không, cảm ơn',
       async onOk() {
         that.props.setAppLoading(true);
+        const res = await (
+          await fetch(
+            API.Importer.ProductManagement.removeCategory.replace('{categoryID}', selectedCategory._id),
+            {
+              method: 'DELETE',
+              headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                'token': that.props.cookies.get(COOKIE_NAMES.token)
+              },
+              signal: that.abortController.signal
+            }
+          )
+        ).json();
 
-        //Category was removed
         that.props.setAppLoading(false);
+        if (res.status !== 200) {
+          message.error(res.errors[0]);
+          return;
+        }
+
         let { categories } = that.state;
         categories = categories.filter(c => c._id !== selectedCategory._id);
         that.setState({ categories });
         that.onCategorySearchInputChange(that.state.categorySearchText, categories);
-        message.success('SUCCESS');
+        message.success(res.messages[0]);
       },
       onCancel() { },
     });
   }
 
   render() {
-    let { selectedProduct } = this.state;
+    let { selectedProduct, suppliers } = this.state;
     const columns = [
       {
         title: '',
@@ -375,7 +444,12 @@ class ProductManagement extends PageBase {
                               <Col span={2}>{item._id === this.state.selectedCategory._id ? (
                                 <Dropdown overlay={
                                   <Menu onClick={e => this.handleSelectCategoryMenu(e)}>
-                                    <Menu.Item key="EDIT">Sửa thông tin</Menu.Item>
+                                    <Menu.Item key="EDIT">
+                                      <EditCategoryDialog
+                                        category={this.state.selectedCategory}
+                                        updateCategoryInList={category => this.updateCategoryInList(category)}
+                                      />
+                                    </Menu.Item>
                                     <Menu.Item key="REMOVE">Xóa</Menu.Item>
                                   </Menu>
                                 }>
@@ -401,19 +475,26 @@ class ProductManagement extends PageBase {
                       {this.state.selectedCategory.name}
                     </h3>
                   </Col>
-                  <Col span={9}>
+                  <Col span={8}>
+                    {/* <div className="product-management__container__topbar__supplier-select">
+                      <span className="product-management__container__topbar__supplier-select__label">Nhà cung cấp</span>
+                      <Select
+                        defaultValue={!this.state.isLoading ? this.state.selectedSupplier._id : ''}
+                        onChange={e => console.log(e)}
+                      >
+                        {suppliers.map(s => (
+                          <Select.Option value={s._id} key={s._id}>{s.name}</Select.Option>
+                        ))}
+                      </Select>
+                    </div> */}
+                  </Col>
+                  <Col span={1}>
                     <div className="product-management__container__topbar__features">
-
-                      <div className="product-management__container__topbar__features__feature">
-                        <ShopFilled className="product-management__container__topbar__features__feature__icon" />
-                      </div>
-
                       <div className="product-management__container__topbar__features__feature">
                         <Badge count={100} overflowCount={99} className="product-management__container__topbar__features__feature__label">
                           <BellFilled className="product-management__container__topbar__features__feature__icon product-management__container__topbar__features__feature__icon--bell" />
                         </Badge>
                       </div>
-
                     </div>
                   </Col>
                   <Col span={7} style={{ paddingRight: 0 }}>
@@ -476,7 +557,7 @@ class ProductManagement extends PageBase {
                                 this.productDetailsFormRef.current.setFieldsValue({
                                   image: selectedProduct.image,
                                   name: selectedProduct.name,
-                                  supplier: selectedProduct.supplier ? selectedProduct.supplier.name : '',
+                                  supplier: selectedProduct.supplier._id,
                                   price: selectedProduct.price,
                                   availableQuantity: selectedProduct.availableQuantity
                                 });
@@ -506,14 +587,11 @@ class ProductManagement extends PageBase {
                             <Form.Item
                               name="supplier"
                               label="Nhà cung cấp"
-                              rules={[
-                                {
-                                  required: true,
-                                  message: 'Vui lòng nhập tên nhà cung cấp'
-                                }
-                              ]}
+                              rules={[{ required: true }]}
                             >
-                              <Input />
+                              <Select>
+                                {suppliers.map(s => (<Select.Option value={s._id}>{s.name}</Select.Option>))}
+                              </Select>
                             </Form.Item>
 
                             <Form.Item
@@ -581,11 +659,21 @@ class ProductManagement extends PageBase {
                       'product-management__container__content__list-products__selected-row' : ''}
                     locale={{ emptyText: (<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Không tìm thấy sản phẩm" />) }}
                   />
+                  <div className="product-management__container__content__list-products__bottom-toolbar"></div>
                 </div>
+
                 <AddProductDialog
                   selectedCategory={{ ...this.state.selectedCategory }}
                   addToListProducts={product => this.addToListProducts(product)}
+                  suppliers={[...suppliers]}
                 />
+
+                {!this.state.isLoading ? (
+                  <SupplierDialog
+                    suppliers={[...suppliers]}
+                  />
+                ) : <></>}
+
               </div>
             </Col>
           </Row>
