@@ -9,6 +9,7 @@ const CategoryModel = require('./category.model');
 const mongoose = require('mongoose');
 const ProductModel = require('../product/product.model');
 const CollectionSortingService = require('../../services/collection-sorting');
+const { UpdateCategoryValidationSchema } = require('./validations/update-category.schema');
 
 const addCategory = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::addCategory::was called`);
@@ -62,16 +63,16 @@ const getCategories = async (req, res, next) => {
       })
     );
 
-logger.info(`${CONTROLLER_NAME}::getCategories::success`);
-return res.status(HttpStatus.OK).json({
-  status: HttpStatus.OK,
-  data: { categories },
-  messages: [CATEGORY_MESSAGE.SUCCESS.GET_CATEGORIES_SUCCESS]
-})
+    logger.info(`${CONTROLLER_NAME}::getCategories::success`);
+    return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
+      data: { categories },
+      messages: [CATEGORY_MESSAGE.SUCCESS.GET_CATEGORIES_SUCCESS]
+    })
   } catch (error) {
-  logger.error(`${CONTROLLER_NAME}::getCategories::error`);
-  return next(error);
-}
+    logger.error(`${CONTROLLER_NAME}::getCategories::error`);
+    return next(error);
+  }
 }
 
 const getCategoryProducts = async (req, res, next) => {
@@ -80,7 +81,7 @@ const getCategoryProducts = async (req, res, next) => {
     const { categoryID } = req.params;
     const category = await CategoryModel.findOne({ _id: mongoose.Types.ObjectId(categoryID) }).populate('products');
     if (!category) {
-      logger.info(`${CONTROLLER_NAME}::getCategoryProducts::not found`);
+      logger.info(`${CONTROLLER_NAME}::getCategoryProducts::category not found`);
       return res.status(HttpStatus.NOT_FOUND).json({
         status: HttpStatus.NOT_FOUND,
         errors: [CATEGORY_MESSAGE.ERROR.CATEGORY_NOT_FOUND]
@@ -100,7 +101,7 @@ const getCategoryProducts = async (req, res, next) => {
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
       data: { products: category.products },
-      messages: [CATEGORY_MESSAGE.SUCCESS.GET_CATEGORY_PRODUCTS]
+      messages: [CATEGORY_MESSAGE.SUCCESS.GET_CATEGORY_PRODUCTS_SUCCESS]
     })
   } catch (error) {
     logger.error(`${CONTROLLER_NAME}::getCategoryProducts::error`);
@@ -108,8 +109,68 @@ const getCategoryProducts = async (req, res, next) => {
   }
 }
 
+const updateCategory = async (req, res, next) => {
+  logger.info(`${CONTROLLER_NAME}::updateCategory::was called`);
+  try {
+    const { error } = Joi.validate(req.body, UpdateCategoryValidationSchema);
+    if (error) {
+      return responseUtil.joiValidationResponse(error, res);
+    }
+
+    const { categoryID } = req.params;
+    const category = await CategoryModel.findOne({ _id: mongoose.Types.ObjectId(categoryID) });
+    if (!category) {
+      logger.info(`${CONTROLLER_NAME}::updateCategory::category not found`);
+      return res.status(HttpStatus.NOT_FOUND).json({
+        status: HttpStatus.NOT_FOUND,
+        errors: [CATEGORY_MESSAGE.ERROR.CATEGORY_NOT_FOUND]
+      });
+    }
+
+    category.name = req.body.name;
+    await category.save();
+
+    logger.info(`${CONTROLLER_NAME}::updateCategory::a category was updated`);
+    return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
+      data: { category },
+      messages: [CATEGORY_MESSAGE.SUCCESS.UPDATE_CATEGORY_SUCCESS]
+    });
+  } catch (error) {
+    logger.error(`${CONTROLLER_NAME}::updateCategory::error`);
+    return next(error);
+  }
+}
+
+const removeCategory = async (req, res, next) => {
+  logger.info(`${CONTROLLER_NAME}::removeCategory::was called`);
+  try {
+    const { categoryID } = req.params;
+    const deletedCategory = await CategoryModel.findOneAndDelete({ _id: mongoose.Types.ObjectId(categoryID) });
+    if (!deletedCategory) {
+      logger.info(`${CONTROLLER_NAME}::removeCategory::category not found`);
+      return res.status(HttpStatus.NOT_FOUND).json({
+        status: HttpStatus.NOT_FOUND,
+        errors: [CATEGORY_MESSAGE.ERROR.CATEGORY_NOT_FOUND]
+      });
+    }
+
+    logger.info(`${CONTROLLER_NAME}::removeCategory::a category was removed`);
+    return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
+      data: {},
+      messages: [CATEGORY_MESSAGE.SUCCESS.REMOVE_CATEGORY_SUCCESS]
+    });
+  } catch (error) {
+    logger.error(`${CONTROLLER_NAME}::removeCategory::error`);
+    return next(error);
+  }
+}
+
 module.exports = {
   addCategory,
   getCategories,
-  getCategoryProducts
+  getCategoryProducts,
+  updateCategory,
+  removeCategory
 }
