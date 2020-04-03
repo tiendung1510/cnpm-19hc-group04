@@ -95,14 +95,14 @@ class BtnAddWorkSchedule extends PageBase {
           Thêm lịch làm việc
         </Button>
         <Modal
-          title={<span style={{ color: '#ff8220' }}>Thêm lịch làm việc</span>}
+          title={<span style={{ color: '#ff8220', fontWeight: 'bold' }}>Thêm lịch làm việc</span>}
           centered
           visible={this.state.isVisible}
           onOk={() => this.onOK()}
           onCancel={() => this.onCancel()}
           okText="Thêm"
           cancelText="Hủy bỏ"
-          okButtonProps={{ style: { background: '#ff8220', borderColor: '#ff8220' } }}
+          okButtonProps={{ style: { background: '#ff8220', border: 0, fontWeight: 'bold' } }}
         >
 
           <div className="add-work-schedule-dialog__calendar">

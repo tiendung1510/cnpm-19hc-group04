@@ -17,22 +17,23 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
     background: white;
 
     .sidebar__header__company-logo {
-      width: 26px;
+      width: 25px;
       margin-right: 7px;
+      margin-top: -1px;
     }
 
     .sidebar__header__company-brand {
       .sidebar__header__company-brand__name {
-        font-size: 14px;
+        font-size: 13px;
         letter-spacing: 2px;
         color: #ff8220;
         font-weight: bold;
       }
 
       .sidebar__header__company-brand__slogan {
-        font-size: 8.5px;
+        font-size: 8px;
         font-style: italic;
-        margin-top: -3.5px;
+        margin-top: -3px;
         color: gray;
       }
     }
@@ -44,15 +45,16 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
   }
 
   .ant-menu-item-selected {
-    background: none !important;
-    background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%) !important;
+    background: #ff8220 !important;
+    // background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%) !important;
     font-weight: bold;
     color: white !important;
     border-top-right-radius: 24px;
     border-bottom-right-radius: 24px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 
-    &.ant-menu-item .anticon, .ant-menu-submenu-title .anticon {
+    &.ant-menu-item .anticon,
+    .ant-menu-submenu-title .anticon {
       color: white !important;
     }
   }

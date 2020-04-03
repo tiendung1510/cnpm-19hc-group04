@@ -316,7 +316,7 @@ class StaffManagement extends PageBase {
                 <ul className="staff-management__body__staffs__sidebar__staff-features">
                   <li className="staff-management__body__staffs__sidebar__staff-features__feature">
                     <UpdateStaffDialog
-                      selectedStaff={selectedStaff}
+                      selectedStaff={{ ...selectedStaff }}
                       reloadStaffs={updatedStaff => this.loadStaffs(this.state.filteredStaffRole, updatedStaff)}
                     />
                   </li>

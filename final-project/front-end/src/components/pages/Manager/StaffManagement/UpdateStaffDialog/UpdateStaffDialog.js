@@ -1,7 +1,7 @@
 import React from 'react';
 import { withCookies } from 'react-cookie';
 import { EditOutlined } from '@ant-design/icons';
-import { Skeleton, Row, Col, Select, Form, Modal, Input, message, DatePicker, Button, Avatar } from 'antd';
+import { Skeleton, Row, Col, Select, Form, Modal, Input, message, DatePicker, Button } from 'antd';
 import './UpdateStaffDialog.style.scss';
 import USER_ROLES from '../../../../../constants/user-role.constant';
 import USER_SEX from '../../../../../constants/user-sex';
@@ -10,6 +10,7 @@ import * as _ from 'lodash';
 import { API } from '../../../../../constants/api.constant';
 import PageBase from '../../../../utilities/PageBase/PageBase';
 import { COOKIE_NAMES } from '../../../../../constants/cookie-name.constant';
+import ImageUploader from '../../../../utilities/ImageUploader/ImageUploader';
 
 const { Option } = Select;
 const layout = {
@@ -20,11 +21,12 @@ const layout = {
 class UpdateStaffDialog extends PageBase {
   constructor(props) {
     super(props);
-    this.formRef = React.createRef();
 
     this.state = {
       isVisible: false
     }
+
+    this.formRef = React.createRef();
   }
 
   setDialogVisible(isVisible) {
@@ -96,7 +98,6 @@ class UpdateStaffDialog extends PageBase {
 
   render() {
     const { selectedStaff } = this.props;
-
     return (
       <div>
         {selectedStaff ? (
@@ -117,19 +118,14 @@ class UpdateStaffDialog extends PageBase {
 
             <Modal
               className="staff-management__body__staffs__content__list-staffs__header__dialogs__update-staff-dialog__content"
-              title={
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Avatar size={28} src={selectedStaff.avatar} style={{ marginRight: 10 }} />
-                  <span style={{ color: '#ff8220' }}>{selectedStaff.fullname} | Thông tin cá nhân</span>
-                </div>
-              }
+              title={<span style={{ color: '#ff8220', fontWeight: 'bold' }}>{selectedStaff.fullname} | Thông tin cá nhân</span>}
               centered
               visible={this.state.isVisible}
               onOk={() => this.onOk()}
               onCancel={() => this.onCancel()}
-              okText="Cập nhật"
+              okText="Lưu thay đổi"
               cancelText="Hủy bỏ"
-              okButtonProps={{ style: { background: '#ff8220', borderColor: '#ff8220' } }}
+              okButtonProps={{ style: { background: '#ff8220', border: 0, fontWeight: 'bold' } }}
             >
 
               <Form
@@ -145,6 +141,23 @@ class UpdateStaffDialog extends PageBase {
                 <Form.Item style={{ display: 'none' }}>
                   <Button type="primary" htmlType="submit" id="update-staff-dialog-btn-submit" />
                 </Form.Item>
+
+                <div className="staff-management__body__staffs__content__list-staffs__header__dialogs__update-staff-dialog__form__img-uploader">
+                  <ImageUploader
+                    width={100}
+                    height={100}
+                    shape="circle"
+                    onFinish={imageUrl => {
+                      if (this.formRef.current) {
+                        this.formRef.current.setFieldsValue({ avatar: imageUrl });
+                      }
+                    }}
+                    defaultImageUrl={selectedStaff.avatar}
+                    tooltipTitle="Nhấp để tải ảnh lên"
+                    tooltipPlacement="bottom"
+                    clearImage={!this.state.isVisible}
+                  />
+                </div>
 
                 <Form.Item
                   label="Họ và tên"
@@ -258,6 +271,7 @@ class UpdateStaffDialog extends PageBase {
                 <Form.Item
                   label="Ảnh đại diện"
                   name="avatar"
+                  style={{ display: 'none' }}
                 >
                   <Input placeholder="Dán đường dẫn ảnh vào đây" />
                 </Form.Item>

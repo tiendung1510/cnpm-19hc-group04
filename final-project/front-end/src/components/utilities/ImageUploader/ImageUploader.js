@@ -21,11 +21,11 @@ export default class ImageUpload extends Component {
   beforeUpload(file) {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
+      message.error('Chỉ cho phép ảnh có định dạng *.jpeg hoặc *.png');
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      message.error('Image must smaller than 2MB!');
+      message.error('Kích thước ảnh quá lớn');
     }
     return isJpgOrPng && isLt2M;
   }
@@ -47,20 +47,28 @@ export default class ImageUpload extends Component {
     }
   };
 
+  componentWillReceiveProps(props) {
+    this.setState({ imageUrl: props.clearImage ? '' : this.state.imageUrl });
+  }
+
   render() {
-    let { defaultImageUrl, width, height, tooltipTitle, tooltipPlacement } = this.props;
-    const { imageUrl } = this.state;
+    let { defaultImageUrl, width, height, tooltipTitle, tooltipPlacement, shape } = this.props;
+    let { imageUrl } = this.state;
 
     const uploadedImage = (
       <div>
         {defaultImageUrl ? (
           <Tooltip title={tooltipTitle} placement={tooltipPlacement}>
-            <img src={defaultImageUrl} alt="default" style={{ width: '100%' }} />
+            <div
+              className="image-uploader__default-img"
+              style={{ width, height, borderRadius: shape === 'circle' ? '50%' : 0 }}>
+              <img src={defaultImageUrl} alt="default" />
+            </div>
           </Tooltip>
         ) : (
             <div className="image-uploader--empty" style={{ width, height }}>
               <PictureOutlined />
-              <span className="image-uploader--empty__text">Đăng tải ảnh</span>
+              <span className="image-uploader--empty__text">Tải ảnh lên</span>
             </div>
           )}
       </div>
@@ -88,7 +96,11 @@ export default class ImageUpload extends Component {
         >
           {imageUrl ? (
             <Tooltip title={tooltipTitle} placement={tooltipPlacement}>
-              <img src={imageUrl} alt="uploaded" style={{ width: '100%' }} />
+              <div
+                className="image-uploader__uploaded-img"
+                style={{ width, height, borderRadius: shape === 'circle' ? '50%' : 0 }}>
+                <img src={imageUrl} alt="uploaded" />
+              </div>
             </Tooltip>
           ) : uploadButton}
         </Upload>

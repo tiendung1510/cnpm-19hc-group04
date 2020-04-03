@@ -153,14 +153,14 @@ class BtnAddWorkShift extends PageBase {
             icon={<PlusCircleFilled />} />
         </Tooltip>
         <Modal
-          title={<span style={{ color: '#ff8220' }}>{`${selectedWorkDay.workWeekDay ? selectedWorkDay.workWeekDay + ', ' : ''} ${selectedWorkDay.workYear ? moment(new Date(selectedWorkDay.workYear, selectedWorkDay.workMonth - 1, selectedWorkDay.workDayInMonth)).format('DD/MM/YYYY') + ' | Thêm ca làm việc trong ngày' : ''}`}</span>}
+          title={<span style={{ color: '#ff8220', fontWeight: 'bold' }}>{`${selectedWorkDay.workWeekDay ? selectedWorkDay.workWeekDay + ', ' : ''} ${selectedWorkDay.workYear ? moment(new Date(selectedWorkDay.workYear, selectedWorkDay.workMonth - 1, selectedWorkDay.workDayInMonth)).format('DD/MM/YYYY') + ' | Ca làm việc mới' : ''}`}</span>}
           centered
           visible={this.state.isVisible}
           onOk={() => this.onOK()}
           onCancel={() => this.onCancel()}
           okText="Thêm"
           cancelText="Hủy bỏ"
-          okButtonProps={{ style: { background: '#ff8220', borderColor: '#ff8220' } }}
+          okButtonProps={{ style: { background: '#ff8220', border: 0, fontWeight: 'bold' } }}
         >
 
           <div className="add-work-shift-dialog__time-picker">

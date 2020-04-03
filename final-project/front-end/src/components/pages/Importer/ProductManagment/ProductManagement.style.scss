@@ -1,3 +1,10 @@
+.product-management__container__left-sidebar__categories__item__menu {
+  .ant-dropdown-menu-item,
+  .ant-dropdown-menu-submenu-title {
+    padding: 0 !important;
+  }
+}
+
 .product-management {
   height: 100vh;
   overflow: hidden;
@@ -42,17 +49,19 @@
     .product-management__container__left-sidebar {
       height: 100%;
       border-right: 1px solid #eee;
-      padding: 0.5 * $padding;
-      padding-top: 0;
+      padding: 0 (0.5 * $padding);
 
       .product-management__container__left-sidebar__title {
         height: 11%;
-        padding-top: 0.25 * $padding;
+        padding-top: 5px;
+        padding-left: 5px;
+        display: flex;
+        align-items: center;
 
-        .product-management__container__left-sidebar__title__text {
-          font-size: 14px;
-          padding-left: 5px;
-          color: rgba($color: #000000, $alpha: 0.7);
+        h3 {
+          color: #ff8220;
+          margin: 0;
+          font-weight: bold;
         }
       }
 
@@ -205,7 +214,7 @@
           border: 1px solid #eee;
           border-radius: 24px;
           overflow: hidden;
-          line-height: 30px;
+          line-height: 27px;
           box-shadow: none;
           outline-style: none;
         }
@@ -237,7 +246,7 @@
           right: 0;
           background: white;
           border-top: 1px solid #eee;
-          border-left: 1px solid #eee;
+          box-shadow: -5px 0 5px -5px rgba(0, 0, 0, 0.24);
 
           .product-management__container__content__product-details__panel__header {
             position: relative;
@@ -249,10 +258,16 @@
               color: gray;
               border: 0;
               background: #eee;
+              transition: 0.2s;
+
+              &:hover {
+                background: #dcdcdc;
+              }
             }
 
             .product-management__container__content__product-details__panel__header__btn-remove-product {
               color: #ff8220;
+              font-size: $primaryFontSize;
             }
           }
 
@@ -265,10 +280,6 @@
               @extend .centered-content;
               justify-content: center;
               height: 31%;
-
-              img {
-                width: 50%;
-              }
             }
 
             .product-management__container__content__product-details__panel__product-details__info {
@@ -322,6 +333,8 @@
                 border-radius: 24px;
                 min-height: 35px;
                 box-shadow: $boxShadow1;
+                font-size: $primaryFontSize;
+                width: 100%;
               }
             }
           }

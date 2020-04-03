@@ -2,7 +2,6 @@ import React from 'react';
 import { withCookies } from 'react-cookie';
 import { connect } from 'react-redux';
 import * as actions from '../../../../../redux/actions';
-import { PlusCircleFilled } from '@ant-design/icons';
 import './AddCategoryDialog.style.scss';
 import { Modal, Form, Input, Button, message } from 'antd';
 import { COOKIE_NAMES } from '../../../../../constants/cookie-name.constant';
@@ -63,15 +62,15 @@ class AddCategoryDialog extends PageBase {
     return (
       <div className="product-management__add-category-dialog">
         <div className="product-management__add-category-dialog__btn-open-wrapper">
-          <PlusCircleFilled
-            className="product-management__add-category-dialog__btn-open-wrapper__btn"
+          <Button
+            className="product-management__add-category-dialog__btn-open-wrapper__btn animated fadeIn"
             onClick={() => this.setDialogVisible(true)}
-          />
+          >Thêm danh mục</Button>
         </div>
 
         <Modal
           className="product-management__add-category-dialog__content"
-          title={<span style={{ color: '#ff8220' }}>Thêm danh mục sản phẩm</span>}
+          title={<span style={{ color: '#ff8220', fontWeight: 'bold' }}>Danh mục mới</span>}
           centered
           visible={this.state.isVisible}
           onOk={() => this.onOk()}
@@ -81,9 +80,9 @@ class AddCategoryDialog extends PageBase {
               this.formRef.current.resetFields();
             }
           }}
-          okText="Hoàn tất"
+          okText="Thêm"
           cancelText="Hủy bỏ"
-          okButtonProps={{ style: { background: '#ff8220', border: 0 } }}
+          okButtonProps={{ style: { background: '#ff8220', border: 0, fontWeight: 'bold' } }}
         >
           <Form
             {...layout}

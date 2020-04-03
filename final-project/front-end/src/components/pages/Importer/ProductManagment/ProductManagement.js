@@ -22,7 +22,6 @@ const { confirm } = Modal;
 
 const layout = {
   labelCol: { span: 9 },
-  wrapperCol: { span: 15 },
 };
 
 class ProductManagement extends PageBase {
@@ -46,18 +45,25 @@ class ProductManagement extends PageBase {
     this.productDetailsFormRef = React.createRef();
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.loadData();
+  }
+
+  async loadData() {
+    this.props.setAppLoading(true);
     const results = await Promise.all([
       this.loadCategories(),
       this.loadSuppliers()
     ]);
 
+    this.props.setAppLoading(false);
     const categories = results[0];
     const suppliers = results[1];
     let { selectedCategory } = this.state;
-    selectedCategory = categories.length > 0 ? { ...categories[0] } : {};
-    this.loadCategoryProducts(selectedCategory);
 
+    selectedCategory = categories.length > 0 ? { ...categories[0] } : {};
+
+    this.loadCategoryProducts(selectedCategory);
     this.setState({
       categories,
       filteredCategories: categories,
@@ -69,7 +75,6 @@ class ProductManagement extends PageBase {
   }
 
   async loadSuppliers() {
-    this.props.setAppLoading(true);
     const res = await (
       await fetch(
         API.Importer.ProductManagement.getSuppliers,
@@ -84,7 +89,6 @@ class ProductManagement extends PageBase {
       )
     ).json();
 
-    this.props.setAppLoading(false);
     if (res.status !== 200) {
       return Promise.reject(res.errors[0]);
     }
@@ -93,7 +97,6 @@ class ProductManagement extends PageBase {
   }
 
   async loadCategories() {
-    this.props.setAppLoading(true);
     const res = await (
       await fetch(
         API.Importer.ProductManagement.getCategories,
@@ -108,7 +111,6 @@ class ProductManagement extends PageBase {
       )
     ).json();
 
-    this.props.setAppLoading(false);
     if (res.status !== 200) {
       return Promise.reject(res.errors[0]);
     }
@@ -160,17 +162,31 @@ class ProductManagement extends PageBase {
     });
   }
 
-  updateProductDetails(values) {
+  async updateProductDetails(values) {
     this.props.setAppLoading(true);
-    const params = { ...values };
-    params.supplier = this.state.suppliers.find(s => s._id === params.supplier);
+    const res = await (
+      await fetch(
+        API.Importer.ProductManagement.updateProduct.replace('{productID}', this.state.selectedProduct._id),
+        {
+          method: 'PUT',
+          body: JSON.stringify(values),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+            'token': this.props.cookies.get(COOKIE_NAMES.token)
+          },
+          signal: this.abortController.signal
+        }
+      )
+    ).json();
 
-    //product was updated
     this.props.setAppLoading(false);
-    let { products, selectedProduct, selectedCategory } = this.state;
-    for (const key in params) {
-      selectedProduct[key] = params[key];
+    if (res.status !== 200) {
+      message.error(res.errors[0]);
+      return;
     }
+
+    let { products, selectedProduct, selectedCategory } = this.state;
+    selectedProduct = { ...res.data.product };
 
     const index = _.findIndex(products, p => p._id === selectedProduct._id);
     if (index >= 0) {
@@ -181,7 +197,7 @@ class ProductManagement extends PageBase {
     this.loadCategoryProducts(selectedCategory);
     this.setState({ selectedProduct });
     this.toggleProductDetailsPanel(false);
-    message.success('Cập nhật sản phẩm thành công');
+    message.success(res.messages[0]);
   }
 
   openRemoveProductDialog() {
@@ -194,19 +210,34 @@ class ProductManagement extends PageBase {
       okText: 'Đồng ý',
       okType: 'danger',
       cancelText: 'Không, cảm ơn',
-      onOk() {
-        that.props.setAppLoading(true);
-
-        //Product was removed
+      async onOk() {
         that.props.setAppLoading(false);
+        const res = await(
+          await fetch(
+            API.Importer.ProductManagement.removeProduct.replace('{productID}', selectedProduct._id),
+            {
+              method: 'DELETE',
+              headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                'token': that.props.cookies.get(COOKIE_NAMES.token)
+              },
+              signal: that.abortController.signal
+            }
+          )
+        ).json();
+
+        that.props.setAppLoading(false);
+        if (res.status !== 200) {
+          message.error(res.errors[0]);
+          return;
+        }
+
         let { products, selectedCategory } = that.state;
         products = products.filter(p => p._id !== selectedProduct._id);
-
         selectedCategory.products = products;
         that.loadCategoryProducts(selectedCategory);
-
         that.toggleProductDetailsPanel(false);
-        message.success('SUCCESS');
+        message.success(res.messages[0]);
       },
       onCancel() { },
     });
@@ -250,7 +281,7 @@ class ProductManagement extends PageBase {
   }
 
   onProductSearchInputChange(text, products) {
-    let { filteredProducts, selectedProduct } = this.state;
+    let { filteredProducts } = this.state;
     if (!text) {
       filteredProducts = [...(products || [])];
     } else {
@@ -267,29 +298,11 @@ class ProductManagement extends PageBase {
 
     filteredProducts = (filteredProducts || []).map(p => ({ ...p, key: p._id }));
 
-    if (filteredProducts.length > 0) {
-      const index = _.findIndex(filteredProducts, p => p._id === selectedProduct._id);
-      if (index >= 0) {
-        selectedProduct = { ...filteredProducts[index] };
-      } else {
-        selectedProduct = { ...filteredProducts[0] };
-      }
-    } else {
-      selectedProduct = {};
-    }
-
     this.setState({
       filteredProducts,
-      selectedProduct,
+      selectedProduct: {},
       productSearchText: text
     });
-  }
-
-  handleSelectCategoryMenu(e) {
-    const { key } = e;
-    if (key === 'REMOVE') {
-      this.openRemoveCategoryDialog();
-    }
   }
 
   openRemoveCategoryDialog() {
@@ -334,6 +347,50 @@ class ProductManagement extends PageBase {
     });
   }
 
+  addToListSuppliers(supplier) {
+    let { suppliers } = this.state;
+    suppliers.push(supplier);
+    this.setState({ suppliers });
+  }
+
+  removeFromListSuppliers(supplier) {
+    let { suppliers } = this.state;
+    suppliers = suppliers.filter(s => s._id !== supplier._id);
+    this.setState({ suppliers });
+  }
+
+  updateProductSupplier(newSupplier) {
+    let { products } = this.state;
+    products = products.map(p => {
+      if (p.supplier._id === newSupplier._id) {
+        for (const key in p.supplier) {
+          if (newSupplier[key]) {
+            p.supplier[key] = newSupplier[key];
+          }
+        }
+      }
+      return p;
+    });
+    this.onProductSearchInputChange(this.state.productSearchText, products);
+    this.updateSuppliers(newSupplier);
+    this.setState({ products });
+  }
+
+  updateSuppliers(newSupplier) {
+    let { suppliers } = this.state;
+    suppliers = suppliers.map(s => {
+      if (s._id === newSupplier._id) {
+        for (const key in s) {
+          if (newSupplier[key]) {
+            s[key] = newSupplier[key];
+          }
+        }
+      }
+      return s;
+    });
+    this.setState({ suppliers });
+  }
+
   render() {
     let { selectedProduct, suppliers } = this.state;
     const columns = [
@@ -353,20 +410,20 @@ class ProductManagement extends PageBase {
         title: 'Sản phẩm',
         dataIndex: 'name',
         key: 'name',
-        width: 200
+        width: 180
       },
       {
         title: 'Nhà cung cấp',
         dataIndex: 'supplier',
         key: 'supplier',
-        width: 150,
+        width: 140,
         render: (text, record) => (<span>{record.supplier.name}</span>)
       },
       {
         title: 'Giá bán',
         dataIndex: 'price',
         key: 'price',
-        width: 100,
+        width: 120,
         render: (text) => (
           <NumberFormat
             value={Number(text)}
@@ -388,15 +445,19 @@ class ProductManagement extends PageBase {
         title: 'Cập nhật lần cuối',
         dataIndex: 'updatedAt',
         key: 'updatedAt',
-        width: 150,
-        render: (text) => (<span>Lúc {moment(text).format('HH:mm DD-MM-YYYY')}</span>)
+        width: 120,
+        render: (text) => (<span>{moment(text).format('HH:mm DD-MM-YYYY')}</span>)
       },
       {
         title: 'Trạng thái',
         dataIndex: 'status',
         key: 'status',
-        width: 150,
-        render: (text, record) => (<center>{record.availableQuantity === 0 ? 'SOLD_OUT' : 'AVAILABLE'}</center>),
+        width: 160,
+        render: (text, record) => (<center>
+          {record.availableQuantity === 0 ? (
+            <span style={{ color: 'crimson', fontWeight: 'bold' }}>Hết hàng</span>
+          ) : 'Còn hàng'}
+        </center>)
       }
     ];
 
@@ -408,19 +469,13 @@ class ProductManagement extends PageBase {
             <Col span={4}>
               <div className="product-management__container__left-sidebar">
                 <div className="product-management__container__left-sidebar__title">
-                  <Row align="middle">
-                    <Col span={20}>
-                      <span className="product-management__container__left-sidebar__title__text">
-                        Danh mục sản phẩm
-                      </span>
-                    </Col>
-                    <Col span={4} style={{ textAlign: 'right' }}>
-                      <AddCategoryDialog
-                        addToListCategories={category => this.addToListCategories(category)}
-                      />
-                    </Col>
-                  </Row>
+                  <h3>Danh mục sản phẩm</h3>
                 </div>
+                {!this.state.isLoading ? (
+                  <AddCategoryDialog
+                    addToListCategories={category => this.addToListCategories(category)}
+                  />
+                ) : <></>}
                 <div className="product-management__container__left-sidebar__search-box">
                   <Input
                     prefix={<SearchOutlined style={{ marginRight: 5 }} />}
@@ -443,14 +498,20 @@ class ProductManagement extends PageBase {
                               <Col span={22}>{item.name}</Col>
                               <Col span={2}>{item._id === this.state.selectedCategory._id ? (
                                 <Dropdown overlay={
-                                  <Menu onClick={e => this.handleSelectCategoryMenu(e)}>
+                                  <Menu className="product-management__container__left-sidebar__categories__item__menu">
                                     <Menu.Item key="EDIT">
                                       <EditCategoryDialog
                                         category={this.state.selectedCategory}
                                         updateCategoryInList={category => this.updateCategoryInList(category)}
                                       />
                                     </Menu.Item>
-                                    <Menu.Item key="REMOVE">Xóa</Menu.Item>
+                                    <Menu.Item key="REMOVE">
+                                      <Button
+                                        type="link"
+                                        style={{ color: 'rgba(0,0,0,0.65)' }}
+                                        onClick={() => this.openRemoveCategoryDialog()}>
+                                        Xóa</Button>
+                                    </Menu.Item>
                                   </Menu>
                                 }>
                                   <EditOutlined />
@@ -470,25 +531,21 @@ class ProductManagement extends PageBase {
             <Col span={20}>
               <div className="product-management__container__topbar">
                 <Row align="middle" gutter={40}>
+                  <Col span={1}>
+                    {!this.state.isLoading ? (
+                      <AddProductDialog
+                        selectedCategory={{ ...this.state.selectedCategory }}
+                        addToListProducts={product => this.addToListProducts(product)}
+                        suppliers={[...suppliers]}
+                      />
+                    ) : <></>}
+                  </Col>
                   <Col span={8}>
                     <h3 className="product-management__container__topbar__title">
-                      {this.state.selectedCategory.name}
+                      <span>{this.state.selectedCategory.name}</span>
                     </h3>
                   </Col>
-                  <Col span={8}>
-                    {/* <div className="product-management__container__topbar__supplier-select">
-                      <span className="product-management__container__topbar__supplier-select__label">Nhà cung cấp</span>
-                      <Select
-                        defaultValue={!this.state.isLoading ? this.state.selectedSupplier._id : ''}
-                        onChange={e => console.log(e)}
-                      >
-                        {suppliers.map(s => (
-                          <Select.Option value={s._id} key={s._id}>{s.name}</Select.Option>
-                        ))}
-                      </Select>
-                    </div> */}
-                  </Col>
-                  <Col span={1}>
+                  <Col span={4}>
                     <div className="product-management__container__topbar__features">
                       <div className="product-management__container__topbar__features__feature">
                         <Badge count={100} overflowCount={99} className="product-management__container__topbar__features__feature__label">
@@ -497,7 +554,19 @@ class ProductManagement extends PageBase {
                       </div>
                     </div>
                   </Col>
-                  <Col span={7} style={{ paddingRight: 0 }}>
+                  <Col span={4} align="center">
+                    {!this.state.isLoading ? (
+                      <div>
+                        <SupplierDialog
+                          suppliers={[...suppliers]}
+                          addToListSuppliers={supplier => this.addToListSuppliers(supplier)}
+                          removeFromListSuppliers={supplier => this.removeFromListSuppliers(supplier)}
+                          updateProductSupplier={supplier => this.updateProductSupplier(supplier)}
+                        />
+                      </div>
+                    ) : <></>}
+                  </Col>
+                  <Col span={7} style={{ padding: 0 }}>
                     <div className="product-management__container__topbar__search-box">
                       <Input
                         prefix={<SearchOutlined style={{ marginRight: 5 }} />}
@@ -590,7 +659,11 @@ class ProductManagement extends PageBase {
                               rules={[{ required: true }]}
                             >
                               <Select>
-                                {suppliers.map(s => (<Select.Option value={s._id}>{s.name}</Select.Option>))}
+                                {suppliers.map(s => (
+                                  <Select.Option
+                                    key={s._id}
+                                    value={s._id}>{s.name}</Select.Option>
+                                ))}
                               </Select>
                             </Form.Item>
 
@@ -661,19 +734,6 @@ class ProductManagement extends PageBase {
                   />
                   <div className="product-management__container__content__list-products__bottom-toolbar"></div>
                 </div>
-
-                <AddProductDialog
-                  selectedCategory={{ ...this.state.selectedCategory }}
-                  addToListProducts={product => this.addToListProducts(product)}
-                  suppliers={[...suppliers]}
-                />
-
-                {!this.state.isLoading ? (
-                  <SupplierDialog
-                    suppliers={[...suppliers]}
-                  />
-                ) : <></>}
-
               </div>
             </Col>
           </Row>

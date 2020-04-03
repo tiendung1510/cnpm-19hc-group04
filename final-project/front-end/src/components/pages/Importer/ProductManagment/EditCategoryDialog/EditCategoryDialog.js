@@ -35,7 +35,7 @@ class EditCategoryDialog extends PageBase {
 
   async onFinish(values) {
     this.props.setAppLoading(false);
-    const res = await(
+    const res = await (
       await fetch(
         API.Importer.ProductManagement.updateCategory.replace('{categoryID}', this.props.category._id),
         {
@@ -74,14 +74,14 @@ class EditCategoryDialog extends PageBase {
         >Chỉnh sửa</Button>
         <Modal
           className="product-management__edit-category-dialog__content"
-          title={<span style={{ color: '#ff8220' }}>{`Danh mục ${category.name} | Sửa thông tin`}</span>}
+          title={<span style={{ color: '#ff8220', fontWeight: 'bold' }}>{`Danh mục: ${category.name} | Sửa thông tin`}</span>}
           centered
           visible={this.state.isVisible}
           onOk={() => this.onOk()}
           onCancel={() => this.setDialogVisible(false)}
           okText="Lưu thay đổi"
           cancelText="Hủy bỏ"
-          okButtonProps={{ style: { background: '#ff8220', border: 0 } }}
+          okButtonProps={{ style: { background: '#ff8220', border: 0, fontWeight: 'bold' } }}
         >
           <Form
             {...layout}

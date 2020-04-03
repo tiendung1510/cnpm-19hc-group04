@@ -9,6 +9,7 @@ import { withCookies } from 'react-cookie';
 import { COOKIE_NAMES } from '../../../../../constants/cookie-name.constant';
 import { API } from '../../../../../constants/api.constant';
 import PageBase from '../../../../utilities/PageBase/PageBase';
+import ImageUploader from '../../../../utilities/ImageUploader/ImageUploader';
 
 const { Option } = Select;
 const layout = {
@@ -17,14 +18,14 @@ const layout = {
 };
 
 class AddStaffDialog extends PageBase {
-  formRef = React.createRef();
-
   constructor(props) {
     super(props);
 
     this.state = {
       isVisible: false
     }
+
+    this.formRef = React.createRef();
   }
 
   setDialogVisible(isVisible) {
@@ -95,7 +96,7 @@ class AddStaffDialog extends PageBase {
           title={
             <div>
               <UserAddOutlined style={{ color: '#ff8220', marginRight: 10 }} />
-              <span style={{ color: '#ff8220' }}>Thêm nhân viên mới</span>
+              <span style={{ color: '#ff8220', fontWeight: 'bold' }}>Thêm nhân viên mới</span>
             </div>
           }
           centered
@@ -104,12 +105,12 @@ class AddStaffDialog extends PageBase {
           onCancel={() => this.onCancel()}
           okText="Hoàn tất"
           cancelText="Hủy bỏ"
-          okButtonProps={{ style: { background: '#ff8220', borderColor: '#ff8220' } }}
+          okButtonProps={{ style: { background: '#ff8220', border: 0, fontWeight: 'bold' } }}
         >
 
           <Form
             {...layout}
-            ref={this.formRef}
+            ref={current => { this.formRef.current = current; }}
             className="staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__form"
             onFinish={e => this.onFinish(e)}
             onFinishFailed={() => { message.error('Vui lòng kiểm tra lại thông tin'); }}
@@ -127,6 +128,21 @@ class AddStaffDialog extends PageBase {
                   </span>
                   <span>Thông tin cá nhân</span>
                 </h3>
+
+                <div className="staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__form__img-uploader">
+                  <ImageUploader
+                    width={100}
+                    height={100}
+                    shape="circle"
+                    onFinish={imageUrl => {
+                      if (this.formRef.current) {
+                        this.formRef.current.setFieldsValue({ avatar: imageUrl });
+                      }
+                    }}
+                    clearImage={!this.state.isVisible}
+                  />
+                </div>
+
                 <Form.Item
                   label="Họ và tên"
                   name="fullname"
@@ -226,6 +242,7 @@ class AddStaffDialog extends PageBase {
                 <Form.Item
                   label="Ảnh đại diện"
                   name="avatar"
+                  style={{ display: 'none' }}
                 >
                   <Input placeholder="Dán đường dẫn ảnh vào đây" />
                 </Form.Item>

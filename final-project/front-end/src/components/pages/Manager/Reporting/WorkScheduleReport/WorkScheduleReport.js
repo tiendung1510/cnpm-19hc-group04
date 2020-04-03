@@ -87,7 +87,7 @@ class WorkScheduleReport extends Component {
 
         <Modal
           className="reporting__work-schedule-report__content"
-          title={<span style={{ color: '#ff8220' }}>{basicInfo.title}</span>}
+          title={<span style={{ color: '#ff8220', fontWeight: 'bold' }}>{basicInfo.title}</span>}
           visible={this.state.isVisible}
           onCancel={() => this.setDialogVisible(false)}
           cancelButtonProps={{ style: { display: 'none' } }}

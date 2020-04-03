@@ -1,8 +1,7 @@
 import Profile from '../components/pages/User/Profile/Profile';
 import ChangePassword from '../components/pages/User/ChangePassword/ChangePassword';
 
-import MoneyCounting from '../components/pages/Cashier/MoneyCounting/MoneyCounting';
-import InventoryRequesting from '../components/pages/Cashier/InventoryRequesting/InventoryRequesting';
+import CheckoutPanel from '../components/pages/Cashier/CheckoutPanel/CheckoutPanel';
 
 import ProductManagement from '../components/pages/Importer/ProductManagment/ProductManagement';
 
@@ -12,7 +11,7 @@ import WorkAssignment from '../components/pages/Manager/WorkAssignment/WorkAssig
 import SupplierManagement from '../components/pages/Manager/SupplierManagement/SupplierManagement';
 
 import {
-  DollarOutlined, QuestionCircleOutlined, InboxOutlined, BarChartOutlined, TeamOutlined, FileDoneOutlined, UserOutlined, LockOutlined, RocketOutlined
+  DollarOutlined, InboxOutlined, BarChartOutlined, TeamOutlined, FileDoneOutlined, UserOutlined, LockOutlined, RocketOutlined
 } from '@ant-design/icons';
 
 export default [
@@ -39,16 +38,10 @@ export default [
     role: "CASHIER",
     pages: [
       {
-        title: 'Tính tiền cho khách',
-        path: '/money-counting',
+        title: 'Quầy thu ngân',
+        path: '/checkout',
         icon: DollarOutlined,
-        component: MoneyCounting
-      },
-      {
-        title: 'Yêu cầu nhập hàng',
-        path: '/inventory-requesting',
-        icon: QuestionCircleOutlined,
-        component: InventoryRequesting
+        component: CheckoutPanel
       }
     ]
   },

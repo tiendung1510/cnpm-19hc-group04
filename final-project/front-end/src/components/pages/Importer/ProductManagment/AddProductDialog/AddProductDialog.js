@@ -1,19 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './AddProductDialog.style.scss';
 import { withCookies } from 'react-cookie';
 import { connect } from 'react-redux';
 import * as actions from '../../../../../redux/actions';
-import { Button, Modal, Form, Input, InputNumber, message, Select, Tooltip } from 'antd';
+import { Button, Modal, Form, Input, InputNumber, message, Select } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import ImageUploader from '../../../../utilities/ImageUploader/ImageUploader';
-import * as _ from 'lodash';
+import { API } from '../../../../../constants/api.constant';
+import { COOKIE_NAMES } from '../../../../../constants/cookie-name.constant';
+import PageBase from '../../../../utilities/PageBase/PageBase';
 
 const layout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 18 },
 };
 
-class AddProductDialog extends Component {
+class AddProductDialog extends PageBase {
   constructor(props) {
     super(props);
 
@@ -35,73 +37,62 @@ class AddProductDialog extends Component {
     document.getElementById('product-management-add-product-dialog-btn-submit').click();
   }
 
-  onFinish(values) {
-    const params = { ...values };
+  async onFinish(values) {
+    this.props.setAppLoading(true);
+    const params = {
+      image: values.image,
+      name: values.name,
+      supplierID: values.supplier,
+      categoryID: this.props.selectedCategory._id,
+      price: values.price,
+      availableQuantity: values.availableQuantity
+    }
+    const res = await (
+      await fetch(
+        API.Importer.ProductManagement.addProduct,
+        {
+          method: 'POST',
+          body: JSON.stringify(params),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+            'token': this.props.cookies.get(COOKIE_NAMES.token)
+          },
+          signal: this.abortController.signal
+        }
+      )
+    ).json();
 
-    const product = {
-      "name": "Sữa bò tươi không đường",
-      "image": "https://product.hstatic.net/1000074072/product/1l-ko-d__ng-min.png",
-      "price": 8000,
-      "availableQuantity": 10,
-      "_id": "5e72350bcbf81e53804eb2bb",
-      "category": {
-        "name": "Sữa tiệt trùng",
-        "_id": "5e70eb4acac22205b7530292",
-        "createdAt": "2020-03-17T15:22:50.312Z",
-        "updatedAt": "2020-03-18T14:49:47.494Z",
-        "__v": 10
-      },
-      "supplier": {
-        "phone": "0999999999",
-        "address": "New York",
-        "_id": "5e70eb46cac22205b7530291",
-        "name": "Vinamilk",
-        "createdAt": "2020-03-17T15:22:46.783Z",
-        "updatedAt": "2020-03-18T14:49:47.609Z",
-        "__v": 10
-      },
-      "createdAt": "2020-03-18T14:49:47.389Z",
-      "updatedAt": "2020-03-18T14:49:47.389Z",
-      "__v": 0
+    this.props.setAppLoading(false);
+    if (res.status !== 200) {
+      message.error(res.errors[0]);
+      return;
     }
 
-    for (const k in params) {
-      if (k !== 'supplier') {
-        product[k] = params[k];
-      } else {
-        const index = _.findIndex(this.props.suppliers, s => s._id === params[k]);
-        if (index < 0)
-          return;
-        product[k] = { ...this.props.suppliers[index] };
-      }
-    }
-
+    const { product } = res.data;
     this.setDialogVisible(false);
     this.props.addToListProducts({ ...product });
-    message.success('SUCCESS');
+    message.success(res.messages[0]);
   }
 
   render() {
     const { selectedCategory } = this.props;
     return (
       <div className="product-management__add-product-dialog">
-        <Tooltip title="Thêm sản phẩm mới" placement="left">
-          <Button
-            shape="circle"
-            icon={<PlusOutlined />}
-            className="product-management__add-product-dialog__btn-open animated bounceIn"
-            onClick={() => this.setDialogVisible(true)}
-          />
-        </Tooltip>
+        <Button
+          shape="circle"
+          icon={<PlusOutlined />}
+          className="product-management__add-product-dialog__btn-open animated bounceIn"
+          onClick={() => this.setDialogVisible(true)}
+        />
 
         <Modal
-          title={<span style={{ color: '#ff8220', fontWeight: 'bold' }}>{`${selectedCategory.name} | Thêm sản phẩm mới`}</span>}
+          title={<span style={{ color: '#ff8220', fontWeight: 'bold' }}>{`Danh mục: ${selectedCategory.name} | Sản phẩm mới`}</span>}
           visible={this.state.isVisible}
           onOk={() => this.onOK()}
           onCancel={() => this.setDialogVisible(false)}
-          okText="Hoàn tất"
+          okText="Thêm"
           cancelText="Hủy bỏ"
-          okButtonProps={{ style: { background: '#ff8220', border: 0 } }}
+          okButtonProps={{ style: { background: '#ff8220', border: 0, fontWeight: 'bold' } }}
         >
           <div className="product-management__add-product-dialog__content">
             <div className="product-management__add-product-dialog__content__img-uploading">
@@ -111,6 +102,7 @@ class AddProductDialog extends Component {
                 tooltipTitle="Nhấn để thay đổi ảnh"
                 tooltipPlacement="bottom"
                 onFinish={imageUrl => this.formRef.current.setFieldsValue({ image: imageUrl })}
+                clearImage={!this.state.isVisible}
               />
             </div>
             <Form

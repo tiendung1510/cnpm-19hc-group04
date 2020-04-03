@@ -148,14 +148,14 @@ class BtnAddWorkShiftAssigner extends PageBase {
           />
         </Tooltip>
         <Modal
-          title={<span style={{ color: '#ff8220' }}>{`${selectedWorkDay.workWeekDay ? selectedWorkDay.workWeekDay + ', ' : ''} ${selectedWorkDay.workYear ? moment(new Date(selectedWorkDay.workYear, selectedWorkDay.workMonth - 1, selectedWorkDay.workDayInMonth)).format('DD/MM/YYYY') + ' (' + moment(selectedWorkShift.startTime).format('HH:mm') + ' - ' + moment(selectedWorkShift.endTime).format('HH:mm') + ') | Phân ca làm việc' : ''}`}</span>}
+          title={<span style={{ color: '#ff8220', fontWeight: 'bold' }}>{`${selectedWorkDay.workWeekDay ? selectedWorkDay.workWeekDay + ', ' : ''} ${selectedWorkDay.workYear ? moment(new Date(selectedWorkDay.workYear, selectedWorkDay.workMonth - 1, selectedWorkDay.workDayInMonth)).format('DD/MM/YYYY') + ' (' + moment(selectedWorkShift.startTime).format('HH:mm') + ' - ' + moment(selectedWorkShift.endTime).format('HH:mm') + ') | Phân ca làm việc' : ''}`}</span>}
           centered
           visible={this.state.isVisible}
           onOk={() => this.onOK()}
           onCancel={() => this.onCancel()}
           okText="Phân công"
           cancelText="Hủy bỏ"
-          okButtonProps={{ style: { background: '#ff8220', borderColor: '#ff8220' } }}
+          okButtonProps={{ style: { background: '#ff8220', border: 0, fontWeight: 'bold' } }}
         >
           <h3>Nhân viên chưa phân công ({staffs.length})</h3>
 

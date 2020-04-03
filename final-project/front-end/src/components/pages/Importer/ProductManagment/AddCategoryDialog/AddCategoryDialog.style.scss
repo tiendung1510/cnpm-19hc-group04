@@ -3,12 +3,23 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-bottom: 30px;
 
     .product-management__add-category-dialog__btn-open-wrapper__btn {
+      background: white;
       color: #ff8220;
-      font-size: 20px;
-      cursor: pointer;
+      border-color: #ff8220;
+      border-radius: 24px;
+      width: 100%;
+      font-weight: bold;
+      font-size: 12px;
       transition: 0.2s;
+
+      &:hover {
+        background: #ff8220;
+        border-color: #ff8220;
+        color: white;
+      }
     }
   }
 }
