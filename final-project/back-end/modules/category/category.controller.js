@@ -58,7 +58,6 @@ const getCategories = async (req, res, next) => {
           })
         );
         category.products = products;
-        CollectionSortingService.sortByCreatedAt(category.products, 'desc');
         return category;
       })
     );
@@ -94,8 +93,6 @@ const getCategoryProducts = async (req, res, next) => {
         return product;
       })
     );
-
-    CollectionSortingService.sortByCreatedAt(category.products, 'desc');
 
     logger.info(`${CONTROLLER_NAME}::getCategoryProducts::success`);
     return res.status(HttpStatus.OK).json({

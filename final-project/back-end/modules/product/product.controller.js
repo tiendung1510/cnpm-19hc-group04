@@ -11,8 +11,6 @@ const SupplierModel = require('../supplier/supplier.model');
 const ProductModel = require('./product.model');
 const { CATEGORY_MESSAGE } = require('../category/category.constant');
 const { SUPPLIER_MESSAGE } = require('../supplier/supplier.constant');
-const { USER_MESSAGE, USER_ROLE } = require('../user/user.constant');
-const { checkUserPermisson } = require('../user/user.service');
 const mongoose = require('mongoose');
 
 const addProduct = async (req, res, next) => {
@@ -72,7 +70,7 @@ const addProduct = async (req, res, next) => {
     delete productInfo.categoryID;
     delete productInfo.supplierID;
 
-    const newProduct = new ProductModel(productInfo);
+    let newProduct = new ProductModel(productInfo);
     await newProduct.save();
 
     category.products.push(newProduct._id);
@@ -80,6 +78,10 @@ const addProduct = async (req, res, next) => {
 
     supplier.products.push(newProduct._id);
     await supplier.save();
+
+    newProduct = await ProductModel.findOne({ _id: newProduct._id })
+      .populate('category', '-products')
+      .populate('supplier', '-products');
 
     logger.info(`${CONTROLLER_NAME}::addProduct::a new product was added`);
     return res.status(HttpStatus.OK).json({
@@ -101,16 +103,6 @@ const updateProduct = async (req, res, next) => {
       return responseUtil.joiValidationResponse(error, res);
     }
 
-    const { fromUser } = req;
-    const isImporter = await checkUserPermisson(fromUser._id, USER_ROLE.IMPORTER.type);
-    if (!isImporter) {
-      logger.info(`${CONTROLLER_NAME}::updateProduct::permission denied`);
-      return res.status(HttpStatus.UNAUTHORIZED).json({
-        status: HttpStatus.UNAUTHORIZED,
-        errors: [USER_MESSAGE.ERROR.PERMISSION_DENIED]
-      });
-    }
-
     const productInfo = req.body;
     if (productInfo.availableQuantity && productInfo.availableQuantity < 0) {
       logger.info(`${CONTROLLER_NAME}::updateProduct::invalid available quantity`);
@@ -129,7 +121,7 @@ const updateProduct = async (req, res, next) => {
     }
 
     const { productID } = req.params;
-    const product = await ProductModel.findOne({ _id: mongoose.Types.ObjectId(productID) });
+    let product = await ProductModel.findOne({ _id: mongoose.Types.ObjectId(productID) });
     if (!product) {
       logger.info(`${CONTROLLER_NAME}::updateProduct::product not found`);
       return res.status(HttpStatus.NOT_FOUND).json({
@@ -138,11 +130,26 @@ const updateProduct = async (req, res, next) => {
       });
     }
 
+    if (productInfo.supplier) {
+      const supplier = await SupplierModel.findOne({ _id: mongoose.Types.ObjectId(productInfo.supplier) });
+      if (!supplier) {
+        logger.info(`${CONTROLLER_NAME}::updateProduct::supplier not found`);
+        return res.status(HttpStatus.NOT_FOUND).json({
+          status: HttpStatus.NOT_FOUND,
+          errors: [SUPPLIER_MESSAGE.ERROR.SUPPLIER_NOT_FOUND]
+        });
+      }
+    }
+
     for (const key in productInfo)
       product[key] = productInfo[key];
     await product.save();
 
-    logger.info(`${CONTROLLER_NAME}::updateProduct::success`);
+    product = await ProductModel.findOne({ _id: mongoose.Types.ObjectId(productID) })
+      .populate('supplier', '-products')
+      .populate('category', '-products');
+
+    logger.info(`${CONTROLLER_NAME}::updateProduct::a product was updated`);
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
       data: { product },
@@ -166,9 +173,44 @@ const getProducts = async (req, res, next) => {
       status: HttpStatus.OK,
       data: { products },
       messages: [PRODUCT_MESSAGE.SUCCESS.GET_PRODUCTS_SUCCESS]
-    })
+    });
   } catch (error) {
     logger.error(`${CONTROLLER_NAME}::getProducts::error`);
+    return next(error);
+  }
+}
+
+const removeProduct = async (req, res, next) => {
+  logger.info(`${CONTROLLER_NAME}::removeProduct::was called`);
+  try {
+    const { productID } = req.params;
+    let product = await ProductModel.findOne({ _id: mongoose.Types.ObjectId(productID) });
+    if (!product) {
+      logger.info(`${CONTROLLER_NAME}::removeProduct::product not found`);
+      return res.status(HttpStatus.NOT_FOUND).json({
+        status: HttpStatus.NOT_FOUND,
+        errors: [PRODUCT_MESSAGE.ERROR.PRODUCT_NOT_FOUND]
+      });
+    }
+
+    let supplier = await SupplierModel.findOne({ _id: product.supplier });
+    supplier.products = supplier.products.filter(p => p._id !== product._id);
+    await supplier.save();
+
+    let category = await CategoryModel.findOne({ _id: product.category });
+    category.products = category.products.filter(p => p._id !== product._id);
+    await category.save();
+
+    await ProductModel.deleteOne({ _id: product._id });
+
+    logger.info(`${CONTROLLER_NAME}::removeProduct::a product was removed`);
+    return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
+      data: {},
+      messages: [PRODUCT_MESSAGE.SUCCESS.REMOVE_PRODUCTS_SUCCESS]
+    });
+  } catch (error) {
+    logger.error(`${CONTROLLER_NAME}::removeProduct::error`);
     return next(error);
   }
 }
@@ -176,5 +218,6 @@ const getProducts = async (req, res, next) => {
 module.exports = {
   addProduct,
   updateProduct,
-  getProducts
+  getProducts,
+  removeProduct
 };
