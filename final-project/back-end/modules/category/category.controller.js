@@ -8,7 +8,6 @@ const { AddCategoryValidationSchema } = require('./validations/add-category.sche
 const CategoryModel = require('./category.model');
 const mongoose = require('mongoose');
 const ProductModel = require('../product/product.model');
-const CollectionSortingService = require('../../services/collection-sorting');
 const { UpdateCategoryValidationSchema } = require('./validations/update-category.schema');
 
 const addCategory = async (req, res, next) => {
