@@ -6,7 +6,6 @@ $primaryBorderRadius: 7px;
   overflow: hidden;
   position: relative;
   height: 100%;
-  border: 1px solid #eee;
   border-radius: $primaryBorderRadius;
 
   .centered-content {
@@ -33,49 +32,74 @@ $primaryBorderRadius: 7px;
   }
 
   .money-counting__getting-started {
-    position: absolute;
-    z-index: 2;
     width: 100%;
     height: 100%;
-    background: url("https://s3.amazonaws.com/secretsaucefiles/photos/images/000/112/850/large/grocery-store-cashier.jpg?1485387754");
-    background-size: 100% 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    background: white;
+    border: 1px solid #eee;
     @extend .round-bordered;
 
-    .money-counting__getting-started__dark-cover {
-      position: absolute;
-      z-index: 3;
+    .money-counting__getting-started__content {
+      height: 67%;
       width: 100%;
-      height: 100%;
-      background: rgba($color: #000000, $alpha: 0.6);
-      top: 0;
-      left: 0;
-      backdrop-filter: blur(5px);
-      @extend .round-bordered;
+      .money-counting__getting-started__content__left {
+        height: 100%;
+        width: 45%;
+        float: left;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        padding-left: 12%;
+        padding-top: 5%;
+
+        .money-counting__getting-started__content__left__title {
+          color: #ff8220;
+          font-weight: bold;
+          font-size: 2rem;
+        }
+
+        .money-counting__getting-started__content__left__btn-start {
+          border: 0;
+          color: white;
+          background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
+          text-shadow: $primaryTextShadow;
+          font-weight: bold;
+          border-radius: 24px;
+          min-height: 45px;
+          max-width: 60%;
+          font-size: 1rem;
+          position: relative;
+          z-index: 4;
+          margin-top: 4%;
+          box-shadow: $boxShadow1;
+        }
+      }
+
+      .money-counting__getting-started__content__right-cover {
+        height: 100%;
+        width: 55%;
+        float: right;
+        display: flex;
+        align-items: center;
+
+        .money-counting__getting-started__content__right-cover__img {
+          margin-top: 20%;
+          height: 90%;
+          width: 90%;
+          background: url("../../../../assets/images/checkout-cover-2.gif");
+          background-size: 100% 100%;
+        }
+      }
     }
 
-    .money-counting__getting-started__btn-start {
-      border: 0;
-      color: white;
-      background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
-      text-shadow: $primaryTextShadow;
-      font-weight: bold;
-      border-radius: 24px;
-      min-height: 50px;
-      min-width: 25%;
-      margin-top: -5%;
-      font-size: 1rem;
-      position: relative;
-      z-index: 4;
+    .money-counting__getting-started__bottom-wave {
+      height: 33%;
     }
   }
 
   .money-counting__panel {
     background: white;
     height: 100%;
+    border: 1px solid #eee;
     @extend .round-bordered;
 
     .money-counting__panel__left {
@@ -141,15 +165,14 @@ $primaryBorderRadius: 7px;
       }
 
       .money-counting__panel__left__product-details {
-        padding-top: 10px;
+        margin-top: 30px;
         .money-counting__panel__left__product-details__empty {
           padding-top: 30px;
           color: silver;
           font-size: 12px;
         }
 
-        h3 {
-          margin-top: 20px;
+        .money-counting__panel__left__product-details__title {
           color: #ff8220;
           font-weight: bold;
         }
@@ -189,64 +212,80 @@ $primaryBorderRadius: 7px;
         height: 11%;
         width: 100%;
 
-        .money-counting__panel__right__header__btn-done-checkout-wrapper {
-          width: 100%;
-          height: 100%;
-          @extend .centered-content;
-
-          .money-counting__panel__right__header__btn-done-checkout-wrapper__btn {
-            background: #ff8220;
-            color: white;
-            border: 0;
-            font-weight: bold;
-            border-radius: 24px;
-            box-shadow: $boxShadow1;
-            min-width: 180px;
-            min-height: 35px;
-            text-shadow: none;
-
-            &:disabled {
-              background: #eee;
-              color: silver;
-              box-shadow: none;
-            }
-          }
-        }
-
         .money-counting__panel__right__header__title {
           display: flex;
           align-items: center;
           width: 100%;
           height: 100%;
-          padding-left: 2%;
+          padding-left: 5%;
           color: #ff8220;
           font-weight: bold;
 
           .money-counting__panel__right__header__title__icon-wrapper {
-            background: orange;
-            margin-right: 11px;
-            width: 31px;
+            background: white;
+            margin-right: 12px;
+            width: 30px;
             height: 30px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
+
+            .money-counting__panel__right__header__title__icon-wrapper__total-item {
+              position: absolute;
+              font-size: 10px;
+              width: 16px;
+              height: 16px;
+              color: white;
+              background: crimson;
+              font-weight: bold;
+              top: -20%;
+              right: -20%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              border-radius: 50%;
+            }
 
             .money-counting__panel__right__header__title__icon-wrapper__icon {
-              color: white;
+              color: #ff8220;
               font-size: 18px;
               margin-left: -2px;
             }
           }
         }
+
+        .money-counting__panel__right__header__total-price {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+          margin-top: 2px;
+
+          .money-counting__panel__right__header__total-price__label {
+            font-size: 12px;
+          }
+
+          .money-counting__panel__right__header__total-price__price {
+            margin-left: 10px;
+            font-weight: bold;
+          }
+        }
       }
 
       .money-counting__panel__right__shopping-cart {
-        height: 100%;
+        height: 89%;
 
         .money-counting__panel__right__shopping-cart__list-products {
           width: 100%;
           $tableFontSize: 12px;
+
+          .money-counting__panel__right__shopping-cart__list-products__btn-remove-item {
+            border: 0;
+            box-shadow: 0;
+            color: rgba($color: #000000, $alpha: 0.2);
+          }
 
           .money-counting__panel__right__shopping-cart__list-products__item {
             display: flex;
@@ -268,7 +307,7 @@ $primaryBorderRadius: 7px;
           }
 
           .ant-table-body {
-            height: 355px;
+            height: 500px;
             @extend .styled-scrollbar;
           }
 
@@ -276,6 +315,7 @@ $primaryBorderRadius: 7px;
             tbody > tr {
               td {
                 font-size: $tableFontSize - 1;
+                transition: 0.2s;
               }
 
               &:hover {
@@ -287,41 +327,10 @@ $primaryBorderRadius: 7px;
             }
 
             .ant-empty {
-              height: 260px;
+              height: 450px;
               display: flex;
               flex-direction: column;
               justify-content: center;
-            }
-          }
-        }
-
-        .money-counting__panel__right__shopping-cart__details {
-          width: 100%;
-          padding: 20px 0 0 20px;
-          font-size: 12px;
-          border-top: 1px solid #eee;
-          height: 100%;
-
-          .money-counting__panel__right__shopping-cart__details__labels {
-            font-weight: bold;
-          }
-
-          .money-counting__panel__right__shopping-cart__details__price-total {
-            font-weight: bold;
-            color: #ff8220;
-            font-size: 18px;
-          }
-
-          .ant-row {
-            height: auto;
-          }
-
-          ul {
-            padding-left: 0;
-            list-style-type: none;
-
-            li {
-              line-height: 40px;
             }
           }
         }

@@ -3,304 +3,433 @@ import './MoneyCounting.style.scss';
 import PageBase from '../../../utilities/PageBase/PageBase';
 import { withCookies } from 'react-cookie';
 import QrReader from 'react-qr-reader';
-import { Row, Col, Empty, notification, Button, Tooltip, Table, Modal } from 'antd';
-import { ReloadOutlined, ShoppingCartOutlined, RightOutlined, QuestionCircleOutlined, ArrowLeftOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Row, Col, Empty, notification, Button, Tooltip, Table, Modal, message } from 'antd';
+import { ReloadOutlined, ShoppingCartOutlined, QuestionCircleOutlined, ArrowLeftOutlined, ExclamationCircleOutlined, DeleteFilled } from '@ant-design/icons';
 import NumberFormat from 'react-number-format';
 import checkoutSound from '../../../../assets/sounds/cashing.wav';
-// import moment from 'moment';
+import rejectingSound from '../../../../assets/sounds/rejecting.wav';
+import { connect } from 'react-redux';
+import * as actions from '../../../../redux/actions';
+import { API } from '../../../../constants/api.constant';
+import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
+import SubmitCheckoutSessionDialog from './SubmitCheckoutSessionDialog/SubmitCheckoutSessionDialog';
 
 const { confirm } = Modal;
 
-const columns = [
-  {
-    title: <center>STT</center>,
-    dataIndex: 'order',
-    key: 'order',
-    width: 80,
-    render: order => <center>{order}</center>
-  },
-  {
-    title: 'Sản phẩm',
-    dataIndex: 'name',
-    key: 'name',
-    render: (text, record) => (
-      <div className="money-counting__panel__right__shopping-cart__list-products__item">
-        {record.image ? (<img src={record.image} alt="product" />) : (<QuestionCircleOutlined />)}
-        <span className="money-counting__panel__right__shopping-cart__list-products__item__name">{text}</span>
-      </div>
-    )
-  },
-  {
-    title: 'Giá bán',
-    dataIndex: 'price',
-    key: 'price',
-    width: 150,
-    render: (text) => (
-      <NumberFormat
-        value={Number(text)}
-        displayType="text"
-        thousandSeparator={true}
-        suffix=" VNĐ"
-        style={{ fontWeight: 'bold' }}
-      />
-    )
-  },
-  {
-    title: 'Danh mục',
-    dataIndex: 'category',
-    key: 'category',
-  },
-  {
-    title: 'Nhà cung cấp',
-    dataIndex: 'supplier',
-    key: 'supplier',
-  }
-];
-
 class MoneyCounting extends PageBase {
-  constructor(props) {
-    super(props);
-    this.state = {
-      scannedProduct: null,
-      checkedOutProducts: [],
-      priceTotal: 0,
-      onWorking: true
-    }
-    this.soundRef = React.createRef();
-  }
+	constructor(props) {
+		super(props);
+		this.state = {
+			scannedProduct: {},
+			checkedOutProducts: [{ "_id": "5e70f8e809d06d1841aea689", "key": "5e70f8e809d06d1841aea689", "order": 1, "name": "Sữa bò tươi có đường", "price": 8000, "category": "Sữa tiệt trùng", "supplier": "Vinamilk", "image": "https://product.hstatic.net/1000074072/product/1l-c_-d__ng-min.png" }, { "_id": "5e70f8e809d06d1841aea689", "key": "5e70f8e809d06d1841aea689", "order": 2, "name": "Sữa bò tươi có đường", "price": 8000, "category": "Sữa tiệt trùng", "supplier": "Vinamilk", "image": "https://product.hstatic.net/1000074072/product/1l-c_-d__ng-min.png" }, { "_id": "5e72350bcbf81e53804eb2bb", "key": "5e72350bcbf81e53804eb2bb", "order": 3, "name": "Sữa bò tươi không đường", "price": 8000, "category": "Sữa tiệt trùng", "supplier": "Vinamilk", "image": "https://product.hstatic.net/1000074072/product/1l-ko-d__ng-min.png" }],
+			priceTotal: 24000,
+			onWorking: true,
+			sound: '',
+			checkoutSessionID: ''
+		}
+		this.soundRef = React.createRef();
+	}
 
-  openNotificationWithIcon = (type, message, description) => {
-    notification[type]({
-      message,
-      description
-    });
-  };
+	async createCheckoutSession() {
+		// this.props.setAppLoading(true);
+		// const res = await (
+		// 	await fetch(
+		// 		API.Cashier.Checkout.createCheckoutSession,
+		// 		{
+		// 			method: 'POST',
+		// 			headers: {
+		// 				'Content-type': 'application/json; charset=UTF-8',
+		// 				'token': this.props.cookies.get(COOKIE_NAMES.token)
+		// 			},
+		// 			signal: this.abortController.signal
+		// 		}
+		// 	)
+		// ).json();
 
-  handleScan = data => {
-    if (data) {
-      this.playCheckoutSound();
-      const productDetails = JSON.parse(data);
-      this.openNotificationWithIcon('success', `${productDetails.name}`, '');
+		// this.props.setAppLoading(false);
+		// if (res.status !== 200) {
+		// 	message.error(res.errors[0]);
+		// 	return;
+		// }
 
-      let { checkedOutProducts, priceTotal } = this.state;
-      checkedOutProducts.push({
-        key: productDetails._id,
-        order: checkedOutProducts.length + 1,
-        name: productDetails.name,
-        price: productDetails.price,
-        category: productDetails.category.name,
-        supplier: productDetails.supplier.name,
-        image: productDetails.image
-      });
+		// const { _id } = res.data.checkoutSession;
+		// message.success(res.messages[0]);
 
-      priceTotal = checkedOutProducts.reduce((pre, cur) => {
-        return pre + cur.price;
-      }, 0);
+		const _id = '5e8a0bceb8f59d12ad7fc177';
+		this.setOnWorking(true);
+		this.props.setCheckoutPanelCheckoutSessionID(_id);
+		this.setState({ checkoutSessionID: _id });
+	}
 
-      this.setState({
-        scannedProduct: { ...productDetails },
-        checkedOutProducts,
-        priceTotal
-      });
-    }
-  }
+	async cancelCheckoutSession() {
+		this.props.setAppLoading(true);
+		const res = await (
+			await fetch(
+				API.Cashier.Checkout.cancelCheckoutSession.replace('{checkoutSessionID}', this.state.checkoutSessionID),
+				{
+					method: 'DELETE',
+					headers: {
+						'Content-type': 'application/json; charset=UTF-8',
+						'token': this.props.cookies.get(COOKIE_NAMES.token)
+					},
+					signal: this.abortController.signal
+				}
+			)
+		).json();
 
-  handleError = error => {
-    if (error) {
-      this.openNotificationWithIcon('error', 'Chưa tìm thấy sản phẩm', '');
-    }
-  }
+		this.props.setAppLoading(false);
+		if (res.status !== 200) {
+			message.error(res.errors[0]);
+			return;
+		}
 
-  clearScannedProduct() {
-    this.setState({ scannedProduct: null });
-  }
+		this.setOnWorking(false);
+		message.success(res.messages[0]);
+	}
 
-  playCheckoutSound() {
-    this.soundRef.play();
-  }
+	openNotification = (message, description) => {
+		notification.open({
+			message,
+			description
+		});
+	};
 
-  setOnWorking(onWorking) {
-    this.setState({ onWorking });
-    this.props.setOnWorking(onWorking);
-  }
+	handleScan = data => {
+		if (data) {
+			this.playSound(checkoutSound);
+			const productDetails = JSON.parse(data);
+			this.openNotification(
+				<span>
+					<span style={{ color: '#44b543', fontWeight: 'bold', marginRight: 10 }}>+1</span>
+					{productDetails.name}
+				</span>,
+				`Vừa xong`
+			);
 
-  backToGettingStarted() {
-    const that = this;
-    confirm({
-      title: `Đang thao tác, bạn có muốn rời khỏi?`,
-      icon: <ExclamationCircleOutlined />,
-      content: '',
-      okText: 'Đồng ý',
-      okType: 'danger',
-      cancelText: 'Không, cảm ơn',
-      onOk() {
-        that.setOnWorking(false);
-        that.props.setOnWorking(false);
-      }
-    });
-  }
+			let { checkedOutProducts, priceTotal } = this.state;
+			checkedOutProducts.push({
+				_id: productDetails._id,
+				key: productDetails._id,
+				order: checkedOutProducts.length + 1,
+				name: productDetails.name,
+				price: productDetails.price,
+				category: productDetails.category.name,
+				supplier: productDetails.supplier.name,
+				image: productDetails.image
+			});
 
-  render() {
-    const { scannedProduct, checkedOutProducts, priceTotal, onWorking } = this.state;
+			priceTotal = checkedOutProducts.reduce((pre, cur) => {
+				return pre + cur.price;
+			}, 0);
 
-    return (
-      <div className="money-counting">
-        {!onWorking ? (
-          <div className="money-counting__getting-started animated fadeIn">
-            <div className="money-counting__getting-started__dark-cover"></div>
-            <Button
-              type="submit"
-              className="money-counting__getting-started__btn-start animated bounceInUp"
-              onClick={() => this.setOnWorking(true)}
-            >Bắt đầu tính tiền</Button>
-          </div>
-        ) : (
-            <div style={{ height: '100%' }}>
-              <audio ref={ref => { this.soundRef = ref; }} src={checkoutSound} controls autoPlay style={{ display: 'none' }} />
-              <div className="money-counting__panel">
-                <Row>
-                  <Col span={6}>
-                    <div className="money-counting__panel__left">
-                      <div className="money-counting__panel__left__header">
-                        <Button
-                          shape="circle"
-                          icon={<ArrowLeftOutlined />}
-                          className="money-counting__panel__left__header__btn-back"
-                          onClick={() => this.backToGettingStarted()}
-                        />
-                        <div className="money-counting__panel__left__header__company">
-                          <img className="money-counting__panel__left__header__company__logo" src={require('../../../../assets/images/app-logo.png')} alt="logo" />
-                          <div className="money-counting__panel__left__header__company__brand">
-                            <div className="money-counting__panel__left__header__company__brand__name"><span>Mini Mart</span></div>
-                            <div className="money-counting__panel__left__header__company__brand__slogan"><span>Tiện Lợi mà Chất Lượng</span></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="money-counting__panel__left__product-scanning animated fadeIn">
-                        <QrReader
-                          delay={1500}
-                          onError={error => this.handleError(error)}
-                          onScan={data => this.handleScan(data)}
-                          className="money-counting__panel__left__product-scanning__scanner"
-                        />
-                      </div>
-                      <div className="money-counting__panel__left__product-details">
-                        <Row align="middle">
-                          <Col span={21}><h3>Thông tin sản phẩm</h3></Col>
-                          <Col span={3} align="center">
-                            <Tooltip title="Làm mới" placement="bottom">
-                              <Button
-                                shape="circle" icon={<ReloadOutlined />}
-                                className="money-counting__panel__left__product-details__btn-clear"
-                                onClick={() => this.clearScannedProduct()}
-                              />
-                            </Tooltip>
-                          </Col>
-                        </Row>
-                        {scannedProduct ? (
-                          <Row gutter={20}>
-                            <Col span={8}>
-                              <ul className="money-counting__panel__left__product-details__labels">
-                                <li>Tên sản phẩm</li>
-                                <li>Giá bán</li>
-                                <li>Thể loại</li>
-                                <li>Nhà phân phối</li>
-                              </ul>
-                            </Col>
-                            <Col span={16}>
-                              <ul className="money-counting__panel__left__product-details__texts">
-                                <li>{scannedProduct.name}</li>
-                                <li>
-                                  <NumberFormat
-                                    value={scannedProduct.price}
-                                    displayType="text"
-                                    thousandSeparator={true}
-                                    suffix=" VNĐ"
-                                    style={{ fontWeight: 'bold' }} />
-                                </li>
-                                <li>{scannedProduct.category.name}</li>
-                                <li>{scannedProduct.supplier.name}</li>
-                              </ul>
-                            </Col>
-                          </Row>
-                        ) : (
-                            <Empty
-                              image={Empty.PRESENTED_IMAGE_SIMPLE}
-                              description="Chưa tìm thấy"
-                              className="money-counting__panel__left__product-details__empty" />
-                          )}
-                      </div>
-                    </div>
-                  </Col>
-                  <Col span={18}>
-                    <div className="money-counting__panel__right">
-                      <div className="money-counting__panel__right__header">
-                        <Row>
-                          <Col span={18}>
-                            <h3 className="money-counting__panel__right__header__title">
-                              <div className="money-counting__panel__right__header__title__icon-wrapper">
-                                <ShoppingCartOutlined className="money-counting__panel__right__header__title__icon-wrapper__icon" />
-                              </div>
-                              <span>Giỏ hàng của khách</span>
-                            </h3>
-                          </Col>
-                          <Col span={6}>
-                            <div className="money-counting__panel__right__header__btn-done-checkout-wrapper">
-                              <Button
-                                className="money-counting__panel__right__header__btn-done-checkout-wrapper__btn"
-                                type="primary"
-                                disabled={checkedOutProducts.length === 0}
-                              >
-                                <span style={{ marginRight: 5 }}>Xuất hóa đơn</span>
-                                <RightOutlined />
-                              </Button>
-                            </div>
-                          </Col>
-                        </Row>
-                      </div>
-                      <div className="money-counting__panel__right__shopping-cart">
-                        <div className="money-counting__panel__right__shopping-cart__list-products">
-                          <Table
-                            dataSource={[...checkedOutProducts]}
-                            columns={columns}
-                            pagination={false}
-                            scroll={{ y: 355 }}
-                            locale={{ emptyText: (<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Chưa có sản phẩm" />) }}
-                          />
-                        </div>
-                        <div className="money-counting__panel__right__shopping-cart__details">
-                          <Row gutter={20}>
-                            <Col span={5}>
-                              <ul className="money-counting__panel__right__shopping-cart__details__labels">
-                                <li>Số lượng sản phẩm</li>
-                                <li>Tổng tiền</li>
-                              </ul>
-                            </Col>
-                            <Col span={19}>
-                              <ul>
-                                <li>{checkedOutProducts.length}</li>
-                                <li>
-                                  <NumberFormat
-                                    value={priceTotal}
-                                    displayType="text"
-                                    thousandSeparator={true}
-                                    suffix=" VNĐ"
-                                    className="money-counting__panel__right__shopping-cart__details__price-total"
-                                  />
-                                </li>
-                              </ul>
-                            </Col>
-                          </Row>
-                        </div>
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
-              </div>
-            </div>
-          )}
-      </div>
-    )
-  }
+			this.setState({
+				scannedProduct: { ...productDetails },
+				checkedOutProducts,
+				priceTotal
+			});
+		}
+	}
+
+	handleError = error => {
+		if (error) {
+			this.openNotificationWithIcon('error', 'Chưa tìm thấy sản phẩm', '');
+		}
+	}
+
+	clearScannedProduct() {
+		this.setState({ scannedProduct: {} });
+	}
+
+	playSound(sound) {
+		this.soundRef.src = sound;
+		this.soundRef.play();
+	}
+
+	setOnWorking(onWorking) {
+		this.setState({ onWorking });
+		this.props.setCheckoutPanelOnWorking(onWorking);
+	}
+
+	backToGettingStarted() {
+		const that = this;
+		confirm({
+			title: `Đang thao tác, bạn có muốn rời khỏi?`,
+			icon: <ExclamationCircleOutlined />,
+			content: '',
+			okText: 'Đồng ý',
+			okType: 'danger',
+			cancelText: 'Không, cảm ơn',
+			onOk() {
+				that.cancelCheckoutSession();
+			}
+		});
+	}
+
+	openRemoveCheckoutProductConfirm(product) {
+		const that = this;
+		confirm({
+			title: `Bạn muốn loại bỏ 1 ${product.name}?`,
+			icon: <ExclamationCircleOutlined />,
+			content: '',
+			okText: 'Đồng ý',
+			okType: 'danger',
+			cancelText: 'Không, cảm ơn',
+			onOk() {
+				let { checkedOutProducts, priceTotal } = that.state;
+				checkedOutProducts = checkedOutProducts.filter(p => p.order !== product.order);
+				checkedOutProducts.sort((a, b) => a.order - b.order);
+				priceTotal -= product.price;
+
+				if (product.order === that.state.scannedProduct.order || checkedOutProducts.length === 0)
+					that.clearScannedProduct();
+
+				that.setState({ checkedOutProducts, priceTotal });
+
+				that.playSound(rejectingSound);
+				that.openNotification(
+					<span>
+						<span style={{ color: 'crimson', fontWeight: 'bold', marginRight: 10 }}>-1</span>
+						{product.name}
+					</span>,
+					`Vừa xong`
+				);
+			}
+		});
+	}
+
+	render() {
+		const { scannedProduct, checkedOutProducts, priceTotal, onWorking } = this.state;
+		const isProductScanned = Object.keys(scannedProduct).length > 0;
+
+		const columns = [
+			{
+				title: <center>STT</center>,
+				dataIndex: 'order',
+				key: 'order',
+				width: 80,
+				render: order => <center>{order}</center>
+			},
+			{
+				title: 'Sản phẩm',
+				dataIndex: 'name',
+				key: 'name',
+				width: 250,
+				render: (text, record) => (
+					<div className="money-counting__panel__right__shopping-cart__list-products__item">
+						{record.image ? (<img src={record.image} alt="product" />) : (<QuestionCircleOutlined />)}
+						<span className="money-counting__panel__right__shopping-cart__list-products__item__name">{text}</span>
+					</div>
+				)
+			},
+			{
+				title: 'Giá bán',
+				dataIndex: 'price',
+				key: 'price',
+				width: 150,
+				render: (text) => (
+					<NumberFormat
+						value={Number(text)}
+						displayType="text"
+						thousandSeparator={true}
+						suffix=" VNĐ"
+						style={{ fontWeight: 'bold' }}
+					/>
+				)
+			},
+			{
+				title: 'Danh mục',
+				dataIndex: 'category',
+				key: 'category',
+				width: 150
+			},
+			{
+				title: 'Nhà cung cấp',
+				dataIndex: 'supplier',
+				key: 'supplier',
+				width: 150
+			},
+			{
+				title: '',
+				dataIndex: '',
+				key: '',
+				render: (value, record) => (
+					<Button
+						className="money-counting__panel__right__shopping-cart__list-products__btn-remove-item"
+						shape="circle"
+						icon={<DeleteFilled />}
+						onClick={() => this.openRemoveCheckoutProductConfirm({ ...record })}
+					/>
+				)
+			}
+		];
+
+		return (
+			<div className="money-counting">
+				{!onWorking ? (
+					<div className="money-counting__getting-started animated fadeIn">
+						<div className="money-counting__getting-started__content">
+							<div className="money-counting__getting-started__content__left animated bounceInLeft">
+								<h1 className="money-counting__getting-started__content__left__title">
+									Tính tiền cho khách
+								</h1>
+								<Button
+									type="submit"
+									className="money-counting__getting-started__content__left__btn-start"
+									onClick={() => this.createCheckoutSession()}
+								>Bắt đầu tính tiền</Button>
+							</div>
+							<div className="money-counting__getting-started__content__right-cover">
+								<div className="money-counting__getting-started__content__right-cover__img"></div>
+							</div>
+						</div>
+						<div className="money-counting__getting-started__bottom-wave">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+								<path fill="url(#my-cool-gradient)" fillOpacity={1}
+									d="M0,0L60,21.3C120,43,240,85,360,90.7C480,96,600,64,720,80C840,96,960,160,1080,197.3C1200,235,1320,245,1380,250.7L1440,256L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"
+								/>
+								<linearGradient id="my-cool-gradient" x2="1" y2="1">
+									<stop offset="0%" stopColor="#ff5858" />
+									<stop offset="100%" stopColor="#f09819" />
+								</linearGradient>
+							</svg>
+						</div>
+					</div>
+				) : (
+						<div style={{ height: '100%' }}>
+							<audio ref={ref => { this.soundRef = ref; }} src="" controls autoPlay style={{ display: 'none' }} />
+							<div className="money-counting__panel">
+								<Row>
+									<Col span={6}>
+										<div className="money-counting__panel__left">
+											<div className="money-counting__panel__left__header">
+												<Button
+													shape="circle"
+													icon={<ArrowLeftOutlined />}
+													className="money-counting__panel__left__header__btn-back"
+													onClick={() => this.backToGettingStarted()}
+												/>
+												<div className="money-counting__panel__left__header__company">
+													<img className="money-counting__panel__left__header__company__logo" src={require('../../../../assets/images/app-logo.png')} alt="logo" />
+													<div className="money-counting__panel__left__header__company__brand">
+														<div className="money-counting__panel__left__header__company__brand__name"><span>Mini Mart</span></div>
+														<div className="money-counting__panel__left__header__company__brand__slogan"><span>Tiện Lợi mà Chất Lượng</span></div>
+													</div>
+												</div>
+											</div>
+											<div className="money-counting__panel__left__product-scanning animated fadeIn">
+												<QrReader
+													delay={1500}
+													onError={error => this.handleError(error)}
+													onScan={data => this.handleScan(data)}
+													className="money-counting__panel__left__product-scanning__scanner"
+												/>
+											</div>
+											<div className="money-counting__panel__left__product-details">
+												<Row align="middle">
+													<Col span={21}>
+														<span className="money-counting__panel__left__product-details__title">Thông tin checkout</span>
+													</Col>
+													<Col span={3} align="center">
+														<Tooltip title="Làm sạch" placement="bottom">
+															<Button
+																shape="circle" icon={<ReloadOutlined />}
+																className="money-counting__panel__left__product-details__btn-clear"
+																onClick={() => this.clearScannedProduct()}
+															/>
+														</Tooltip>
+													</Col>
+												</Row>
+												{isProductScanned ? (
+													<Row gutter={20}>
+														<Col span={8}>
+															<ul className="money-counting__panel__left__product-details__labels">
+																<li>Tên sản phẩm</li>
+																<li>Giá bán</li>
+																<li>Thể loại</li>
+																<li>Nhà phân phối</li>
+															</ul>
+														</Col>
+														<Col span={16}>
+															<ul className="money-counting__panel__left__product-details__texts">
+																<li>{scannedProduct.name}</li>
+																<li>
+																	<NumberFormat
+																		value={scannedProduct.price}
+																		displayType="text"
+																		thousandSeparator={true}
+																		suffix=" VNĐ"
+																		style={{ fontWeight: 'bold' }} />
+																</li>
+																<li>{scannedProduct.category.name}</li>
+																<li>{scannedProduct.supplier.name}</li>
+															</ul>
+														</Col>
+													</Row>
+												) : (
+														<Empty
+															image={Empty.PRESENTED_IMAGE_SIMPLE}
+															description="Chưa tìm thấy"
+															className="money-counting__panel__left__product-details__empty" />
+													)}
+											</div>
+										</div>
+									</Col>
+									<Col span={18}>
+										<div className="money-counting__panel__right">
+											<div className="money-counting__panel__right__header">
+												<Row align="middle">
+													<Col span={12}>
+														<div className="money-counting__panel__right__header__title">
+															<div className="money-counting__panel__right__header__title__icon-wrapper">
+																<ShoppingCartOutlined className="money-counting__panel__right__header__title__icon-wrapper__icon" />
+																<div className="money-counting__panel__right__header__title__icon-wrapper__total-item">
+																	<span>{checkedOutProducts.length}</span>
+																</div>
+															</div>
+															<span>Giỏ hàng của khách</span>
+														</div>
+													</Col>
+													<Col span={6}>
+														<div className="money-counting__panel__right__header__total-price">
+															<span className="money-counting__panel__right__header__total-price__label">
+																Tổng tiền:
+															</span>
+															<NumberFormat
+																value={priceTotal}
+																displayType="text"
+																thousandSeparator={true}
+																suffix=" VNĐ"
+																className="money-counting__panel__right__header__total-price__price"
+															/>
+														</div>
+													</Col>
+													<Col span={6}>
+														<SubmitCheckoutSessionDialog
+															checkedOutProducts={{ ...checkedOutProducts }}
+															checkoutSessionID={this.state.checkoutSessionID}
+														/>
+													</Col>
+												</Row>
+											</div>
+											<div className="money-counting__panel__right__shopping-cart">
+												<div className="money-counting__panel__right__shopping-cart__list-products">
+													<Table
+														dataSource={[...checkedOutProducts]}
+														columns={columns}
+														pagination={false}
+														scroll={{ y: 500 }}
+														locale={{ emptyText: (<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Giỏ hàng trống" />) }}
+													/>
+												</div>
+											</div>
+										</div>
+									</Col>
+								</Row>
+							</div>
+						</div>
+					)}
+			</div>
+		)
+	}
 }
-export default withCookies(MoneyCounting)
+export default connect(null, actions)(withCookies(MoneyCounting));

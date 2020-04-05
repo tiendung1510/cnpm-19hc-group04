@@ -6,14 +6,16 @@
   padding: 0 15px;
 
   $boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.23);
   $primaryFontSize: 12px;
   $primaryBorderRadius: 7px;
+  $primaryBgColor: #f8f8f8;
 
   .checkout-panel__main-board {
     width: 100%;
     height: 90vh;
-    background: white;
-    box-shadow: $boxShadow1;
+    background: $primaryBgColor;
+    box-shadow: $boxShadow2;
     border-radius: $primaryBorderRadius;
     overflow: hidden;
     display: flex;
@@ -36,7 +38,7 @@
         margin-left: 15px;
         margin-top: 10px;
         margin-bottom: 20px;
-        background: #f8f8f8;
+        background: white;
         box-shadow: $boxShadow1;
 
         &.checkout-panel__main-board__navbar__item--selected {
@@ -58,7 +60,7 @@
       .ant-menu-dark.ant-menu-vertical-right {
         height: 100%;
         width: 60px;
-        background: white;
+        background: $primaryBgColor;
 
         .ant-menu-item {
           padding: 2px 0 0 0 !important;
@@ -80,6 +82,6 @@
     width: 100%;
     height: 100%;
     padding: 10px;
-    background: white;
+    background: $primaryBgColor;
   }
 }

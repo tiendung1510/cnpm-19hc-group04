@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './CheckoutPanel.style.scss';
-import { Menu, Modal } from 'antd';
+import { Menu, Modal, message } from 'antd';
 import {
   QuestionCircleOutlined,
   HistoryOutlined,
@@ -8,6 +8,12 @@ import {
   ExclamationCircleOutlined
 } from '@ant-design/icons';
 import MoneyCounting from '../MoneyCounting/MoneyCounting';
+import { connect } from 'react-redux';
+import { API } from '../../../../constants/api.constant';
+import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
+import * as actions from '../../../../redux/actions';
+import { withCookies } from 'react-cookie';
+import PageBase from '../../../utilities/PageBase/PageBase';
 
 const navbarMenuItems = [
   {
@@ -17,7 +23,7 @@ const navbarMenuItems = [
   },
   {
     key: '2',
-    title: 'Yêu cầu nhập hàng',
+    title: 'Lịch sử yêu cầu nhập hàng',
     icon: QuestionCircleOutlined
   },
   {
@@ -29,14 +35,15 @@ const navbarMenuItems = [
 
 const { confirm } = Modal;
 
-export default class CheckoutPanel extends Component {
+class CheckoutPanel extends PageBase {
 
   constructor(props) {
     super(props);
     this.state = {
       collapsed: false,
       selectedMenuItem: { ...navbarMenuItems[0] },
-      onWorking: false
+      onWorking: false,
+      checkoutSessionID: ''
     }
   }
 
@@ -45,6 +52,10 @@ export default class CheckoutPanel extends Component {
       collapsed: !this.state.collapsed,
     });
   };
+
+  setCheckoutSessionID(id) {
+    this.setState({ checkoutSessionID: id });
+  }
 
   handleSelectMenuItem(e) {
     const { key } = e;
@@ -66,16 +77,43 @@ export default class CheckoutPanel extends Component {
       okType: 'danger',
       cancelText: 'Không, cảm ơn',
       onOk() {
-        that.setState({
-          selectedMenuItem: navbarMenuItems.find(item => item.key === key),
-          onWorking: false
-        });
+        that.cancelCheckoutSession(key);
       }
     });
   }
 
   setOnWorking(onWorking) {
     this.setState({ onWorking });
+  }
+
+  async cancelCheckoutSession(key) {
+    this.props.setAppLoading(true);
+    const res = await (
+      await fetch(
+        API.Cashier.Checkout.cancelCheckoutSession.replace('{checkoutSessionID}', this.state.checkoutSessionID),
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+            'token': this.props.cookies.get(COOKIE_NAMES.token)
+          },
+          signal: this.abortController.signal
+        }
+      )
+    ).json();
+
+    this.props.setAppLoading(false);
+    if (res.status !== 200) {
+      message.error(res.errors[0]);
+      return;
+    }
+
+    this.setState({
+      selectedMenuItem: navbarMenuItems.find(item => item.key === key),
+      onWorking: false,
+      checkoutSessionID: ''
+    });
+    message.success(res.messages[0]);
   }
 
   render() {
@@ -105,7 +143,8 @@ export default class CheckoutPanel extends Component {
           <div className="checkout-panel__main-board__content">
             {selectedMenuItem.key === '1' ? (
               <MoneyCounting
-                setOnWorking={onWorking => this.setOnWorking(onWorking)}
+                setCheckoutPanelOnWorking={onWorking => this.setOnWorking(onWorking)}
+                setCheckoutPanelCheckoutSessionID={checkoutSessionID => this.setCheckoutSessionID(checkoutSessionID)}
               />
             ) : <></>}
           </div>
@@ -114,3 +153,4 @@ export default class CheckoutPanel extends Component {
     )
   }
 }
+export default connect(null, actions)(withCookies(CheckoutPanel));

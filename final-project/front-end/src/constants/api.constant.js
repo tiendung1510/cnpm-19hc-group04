@@ -5,6 +5,13 @@ export const API = {
     login: `${secret.API_URL}/users/login`,
     changePassword: `${secret.API_URL}/users/change-password`
   },
+  Cashier: {
+    Checkout: {
+      createCheckoutSession: `${secret.API_URL}/checkout-sessions`,
+      cancelCheckoutSession: `${secret.API_URL}/checkout-sessions/{checkoutSessionID}`,
+      submitCheckoutSession: `${secret.API_URL}/checkout-sessions/{checkoutSessionID}`
+    }
+  },
   Manager: {
     StaffManagement: {
       getListStaffs: `${secret.API_URL}/users`,
