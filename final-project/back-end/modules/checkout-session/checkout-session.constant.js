@@ -1,7 +1,7 @@
 module.exports = {
   CHECKOUT_SESSION_MESSAGE: {
     SUCCESS: {
-      CREATE_CHECKOUT_SESSION_SUCCESS: 'Tạo phiên tính tiền thành công',
+      CREATE_CHECKOUT_SESSION_SUCCESS: 'Bắt đầu phiên tính tiền',
       SUBMIT_CHECKOUT_SESSION_SUCCESS: 'Hoàn tất phiên tính tiền',
       CANCEL_CHECKOUT_SESSION_SUCCESS: 'Đã hủy phiên tính tiền',
       GET_CHECKOUT_SESSIONS_SUCCESS: 'Lấy danh sách phiên tính tiền thành công'

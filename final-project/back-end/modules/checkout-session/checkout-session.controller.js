@@ -38,6 +38,7 @@ const getCheckoutSessions = async (req, res, next) => {
       .find({ cashier: mongoose.Types.ObjectId(fromUser._id) })
       .populate({
         path: 'soldItems',
+        select: '-checkoutSession',
         populate: { path: 'product', select: 'name price availableQuantity' }
       });
 
@@ -45,7 +46,7 @@ const getCheckoutSessions = async (req, res, next) => {
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
       data: { checkoutSessions },
-      messages: []
+      messages: [CHECKOUT_SESSION_MESSAGE.SUCCESS.GET_CHECKOUT_SESSIONS_SUCCESS]
     });
   } catch (error) {
     logger.error(`${CONTROLLER_NAME}::getCheckoutSessions::error`);
@@ -201,10 +202,7 @@ const submitCheckoutSession = async (req, res, next) => {
       .populate('product', 'name price availableQuantity');
 
     checkoutSession.soldItems = soldItems.map(item => item._id);
-    checkoutSession.priceTotal = soldItems.reduce((pre, item) => {
-      const cur = item.product.price * item.quantity;
-      return pre + cur;
-    }, 0);
+    checkoutSession.priceTotal = soldItems.reduce((acc, cur) => acc + (cur.product.price * cur.quantity), 0);
     checkoutSession.submittedAt = new Date();
     await checkoutSession.save();
 
