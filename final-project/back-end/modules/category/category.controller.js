@@ -52,7 +52,9 @@ const getCategories = async (req, res, next) => {
       categories.map(async (category) => {
         const products = await Promise.all(
           category.products.map(async (p) => {
-            const product = await ProductModel.findOne({ _id: p._id }).populate('supplier', '-products');
+            const product = await ProductModel.findOne({ _id: p._id })
+              .populate('supplier', '-products')
+              .populate('category', '-products');
             return product;
           })
         );
@@ -88,7 +90,9 @@ const getCategoryProducts = async (req, res, next) => {
 
     category.products = await Promise.all(
       category.products.map(async (p) => {
-        const product = await ProductModel.findOne({ _id: p._id }).populate('supplier', '-products');
+        const product = await ProductModel.findOne({ _id: p._id })
+          .populate('supplier', '-products')
+          .populate('category', '-products');
         return product;
       })
     );

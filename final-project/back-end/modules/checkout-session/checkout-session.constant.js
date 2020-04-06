@@ -9,9 +9,10 @@ module.exports = {
     ERROR: {
       CHECKOUT_SESSION_NOT_FOUND: 'Phiên tính tiền chưa được ghi nhận',
       CHECKOUT_SESSION_LACK_OF_PRODUCT: 'Số lượng sản phẩm hiện có không đủ để đáp ứng',
-      CHECKOUT_SESSION_PRODUCT_NOT_FOUND: 'Có sản phẩm không tồn tại',
+      CHECKOUT_SESSION_PRODUCT_NOT_FOUND: 'Có sản phẩm không được tìm thấy',
       CHECKOUT_SESSION_WAS_SUBMITTED: 'Phiên tính tiền đã hoàn thất',
-      CHECKOUT_SESSION_CANNOT_BE_CANCELLED: 'Không thể hủy phiên tính tiền đã hoàn tất'
+      CHECKOUT_SESSION_CANNOT_BE_CANCELLED: 'Không thể hủy phiên tính tiền đã hoàn tất',
+      CHECKOUT_SESSION_EMPTY_LIST_PRODUCTS: 'Danh sách sản phẩm không được để trống'
     }
   },
   CONTROLLER_NAME: 'CheckoutSessionController'

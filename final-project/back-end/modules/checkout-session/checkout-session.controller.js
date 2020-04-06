@@ -18,10 +18,17 @@ const createCheckoutSession = async (req, res, next) => {
     const checkoutSession = new CheckoutSessionModel({ cashier: fromUser._id });
     await checkoutSession.save();
 
+    const availableProducts = await ProductModel.find({})
+      .populate('supplier', '-products')
+      .populate('category', '-products');
+
     logger.info(`${CONTROLLER_NAME}::createCheckoutSession::a new checkout session was created`);
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
-      data: { checkoutSession },
+      data: {
+        checkoutSession,
+        availableProducts
+      },
       messages: [CHECKOUT_SESSION_MESSAGE.SUCCESS.CREATE_CHECKOUT_SESSION_SUCCESS]
     })
   } catch (error) {
@@ -34,13 +41,18 @@ const getCheckoutSessions = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::getCheckoutSessions::was called`);
   try {
     const { fromUser } = req;
-    const checkoutSessions = await CheckoutSessionModel
+    let checkoutSessions = await CheckoutSessionModel
       .find({ cashier: mongoose.Types.ObjectId(fromUser._id) })
       .populate({
         path: 'soldItems',
         select: '-checkoutSession',
         populate: { path: 'product', select: 'name price availableQuantity' }
       });
+    checkoutSessions.sort((a, b) => {
+      const d1 = new Date(a.submittedAt).getTime();
+      const d2 = new Date(b.submittedAt).getTime();
+      return d2 - d1;
+    });
 
     logger.info(`${CONTROLLER_NAME}::getCheckoutSessions::success`);
     return res.status(HttpStatus.OK).json({
@@ -116,6 +128,14 @@ const submitCheckoutSession = async (req, res, next) => {
     }
 
     let { products } = req.body;
+    if (products.length === 0) {
+      logger.info(`${CONTROLLER_NAME}::submitCheckoutSession::list products cannot be empty`);
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        status: HttpStatus.BAD_REQUEST,
+        errors: [CHECKOUT_SESSION_MESSAGE.ERROR.CHECKOUT_SESSION_EMPTY_LIST_PRODUCTS]
+      });
+    }
+
     products = _.countBy(products);
 
     let availableProducts = await Promise.all(
@@ -130,10 +150,15 @@ const submitCheckoutSession = async (req, res, next) => {
 
     if (Object.keys(products).length !== availableProducts.length) {
       logger.info(`${CONTROLLER_NAME}::submitCheckoutSession::list products has item not found`);
+
+      const notExistedProductIDs = Object.keys(products)
+        .filter(pid => _.findIndex(availableProducts, ap => ap._id === pid) < 0);
+
       return res.status(HttpStatus.NOT_FOUND).json({
         status: HttpStatus.NOT_FOUND,
+        data: { notExistedProductIDs },
         errors: [CHECKOUT_SESSION_MESSAGE.ERROR.CHECKOUT_SESSION_PRODUCT_NOT_FOUND]
-      })
+      });
     }
 
     let lackingItems = [];
