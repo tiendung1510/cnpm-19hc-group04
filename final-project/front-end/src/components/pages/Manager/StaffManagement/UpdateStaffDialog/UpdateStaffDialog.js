@@ -146,7 +146,7 @@ class UpdateStaffDialog extends PageBase {
                   <ImageUploader
                     width={100}
                     height={100}
-                    shape="circle"
+                    isAvatar={true}
                     onFinish={imageUrl => {
                       if (this.formRef.current) {
                         this.formRef.current.setFieldsValue({ avatar: imageUrl });

@@ -78,7 +78,7 @@
 
   .money-counting__submit-checkout-session-dialog__bill__price-total {
     font-weight: bold;
-    font-size: 14px;
+    font-size: $primaryFontSize + 2;
   }
 
   .money-counting__submit-checkout-session-dialog__bill__qrcode {

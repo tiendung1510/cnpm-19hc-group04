@@ -1,14 +1,17 @@
 import React from 'react';
-import { Button, Modal, Tooltip } from 'antd';
+import { Button, Modal, Tooltip, message, notification } from 'antd';
 import { RightOutlined, PrinterOutlined } from '@ant-design/icons';
 import './SubmitCheckoutSessionDialog.style.scss';
 import PageBase from '../../../../utilities/PageBase/PageBase';
 import { connect } from 'react-redux';
 import { withCookies } from 'react-cookie';
 import * as actions from '../../../../../redux/actions';
+import { COOKIE_NAMES } from '../../../../../constants/cookie-name.constant';
 import moment from 'moment';
 import BillToPrint from './BillToPrint/BillToPrint';
 import ReactToPrint from 'react-to-print';
+import { API } from '../../../../../constants/api.constant';
+import * as _ from 'lodash';
 
 class SubmitCheckoutSessionDialog extends PageBase {
   constructor(props) {
@@ -19,6 +22,15 @@ class SubmitCheckoutSessionDialog extends PageBase {
     }
   }
 
+  openNotification = (message, description, placement) => {
+    notification['warning']({
+      message,
+      description,
+      placement,
+      duration: null
+    });
+  };
+
   setDialogVisible(isVisible) {
     this.setState({ isVisible });
   }
@@ -28,73 +40,56 @@ class SubmitCheckoutSessionDialog extends PageBase {
   }
 
   async submitCheckoutSession() {
-    const { checkoutSessionID } = this.props;
-    const res = {
-      "status": 200,
-      "data": {
-        "checkoutSession": {
-          "soldItems": [
-            {
-              "quantity": 3,
-              "_id": "5e8a0bdeb8f59d12ad7fc178",
-              "product": {
-                "name": "Sữa bò tươi có đường",
-                "price": 8000,
-                "availableQuantity": 11,
-                "_id": "5e70f8e809d06d1841aea689"
-              },
-              "checkoutSession": "5e8a0bceb8f59d12ad7fc177",
-              "createdAt": "2020-04-05T16:48:30.731Z",
-              "updatedAt": "2020-04-05T16:48:30.731Z",
-              "__v": 0
-            },
-            {
-              "quantity": 2,
-              "_id": "5e8a0bdeb8f59d12ad7fc179",
-              "product": {
-                "name": "Dao nhập khẩu Châu Âu",
-                "price": 1250000,
-                "availableQuantity": 14,
-                "_id": "5e85a87a242b435251cdacb0"
-              },
-              "checkoutSession": "5e8a0bceb8f59d12ad7fc177",
-              "createdAt": "2020-04-05T16:48:30.732Z",
-              "updatedAt": "2020-04-05T16:48:30.732Z",
-              "__v": 0
-            },
-            {
-              "quantity": 1,
-              "_id": "5e8a0bdeb8f59d12ad7fc17a",
-              "product": {
-                "name": "Sữa ADM Gold",
-                "price": 40000,
-                "availableQuantity": 17,
-                "_id": "5e84abd73866907a1d35da6d"
-              },
-              "checkoutSession": "5e8a0bceb8f59d12ad7fc177",
-              "createdAt": "2020-04-05T16:48:30.732Z",
-              "updatedAt": "2020-04-05T16:48:30.732Z",
-              "__v": 0
-            }
-          ],
-          "priceTotal": 2564000,
-          "submittedAt": "2020-04-05T16:48:31.153Z",
-          "_id": "5e8a0bceb8f59d12ad7fc177",
-          "cashier": "5e80295b917650122d2e5d17",
-          "createdAt": "2020-04-05T16:48:14.335Z",
-          "updatedAt": "2020-04-05T16:48:31.156Z",
-          "__v": 1
+    const { checkoutSessionID, checkedOutProducts } = this.props;
+    const params = { products: checkedOutProducts.map(p => p._id) };
+    this.props.setAppLoading(true);
+    const res = await (
+      await fetch(
+        API.Cashier.Checkout.submitCheckoutSession.replace('{checkoutSessionID}', checkoutSessionID),
+        {
+          method: 'PUT',
+          body: JSON.stringify(params),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+            'token': this.props.cookies.get(COOKIE_NAMES.token)
+          },
+          signal: this.abortController.signal
         }
-      },
-      "messages": [
-        "Hoàn tất phiên tính tiền"
-      ]
-    };
+      )
+    ).json();
+
+    this.props.setAppLoading(false);
+    if (res.status !== 200) {
+      if (res.data) {
+        const { notExistedProductIDs } = res.data;
+        let notExistedProducts = checkedOutProducts
+          .filter(p => _.findIndex(notExistedProductIDs, id => id === p._id) >= 0);
+        notExistedProducts = _.uniqBy(notExistedProducts, '_id');
+        this.notifyNotExistedProducts(notExistedProducts, res.errors[0]);
+        return;
+      }
+
+      message.error(res.errors[0]);
+      return;
+    }
 
     const { checkoutSession } = res.data;
     this.setState({ checkoutSession });
-
+    this.props.setCheckoutDoneScreenVisible(true);
+    this.props.setMainPanelOnWorking(false);
     this.setDialogVisible(true);
+  }
+
+  notifyNotExistedProducts(products, message) {
+    this.openNotification(
+      message,
+      <ul style={{ paddingLeft: 18 }}>
+        {products.map(p => (
+          <li key={p._id}>{p.name}</li>
+        ))}
+      </ul>,
+      'bottomRight'
+    )
   }
 
   render() {
@@ -125,6 +120,7 @@ class SubmitCheckoutSessionDialog extends PageBase {
           okText="In hóa đơn"
           okButtonProps={{ style: { display: 'none' } }}
           cancelButtonProps={{ style: { display: 'none' } }}
+          maskClosable={false}
         >
           {Object.keys(checkoutSession).length > 0 ? (
             <div className="money-counting__submit-checkout-session-dialog__content__bill">
@@ -133,7 +129,9 @@ class SubmitCheckoutSessionDialog extends PageBase {
                   <Button
                     className="money-counting__submit-checkout-session-dialog__content__bill__toolbar__item"
                     shape="circle"
-                    icon={<PrinterOutlined />} />
+                    icon={<PrinterOutlined />}
+                    onClick={() => this.onOK()}
+                  />
                 </Tooltip>
               </div>
               <div className="money-counting__submit-checkout-session-dialog__content__bill__wrapper">

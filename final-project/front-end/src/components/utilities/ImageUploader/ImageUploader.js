@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Upload, message, Tooltip } from 'antd';
+import { Upload, message, Tooltip, Avatar } from 'antd';
 import { LoadingOutlined, PictureOutlined } from '@ant-design/icons';
 import './ImageUploader.style.scss'
 
@@ -52,7 +52,7 @@ export default class ImageUpload extends Component {
   }
 
   render() {
-    let { defaultImageUrl, width, height, tooltipTitle, tooltipPlacement, shape } = this.props;
+    let { defaultImageUrl, width, height, tooltipTitle, tooltipPlacement, isAvatar } = this.props;
     let { imageUrl } = this.state;
 
     const uploadedImage = (
@@ -61,8 +61,15 @@ export default class ImageUpload extends Component {
           <Tooltip title={tooltipTitle} placement={tooltipPlacement}>
             <div
               className="image-uploader__default-img"
-              style={{ width, height, borderRadius: shape === 'circle' ? '50%' : 0 }}>
-              <img src={defaultImageUrl} alt="default" />
+              style={{ width, height }}>
+              {isAvatar ? (
+                <Avatar
+                  src={defaultImageUrl}
+                  size={width}
+                />
+              ) : (
+                  <img src={defaultImageUrl} alt="default" />
+                )}
             </div>
           </Tooltip>
         ) : (
@@ -98,8 +105,15 @@ export default class ImageUpload extends Component {
             <Tooltip title={tooltipTitle} placement={tooltipPlacement}>
               <div
                 className="image-uploader__uploaded-img"
-                style={{ width, height, borderRadius: shape === 'circle' ? '50%' : 0 }}>
-                <img src={imageUrl} alt="uploaded" />
+                style={{ width, height }}>
+                {isAvatar ? (
+                  <Avatar
+                    src={imageUrl}
+                    size={width}
+                  />
+                ) : (
+                    <img src={imageUrl} alt="uploaded" />
+                  )}
               </div>
             </Tooltip>
           ) : uploadButton}

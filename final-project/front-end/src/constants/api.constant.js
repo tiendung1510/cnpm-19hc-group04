@@ -7,6 +7,7 @@ export const API = {
   },
   Cashier: {
     Checkout: {
+      getCheckoutSessions: `${secret.API_URL}/checkout-sessions`,
       createCheckoutSession: `${secret.API_URL}/checkout-sessions`,
       cancelCheckoutSession: `${secret.API_URL}/checkout-sessions/{checkoutSessionID}`,
       submitCheckoutSession: `${secret.API_URL}/checkout-sessions/{checkoutSessionID}`

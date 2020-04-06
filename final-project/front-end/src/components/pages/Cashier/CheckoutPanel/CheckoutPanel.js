@@ -8,6 +8,7 @@ import {
   ExclamationCircleOutlined
 } from '@ant-design/icons';
 import MoneyCounting from '../MoneyCounting/MoneyCounting';
+import TransactionHistory from '../TransactionHistory/TransactionHistory';
 import { connect } from 'react-redux';
 import { API } from '../../../../constants/api.constant';
 import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
@@ -145,6 +146,13 @@ class CheckoutPanel extends PageBase {
               <MoneyCounting
                 setCheckoutPanelOnWorking={onWorking => this.setOnWorking(onWorking)}
                 setCheckoutPanelCheckoutSessionID={checkoutSessionID => this.setCheckoutSessionID(checkoutSessionID)}
+                setMainPanelOnWorking={onWorking => this.setOnWorking(onWorking)}
+              />
+            ) : <></>}
+
+            {selectedMenuItem.key === '3' ? (
+              <TransactionHistory
+
               />
             ) : <></>}
           </div>

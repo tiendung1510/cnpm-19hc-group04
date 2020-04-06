@@ -69,14 +69,14 @@ class Login extends Component {
     return (
       <div className="container">
         <div className="dark-bg"></div>
-        <div className="__header">
+        <div className="__header animated fadeIn">
           <img className="__company-logo" src={require('../../../../assets/images/app-logo.png')} alt="logo" />
           <div className="__company-brand">
             <div className="__name"><span>Mini Mart</span></div>
             <div className="__slogan"><span>Tiện Lợi mà Chất Lượng</span></div>
           </div>
         </div>
-        <div className="login animated fadeIn">
+        <div className="login animated bounceInDown">
           <Row className="__content">
             <Col span={9}>
               <div className="__staff-symbol">

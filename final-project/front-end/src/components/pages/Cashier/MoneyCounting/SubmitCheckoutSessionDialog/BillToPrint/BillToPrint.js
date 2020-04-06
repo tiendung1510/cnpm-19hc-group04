@@ -10,7 +10,6 @@ import { withCookies } from 'react-cookie';
 class BillToPrint extends Component {
   render() {
     const { checkoutSession } = this.props;
-
     return (
       <div className="money-counting__submit-checkout-session-dialog__bill">
         <div className="money-counting__submit-checkout-session-dialog__bill__header">
@@ -43,17 +42,17 @@ class BillToPrint extends Component {
         <ul className="money-counting__submit-checkout-session-dialog__bill__list-items">
           <li style={{ fontWeight: 'bold', paddingBottom: 10 }}>
             <Row>
-              <Col span={12}>Sản phẩm</Col>
-              <Col span={6}><center>SL</center></Col>
-              <Col span={6}>Thành tiền</Col>
+              <Col span={10}>Sản phẩm</Col>
+              <Col span={7}><center>SL</center></Col>
+              <Col span={7}>Thành tiền</Col>
             </Row>
           </li>
           {checkoutSession.soldItems.map(item => (
             <li key={item._id}>
               <Row>
-                <Col span={12}>{item.product.name}</Col>
-                <Col span={6}><center>{item.quantity}</center></Col>
-                <Col span={6}>
+                <Col span={10}>{item.product.name}</Col>
+                <Col span={7}><center>{item.quantity}</center></Col>
+                <Col span={7}>
                   <NumberFormat
                     value={Number(item.product.price * item.quantity)}
                     displayType="text"
@@ -67,8 +66,9 @@ class BillToPrint extends Component {
         <Divider />
         <div className="money-counting__submit-checkout-session-dialog__bill__price-total">
           <Row>
-            <Col span={12}>Tổng tiền</Col>
-            <Col span={12} align="end">
+            <Col span={10}>Tổng tiền</Col>
+            <Col span={7}></Col>
+            <Col span={7}>
               <NumberFormat
                 value={Number(checkoutSession.priceTotal)}
                 displayType="text"

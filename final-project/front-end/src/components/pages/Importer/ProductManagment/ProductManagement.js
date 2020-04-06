@@ -17,6 +17,7 @@ import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
 import { sortByCreatedAt } from '../../../../services/collection-sorting.service';
 import EditCategoryDialog from './EditCategoryDialog/EditCategoryDialog';
 import SupplierDialog from './SupplierDialog/SupplierDialog';
+import QRCode from 'qrcode.react';
 
 const { confirm } = Modal;
 
@@ -212,7 +213,7 @@ class ProductManagement extends PageBase {
       cancelText: 'Không, cảm ơn',
       async onOk() {
         that.props.setAppLoading(false);
-        const res = await(
+        const res = await (
           await fetch(
             API.Importer.ProductManagement.removeProduct.replace('{productID}', selectedProduct._id),
             {
@@ -416,14 +417,14 @@ class ProductManagement extends PageBase {
         title: 'Nhà cung cấp',
         dataIndex: 'supplier',
         key: 'supplier',
-        width: 140,
+        width: 160,
         render: (text, record) => (<span>{record.supplier.name}</span>)
       },
       {
         title: 'Giá bán',
         dataIndex: 'price',
         key: 'price',
-        width: 120,
+        width: 140,
         render: (text) => (
           <NumberFormat
             value={Number(text)}
@@ -445,19 +446,32 @@ class ProductManagement extends PageBase {
         title: 'Cập nhật lần cuối',
         dataIndex: 'updatedAt',
         key: 'updatedAt',
-        width: 120,
+        width: 160,
         render: (text) => (<span>{moment(text).format('HH:mm DD-MM-YYYY')}</span>)
       },
       {
         title: 'Trạng thái',
         dataIndex: 'status',
         key: 'status',
-        width: 160,
+        width: 100,
         render: (text, record) => (<center>
           {record.availableQuantity === 0 ? (
             <span style={{ color: 'crimson', fontWeight: 'bold' }}>Hết hàng</span>
           ) : 'Còn hàng'}
         </center>)
+      },
+      {
+        title: <center>Mã QR</center>,
+        dataIndex: '',
+        key: 'qrcode',
+        render: (value, record) => (
+          <center>
+            <QRCode
+              value={record._id}
+              style={{ width: 30, height: 30 }}
+            />
+          </center>
+        )
       }
     ];
 

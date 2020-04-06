@@ -168,6 +168,7 @@
             left: 0;
             height: 40.4%;
             width: 100%;
+            text-shadow: $textShadow1;
 
             .staff-management__body__staffs__content__list-staffs__header__dialogs {
               display: flex;
@@ -183,6 +184,7 @@
               width: 100%;
               height: 100%;
               background: rgba($color: #000000, $alpha: 0.15);
+              display: none;
             }
 
             $headerTextColor: white;

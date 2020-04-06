@@ -69,7 +69,7 @@ $primaryBorderRadius: 7px;
           font-size: 1rem;
           position: relative;
           z-index: 4;
-          margin-top: 4%;
+          margin-top: 3%;
           box-shadow: $boxShadow1;
         }
       }
@@ -101,6 +101,44 @@ $primaryBorderRadius: 7px;
     height: 100%;
     border: 1px solid #eee;
     @extend .round-bordered;
+    position: relative;
+
+    .money-counting__panel__checkout-done {
+      position: absolute;
+      background: rgba($color: #fff, $alpha: 0.8);
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+
+      .money-counting__panel__checkout-done__title {
+        font-size: 20px;
+      }
+
+      .money-counting__panel__checkout-done__icon {
+        color: #44b543;
+        font-size: 3rem;
+        margin: 20px 0 40px 0;
+      }
+
+      .money-counting__panel__checkout-done__btn-continue {
+        background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
+        border: 0;
+        border-radius: 24px;
+        box-shadow: $boxShadow1;
+        color: white;
+        font-weight: bold;
+        min-height: 45px;
+        min-width: 250px;
+        font-size: 1rem;
+        text-shadow: $primaryTextShadow;
+      }
+    }
 
     .money-counting__panel__left {
       background: white;

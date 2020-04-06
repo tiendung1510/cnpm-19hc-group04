@@ -14,10 +14,10 @@
 
   .image-uploader__uploaded-img {
     overflow: hidden;
+    display: flex;
+    align-items: center;
 
     img {
-      object-fit: cover;
-      height: 100%;
       width: 100%;
     }
   }
@@ -40,10 +40,10 @@
 
   .image-uploader__default-img {
     overflow: hidden;
+    display: flex;
+    align-items: center;
 
     img {
-      object-fit: cover;
-      height: 100%;
       width: 100%;
     }
   }

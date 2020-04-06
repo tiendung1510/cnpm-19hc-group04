@@ -4,15 +4,17 @@ import PageBase from '../../../utilities/PageBase/PageBase';
 import { withCookies } from 'react-cookie';
 import QrReader from 'react-qr-reader';
 import { Row, Col, Empty, notification, Button, Tooltip, Table, Modal, message } from 'antd';
-import { ReloadOutlined, ShoppingCartOutlined, QuestionCircleOutlined, ArrowLeftOutlined, ExclamationCircleOutlined, DeleteFilled } from '@ant-design/icons';
+import { ReloadOutlined, ShoppingCartOutlined, QuestionCircleOutlined, ArrowLeftOutlined, ExclamationCircleOutlined, DeleteFilled, CheckCircleOutlined } from '@ant-design/icons';
 import NumberFormat from 'react-number-format';
 import checkoutSound from '../../../../assets/sounds/cashing.wav';
 import rejectingSound from '../../../../assets/sounds/rejecting.wav';
+import warningSound from '../../../../assets/sounds/warning.wav';
 import { connect } from 'react-redux';
 import * as actions from '../../../../redux/actions';
 import { API } from '../../../../constants/api.constant';
 import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
 import SubmitCheckoutSessionDialog from './SubmitCheckoutSessionDialog/SubmitCheckoutSessionDialog';
+import * as _ from 'lodash';
 
 const { confirm } = Modal;
 
@@ -21,44 +23,61 @@ class MoneyCounting extends PageBase {
 		super(props);
 		this.state = {
 			scannedProduct: {},
-			checkedOutProducts: [{ "_id": "5e70f8e809d06d1841aea689", "key": "5e70f8e809d06d1841aea689", "order": 1, "name": "Sữa bò tươi có đường", "price": 8000, "category": "Sữa tiệt trùng", "supplier": "Vinamilk", "image": "https://product.hstatic.net/1000074072/product/1l-c_-d__ng-min.png" }, { "_id": "5e70f8e809d06d1841aea689", "key": "5e70f8e809d06d1841aea689", "order": 2, "name": "Sữa bò tươi có đường", "price": 8000, "category": "Sữa tiệt trùng", "supplier": "Vinamilk", "image": "https://product.hstatic.net/1000074072/product/1l-c_-d__ng-min.png" }, { "_id": "5e72350bcbf81e53804eb2bb", "key": "5e72350bcbf81e53804eb2bb", "order": 3, "name": "Sữa bò tươi không đường", "price": 8000, "category": "Sữa tiệt trùng", "supplier": "Vinamilk", "image": "https://product.hstatic.net/1000074072/product/1l-ko-d__ng-min.png" }],
-			priceTotal: 24000,
-			onWorking: true,
+			availableProducts: [],
+			checkedOutProducts: [],
+			priceTotal: 0,
+			onWorking: false,
 			sound: '',
-			checkoutSessionID: ''
+			checkoutSessionID: '',
+			isCheckoutDoneScreenVisible: false
 		}
 		this.soundRef = React.createRef();
 	}
 
+	clearAllStates() {
+		this.setState({
+			scannedProduct: {},
+			checkedOutProducts: [],
+			priceTotal: 0,
+			onWorking: false,
+			sound: '',
+			checkoutSessionID: '',
+			isCheckoutDoneScreenVisible: false
+		});
+	}
+
 	async createCheckoutSession() {
-		// this.props.setAppLoading(true);
-		// const res = await (
-		// 	await fetch(
-		// 		API.Cashier.Checkout.createCheckoutSession,
-		// 		{
-		// 			method: 'POST',
-		// 			headers: {
-		// 				'Content-type': 'application/json; charset=UTF-8',
-		// 				'token': this.props.cookies.get(COOKIE_NAMES.token)
-		// 			},
-		// 			signal: this.abortController.signal
-		// 		}
-		// 	)
-		// ).json();
+		this.props.setAppLoading(true);
+		const res = await (
+			await fetch(
+				API.Cashier.Checkout.createCheckoutSession,
+				{
+					method: 'POST',
+					headers: {
+						'Content-type': 'application/json; charset=UTF-8',
+						'token': this.props.cookies.get(COOKIE_NAMES.token)
+					},
+					signal: this.abortController.signal
+				}
+			)
+		).json();
 
-		// this.props.setAppLoading(false);
-		// if (res.status !== 200) {
-		// 	message.error(res.errors[0]);
-		// 	return;
-		// }
+		this.props.setAppLoading(false);
+		if (res.status !== 200) {
+			message.error(res.errors[0]);
+			return;
+		}
 
-		// const { _id } = res.data.checkoutSession;
-		// message.success(res.messages[0]);
+		const { _id } = res.data.checkoutSession;
+		const { availableProducts } = res.data;
+		message.success(res.messages[0]);
 
-		const _id = '5e8a0bceb8f59d12ad7fc177';
 		this.setOnWorking(true);
 		this.props.setCheckoutPanelCheckoutSessionID(_id);
-		this.setState({ checkoutSessionID: _id });
+		this.setState({
+			checkoutSessionID: _id,
+			availableProducts
+		});
 	}
 
 	async cancelCheckoutSession() {
@@ -94,10 +113,27 @@ class MoneyCounting extends PageBase {
 		});
 	};
 
+	openNotExistedProductNotification() {
+		notification['warning']({
+			message: 'Cảnh báo',
+			description: 'Sản phẩm này không có trong siêu thị'
+		});
+	}
+
 	handleScan = data => {
 		if (data) {
+			const { availableProducts } = this.state;
+			const productID = data;
+			const index = _.findIndex(availableProducts, ap => ap._id === productID);
+			if (index < 0) {
+				this.playSound(warningSound);
+				this.openNotExistedProductNotification();
+				this.clearScannedProduct();
+				return;
+			}
+
 			this.playSound(checkoutSound);
-			const productDetails = JSON.parse(data);
+			const productDetails = { ...availableProducts[index] };
 			this.openNotification(
 				<span>
 					<span style={{ color: '#44b543', fontWeight: 'bold', marginRight: 10 }}>+1</span>
@@ -132,7 +168,7 @@ class MoneyCounting extends PageBase {
 
 	handleError = error => {
 		if (error) {
-			this.openNotificationWithIcon('error', 'Chưa tìm thấy sản phẩm', '');
+			message.error(error);
 		}
 	}
 
@@ -195,6 +231,16 @@ class MoneyCounting extends PageBase {
 				);
 			}
 		});
+	}
+
+	setCheckoutDoneScreenVisible(isVisible) {
+		this.setState({ isCheckoutDoneScreenVisible: isVisible });
+	}
+
+	continueToCheckout() {
+		this.clearAllStates();
+		this.createCheckoutSession();
+		this.props.setMainPanelOnWorking(true);
 	}
 
 	render() {
@@ -298,6 +344,20 @@ class MoneyCounting extends PageBase {
 						<div style={{ height: '100%' }}>
 							<audio ref={ref => { this.soundRef = ref; }} src="" controls autoPlay style={{ display: 'none' }} />
 							<div className="money-counting__panel">
+								{this.state.isCheckoutDoneScreenVisible ? (
+									<div className="money-counting__panel__checkout-done">
+										<h1 className="money-counting__panel__checkout-done__title">
+											Phiên tính tiền đã hoàn tất
+									</h1>
+										<CheckCircleOutlined className="money-counting__panel__checkout-done__icon" />
+										<Button
+											className="money-counting__panel__checkout-done__btn-continue"
+											onClick={() => this.continueToCheckout()}
+										>
+											Tiếp tục tính tiền
+									</Button>
+									</div>
+								) : <></>}
 								<Row>
 									<Col span={6}>
 										<div className="money-counting__panel__left">
@@ -405,8 +465,10 @@ class MoneyCounting extends PageBase {
 													</Col>
 													<Col span={6}>
 														<SubmitCheckoutSessionDialog
-															checkedOutProducts={{ ...checkedOutProducts }}
+															checkedOutProducts={[...checkedOutProducts]}
 															checkoutSessionID={this.state.checkoutSessionID}
+															setCheckoutDoneScreenVisible={isVisible => this.setCheckoutDoneScreenVisible(isVisible)}
+															setMainPanelOnWorking={onWorking => this.props.setMainPanelOnWorking(onWorking)}
 														/>
 													</Col>
 												</Row>
