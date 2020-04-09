@@ -1,7 +1,7 @@
 import React from 'react';
 import { withCookies } from 'react-cookie';
 import { EditOutlined } from '@ant-design/icons';
-import { Skeleton, Row, Col, Select, Form, Modal, Input, message, DatePicker, Button } from 'antd';
+import { Row, Col, Select, Form, Modal, Input, message, DatePicker, Button } from 'antd';
 import './UpdateStaffDialog.style.scss';
 import USER_ROLES from '../../../../../constants/user-role.constant';
 import USER_SEX from '../../../../../constants/user-sex';
@@ -100,188 +100,186 @@ class UpdateStaffDialog extends PageBase {
     const { selectedStaff } = this.props;
     return (
       <div>
-        {selectedStaff ? (
-          <div>
-            <Row align="middle">
-              <Col span={2}>
-                <EditOutlined className="staff-management__body__staffs__sidebar__staff-features__feature__icon" />
-              </Col>
-              <Col
-                span={22}
-                className="staff-management__body__staffs__sidebar__staff-features__feature__info"
-                onClick={() => this.setDialogVisible(true)}
-              >
-                <span className="staff-management__body__staffs__sidebar__staff-features__feature__info__name">
-                  Chỉnh sửa thông tin</span>
-              </Col>
-            </Row>
-
-            <Modal
-              className="staff-management__body__staffs__content__list-staffs__header__dialogs__update-staff-dialog__content"
-              title={<span style={{ color: '#ff8220', fontWeight: 'bold' }}>{selectedStaff.fullname} | Thông tin cá nhân</span>}
-              centered
-              visible={this.state.isVisible}
-              onOk={() => this.onOk()}
-              onCancel={() => this.onCancel()}
-              okText="Lưu thay đổi"
-              cancelText="Hủy bỏ"
-              okButtonProps={{ style: { background: '#ff8220', border: 0, fontWeight: 'bold' } }}
+        <div>
+          <Row align="middle">
+            <Col span={2}>
+              <EditOutlined className="staff-management__body__staffs__sidebar__staff-features__feature__icon" />
+            </Col>
+            <Col
+              span={22}
+              className="staff-management__body__staffs__sidebar__staff-features__feature__info"
+              onClick={() => this.setDialogVisible(true)}
             >
+              <span className="staff-management__body__staffs__sidebar__staff-features__feature__info__name">
+                Chỉnh sửa thông tin</span>
+            </Col>
+          </Row>
 
-              <Form
-                {...layout}
-                ref={ref => {
-                  this.formRef.current = ref;
-                  this.loadSelectedStaffProfile();
-                }}
-                className="staff-management__body__staffs__content__list-staffs__header__dialogs__update-staff-dialog__form"
-                onFinish={e => this.onFinish(e)}
-                onFinishFailed={() => { message.error('Vui lòng kiểm tra lại thông tin'); }}
+          <Modal
+            className="staff-management__body__staffs__content__list-staffs__header__dialogs__update-staff-dialog__content"
+            title={<span style={{ color: '#ff8220', fontWeight: 'bold' }}>{selectedStaff.fullname} | Thông tin cá nhân</span>}
+            centered
+            visible={this.state.isVisible}
+            onOk={() => this.onOk()}
+            onCancel={() => this.onCancel()}
+            okText="Lưu thay đổi"
+            cancelText="Hủy bỏ"
+            okButtonProps={{ style: { background: '#ff8220', border: 0, fontWeight: 'bold' } }}
+          >
+
+            <Form
+              {...layout}
+              ref={ref => {
+                this.formRef.current = ref;
+                this.loadSelectedStaffProfile();
+              }}
+              className="staff-management__body__staffs__content__list-staffs__header__dialogs__update-staff-dialog__form"
+              onFinish={e => this.onFinish(e)}
+              onFinishFailed={() => { message.error('Vui lòng kiểm tra lại thông tin'); }}
+            >
+              <Form.Item style={{ display: 'none' }}>
+                <Button type="primary" htmlType="submit" id="update-staff-dialog-btn-submit" />
+              </Form.Item>
+
+              <div className="staff-management__body__staffs__content__list-staffs__header__dialogs__update-staff-dialog__form__img-uploader">
+                <ImageUploader
+                  width={100}
+                  height={100}
+                  isAvatar={true}
+                  onFinish={imageUrl => {
+                    if (this.formRef.current) {
+                      this.formRef.current.setFieldsValue({ avatar: imageUrl });
+                    }
+                  }}
+                  defaultImageUrl={selectedStaff.avatar}
+                  tooltipTitle="Nhấp để tải ảnh lên"
+                  tooltipPlacement="bottom"
+                  clearImage={!this.state.isVisible}
+                />
+              </div>
+
+              <Form.Item
+                label="Họ và tên"
+                name="fullname"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng nhập họ và tên'
+                  }
+                ]}
               >
-                <Form.Item style={{ display: 'none' }}>
-                  <Button type="primary" htmlType="submit" id="update-staff-dialog-btn-submit" />
-                </Form.Item>
+                <Input placeholder="Tối đa 30 kí tự" />
+              </Form.Item>
 
-                <div className="staff-management__body__staffs__content__list-staffs__header__dialogs__update-staff-dialog__form__img-uploader">
-                  <ImageUploader
-                    width={100}
-                    height={100}
-                    isAvatar={true}
-                    onFinish={imageUrl => {
-                      if (this.formRef.current) {
-                        this.formRef.current.setFieldsValue({ avatar: imageUrl });
-                      }
-                    }}
-                    defaultImageUrl={selectedStaff.avatar}
-                    tooltipTitle="Nhấp để tải ảnh lên"
-                    tooltipPlacement="bottom"
-                    clearImage={!this.state.isVisible}
-                  />
-                </div>
+              <Form.Item
+                label="Tên tài khoản"
+                name="username"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng nhập tên tài khoản'
+                  }
+                ]}
+              >
+                <Input placeholder="Tối đa 30 kí tự" />
+              </Form.Item>
 
-                <Form.Item
-                  label="Họ và tên"
-                  name="fullname"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng nhập họ và tên'
-                    }
-                  ]}
+              <Form.Item
+                label="Chức vụ"
+                name="role"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng chọn chức vụ'
+                  }
+                ]}
+              >
+                <Select
+                  placeholder="Chọn chức vụ"
+                  allowClear
                 >
-                  <Input placeholder="Tối đa 30 kí tự" />
-                </Form.Item>
+                  <Option value={USER_ROLES.CASHIER.type}>{USER_ROLES.CASHIER.name}</Option>
+                  <Option value={USER_ROLES.IMPORTER.type}>{USER_ROLES.IMPORTER.name}</Option>
+                  <Option value={USER_ROLES.MANAGER.type}>{USER_ROLES.MANAGER.name}</Option>
+                </Select>
+              </Form.Item>
 
-                <Form.Item
-                  label="Tên tài khoản"
-                  name="username"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng nhập tên tài khoản'
-                    }
-                  ]}
+              <Form.Item
+                label="Giới tính"
+                name="sex"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng chọn giới tính'
+                  }
+                ]}
+              >
+                <Select
+                  placeholder="Chọn giới tính"
+                  allowClear
                 >
-                  <Input placeholder="Tối đa 30 kí tự" />
-                </Form.Item>
+                  <Option value={USER_SEX.MALE.name}>{USER_SEX.MALE.name}</Option>
+                  <Option value={USER_SEX.FEMALE.name}>{USER_SEX.FEMALE.name}</Option>
+                </Select>
+              </Form.Item>
 
-                <Form.Item
-                  label="Chức vụ"
-                  name="role"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng chọn chức vụ'
-                    }
-                  ]}
-                >
-                  <Select
-                    placeholder="Chọn chức vụ"
-                    allowClear
-                  >
-                    <Option value={USER_ROLES.CASHIER.type}>{USER_ROLES.CASHIER.name}</Option>
-                    <Option value={USER_ROLES.IMPORTER.type}>{USER_ROLES.IMPORTER.name}</Option>
-                    <Option value={USER_ROLES.MANAGER.type}>{USER_ROLES.MANAGER.name}</Option>
-                  </Select>
-                </Form.Item>
+              <Form.Item
+                label="Ngày sinh"
+                name="dateOfBirth"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng chọn ngày sinh'
+                  }
+                ]}
+              >
+                <DatePicker placeholder="Chọn ngày sinh" format="DD-MM-YYYY" />
+              </Form.Item>
 
-                <Form.Item
-                  label="Giới tính"
-                  name="sex"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng chọn giới tính'
-                    }
-                  ]}
-                >
-                  <Select
-                    placeholder="Chọn giới tính"
-                    allowClear
-                  >
-                    <Option value={USER_SEX.MALE.name}>{USER_SEX.MALE.name}</Option>
-                    <Option value={USER_SEX.FEMALE.name}>{USER_SEX.FEMALE.name}</Option>
-                  </Select>
-                </Form.Item>
+              <Form.Item
+                label="E-mail"
+                name="email"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng nhập địa chỉ email'
+                  },
+                  {
+                    type: "email",
+                    message: 'Địa chỉ email không hợp lệ'
+                  }
+                ]}
+              >
+                <Input placeholder="abc@gmail.com" />
+              </Form.Item>
 
-                <Form.Item
-                  label="Ngày sinh"
-                  name="dateOfBirth"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng chọn ngày sinh'
-                    }
-                  ]}
-                >
-                  <DatePicker placeholder="Chọn ngày sinh" format="DD-MM-YYYY" />
-                </Form.Item>
+              <Form.Item
+                label="Điện thoại"
+                name="phone"
+              >
+                <Input maxLength={11} placeholder="Gồm 10 hoặc 11 số" />
+              </Form.Item>
 
-                <Form.Item
-                  label="E-mail"
-                  name="email"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng nhập địa chỉ email'
-                    },
-                    {
-                      type: "email",
-                      message: 'Địa chỉ email không hợp lệ'
-                    }
-                  ]}
-                >
-                  <Input placeholder="abc@gmail.com" />
-                </Form.Item>
+              <Form.Item
+                label="Địa chỉ"
+                name="address"
+              >
+                <Input.TextArea placeholder="227 Nguyễn Văn Cừ, Quận 5" />
+              </Form.Item>
 
-                <Form.Item
-                  label="Điện thoại"
-                  name="phone"
-                >
-                  <Input maxLength={11} placeholder="Gồm 10 hoặc 11 số" />
-                </Form.Item>
+              <Form.Item
+                label="Ảnh đại diện"
+                name="avatar"
+                style={{ display: 'none' }}
+              >
+                <Input placeholder="Dán đường dẫn ảnh vào đây" />
+              </Form.Item>
 
-                <Form.Item
-                  label="Địa chỉ"
-                  name="address"
-                >
-                  <Input.TextArea placeholder="227 Nguyễn Văn Cừ, Quận 5" />
-                </Form.Item>
+            </Form>
 
-                <Form.Item
-                  label="Ảnh đại diện"
-                  name="avatar"
-                  style={{ display: 'none' }}
-                >
-                  <Input placeholder="Dán đường dẫn ảnh vào đây" />
-                </Form.Item>
+          </Modal>
 
-              </Form>
-
-            </Modal>
-
-          </div>
-        ) : (<Skeleton.Input style={{ width: '100%', height: 20 }} active={true} size="small" />)}
+        </div>
       </div>
     )
   }

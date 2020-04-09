@@ -20,6 +20,12 @@ export const API = {
       updateStaffProfile: `${secret.API_URL}/users/{updatedUserID}`,
       removeStaff: `${secret.API_URL}/users/{deletedUserID}`
     },
+    SupplierManagment: {
+      getSuppliers: `${secret.API_URL}/suppliers`,
+      addSupplier: `${secret.API_URL}/suppliers`,
+      removeSupplier: `${secret.API_URL}/suppliers/{supplierID}`,
+      updateSupplier: `${secret.API_URL}/suppliers/{supplierID}`
+    },
     WorkSchedule: {
       getWorkSchedules: `${secret.API_URL}/work-schedules`,
       addWorkSchedule: `${secret.API_URL}/work-schedules`,

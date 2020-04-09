@@ -2,7 +2,7 @@ import React from 'react';
 import PageBase from '../../../utilities/PageBase/PageBase';
 import './StaffManagement.style.scss';
 import { SearchOutlined, UserDeleteOutlined, TeamOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { Input, Row, Col, Select, Table, Avatar, message, Skeleton, Modal } from 'antd';
+import { Input, Row, Col, Select, Table, Avatar, message, Skeleton, Modal, Empty } from 'antd';
 import { withCookies } from 'react-cookie';
 import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
 import { API } from '../../../../constants/api.constant';
@@ -315,10 +315,12 @@ class StaffManagement extends PageBase {
 
                 <ul className="staff-management__body__staffs__sidebar__staff-features">
                   <li className="staff-management__body__staffs__sidebar__staff-features__feature">
-                    <UpdateStaffDialog
-                      selectedStaff={{ ...selectedStaff }}
-                      reloadStaffs={updatedStaff => this.loadStaffs(this.state.filteredStaffRole, updatedStaff)}
-                    />
+                    {selectedStaff ? (
+                      <UpdateStaffDialog
+                        selectedStaff={{ ...selectedStaff }}
+                        reloadStaffs={updatedStaff => this.loadStaffs(this.state.filteredStaffRole, updatedStaff)}
+                      />
+                    ) : (<Skeleton.Input style={{ width: '100%', height: 22 }} active={true} size="small" />)}
                   </li>
                   <li
                     className="staff-management__body__staffs__sidebar__staff-features__feature"
@@ -334,7 +336,7 @@ class StaffManagement extends PageBase {
                             Xóa khỏi hệ thống</span>
                         </Col>
                       </Row>
-                    ) : (<Skeleton.Input style={{ width: '100%', height: 20 }} active={true} size="small" />)}
+                    ) : (<Skeleton.Input style={{ width: '100%', height: 22 }} active={true} size="small" />)}
                   </li>
                 </ul>
 
@@ -387,6 +389,7 @@ class StaffManagement extends PageBase {
                   </div>
                   <Row className="staff-management__body__staffs__content__list-staffs__wrapper">
                     <Table
+                      locale={{ emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Chưa có dữ liệu" /> }}
                       columns={columns}
                       dataSource={filteredStaffs}
                       pagination={false}

@@ -1,5 +1,7 @@
 $leftSidebarHeight: 100vh;
 $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+$boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+$boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.23);
 
 .work-assignment {
   background: #ff8220;
@@ -32,7 +34,7 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
       .ant-select {
         width: 100%;
         margin-top: 5px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        box-shadow: $boxShadow1;
         border-radius: 3px;
         overflow: hidden;
 
@@ -62,7 +64,7 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         height: 68 / 100 * $leftSidebarHeight;
         background: white;
         border-radius: 3px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        box-shadow: $boxShadow1;
         overflow: hidden;
         overflow-y: auto;
         @extend .styled-scrollbar;
@@ -116,7 +118,7 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
   .work-assignment__content {
     height: 90.2vh;
     position: relative;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    box-shadow: $boxShadow2;
     border-radius: 5px;
     border-top-left-radius: 12px;
     overflow: hidden;
@@ -136,7 +138,7 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         position: absolute;
         z-index: 3;
         right: 0;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        box-shadow: $boxShadow2;
 
         $blockPaddingTop: 20px;
 
@@ -387,7 +389,7 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
               position: relative;
               z-index: 5;
               transform: scale(1.05, 1.05);
-              box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+              box-shadow: $boxShadow2;
             }
 
             .work-assignment__content__body__tabs__work-schedule__work-day__day-in-month {

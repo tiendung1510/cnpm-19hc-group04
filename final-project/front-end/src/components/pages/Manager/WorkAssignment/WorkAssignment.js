@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Tabs, Select, List, Avatar, Button, Modal, message, Tooltip } from 'antd';
+import { Row, Col, Tabs, Select, List, Avatar, Button, Modal, message, Tooltip, Skeleton, Empty } from 'antd';
 import { CloseCircleOutlined, ExclamationCircleOutlined, LogoutOutlined } from '@ant-design/icons';
 import USER_ROLE from '../../../../constants/user-role.constant';
 import './WorkAssignment.style.scss';
@@ -565,12 +565,20 @@ class WorkAssignment extends PageBase {
               <div style={{ minHeight: 37 }}>
                 {
                   (listWorkYears || []).length > 0 ? (
-                    <Select defaultValue={selectedWorkYear} onChange={e => this.handleSelectYear(e)}>
+                    <Select
+                      className="animated fadeIn"
+                      defaultValue={selectedWorkYear}
+                      onChange={e => this.handleSelectYear(e)}>
                       {listWorkYears.map((y, i) => (
                         <Option key={i} value={y.value}>{y.text}</Option>
                       ))}
                     </Select>
-                  ) : null
+                  ) : (
+                      <Skeleton.Input
+                        style={{ width: '100%', height: 30, borderRadius: 3, background: 'rgba(0,0,0,0.15)' }}
+                        active={true} size="small"
+                      />
+                    )
                 }
               </div>
             </div>
@@ -583,6 +591,7 @@ class WorkAssignment extends PageBase {
 
               <div className="work-assignment__left-sidebar__list-tasks__wrapper">
                 <List
+                  locale={{ emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Chưa có dữ liệu" /> }}
                   size="small"
                   dataSource={workSchedules}
                   renderItem={(item, index) => {
@@ -644,6 +653,7 @@ class WorkAssignment extends PageBase {
                     </Row>
                     <div className="work-assignment__content__task-work-day-panel__panel__main__list-work-shifts__wrapper">
                       <List
+                        locale={{ emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Chưa có dữ liệu" /> }}
                         itemLayout="horizontal"
                         dataSource={selectedWorkDay.workShifts}
                         renderItem={(ws, index) => (
@@ -724,6 +734,7 @@ class WorkAssignment extends PageBase {
 
                       <div className="work-assignment__content__task-work-day-panel__panel__main__list-staffs__wrapper">
                         <List
+                          locale={{ emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Chưa có dữ liệu" /> }}
                           itemLayout="horizontal"
                           dataSource={selectedWorkShift.workAssignments}
                           renderItem={wa => (

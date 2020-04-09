@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Button, Row, Col, Tooltip, message } from 'antd';
+import { Form, Input, Button, Tooltip, message } from 'antd';
 import './Login.style.scss';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { API } from '../../../../constants/api.constant';
@@ -67,76 +67,67 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="container animated fadeIn">
         <div className="dark-bg"></div>
-        <div className="__header animated fadeIn">
+        <div className="__header">
           <img className="__company-logo" src={require('../../../../assets/images/app-logo.png')} alt="logo" />
           <div className="__company-brand">
             <div className="__name"><span>Mini Mart</span></div>
             <div className="__slogan"><span>Tiện Lợi mà Chất Lượng</span></div>
           </div>
         </div>
-        <div className="login animated bounceInDown">
-          <Row className="__content">
-            <Col span={9}>
-              <div className="__staff-symbol">
-                <img src={require('../../../../assets/images/staffs.png')} alt="staffs" />
-              </div>
-            </Col>
-            <Col span={15}>
-              <p className="__main-title">Quản trị Mini Mart</p>
-              <Form
-                className="__form"
-                {...layout}
-                name="basic"
-                initialValues={{
-                  remember: true,
-                }}
-                onFinish={this.login}
-                onFinishFailed={() => { message.error('Vui lòng nhập đầy đủ thông tin'); }}
-              >
-                <Form.Item
-                  name="username"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng nhập tài khoản',
-                    },
-                  ]}
-                >
-                  <Input prefix={<UserOutlined className="__form__icon" />} placeholder="Tài khoản" autoFocus={true} />
-                </Form.Item>
+        <div className="login animated jackInTheBox">
+          <h2 className="__main-title">Quản trị viên</h2>
+          <div className="__cover-img"></div>
+          <Form
+            className="__form"
+            {...layout}
+            name="basic"
+            initialValues={{
+              remember: true,
+            }}
+            onFinish={this.login}
+            onFinishFailed={() => { message.error('Vui lòng nhập đầy đủ thông tin'); }}
+          >
+            <Form.Item
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập tài khoản',
+                },
+              ]}
+            >
+              <Input prefix={<UserOutlined className="__form__icon" />} placeholder="Tài khoản" autoFocus={true} />
+            </Form.Item>
 
-                <Form.Item
-                  name="password"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng nhập mật khẩu',
-                    },
-                  ]}
-                >
-                  <Input.Password prefix={<LockOutlined className="__form__icon" />} placeholder="Mật khẩu" />
-                </Form.Item>
+            <Form.Item
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập mật khẩu',
+                },
+              ]}
+            >
+              <Input.Password prefix={<LockOutlined className="__form__icon" />} placeholder="Mật khẩu" />
+            </Form.Item>
 
-                <div className="__form__forgot-password">
-                  <Tooltip title="Yêu cầu khôi phục mật khẩu">
-                    <a href="/login" style={{ marginLeft: 8 }}>
-                      Quên mật khẩu?
+            <div className="__form__forgot-password">
+              <Tooltip title="Yêu cầu khôi phục mật khẩu">
+                <a href="/login" style={{ marginLeft: 8 }}>
+                  Quên mật khẩu?
                     </a>
-                  </Tooltip>
-                </div>
+              </Tooltip>
+            </div>
 
-                <Form.Item {...tailLayout}>
-                  <Button className="__form__btn-submit" type="primary" htmlType="submit">
-                    ĐĂNG NHẬP
+            <Form.Item {...tailLayout}>
+              <Button className="__form__btn-submit" type="primary" htmlType="submit">
+                ĐĂNG NHẬP
                   </Button>
-                </Form.Item>
+            </Form.Item>
 
-              </Form>
-            </Col>
-          </Row>
-
+          </Form>
         </div>
 
         <svg className="wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
@@ -145,7 +136,15 @@ class Login extends Component {
             <stop offset="0%" stopColor="#ff5858" />
             <stop offset="100%" stopColor="#f09819" />
           </linearGradient> */}
-          <path fill="#ff8220" fillOpacity={1} d="M0,160L1440,0L1440,320L0,320Z" />
+          <path fillOpacity={1}
+            d="M0,0L1440,192L1440,320L0,320Z"
+          />
+        </svg>
+
+        <svg className="wave2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+          <path fillOpacity="1"
+            d="M0,64L1440,320L1440,0L0,0Z"
+          />
         </svg>
 
         <p className="__footer">Mini Mart &copy;2020 All right reserved.</p>

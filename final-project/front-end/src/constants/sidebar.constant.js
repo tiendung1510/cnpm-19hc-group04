@@ -8,7 +8,7 @@ import ProductManagement from '../components/pages/Importer/ProductManagment/Pro
 import Reporting from '../components/pages/Manager/Reporting/Reporting';
 import StaffManagement from '../components/pages/Manager/StaffManagement/StaffManagement';
 import WorkAssignment from '../components/pages/Manager/WorkAssignment/WorkAssignment';
-import SupplierManagement from '../components/pages/Manager/SupplierManagement/SupplierManagement';
+import ImportingRequest from '../components/pages/Manager/ImportingRequest/ImportingRequest';
 
 import {
   DollarOutlined, InboxOutlined, BarChartOutlined, TeamOutlined, FileDoneOutlined, UserOutlined, LockOutlined, RocketOutlined
@@ -67,19 +67,19 @@ export default [
       },
       {
         title: 'Phân ca làm việc',
-        path: '/work-assignment',
+        path: '/work-assignments',
         icon: FileDoneOutlined,
         component: WorkAssignment
       },
       {
-        title: 'Nhà cung cấp',
-        path: '/suppliers',
+        title: 'Yêu cầu nhập hàng',
+        path: '/importing-requests',
         icon: RocketOutlined,
-        component: SupplierManagement
+        component: ImportingRequest
       },
       {
         title: 'Báo cáo - thống kê',
-        path: '/reporting',
+        path: '/reports',
         icon: BarChartOutlined,
         component: Reporting
       }

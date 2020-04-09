@@ -16,7 +16,6 @@ import PageBase from '../../../utilities/PageBase/PageBase';
 import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
 import { sortByCreatedAt } from '../../../../services/collection-sorting.service';
 import EditCategoryDialog from './EditCategoryDialog/EditCategoryDialog';
-import SupplierDialog from './SupplierDialog/SupplierDialog';
 import QRCode from 'qrcode.react';
 
 const { confirm } = Modal;
@@ -559,7 +558,7 @@ class ProductManagement extends PageBase {
                       <span>{this.state.selectedCategory.name}</span>
                     </h3>
                   </Col>
-                  <Col span={4}>
+                  <Col span={8}>
                     <div className="product-management__container__topbar__features">
                       <div className="product-management__container__topbar__features__feature">
                         <Badge count={100} overflowCount={99} className="product-management__container__topbar__features__feature__label">
@@ -567,18 +566,6 @@ class ProductManagement extends PageBase {
                         </Badge>
                       </div>
                     </div>
-                  </Col>
-                  <Col span={4} align="center">
-                    {!this.state.isLoading ? (
-                      <div>
-                        <SupplierDialog
-                          suppliers={[...suppliers]}
-                          addToListSuppliers={supplier => this.addToListSuppliers(supplier)}
-                          removeFromListSuppliers={supplier => this.removeFromListSuppliers(supplier)}
-                          updateProductSupplier={supplier => this.updateProductSupplier(supplier)}
-                        />
-                      </div>
-                    ) : <></>}
                   </Col>
                   <Col span={7} style={{ padding: 0 }}>
                     <div className="product-management__container__topbar__search-box">

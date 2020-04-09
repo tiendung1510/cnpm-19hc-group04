@@ -116,12 +116,13 @@ $boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   }
 
   .product-management__supplier-dialog__content__frm-add-supplier {
-    .ant-form {
-      padding: 10px;
-    }
 
     .product-management__supplier-dialog__content__frm-add-supplier__title {
       color: #ff8220;
+    }
+
+    .ant-form {
+      padding: 10px;
     }
 
     .ant-form-item {
