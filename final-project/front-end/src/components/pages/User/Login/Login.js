@@ -76,7 +76,7 @@ class Login extends Component {
             <div className="__slogan"><span>Tiện Lợi mà Chất Lượng</span></div>
           </div>
         </div>
-        <div className="login animated jackInTheBox">
+        <div className="login animated bounceInDown">
           <h2 className="__main-title">Quản trị viên</h2>
           <div className="__cover-img"></div>
           <Form

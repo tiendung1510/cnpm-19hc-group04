@@ -8,7 +8,7 @@
   $fontSize: 12px;
 
   background: white;
-  border-radius: $borderRadius0;
+  border-radius: $borderRadius2;
   box-shadow: $boxShadow2;
   height: 100%;
   width: 100%;
@@ -33,7 +33,7 @@
     font-weight: bold;
     color: white;
     background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
-    margin: 1% 0 2% -2.5%;
+    margin: 2% 0 1% -2.5%;
     border-top-right-radius: 24px;
     border-bottom-right-radius: 24px;
     padding-left: 5%;

@@ -19,14 +19,14 @@ $fontSize: 12px;
   background-size: 100% 100%;
 
   .dark-bg {
-    background: rgba($color: white, $alpha: 0.8);
+    background: rgba($color: #000, $alpha: 0.7);
     position: absolute;
     z-index: 1;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    backdrop-filter: blur(3px);
+    backdrop-filter: blur(4px);
   }
 
   .__header {
@@ -50,14 +50,15 @@ $fontSize: 12px;
       .__name {
         font-size: 15px;
         letter-spacing: 2px;
-        color: #ff8220;
+        color: darkorange;
         font-weight: bold;
       }
 
       .__slogan {
         font-size: 8px;
         font-style: italic;
-        color: rgba($color: #000, $alpha: 0.5);
+        color: white;
+        letter-spacing: 0.5px;
         margin-top: -2.5px;
       }
     }
@@ -70,20 +71,20 @@ $fontSize: 12px;
     filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.8));
 
     path {
-      fill: darkorange;
+      fill: #ff8220;
     }
   }
 
   .wave2 {
     position: absolute;
     z-index: 2;
-    right: -42%;
+    right: -47%;
     top: 0;
-    transform: rotate(96deg);
-    filter: drop-shadow(4px 0 4px rgba(0, 0, 0, 0.6));
+    transform: rotate(106deg);
+    filter: drop-shadow(2px 0 2px rgba(0, 0, 0, 0.6));
 
     path {
-      fill: #ff8220;
+      fill: #ff6f00;
     }
   }
 
