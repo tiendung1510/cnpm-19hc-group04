@@ -183,7 +183,7 @@ const submitCheckoutSession = async (req, res, next) => {
         lackingItems.push({
           product,
           requiredQuantity,
-          lackingQuantity
+          availableQuantity: requiredQuantity - lackingQuantity
         });
       } else {
         product.availableQuantity = availableQuantity;
