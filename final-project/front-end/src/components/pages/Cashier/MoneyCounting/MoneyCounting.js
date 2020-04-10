@@ -15,6 +15,7 @@ import { API } from '../../../../constants/api.constant';
 import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
 import SubmitCheckoutSessionDialog from './SubmitCheckoutSessionDialog/SubmitCheckoutSessionDialog';
 import * as _ from 'lodash';
+import ImportingRequestDialog from './ImportingRequestDialog/ImportingRequestDialog';
 
 const { confirm } = Modal;
 
@@ -323,6 +324,7 @@ class MoneyCounting extends PageBase {
 									className="money-counting__getting-started__content__left__btn-start"
 									onClick={() => this.createCheckoutSession()}
 								>Bắt đầu tính tiền</Button>
+								<ImportingRequestDialog />
 							</div>
 							<div className="money-counting__getting-started__content__right-cover">
 								<div className="money-counting__getting-started__content__right-cover__img"></div>
