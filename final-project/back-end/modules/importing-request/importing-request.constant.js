@@ -1,7 +1,8 @@
 module.exports = {
   IMPORTING_REQUEST_MESSAGE: {
     SUCCESS: {
-      CREATE_IMPORTING_REQUEST_SUCCESS: 'Đã gửi yêu cầu nhập hàng'
+      CREATE_IMPORTING_REQUEST_SUCCESS: 'Đã gửi yêu cầu nhập hàng',
+      GET_IMPORTING_REQUESTS_SUCCESS: 'Lấy danh sách yêu cầu nhập hàng thành công'
     },
     ERROR: {
       EMPTY_LIST_REQUIRED_PRODUCTS: 'Danh sách sản phẩm yêu cầu không được để trống',
