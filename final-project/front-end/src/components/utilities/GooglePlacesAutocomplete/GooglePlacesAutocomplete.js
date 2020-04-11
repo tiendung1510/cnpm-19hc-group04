@@ -36,7 +36,7 @@ export default class PlacesAutocomplete extends Component {
           onSelect={e => this.handleSelectPlace(e)}
           initialValue={this.props.initialValue}
           renderInput={(props) => (
-            <Input {...props} maxLength={100} />
+            <Input {...props} maxLength={150} />
           )}
         />
       </div>

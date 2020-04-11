@@ -69,7 +69,7 @@
     z-index: 3;
     border-radius: $primaryBorderRadius - 2;
     overflow: hidden;
-    padding-top: 2%;
+    padding: 2% 0;
 
     .transaction-history__content__timeline {
       height: 100%;

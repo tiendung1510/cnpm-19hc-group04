@@ -77,7 +77,7 @@ class Login extends Component {
           </div>
         </div>
         <div className="login animated bounceInDown">
-          <h2 className="__main-title">Quản trị viên</h2>
+          <h2 className="__main-title">STAFF ONLY</h2>
           <div className="__cover-img"></div>
           <Form
             className="__form"

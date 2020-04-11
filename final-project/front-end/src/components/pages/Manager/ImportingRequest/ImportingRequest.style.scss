@@ -100,15 +100,7 @@
         background: #eee;
         border-radius: $borderRadius0;
         padding: 7px;
-
-        .importing-request__container__block__body__request {
-          width: 100%;
-          height: 60px;
-          background: white;
-          border: 1px solid #eee;
-          margin-bottom: 7px;
-          border-radius: $borderRadius0;
-        }
+        overflow: auto;
       }
     }
   }

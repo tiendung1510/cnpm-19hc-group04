@@ -10,10 +10,15 @@ export const API = {
       getCheckoutSessions: `${secret.API_URL}/checkout-sessions`,
       createCheckoutSession: `${secret.API_URL}/checkout-sessions`,
       cancelCheckoutSession: `${secret.API_URL}/checkout-sessions/{checkoutSessionID}`,
-      submitCheckoutSession: `${secret.API_URL}/checkout-sessions/{checkoutSessionID}`
+      submitCheckoutSession: `${secret.API_URL}/checkout-sessions/{checkoutSessionID}`,
+
+      createImportingRequest: `${secret.API_URL}/importing-requests`,
     }
   },
   Manager: {
+    ImportingRequestManagement: {
+      getImportingRequest: `${secret.API_URL}/importing-requests`
+    },
     StaffManagement: {
       getListStaffs: `${secret.API_URL}/users`,
       addStaff: `${secret.API_URL}/users`,

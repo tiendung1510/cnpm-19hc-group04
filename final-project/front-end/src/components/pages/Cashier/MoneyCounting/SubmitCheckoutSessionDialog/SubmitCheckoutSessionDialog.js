@@ -60,12 +60,18 @@ class SubmitCheckoutSessionDialog extends PageBase {
 
     this.props.setAppLoading(false);
     if (res.status !== 200) {
-      if (res.data) {
+      if (res.status === 404 && res.data) {
         const { notExistedProductIDs } = res.data;
         let notExistedProducts = checkedOutProducts
           .filter(p => _.findIndex(notExistedProductIDs, id => id === p._id) >= 0);
         notExistedProducts = _.uniqBy(notExistedProducts, '_id');
         this.notifyNotExistedProducts(notExistedProducts, res.errors[0]);
+        return;
+      }
+
+      if (res.status === 400 && res.data) {
+        this.props.loadLackingItems(res.data.lackingItems);
+        this.props.setLackingItemsDialogVisible(true);
         return;
       }
 

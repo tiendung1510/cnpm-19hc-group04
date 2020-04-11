@@ -30,7 +30,9 @@ class MoneyCounting extends PageBase {
 			onWorking: false,
 			sound: '',
 			checkoutSessionID: '',
-			isCheckoutDoneScreenVisible: false
+			isCheckoutDoneScreenVisible: false,
+			lackingItems: [],
+			isLackingItemsDialogVisible: false
 		}
 		this.soundRef = React.createRef();
 	}
@@ -107,10 +109,11 @@ class MoneyCounting extends PageBase {
 		message.success(res.messages[0]);
 	}
 
-	openNotification = (message, description) => {
+	openNotification = (message, description, placement) => {
 		notification.open({
 			message,
-			description
+			description,
+			placement
 		});
 	};
 
@@ -140,7 +143,8 @@ class MoneyCounting extends PageBase {
 					<span style={{ color: '#44b543', fontWeight: 'bold', marginRight: 10 }}>+1</span>
 					{productDetails.name}
 				</span>,
-				`Vừa xong`
+				`Vừa xong`,
+				'topRight'
 			);
 
 			let { checkedOutProducts, priceTotal } = this.state;
@@ -228,7 +232,8 @@ class MoneyCounting extends PageBase {
 						<span style={{ color: 'crimson', fontWeight: 'bold', marginRight: 10 }}>-1</span>
 						{product.name}
 					</span>,
-					`Vừa xong`
+					`Vừa xong`,
+					'topRight'
 				);
 			}
 		});
@@ -244,8 +249,16 @@ class MoneyCounting extends PageBase {
 		this.props.setMainPanelOnWorking(true);
 	}
 
+	loadLackingItems(lackingItems) {
+		this.setState({ lackingItems });
+	}
+
+	setLackingItemsDialogVisible(isVisible) {
+		this.setState({ isLackingItemsDialogVisible: isVisible });
+	}
+
 	render() {
-		const { scannedProduct, checkedOutProducts, priceTotal, onWorking } = this.state;
+		const { scannedProduct, checkedOutProducts, priceTotal, onWorking, lackingItems } = this.state;
 		const isProductScanned = Object.keys(scannedProduct).length > 0;
 
 		const columns = [
@@ -324,7 +337,6 @@ class MoneyCounting extends PageBase {
 									className="money-counting__getting-started__content__left__btn-start"
 									onClick={() => this.createCheckoutSession()}
 								>Bắt đầu tính tiền</Button>
-								<ImportingRequestDialog />
 							</div>
 							<div className="money-counting__getting-started__content__right-cover">
 								<div className="money-counting__getting-started__content__right-cover__img"></div>
@@ -344,6 +356,11 @@ class MoneyCounting extends PageBase {
 					</div>
 				) : (
 						<div style={{ height: '100%' }}>
+							<ImportingRequestDialog
+								lackingItems={[...lackingItems]}
+								isVisible={this.state.isLackingItemsDialogVisible}
+								setLackingItemsDialogVisible={isVisible => this.setLackingItemsDialogVisible(isVisible)}
+							/>
 							<audio ref={ref => { this.soundRef = ref; }} src="" controls autoPlay style={{ display: 'none' }} />
 							<div className="money-counting__panel">
 								{this.state.isCheckoutDoneScreenVisible ? (
@@ -471,6 +488,8 @@ class MoneyCounting extends PageBase {
 															checkoutSessionID={this.state.checkoutSessionID}
 															setCheckoutDoneScreenVisible={isVisible => this.setCheckoutDoneScreenVisible(isVisible)}
 															setMainPanelOnWorking={onWorking => this.props.setMainPanelOnWorking(onWorking)}
+															loadLackingItems={items => this.loadLackingItems(items)}
+															setLackingItemsDialogVisible={isVisible => this.setLackingItemsDialogVisible(isVisible)}
 														/>
 													</Col>
 												</Row>

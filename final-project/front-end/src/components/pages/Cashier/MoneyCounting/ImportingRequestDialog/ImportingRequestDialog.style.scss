@@ -72,4 +72,8 @@
     height: 100%;
     @extend .styled-scrollbar;
   }
+
+  .ant-spin-dot-item {
+    background: #ff8220 !important;
+  }
 }
