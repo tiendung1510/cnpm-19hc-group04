@@ -14,7 +14,7 @@ const requiredProductSchema = new Schema(
     },
     requiredQuantity: {
       type: Number,
-      default: 0
+      default: 1
     },
     importedQuantity: {
       type: Number,

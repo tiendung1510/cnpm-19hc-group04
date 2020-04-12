@@ -37,6 +37,10 @@ const importingRequestSchema = new Schema(
     finishedAt: {
       type: Date,
       default: null
+    },
+    note: {
+      type: String,
+      default: null
     }
   },
   { timestamps: true }
