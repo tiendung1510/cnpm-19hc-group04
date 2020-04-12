@@ -1,0 +1,171 @@
+$borderRadius0: 2px;
+$borderRadius1: 3px;
+$fontSize0: 9px;
+$fontSize1: 10px;
+$fontSize2: 11px;
+$fontSize3: 12px;
+
+.importing-request__container__block__body__request--pending {
+  .importing-request__container__block__body__request--pending__summary {
+    width: 100%;
+    min-height: 80px;
+    background: white;
+    border: 1px solid #eee;
+    margin-bottom: 7px;
+    padding: 10px;
+    cursor: pointer;
+
+    .importing-request__container__block__body__request--pending__summary__avatar {
+      margin-top: 2px;
+    }
+
+    .importing-request__container__block__body__request--pending__summary__details {
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+
+      .importing-request__container__block__body__request--pending__summary__details__title {
+        font-size: $fontSize3;
+      }
+
+      .importing-request__container__block__body__request--pending__summary__details__time {
+        font-size: $fontSize0;
+        color: rgba($color: #000000, $alpha: 0.4);
+      }
+
+      .importing-request__container__block__body__request--pending__summary__details__products {
+        font-size: $fontSize1;
+        padding-top: 5px;
+        margin: 0;
+      }
+    }
+  }
+}
+
+.importing-request__container__block__body__request--pending__dialog {
+  .styled-scrollbar {
+    &::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba($color: #000000, $alpha: 0.2);
+      border-radius: 0;
+    }
+  }
+
+  .ant-modal-content {
+    width: 50vw;
+    left: -25%;
+  }
+
+  .importing-request__container__block__body__request--pending__dialog__labels,
+  .importing-request__container__block__body__request--pending__dialog__values {
+    padding-left: 0;
+    list-style: none;
+    font-size: $fontSize3;
+    line-height: 35px;
+  }
+
+  .importing-request__container__block__body__request--pending__dialog__values {
+    .importing-request__container__block__body__request--pending__dialog__values__status {
+      color: white;
+      font-weight: bold;
+      background: #ff6f61;
+      padding: 4px 10px;
+      font-size: $fontSize0;
+      border-radius: 12px;
+    }
+  }
+
+  .importing-request__container__block__body__request--pending__dialog__labels {
+    font-weight: bold;
+  }
+
+  .importing-request__container__block__body__request--pending__dialog__products-header {
+    width: 100%;
+    padding: 0 10px 15px 0;
+    font-weight: bold;
+    font-size: $fontSize2;
+  }
+
+  .importing-request__container__block__body__request--pending__dialog__products {
+    $tableFontSize: $fontSize2;
+    margin-top: -5px;
+
+    .ant-table {
+      thead > tr > th {
+        font-size: $tableFontSize;
+        color: #ff8220;
+        font-weight: bold;
+        padding: 10px 0;
+
+        &:nth-of-type(1) {
+          padding-left: 10px;
+        }
+      }
+
+      tbody > tr {
+        transition: 0.2s;
+        td {
+          font-size: $tableFontSize;
+          padding: 0;
+        }
+
+        &:hover td {
+          background: none;
+        }
+      }
+    }
+
+    .ant-table-body {
+      @extend .styled-scrollbar;
+    }
+
+    .ant-table .ant-table-container::before,
+    .ant-table .ant-table-container::after {
+      width: 0;
+    }
+
+    .ant-input-number {
+      width: 70px;
+      margin-left: 15px;
+      .ant-input-number-input {
+        font-size: $tableFontSize;
+        height: 25px;
+        text-align: center;
+      }
+    }
+  }
+
+  .importing-request__container__block__body__request--pending__dialog__executor {
+    margin-top: 20px;
+    .importing-request__container__block__body__request--pending__dialog__executor__title {
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      padding-top: 10px;
+    }
+    .importing-request__container__block__body__request--pending__dialog__executor__btn-submit {
+      background: #ff8220;
+      border: 0;
+      font-size: $fontSize3;
+      font-weight: bold;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+      min-width: 150px;
+    }
+
+    .ant-divider-horizontal {
+      margin-top: 12px;
+      margin-bottom: 24px;
+    }
+
+    .ant-form-item .ant-mentions,
+    .ant-form-item textarea.ant-input {
+      margin-top: -10px;
+      height: 80px;
+      font-size: $fontSize2;
+    }
+  }
+}

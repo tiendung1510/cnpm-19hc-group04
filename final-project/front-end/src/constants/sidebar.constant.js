@@ -11,7 +11,7 @@ import WorkAssignment from '../components/pages/Manager/WorkAssignment/WorkAssig
 import ImportingRequest from '../components/pages/Manager/ImportingRequest/ImportingRequest';
 
 import {
-  DollarOutlined, InboxOutlined, BarChartOutlined, TeamOutlined, FileDoneOutlined, UserOutlined, LockOutlined, RocketOutlined
+  DollarOutlined, InboxOutlined, BarChartOutlined, TeamOutlined, FileDoneOutlined, UserOutlined, LockOutlined, MessageOutlined
 } from '@ant-design/icons';
 
 export default [
@@ -74,7 +74,7 @@ export default [
       {
         title: 'Yêu cầu nhập hàng',
         path: '/importing-requests',
-        icon: RocketOutlined,
+        icon: MessageOutlined,
         component: ImportingRequest
       },
       {

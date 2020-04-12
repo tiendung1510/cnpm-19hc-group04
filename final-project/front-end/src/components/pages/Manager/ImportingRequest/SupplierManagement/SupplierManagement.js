@@ -40,7 +40,7 @@ class SupplierManagement extends PageBase {
       okType: 'danger',
       cancelText: 'Không, cảm ơn',
       async onOk() {
-        that.props.setAppLoading(false);
+        that.props.setAppLoading(true);
         const res = await (
           await fetch(
             API.Manager.SupplierManagment.removeSupplier.replace('{supplierID}', supplierID),

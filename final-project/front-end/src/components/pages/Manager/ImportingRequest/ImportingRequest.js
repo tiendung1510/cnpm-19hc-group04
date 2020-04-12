@@ -8,10 +8,10 @@ import PageBase from '../../../utilities/PageBase/PageBase';
 import { API } from '../../../../constants/api.constant';
 import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
 import SupplierManagement from './SupplierManagement/SupplierManagement';
-import RequestDetails from './RequestDetails/RequestDetails';
-import * as _ from 'lodash';
+import PendingRequest from './PendingRequest/PendingRequest';
 import { message } from 'antd';
 import CONSTANT from '../../../../constants/importing-request.constant';
+import USER_ROLES from '../../../../constants/user-role.constant';
 
 class ImportingRequest extends PageBase {
 
@@ -63,7 +63,6 @@ class ImportingRequest extends PageBase {
       )
     ).json();
 
-    this.props.setAppLoading(false);
     if (res.status !== 200) {
       return Promise.reject(res.errors[0]);
     }
@@ -86,7 +85,6 @@ class ImportingRequest extends PageBase {
       )
     ).json();
 
-    this.props.setAppLoading(false);
     if (res.status !== 200) {
       return Promise.reject(res.errors[0]);
     }
@@ -99,7 +97,7 @@ class ImportingRequest extends PageBase {
   }
 
   render() {
-    const { importingRequests } = this.state;
+    const { importingRequests, staffs } = this.state;
     const pendingRequests = importingRequests.filter(r => r.status === CONSTANT.STATUS.PENDING.type);
     const acceptedRequests = importingRequests.filter(r => r.status === CONSTANT.STATUS.ACCEPTED.type);
     const finishedRequests = importingRequests.filter(r => r.status === CONSTANT.STATUS.FINISHED.type);
@@ -121,9 +119,10 @@ class ImportingRequest extends PageBase {
                 </div>
                 <div className="importing-request__container__block__body">
                   {pendingRequests.map(r => (
-                    <RequestDetails
+                    <PendingRequest
                       key={r._id}
                       details={{ ...r }}
+                      importers={staffs.filter(s => s.role === USER_ROLES.IMPORTER.type)}
                     />
                   ))}
                 </div>
@@ -141,12 +140,12 @@ class ImportingRequest extends PageBase {
                   </span>
                 </div>
                 <div className="importing-request__container__block__body">
-                  {acceptedRequests.map(r => (
-                    <RequestDetails
+                  {/* {acceptedRequests.map(r => (
+                    <Request
                       key={r._id}
                       details={{ ...r }}
                     />
-                  ))}
+                  ))} */}
                 </div>
               </div>
             </Col>
@@ -162,12 +161,12 @@ class ImportingRequest extends PageBase {
                   </span>
                 </div>
                 <div className="importing-request__container__block__body">
-                  {finishedRequests.map(r => (
-                    <RequestDetails
+                  {/* {finishedRequests.map(r => (
+                    <Request
                       key={r._id}
                       details={{ ...r }}
                     />
-                  ))}
+                  ))} */}
                 </div>
               </div>
             </Col>
