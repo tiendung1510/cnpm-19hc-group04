@@ -21,7 +21,7 @@ export default class PendingRequest extends Component {
                   {details.sender.fullname}
                 </span>
                 <span className="importing-request__container__block__body__request--pending__summary__details__time">
-                  Vào lúc {moment(details.createdAt).format('HH:mm DD-MM-YYYY')}
+                  Gửi lúc {moment(details.createdAt).format('HH:mm DD-MM-YYYY')}
                 </span>
                 <p className="importing-request__container__block__body__request--pending__summary__details__products">
                   {details.requiredProducts.map(rp => rp.product.name).join(', ')}.

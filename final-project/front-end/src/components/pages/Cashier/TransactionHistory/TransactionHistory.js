@@ -76,9 +76,9 @@ class TransactionHistory extends PageBase {
                           <p className="transaction-history__content__timeline__item__list-products">
                             {cs.soldItems.map((item, index) => {
                               return index < cs.soldItems.length - 1 ? (
-                                <span>{`${item.product.name} x${item.quantity}, `}</span>
+                                <span key={index}>{`${item.product.name} x${item.quantity}, `}</span>
                               ) : (
-                                  <span>{`${item.product.name} x${item.quantity}.`}</span>
+                                  <span key={index}>{`${item.product.name} x${item.quantity}.`}</span>
                                 )
                             })}
                           </p>

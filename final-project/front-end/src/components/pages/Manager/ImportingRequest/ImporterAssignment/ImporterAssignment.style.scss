@@ -5,35 +5,35 @@ $fontSize1: 10px;
 $fontSize2: 11px;
 $fontSize3: 12px;
 
-.importing-request__container__block__body__request--pending {
-  .importing-request__container__block__body__request--pending__summary {
+.importer-assignment {
+  .importer-assignment__summary {
     width: 100%;
     min-height: 95px;
     padding: 12.5px 10px 10px 12.5px;
     background: white;
     border: 1px solid #eee;
     margin-bottom: 5px;
-  
-    .importing-request__container__block__body__request--pending__summary__avatar {
+
+    .importer-assignment__summary__avatar {
       margin-top: 2px;
     }
 
-    .importing-request__container__block__body__request--pending__summary__details {
+    .importer-assignment__summary__details {
       text-align: left;
       display: flex;
       flex-direction: column;
 
-      .importing-request__container__block__body__request--pending__summary__details__title {
+      .importer-assignment__summary__details__title {
         font-size: $fontSize3;
         font-weight: bold;
       }
 
-      .importing-request__container__block__body__request--pending__summary__details__time {
+      .importer-assignment__summary__details__time {
         font-size: $fontSize1;
         color: rgba($color: #000000, $alpha: 0.4);
       }
 
-      .importing-request__container__block__body__request--pending__summary__details__products {
+      .importer-assignment__summary__details__products {
         font-size: $fontSize1;
         padding-top: 5px;
         margin: 0;

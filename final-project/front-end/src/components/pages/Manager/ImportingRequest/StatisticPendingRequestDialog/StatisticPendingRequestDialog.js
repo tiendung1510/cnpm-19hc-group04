@@ -1,11 +1,17 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Button, Modal, Table, InputNumber, Divider, Dropdown, Menu, Avatar, Form, Input, Row, Col, message } from 'antd';
 import NumberFormat from 'react-number-format';
 import { DownOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import './StatisticPendingRequestDialog.style.scss';
 import * as _ from 'lodash';
+import { connect } from 'react-redux';
+import * as actions from '../../../../../redux/actions';
+import { withCookies } from 'react-cookie';
+import { COOKIE_NAMES } from '../../../../../constants/cookie-name.constant';
+import { API } from '../../../../../constants/api.constant';
+import PageBase from '../../../../utilities/PageBase/PageBase';
 
-export default class StatisticPendingRequestDialog extends Component {
+class StatisticPendingRequestDialog extends PageBase {
   constructor(props) {
     super(props);
     this.state = {
@@ -46,30 +52,47 @@ export default class StatisticPendingRequestDialog extends Component {
     });
   }
 
-  acceptRequests(values) {
+  async acceptRequests(values) {
     if (!values.executor) {
       message.error('Thông tin bàn giao chưa đầy đủ, vui lòng kiểm tra lại');
       return;
     }
 
-    const { requiredProducts } = this.state;
+    this.props.setAppLoading(true);
+    const { requiredProducts, priceTotal } = this.state;
     let { pendingRequests } = this.props;
     const params = {
       ...values,
-      requests: pendingRequests.map(r => {
-        return {
-          _id: r._id,
-          requiredProducts: r.requiredProducts.map(item1 => {
-            return {
-              _id: item1._id,
-              requiredQuantity: requiredProducts.find(item2 => item1.product._id === item2.product._id).requiredQuantity
-            }
-          })
+      priceTotal,
+      requests: pendingRequests.map(r => ({ _id: r._id })),
+      importedProducts: requiredProducts.map(rp => ({
+        productID: rp.product._id,
+        requiredQuantity: rp.requiredQuantity
+      }))
+    }
+    const res = await (
+      await fetch(
+        API.Manager.ImportingRequestManagement.acceptImportingRequests,
+        {
+          method: 'PUT',
+          body: JSON.stringify(params),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+            'token': this.props.cookies.get(COOKIE_NAMES.token)
+          },
+          signal: this.abortController.signal
         }
-      })
+      )
+    ).json();
+
+    this.props.setAppLoading(false);
+    if (res.status !== 200) {
+      message.error(res.errors[0]);
+      return;
     }
 
-    console.log(params);
+    this.props.onAcceptRequests();
+    this.setDialogVisible(false);
   }
 
   handleSelectExcecutor(data) {
@@ -139,7 +162,11 @@ export default class StatisticPendingRequestDialog extends Component {
       <Menu onClick={e => this.handleSelectExcecutor(e.key)}>
         {importers.map(i => (
           <Menu.Item key={JSON.stringify(i)}>
-            <Avatar src={i.avatar} size={20} style={{ marginRight: 10 }} />
+            <Avatar
+              src={i.avatar}
+              size={20}
+              style={{ marginRight: 10 }}
+            />
             {i.fullname}
           </Menu.Item>
         ))}
@@ -154,7 +181,7 @@ export default class StatisticPendingRequestDialog extends Component {
             className="statistic-pending-request-dialog__btn-open-wrapper__btn"
             onClick={() => this.setDialogVisible(true)}
           >
-            Thống kê yêu cầu
+            Thống kê sản phẩm yêu cầu
           </Button>
         </div>
 
@@ -258,3 +285,4 @@ export default class StatisticPendingRequestDialog extends Component {
     )
   }
 }
+export default connect(null, actions)(withCookies(StatisticPendingRequestDialog));

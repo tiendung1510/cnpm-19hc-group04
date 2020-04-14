@@ -17,7 +17,10 @@ export const API = {
   },
   Manager: {
     ImportingRequestManagement: {
-      getImportingRequest: `${secret.API_URL}/importing-requests`
+      getImportingRequest: `${secret.API_URL}/importing-requests`,
+      acceptImportingRequests: `${secret.API_URL}/importing-requests`,
+
+      getImporterAssignments: `${secret.API_URL}/importer-assignments`
     },
     StaffManagement: {
       getListStaffs: `${secret.API_URL}/users`,
