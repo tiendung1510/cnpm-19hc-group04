@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Modal, Tooltip, message, notification } from 'antd';
-import { RightOutlined, PrinterOutlined } from '@ant-design/icons';
+import { PrinterOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import './SubmitCheckoutSessionDialog.style.scss';
 import PageBase from '../../../../utilities/PageBase/PageBase';
 import { connect } from 'react-redux';
@@ -110,7 +110,7 @@ class SubmitCheckoutSessionDialog extends PageBase {
           onClick={() => this.submitCheckoutSession()}
         >
           <span style={{ marginRight: 5 }}>Hoàn tất tính tiền</span>
-          <RightOutlined />
+          <ArrowRightOutlined />
         </Button>
 
         <Modal

@@ -12,6 +12,7 @@ import PendingRequest from './PendingRequest/PendingRequest';
 import { message } from 'antd';
 import CONSTANT from '../../../../constants/importing-request.constant';
 import USER_ROLES from '../../../../constants/user-role.constant';
+import StatisticPendingRequestDialog from './StatisticPendingRequestDialog/StatisticPendingRequestDialog';
 
 class ImportingRequest extends PageBase {
 
@@ -110,14 +111,14 @@ class ImportingRequest extends PageBase {
               <div
                 className="importing-request__container__block">
                 <div className="importing-request__container__block__header">
-                  <span className="importing-request__container__block__header__title --to-do">
+                  <span className="importing-request__container__block__header__title --pending">
                     Đang chờ duyệt
                   </span>
-                  <span className="importing-request__container__block__header__number --to-do">
+                  <span className="importing-request__container__block__header__number --pending">
                     {pendingRequests.length}
                   </span>
                 </div>
-                <div className="importing-request__container__block__body">
+                <div className="importing-request__container__block__body --pending">
                   {pendingRequests.map(r => (
                     <PendingRequest
                       key={r._id}
@@ -126,16 +127,20 @@ class ImportingRequest extends PageBase {
                     />
                   ))}
                 </div>
+                <StatisticPendingRequestDialog
+                  pendingRequests={[...pendingRequests]}
+                  importers={staffs.filter(s => s.role === USER_ROLES.IMPORTER.type)}
+                />
               </div>
             </Col>
             <Col span={5}>
               <div
                 className="importing-request__container__block">
                 <div className="importing-request__container__block__header">
-                  <span className="importing-request__container__block__header__title --progressing">
+                  <span className="importing-request__container__block__header__title --accepted">
                     Đang thực hiện
                   </span>
-                  <span className="importing-request__container__block__header__number --progressing">
+                  <span className="importing-request__container__block__header__number --accepted">
                     {acceptedRequests.length}
                   </span>
                 </div>
@@ -153,10 +158,10 @@ class ImportingRequest extends PageBase {
               <div
                 className="importing-request__container__block">
                 <div className="importing-request__container__block__header">
-                  <span className="importing-request__container__block__header__title --done">
+                  <span className="importing-request__container__block__header__title --finished">
                     Đã hoàn tất
                   </span>
-                  <span className="importing-request__container__block__header__number --done">
+                  <span className="importing-request__container__block__header__number --finished">
                     {finishedRequests.length}
                   </span>
                 </div>

@@ -148,7 +148,7 @@ class SupplierManagement extends PageBase {
       <div className="importing-request__container__suppliers">
         <div className="importing-request__container__suppliers__header">
           <span className="importing-request__container__suppliers__header__title">
-            Nhà cung cấp sản phẩm
+            Nhà cung cấp sản phẩm ({filteredSuppliers.length})
           </span>
         </div>
         <div className="importing-request__container__suppliers__toolbar">

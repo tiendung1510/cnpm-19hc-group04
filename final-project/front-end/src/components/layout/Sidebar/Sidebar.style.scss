@@ -42,11 +42,11 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
   .ant-menu-item {
     color: rgba($color: #000000, $alpha: 0.65) !important;
     font-size: 12px !important;
+    max-width: 195px;
   }
 
   .ant-menu-item-selected {
     background: #ff8220 !important;
-    // background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%) !important;
     font-weight: bold;
     color: white !important;
     border-top-right-radius: 24px;
