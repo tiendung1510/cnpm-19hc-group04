@@ -12,7 +12,7 @@ const ImportingRequestModel = require('./importing-request.model');
 const RequiredProductModel = require('../required-product/required-product.model');
 const { acceptImportingRequestsValidationSchema } = require('./validations/accept-importing-requests.schema');
 const UserModel = require('../user/user.model');
-const SortingService = require('../../services/collection-sorting');
+const CollectionSortingService = require('../../services/collection-sorting');
 const ImporterAssignmentModel = require('../importer-assignment/importer-assignment.model');
 const ImportedProductModel = require('../imported-product/imported-product.model');
 
@@ -93,7 +93,7 @@ const getImportingRequests = async (req, res, next) => {
         }
       });
 
-    SortingService.sortByCreatedAt(importingRequests, 'desc');
+    CollectionSortingService.sortByCreatedAt(importingRequests, 'desc');
 
     logger.info(`${CONTROLLER_NAME}::getImportingRequests::success`);
     return res.status(HttpStatus.OK).json({
@@ -122,6 +122,18 @@ const acceptImportingRequests = async (req, res, next) => {
       return res.status(HttpStatus.NOT_FOUND).json({
         status: HttpStatus.NOT_FOUND,
         errors: [IMPORTING_REQUEST_MESSAGE.ERROR.EXECUTOR_NOT_FOUND]
+      });
+    }
+
+    const executorNotFinishedAssignment = await ImporterAssignmentModel.findOne({
+      importer: mongoose.Types.ObjectId(executor._id),
+      finishedAt: null
+    });
+    if (executorNotFinishedAssignment) {
+      logger.info(`${CONTROLLER_NAME}::acceptImportingRequests::executor's assignment has not been finished`);
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        status: HttpStatus.BAD_REQUEST,
+        errors: [IMPORTING_REQUEST_MESSAGE.ERROR.EXECUTOR_ASSIGNMENT_HAS_NOT_BEEN_FINISHED]
       });
     }
 

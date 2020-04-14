@@ -10,7 +10,8 @@ module.exports = {
       REQUIRED_PRODUCT_NOT_FOUND: 'Không tìm thấy sản phẩm yêu cầu',
       EXECUTOR_NOT_FOUND: 'Không tìm thấy người thực hiện',
       IMPORTING_REQUEST_NOT_FOUND: 'Không tìm thấy yêu cầu nhập hàng',
-      REACCEPTED_IMPORTING_REQUEST: 'Có yêu cầu đã được bàn giao thực hiện'
+      REACCEPTED_IMPORTING_REQUEST: 'Có yêu cầu đã được bàn giao thực hiện',
+      EXECUTOR_ASSIGNMENT_HAS_NOT_BEEN_FINISHED: 'Nhân viên này đang thực hiện một yêu cầu khác'
     }
   },
   STATUS: {

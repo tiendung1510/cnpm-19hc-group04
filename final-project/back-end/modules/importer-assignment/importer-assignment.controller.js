@@ -6,17 +6,19 @@ const HttpStatus = require("http-status-codes");
 const mongoose = require('mongoose');
 const { IMPORTER_ASSIGNMENT_MESSAGE, CONTROLLER_NAME } = require('./importer-assignment.constant');
 const ImporterAssignmentModel = require('./importer-assignment.model');
+const CollectionSortingService = require('../../services/collection-sorting');
 
 const getImporterAssignments = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::getImporterAssignments::was called`);
   try {
-    const importerAssignments = await ImporterAssignmentModel.find({})
+    let importerAssignments = await ImporterAssignmentModel.find({})
       .populate('importer')
       .populate('manager')
       .populate({
         path: 'importedProducts',
         populate: { path: 'product' }
       });
+    CollectionSortingService.sortByCreatedAt(importerAssignments, 'desc');
 
     logger.info(`${CONTROLLER_NAME}::getImporterAssignments::success`);
     return res.status(HttpStatus.OK).json({

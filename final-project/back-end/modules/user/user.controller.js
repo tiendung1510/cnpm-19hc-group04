@@ -15,6 +15,7 @@ const config = require('config');
 const bcrypt = require('bcrypt');
 const WorkAssignmentModel = require('../work-assignment/work-assignment.model');
 const moment = require('moment');
+const ImporterAssignmentModel = require('../importer-assignment/importer-assignment.model');
 
 const login = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::login::was called`);
@@ -180,6 +181,21 @@ const getUsers = async (req, res, next) => {
 
         _u.workAssignments = workAssignments;
         return _u;
+      })
+    );
+
+    // Check user's importer assignment status if user is importer
+    users = await Promise.all(
+      users.map(async (u) => {
+        if (u.role !== USER_ROLE.IMPORTER.type)
+          return u;
+        let user = JSON.parse(JSON.stringify(u));
+        const importerAssignment = await ImporterAssignmentModel.findOne({
+          importer: user._id,
+          finishedAt: null
+        });
+        user.isImporterAssignmentFinished = importerAssignment ? false : true;
+        return user;
       })
     );
 
