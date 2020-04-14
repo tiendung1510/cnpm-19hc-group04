@@ -26,10 +26,6 @@ const importingRequestSchema = new Schema(
     requiredProducts: [
       { type: Schema.Types.ObjectId, ref: 'RequiredProductModel' }
     ],
-    priceTotal: {
-      type: Number,
-      default: 0
-    },
     acceptedAt: {
       type: Date,
       default: null

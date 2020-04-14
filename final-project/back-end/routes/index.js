@@ -10,5 +10,6 @@ router.use('/work-shifts', require('../modules/work-shift/work-shift.route'));
 router.use('/work-assignments', require('../modules/work-assignment/work-assignment.route'));
 router.use('/checkout-sessions', require('../modules/checkout-session/checkout-session.route'));
 router.use('/importing-requests', require('../modules/importing-request/importing-request.route'));
+router.use('/importer-assignments', require('../modules/importer-assignment/importer-assignment.route'));
 
 module.exports = router;
