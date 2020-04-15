@@ -16,7 +16,13 @@ const getImporterAssignments = async (req, res, next) => {
       .populate('manager')
       .populate({
         path: 'importedProducts',
-        populate: { path: 'product' }
+        populate: {
+          path: 'product',
+          populate: {
+            path: 'supplier',
+            select: '-products'
+          }
+        }
       });
     CollectionSortingService.sortByCreatedAt(importerAssignments, 'desc');
 

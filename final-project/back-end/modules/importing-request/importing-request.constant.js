@@ -3,7 +3,8 @@ module.exports = {
     SUCCESS: {
       CREATE_IMPORTING_REQUEST_SUCCESS: 'Đã gửi yêu cầu nhập hàng',
       GET_IMPORTING_REQUESTS_SUCCESS: 'Lấy danh sách yêu cầu nhập hàng thành công',
-      ACCEPT_IMPORTING_REQUEST_SUCCESS: 'Bàn giao thực hiện yêu cầu thành công'
+      ACCEPT_IMPORTING_REQUEST_SUCCESS: 'Bàn giao thực hiện yêu cầu thành công',
+      CANCEL_IMPORTING_REQUEST_SUCCESS: 'Từ chối yêu cầu thành công'
     },
     ERROR: {
       EMPTY_LIST_REQUIRED_PRODUCTS: 'Danh sách sản phẩm yêu cầu không được để trống',
@@ -26,6 +27,10 @@ module.exports = {
     FINISHED: {
       type: 'FINISHED',
       name: 'Đã thực hiện xong'
+    },
+    CANCELLED: {
+      type: 'CANCELLED',
+      name: 'Đã bị từ chối'
     }
   },
   CONTROLLER_NAME: 'ImportingRequestController'

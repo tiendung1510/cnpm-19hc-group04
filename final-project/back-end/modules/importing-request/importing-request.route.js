@@ -7,5 +7,6 @@ const importingRequestController = require('./importing-request.controller');
 router.get('/', checkTokenMiddleware, checkManagerRoleMiddleware, importingRequestController.getImportingRequests);
 router.post('/', checkTokenMiddleware, checkCashierRoleMiddleware, importingRequestController.createImportingRequest);
 router.put('/', checkTokenMiddleware, checkManagerRoleMiddleware, importingRequestController.acceptImportingRequests);
+router.delete('/:importingRequestID', checkTokenMiddleware, checkManagerRoleMiddleware, importingRequestController.cancelImportingRequest);
 
 module.exports = router;

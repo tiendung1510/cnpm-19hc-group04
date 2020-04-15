@@ -210,8 +210,50 @@ const acceptImportingRequests = async (req, res, next) => {
   }
 }
 
+const cancelImportingRequest = async (req, res, next) => {
+  logger.info(`${CONTROLLER_NAME}::cancelImportingRequest::was called`);
+  try {
+    const { importingRequestID } = req.params;
+    const deletedImporingRequest = await ImportingRequestModel.findOneAndDelete({ _id: mongoose.Types.ObjectId(importingRequestID) });
+    if (!deletedImporingRequest) {
+      logger.info(`${CONTROLLER_NAME}::cancelImportingRequest::importing request not found`);
+      return res.status(HttpStatus.NOT_FOUND).json({
+        status: HttpStatus.NOT_FOUND,
+        data: {},
+        errors: [IMPORTING_REQUEST_MESSAGE.ERROR.IMPORTING_REQUEST_NOT_FOUND]
+      });
+    }
+
+    let importingRequests = await ImportingRequestModel.find({})
+      .populate('sender')
+      .populate('executor')
+      .populate('accepter')
+      .populate({
+        path: 'requiredProducts',
+        select: '-importingRequest',
+        populate: {
+          path: 'product',
+          populate: { path: 'supplier' }
+        }
+      });
+
+    CollectionSortingService.sortByCreatedAt(importingRequests, 'desc');
+
+    logger.info(`${CONTROLLER_NAME}::cancelImportingRequest::an importing request was cancelled`);
+    return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
+      data: { importingRequests },
+      messages: [IMPORTING_REQUEST_MESSAGE.SUCCESS.CANCEL_IMPORTING_REQUEST_SUCCESS]
+    });
+  } catch (error) {
+    logger.error(`${CONTROLLER_NAME}::cancelImportingRequest::error`);
+    next(error)
+  }
+}
+
 module.exports = {
   createImportingRequest,
   getImportingRequests,
-  acceptImportingRequests
+  acceptImportingRequests,
+  cancelImportingRequest
 }
