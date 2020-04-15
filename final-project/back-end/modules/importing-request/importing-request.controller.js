@@ -214,7 +214,10 @@ const cancelImportingRequest = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::cancelImportingRequest::was called`);
   try {
     const { importingRequestID } = req.params;
-    const deletedImporingRequest = await ImportingRequestModel.findOneAndDelete({ _id: mongoose.Types.ObjectId(importingRequestID) });
+    const deletedImporingRequest = await ImportingRequestModel.findOneAndDelete({ 
+      _id: mongoose.Types.ObjectId(importingRequestID),
+      status: STATUS.PENDING.type
+    });
     if (!deletedImporingRequest) {
       logger.info(`${CONTROLLER_NAME}::cancelImportingRequest::importing request not found`);
       return res.status(HttpStatus.NOT_FOUND).json({
