@@ -16,6 +16,7 @@ const bcrypt = require('bcrypt');
 const WorkAssignmentModel = require('../work-assignment/work-assignment.model');
 const moment = require('moment');
 const ImporterAssignmentModel = require('../importer-assignment/importer-assignment.model');
+const CollectionSortingService = require('../../services/collection-sorting');
 
 const login = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::login::was called`);
@@ -344,11 +345,44 @@ const deleteUser = async (req, res, next) => {
   }
 }
 
+const getImporterAssignments = async (req, res, next) => {
+  logger.info(`${CONTROLLER_NAME}::getImporterAssignments::was called`);
+  try {
+    const userID = req.fromUser._id;
+    let importerAssignments = await ImporterAssignmentModel.find({
+      importer: mongoose.Types.ObjectId(userID),
+      finishedAt: null
+    }).populate('manager')
+      .populate({
+        path: 'importedProducts',
+        populate: {
+          path: 'product',
+          populate: {
+            path: 'supplier',
+            select: '-products'
+          }
+        }
+      });
+    CollectionSortingService.sortByCreatedAt(importerAssignments, 'desc');
+
+    logger.info(`${CONTROLLER_NAME}::getImporterAssignments::success`);
+    return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
+      data: { importerAssignments },
+      messages: [USER_MESSAGE.SUCCESS.GET_IMPORTER_ASSIGNMENTS_SUCCESS]
+    });
+  } catch (error) {
+    logger.error(`${CONTROLLER_NAME}::getImporterAssignments::error`, error);
+    return next(error);
+  }
+}
+
 module.exports = {
   login,
   addUser,
   getUsers,
   updateProfile,
   changePassword,
-  deleteUser
+  deleteUser,
+  getImporterAssignments
 };
