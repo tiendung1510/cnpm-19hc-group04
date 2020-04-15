@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../../../../redux/actions';
 import './AddCategoryDialog.style.scss';
 import { Modal, Form, Input, Button, message } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { COOKIE_NAMES } from '../../../../../constants/cookie-name.constant';
 import { API } from '../../../../../constants/api.constant';
 import PageBase from '../../../../utilities/PageBase/PageBase';
@@ -63,9 +64,9 @@ class AddCategoryDialog extends PageBase {
       <div className="product-management__add-category-dialog">
         <div className="product-management__add-category-dialog__btn-open-wrapper">
           <Button
+            icon={<PlusOutlined />}
             className="product-management__add-category-dialog__btn-open-wrapper__btn animated fadeIn"
-            onClick={() => this.setDialogVisible(true)}
-          >Thêm danh mục</Button>
+            onClick={() => this.setDialogVisible(true)} />
         </div>
 
         <Modal

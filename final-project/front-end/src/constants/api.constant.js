@@ -65,6 +65,9 @@ export const API = {
       addProduct: `${secret.API_URL}/products`,
       updateProduct: `${secret.API_URL}/products/{productID}`,
       removeProduct: `${secret.API_URL}/products/{productID}`
+    },
+    ImporterAssignmentManagement: {
+      getImporterAssignments: `${secret.API_URL}/users/importer-assignments`
     }
   }
 }

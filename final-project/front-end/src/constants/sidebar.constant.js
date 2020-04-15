@@ -49,7 +49,7 @@ export default [
     role: "IMPORTER",
     pages: [
       {
-        title: 'Quản lý sản phẩm',
+        title: 'Kho chứa sản phẩm',
         path: '/products',
         icon: InboxOutlined,
         component: ProductManagement
@@ -60,7 +60,7 @@ export default [
     role: "MANAGER",
     pages: [
       {
-        title: 'Quản lý nhân viên',
+        title: 'Tổ chức nhân sự',
         path: '/staffs',
         icon: TeamOutlined,
         component: StaffManagement

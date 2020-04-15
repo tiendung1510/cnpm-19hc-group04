@@ -10,11 +10,13 @@
   overflow: hidden;
   background: #ff8220;
   padding: 0 15px;
+  padding-top: 5px;
 
   $boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.23);
   $primaryFontSize: 12px;
   $padding: 20px;
+  $textShadow1: 1px 1px 2px rgba(0, 0, 0, 0.4);
 
   .styled-scrollbar {
     &::-webkit-scrollbar {
@@ -55,24 +57,34 @@
       .product-management__container__left-sidebar__title {
         height: 11%;
         padding-top: 5px;
-        padding-left: 5px;
         display: flex;
         align-items: center;
 
-        h3 {
-          color: #ff8220;
-          margin: 0;
+        .product-management__container__left-sidebar__title__text {
           font-weight: bold;
+          background: white;
+          color: #ff8220;
+          padding: 5px 0;
+          padding-left: 30px;
+          min-width: 220px;
+          min-height: 35px;
+          display: flex;
+          align-items: center;
+          border-top-right-radius: 24px;
+          border-bottom-right-radius: 24px;
+          margin-left: -10%;
         }
       }
 
       .product-management__container__left-sidebar__search-box {
-        $searchBoxBackground: #f8f8f8;
-        margin-top: -10px;
+        $searchBoxBackground: white;
+
+        .ant-row {
+          height: auto;
+        }
 
         .ant-input-affix-wrapper {
           background: $searchBoxBackground;
-          border: 1px solid #eee;
           border-radius: 3px;
           overflow: hidden;
           box-shadow: none;
@@ -95,7 +107,7 @@
 
         .product-management__container__left-sidebar__categories__wrapper {
           .product-management__container__left-sidebar__categories__item {
-            font-size: $primaryFontSize;
+            font-size: $primaryFontSize - 1;
             color: rgba($color: #000000, $alpha: 0.5);
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -177,20 +189,31 @@
       .product-management__container__topbar__features {
         @extend .centered-content;
         justify-content: flex-end;
-        margin-top: 5px;
 
         .product-management__container__topbar__features__feature {
           position: relative;
           @extend .centered-content;
-          width: 15%;
+          cursor: pointer;
 
-          .product-management__container__topbar__features__feature__icon {
-            color: silver;
-            font-size: 18px;
+          .product-management__container__topbar__features__feature__btn-show-assignment {
+            min-width: 190px;
+            min-height: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 0;
+            // background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
+            background: #4bb543;
+            font-weight: bold;
+            font-size: $primaryFontSize;
+            box-shadow: $boxShadow1;
 
-            &.product-management__container__topbar__features__feature__icon--bell {
-              position: relative;
-              left: -10px;
+            &.--alert {
+              .--bell {
+                font-size: 16px;
+                color: white;
+                animation-iteration-count: infinite !important;
+              }
             }
           }
           .product-management__container__topbar__features__feature__label {
@@ -202,17 +225,16 @@
             }
 
             .ant-badge-count {
-              background: #ff8220;
+              background: crimson;
             }
           }
         }
       }
 
       .product-management__container__topbar__search-box {
-        $searchBoxBackground: #f8f8f8;
+        $searchBoxBackground: white;
         .ant-input-affix-wrapper {
           background: $searchBoxBackground;
-          border: 1px solid #eee;
           border-radius: 24px;
           overflow: hidden;
           line-height: 27px;
@@ -343,22 +365,12 @@
       }
 
       .product-management__container__content__list-products {
-        $tableFontSize: 12px;
+        $tableFontSize: 11px;
         position: relative;
-
-        .product-management__container__content__list-products__bottom-toolbar {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          height: 30%;
-          z-index: 8;
-          background: #eee;
-          display: none;
-        }
+        padding: 10px;
 
         .product-management__container__content__list-products__product-img {
-          width: 30px;
+          width: 25px;
         }
 
         .product-management__container__content__list-products__selected-row {
@@ -387,6 +399,7 @@
               font-size: $tableFontSize;
               transition: 0.2s;
               cursor: pointer;
+              padding: 10px;
             }
 
             &:hover {

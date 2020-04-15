@@ -1,6 +1,6 @@
 import React from 'react';
 import './ProductManagement.style.scss';
-import { Row, Col, Input, List, Button, Table, Badge, Form, message, InputNumber, Modal, Empty, Dropdown, Menu, Select } from 'antd';
+import { Row, Col, Input, List, Button, Table, Form, message, InputNumber, Modal, Empty, Dropdown, Select, Menu } from 'antd';
 import { SearchOutlined, CloseOutlined, BellFilled, ExclamationCircleOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import NumberFormat from 'react-number-format';
@@ -39,7 +39,8 @@ class ProductManagement extends PageBase {
       categorySearchText: '',
       filteredCategories: [],
       suppliers: [],
-      isLoading: true
+      isLoading: true,
+      importerAssignments: []
     }
 
     this.productDetailsFormRef = React.createRef();
@@ -53,12 +54,14 @@ class ProductManagement extends PageBase {
     this.props.setAppLoading(true);
     const results = await Promise.all([
       this.loadCategories(),
-      this.loadSuppliers()
+      this.loadSuppliers(),
+      this.loadImporterAssignments()
     ]);
 
     this.props.setAppLoading(false);
     const categories = results[0];
     const suppliers = results[1];
+    const importerAssignments = results[2];
     let { selectedCategory } = this.state;
 
     selectedCategory = categories.length > 0 ? { ...categories[0] } : {};
@@ -70,7 +73,8 @@ class ProductManagement extends PageBase {
       selectedCategory,
       suppliers,
       selectedSupplier: suppliers.length > 0 ? { ...suppliers[0] } : {},
-      isLoading: false
+      isLoading: false,
+      importerAssignments
     });
   }
 
@@ -116,6 +120,28 @@ class ProductManagement extends PageBase {
     }
 
     return Promise.resolve(res.data.categories);
+  }
+
+  async loadImporterAssignments() {
+    const res = await (
+      await fetch(
+        API.Importer.ImporterAssignmentManagement.getImporterAssignments,
+        {
+          method: 'GET',
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+            'token': this.props.cookies.get(COOKIE_NAMES.token)
+          },
+          signal: this.abortController.signal
+        }
+      )
+    ).json();
+
+    if (res.status !== 200) {
+      return Promise.reject(res.errors[0]);
+    }
+
+    return Promise.resolve(res.data.importerAssignments);
   }
 
   loadCategoryProducts(category) {
@@ -392,7 +418,7 @@ class ProductManagement extends PageBase {
   }
 
   render() {
-    let { selectedProduct, suppliers } = this.state;
+    let { selectedProduct, suppliers, importerAssignments } = this.state;
     const columns = [
       {
         title: '',
@@ -467,13 +493,12 @@ class ProductManagement extends PageBase {
           <center>
             <QRCode
               value={record._id}
-              style={{ width: 30, height: 30 }}
+              style={{ width: 25, height: 25 }}
             />
           </center>
         )
       }
     ];
-
     return (
       <div className="product-management animated fadeIn">
 
@@ -482,20 +507,30 @@ class ProductManagement extends PageBase {
             <Col span={4}>
               <div className="product-management__container__left-sidebar">
                 <div className="product-management__container__left-sidebar__title">
-                  <h3>Danh mục sản phẩm</h3>
+                  <span className="product-management__container__left-sidebar__title__text">
+                    Danh mục sản phẩm ({this.state.filteredCategories.length})
+                  </span>
                 </div>
-                {!this.state.isLoading ? (
-                  <AddCategoryDialog
-                    addToListCategories={category => this.addToListCategories(category)}
-                  />
-                ) : <></>}
+
                 <div className="product-management__container__left-sidebar__search-box">
-                  <Input
-                    prefix={<SearchOutlined style={{ marginRight: 5 }} />}
-                    placeholder="Tìm kiếm danh mục..."
-                    onChange={e => this.onCategorySearchInputChange(e.target.value, this.state.categories)}
-                  />
+                  <Row align="middle" style={{ width: '100%' }}>
+                    <Col span={19}>
+                      <Input
+                        prefix={<SearchOutlined style={{ marginRight: 5 }} />}
+                        placeholder="Tìm kiếm..."
+                        onChange={e => this.onCategorySearchInputChange(e.target.value, this.state.categories)}
+                      />
+                    </Col>
+                    <Col span={5}>
+                      {!this.state.isLoading ? (
+                        <AddCategoryDialog
+                          addToListCategories={category => this.addToListCategories(category)}
+                        />
+                      ) : <></>}
+                    </Col>
+                  </Row>
                 </div>
+
                 <div className="product-management__container__left-sidebar__categories">
                   <div className="product-management__container__left-sidebar__categories__wrapper">
                     <List
@@ -508,7 +543,7 @@ class ProductManagement extends PageBase {
                             ${item._id === this.state.selectedCategory._id ? 'product-management__container__left-sidebar__categories__item--selected' : ''}
                           `}>
                             <Row>
-                              <Col span={22}>{item.name}</Col>
+                              <Col span={22}>{item.name} ({item.products.length})</Col>
                               <Col span={2}>{item._id === this.state.selectedCategory._id ? (
                                 <Dropdown overlay={
                                   <Menu className="product-management__container__left-sidebar__categories__item__menu">
@@ -554,16 +589,23 @@ class ProductManagement extends PageBase {
                     ) : <></>}
                   </Col>
                   <Col span={8}>
-                    <h3 className="product-management__container__topbar__title">
-                      <span>{this.state.selectedCategory.name}</span>
-                    </h3>
+                    {this.state.selectedCategory.products ? (
+                      <div className="product-management__container__topbar__title">
+                        <span>{this.state.selectedCategory.name} ({this.state.selectedCategory.products.length})</span>
+                      </div>
+                    ) : <></>}
                   </Col>
                   <Col span={8}>
                     <div className="product-management__container__topbar__features">
                       <div className="product-management__container__topbar__features__feature">
-                        <Badge count={100} overflowCount={99} className="product-management__container__topbar__features__feature__label">
-                          <BellFilled className="product-management__container__topbar__features__feature__icon product-management__container__topbar__features__feature__icon--bell" />
-                        </Badge>
+                        <Button
+                          className="product-management__container__topbar__features__feature__btn-show-assignment --alert"
+                          icon={<BellFilled className="product-management__container__topbar__features__feature__btn-show-assignment__icon --bell animated tada" />}
+                          type="primary"
+                          shape="round"
+                        >
+                          Có yêu cầu nhập hàng
+                        </Button>
                       </div>
                     </div>
                   </Col>

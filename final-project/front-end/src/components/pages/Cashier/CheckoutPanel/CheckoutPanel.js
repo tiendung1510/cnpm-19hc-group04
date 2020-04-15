@@ -2,10 +2,10 @@ import React from 'react';
 import './CheckoutPanel.style.scss';
 import { Menu, Modal, message } from 'antd';
 import {
-  QuestionCircleOutlined,
   HistoryOutlined,
   QrcodeOutlined,
-  ExclamationCircleOutlined
+  ExclamationCircleOutlined,
+  MessageOutlined
 } from '@ant-design/icons';
 import MoneyCounting from '../MoneyCounting/MoneyCounting';
 import TransactionHistory from '../TransactionHistory/TransactionHistory';
@@ -25,7 +25,7 @@ const navbarMenuItems = [
   {
     key: '2',
     title: 'Lịch sử yêu cầu nhập hàng',
-    icon: QuestionCircleOutlined
+    icon: MessageOutlined
   },
   {
     key: '3',
