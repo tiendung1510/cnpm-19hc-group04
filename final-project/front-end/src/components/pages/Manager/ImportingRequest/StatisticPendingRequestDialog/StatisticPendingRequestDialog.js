@@ -180,6 +180,7 @@ class StatisticPendingRequestDialog extends PageBase {
             shape="round"
             className="statistic-pending-request-dialog__btn-open-wrapper__btn"
             onClick={() => this.setDialogVisible(true)}
+            disabled={requiredProducts.length === 0}
           >
             Thống kê sản phẩm yêu cầu
           </Button>

@@ -5,35 +5,53 @@ $fontSize1: 10px;
 $fontSize2: 11px;
 $fontSize3: 12px;
 
-.importing-request__container__block__body__request--pending {
-  .importing-request__container__block__body__request--pending__summary {
+.pending-importing-request {
+  .pending-importing-request__summary {
     width: 100%;
     min-height: 95px;
     padding: 12.5px 10px 10px 12.5px;
     background: white;
     border: 1px solid #eee;
     margin-bottom: 5px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+
+    .pending-importing-request__summary__btn-cancel {
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      right: 0;
+      font-size: $fontSize2;
+      color: silver;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   
-    .importing-request__container__block__body__request--pending__summary__avatar {
+    .pending-importing-request__summary__avatar {
       margin-top: 2px;
     }
 
-    .importing-request__container__block__body__request--pending__summary__details {
+    .pending-importing-request__summary__details {
       text-align: left;
       display: flex;
       flex-direction: column;
 
-      .importing-request__container__block__body__request--pending__summary__details__title {
+      .pending-importing-request__summary__details__title {
         font-size: $fontSize3;
         font-weight: bold;
+        color: rgba($color: #000000, $alpha: 0.6);
       }
 
-      .importing-request__container__block__body__request--pending__summary__details__time {
+      .pending-importing-request__summary__details__time {
         font-size: $fontSize1;
         color: rgba($color: #000000, $alpha: 0.4);
       }
 
-      .importing-request__container__block__body__request--pending__summary__details__products {
+      .pending-importing-request__summary__details__products {
         font-size: $fontSize1;
         padding-top: 5px;
         margin: 0;
@@ -44,6 +62,96 @@ $fontSize3: 12px;
         overflow: hidden;
         text-overflow: ellipsis;
       }
+    }
+  }
+}
+
+.pending-importing-request__content {
+  .styled-scrollbar {
+    &::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba($color: #000000, $alpha: 0.2);
+      border-radius: $borderRadius1;
+    }
+  }
+
+  .ant-modal-content {
+    width: 40vw;
+    left: -10%;
+  }
+
+  .ant-modal-body {
+    padding-bottom: 0;
+  }
+
+  .pending-importing-request__content__labels,
+  .pending-importing-request__content__values {
+    list-style: none;
+    padding-left: 0;
+    font-size: $fontSize3;
+    line-height: 35px;
+  }
+  
+  .pending-importing-request__content__values {
+    .pending-importing-request__content__values__status {
+      font-weight: bold;
+      color: #ff8220;
+    }
+  }
+
+  .pending-importing-request__content__products {
+    $tableFontSize: $fontSize2;
+    margin-top: -5px;
+    .ant-table {
+      thead > tr > th {
+        font-size: $tableFontSize;
+        color: #ff8220;
+        font-weight: bold;
+        padding: 10px 0;
+
+        &:nth-of-type(1) {
+          padding-left: 10px;
+        }
+      }
+
+      tbody > tr {
+        transition: 0.2s;
+        td {
+          font-size: $tableFontSize;
+          padding: 0;
+        }
+
+        &:hover td {
+          background: none;
+        }
+      }
+    }
+
+    .ant-table-body {
+      @extend .styled-scrollbar;
+    }
+
+    .ant-table .ant-table-container::before,
+    .ant-table .ant-table-container::after {
+      width: 0;
+    }
+  }
+
+  .pending-importing-request__content__btn-cancel-wrapper {
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .pending-importing-request__content__btn-cancel-wrapper__btn {
+      border: 0;
+      background: white;
+      color: crimson;
+      box-shadow: none;
     }
   }
 }

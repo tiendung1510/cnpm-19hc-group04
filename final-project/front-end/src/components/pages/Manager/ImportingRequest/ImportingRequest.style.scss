@@ -70,6 +70,15 @@
           }
         }
 
+        .importing-request__container__block__header__btn-update {
+          font-size: $fontSize;
+          border: 0;
+          box-shadow: none;
+          margin-left: 5px;
+          color: gray;
+          background: none;
+        }
+
         .importing-request__container__block__header__number {
           position: absolute;
           right: 0;
@@ -103,7 +112,7 @@
         overflow: auto;
 
         &.--pending {
-          height: 80%;
+          height: 75%;
         }
       }
     }

@@ -19,6 +19,7 @@ export const API = {
     ImportingRequestManagement: {
       getImportingRequest: `${secret.API_URL}/importing-requests`,
       acceptImportingRequests: `${secret.API_URL}/importing-requests`,
+      cancelImportingRequest: `${secret.API_URL}/importing-requests/{importingRequestID}`,
 
       getImporterAssignments: `${secret.API_URL}/importer-assignments`
     },

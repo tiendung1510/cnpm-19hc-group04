@@ -6,11 +6,15 @@ export default {
     },
     ACCEPTED: {
       type: 'ACCEPTED',
-      name: 'Đã được chấp nhận'
+      name: 'Đang thực hiện'
     },
     FINISHED: {
       type: 'FINISHED',
-      name: 'Đã thực hiện xong'
+      name: 'Đã hoàn tất'
+    },
+    CANCELLED: {
+      type: 'CANCELLED',
+      name: 'Đã bị từ chối'
     }
   }
 }

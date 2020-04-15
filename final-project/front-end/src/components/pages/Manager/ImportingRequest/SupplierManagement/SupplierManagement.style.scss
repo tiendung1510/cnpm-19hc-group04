@@ -91,6 +91,10 @@
 
       .ant-list-item {
         padding-left: 4%;
+        transition: 0.2s;
+        &:hover {
+          background: #f8f8f8;
+        }
       }
     }
   }

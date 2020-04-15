@@ -19,6 +19,13 @@ $fontSize3: 12px;
       min-height: 35px;
       min-width: 95%;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+
+      &:disabled {
+        background: #eee;
+        color: silver;
+        box-shadow: none;
+        text-shadow: none;
+      }
     }
   }
 }
@@ -47,7 +54,6 @@ $fontSize3: 12px;
 
   .statistic-pending-request-dialog__content__products {
     $tableFontSize: $fontSize2;
-
     .ant-table {
       thead > tr > th {
         font-size: $tableFontSize;

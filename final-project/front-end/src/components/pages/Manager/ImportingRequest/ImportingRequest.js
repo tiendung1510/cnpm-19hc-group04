@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col } from 'antd';
+import { Row, Col, Button } from 'antd';
 import './ImportingRequest.style.scss';
 import { connect } from 'react-redux';
 import { withCookies } from 'react-cookie';
@@ -14,6 +14,7 @@ import CONSTANT from '../../../../constants/importing-request.constant';
 import USER_ROLES from '../../../../constants/user-role.constant';
 import StatisticPendingRequestDialog from './StatisticPendingRequestDialog/StatisticPendingRequestDialog';
 import ImporterAssignment from './ImporterAssignment/ImporterAssignment';
+import { ReloadOutlined } from '@ant-design/icons';
 
 class ImportingRequest extends PageBase {
 
@@ -135,6 +136,15 @@ class ImportingRequest extends PageBase {
     });
   }
 
+  setImportingRequests(importingRequests) {
+    this.setState({ importingRequests });
+  }
+
+  async reloadImportingRequests() {
+    const importingRequests = await this.loadImportingRequests();
+    this.setState({ importingRequests });
+  }
+
   render() {
     const { importingRequests, staffs, importerAssignments } = this.state;
     const pendingRequests = importingRequests.filter(r => r.status === CONSTANT.STATUS.PENDING.type);
@@ -150,6 +160,13 @@ class ImportingRequest extends PageBase {
                   <span className="importing-request__container__block__header__title --pending">
                     Đang chờ duyệt
                   </span>
+                  <Button
+                    type="primary"
+                    shape="circle"
+                    icon={<ReloadOutlined />}
+                    className="importing-request__container__block__header__btn-update"
+                    onClick={() => this.reloadImportingRequests()}
+                  />
                   <span className="importing-request__container__block__header__number --pending">
                     {pendingRequests.length}
                   </span>
@@ -160,6 +177,7 @@ class ImportingRequest extends PageBase {
                       key={r._id}
                       details={{ ...r }}
                       importers={staffs.filter(s => s.role === USER_ROLES.IMPORTER.type)}
+                      onUpdateImportingRequests={requests => this.setImportingRequests(requests)}
                     />
                   ))}
                 </div>
