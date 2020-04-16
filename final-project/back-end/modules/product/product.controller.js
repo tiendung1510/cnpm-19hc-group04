@@ -12,6 +12,8 @@ const ProductModel = require('./product.model');
 const { CATEGORY_MESSAGE } = require('../category/category.constant');
 const { SUPPLIER_MESSAGE } = require('../supplier/supplier.constant');
 const mongoose = require('mongoose');
+const ImporterAssignmentModel = require('../importer-assignment/importer-assignment.model');
+const ImportedProductModel = require('../imported-product/imported-product.model');
 
 const addProduct = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::addProduct::was called`);
@@ -141,6 +143,79 @@ const updateProduct = async (req, res, next) => {
       }
     }
 
+    //Check available quantity if product is required to be imported
+    let isImporterAssignmentUpdated = false;
+    if (productInfo.availableQuantity) {
+      if (productInfo.availableQuantity < 0) {
+        logger.info(`${CONTROLLER_NAME}::updateProduct::invalid available quantity`);
+        return res.status(HttpStatus.BAD_REQUEST).json({
+          status: HttpStatus.BAD_REQUEST,
+          errors: [PRODUCT_MESSAGE.ERROR.INVALID_PRODUCT_AVAILABLE_QUANTITY]
+        });
+      }
+
+      //In case of product is imported more
+      if (productInfo.availableQuantity > product.availableQuantity) {
+        const importerAssignments = await ImporterAssignmentModel
+          .find({
+            _id: req.fromUser._id,
+            finishedAt: null
+          }).populate('importedProducts');
+
+        if (importerAssignments.length === 0) {
+          logger.info(`${CONTROLLER_NAME}::updateProduct::product is not required to be imported`);
+          return res.status(HttpStatus.BAD_REQUEST).json({
+            status: HttpStatus.BAD_REQUEST,
+            errors: [PRODUCT_MESSAGE.ERROR.UPDATE_AVAILABLE_QUANTITY_DENIED]
+          });
+        }
+
+        let importerAssignment = importerAssignments[0];
+        let importedProduct = importerAssignment.importedProducts.find(item => item.product === product._id);
+        if (!importedProduct) {
+          logger.info(`${CONTROLLER_NAME}::updateProduct::product is not required to be imported`);
+          return res.status(HttpStatus.BAD_REQUEST).json({
+            status: HttpStatus.BAD_REQUEST,
+            errors: [PRODUCT_MESSAGE.ERROR.UPDATE_AVAILABLE_QUANTITY_DENIED]
+          });
+        }
+
+        const importedQuantity = productInfo.availableQuantity - product.availableQuantity;
+        if (importedQuantity > importedProduct.requiredQuanity) {
+          logger.info(`${CONTROLLER_NAME}::updateProduct::imported quantity exceeds required quantity`);
+          return res.status(HttpStatus.BAD_REQUEST).json({
+            status: HttpStatus.BAD_REQUEST,
+            errors: [PRODUCT_MESSAGE.ERROR.REQUIRED_QUANTITY_EXCEEDED]
+          });
+        }
+
+        importedProduct = await ImportedProductModel.findOne({ _id: importedProduct._id });
+        importedProduct.importedQuantity = importedQuantity;
+        await importedProduct.save();
+
+        //Check if importer assignment is finished
+        importerAssignment = await ImporterAssignmentModel
+          .findOne({ _id: importerAssignment._id })
+          .populate('importedProducts');
+
+        let flag = true;
+        for (const item of importerAssignment.importedProducts) {
+          if (item.importedQuantity < item.requiredQuanity) {
+            flag = false;
+            break;
+          }
+        }
+
+        if (flag) {
+          importerAssignment.finishedAt = new Date();
+          await importerAssignment.save();
+        }
+
+        // Notice product's available was updated for reloading importer assignemnt from client
+        isImporterAssignmentUpdated = true;
+      }
+    }
+
     for (const key in productInfo)
       product[key] = productInfo[key];
     await product.save();
@@ -152,7 +227,7 @@ const updateProduct = async (req, res, next) => {
     logger.info(`${CONTROLLER_NAME}::updateProduct::a product was updated`);
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
-      data: { product },
+      data: { product, isImporterAssignmentUpdated },
       messages: [PRODUCT_MESSAGE.SUCCESS.UPDATE_PRODUCT_SUCCESS]
     })
   } catch (error) {
