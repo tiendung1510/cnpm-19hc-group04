@@ -148,6 +148,8 @@ class ImportingRequest extends PageBase {
   render() {
     const { importingRequests, staffs, importerAssignments } = this.state;
     const pendingRequests = importingRequests.filter(r => r.status === CONSTANT.STATUS.PENDING.type);
+    const notFinishedAssignments = importerAssignments.filter(a => a.finishedAt === null);
+    const finishedAssignments = importerAssignments.filter(a => a.finishedAt !== null);
 
     return (
       <div className="importing-request animated fadeIn">
@@ -196,11 +198,11 @@ class ImportingRequest extends PageBase {
                     Đang thực hiện
                   </span>
                   <span className="importing-request__container__block__header__number --accepted">
-                    {importerAssignments.length}
+                    {notFinishedAssignments.length}
                   </span>
                 </div>
                 <div className="importing-request__container__block__body">
-                  {importerAssignments.map(a => (
+                  {notFinishedAssignments.map(a => (
                     <ImporterAssignment data={{ ...a }} key={a._id} />
                   ))}
                 </div>
@@ -214,10 +216,13 @@ class ImportingRequest extends PageBase {
                     Đã hoàn tất
                   </span>
                   <span className="importing-request__container__block__header__number --finished">
-                    0
+                    {finishedAssignments.length}
                   </span>
                 </div>
                 <div className="importing-request__container__block__body">
+                  {finishedAssignments.map(a => (
+                    <ImporterAssignment data={{ ...a }} key={a._id} />
+                  ))}
                 </div>
               </div>
             </Col>

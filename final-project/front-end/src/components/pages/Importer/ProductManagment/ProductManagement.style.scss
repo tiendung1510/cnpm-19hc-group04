@@ -51,7 +51,6 @@
 
     .product-management__container__left-sidebar {
       height: 100%;
-      border-right: 1px solid #eee;
       padding: 0 (0.5 * $padding);
 
       .product-management__container__left-sidebar__title {
@@ -64,7 +63,6 @@
           font-weight: bold;
           background: white;
           color: #ff8220;
-          padding: 5px 0;
           padding-left: 30px;
           min-width: 220px;
           min-height: 35px;
@@ -203,7 +201,7 @@
             align-items: center;
             border: 0;
             // background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
-            background: #4bb543;
+            background: #ff8220;
             font-weight: bold;
             font-size: $primaryFontSize;
             box-shadow: $boxShadow1;

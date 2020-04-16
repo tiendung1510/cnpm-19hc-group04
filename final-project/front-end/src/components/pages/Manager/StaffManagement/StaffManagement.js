@@ -24,7 +24,8 @@ class StaffManagement extends PageBase {
       filteredStaffs: [],
       selectedStaff: null,
       searchStaffText: '',
-      filteredStaffRole: null
+      filteredStaffRole: null,
+      isLoading: true
     }
   }
 
@@ -54,32 +55,33 @@ class StaffManagement extends PageBase {
       )
     ).json();
 
-    if (res.status === 200) {
-      const { users } = res.data;
-      let { filteredStaffs, selectedStaff } = this.state;
-
-      if (!role) {
-        filteredStaffs = [...users];
-      } else {
-        filteredStaffs = users.filter(u => u.role === role);
-      }
-
-      if (filteredStaffs.length > 0) {
-        if (defaultStaff) {
-          selectedStaff = defaultStaff;
-        } else {
-          selectedStaff = filteredStaffs[0];
-        }
-      } else {
-        selectedStaff = null;
-      }
-
-      this.setState({ staffs: users, filteredStaffs, selectedStaff });
-    } else {
+    this.props.setAppLoading(false);
+    this.setState({ isLoading: false });
+    if (res.status !== 200) {
       message.error(res.errors[0]);
+      return;
     }
 
-    this.props.setAppLoading(false);
+    const { users } = res.data;
+    let { filteredStaffs, selectedStaff } = this.state;
+
+    if (!role) {
+      filteredStaffs = [...users];
+    } else {
+      filteredStaffs = users.filter(u => u.role === role);
+    }
+
+    if (filteredStaffs.length > 0) {
+      if (defaultStaff) {
+        selectedStaff = defaultStaff;
+      } else {
+        selectedStaff = filteredStaffs[0];
+      }
+    } else {
+      selectedStaff = null;
+    }
+
+    this.setState({ staffs: users, filteredStaffs, selectedStaff });
   }
 
   onClickListStaffsRow(record) {
@@ -185,14 +187,15 @@ class StaffManagement extends PageBase {
   }
 
   render() {
-    let { filteredStaffs, selectedStaff } = this.state;
+    if (this.state.isLoading)
+      return <div className="staff-management"></div>
 
+    let { filteredStaffs, selectedStaff } = this.state;
     filteredStaffs = filteredStaffs.map((s, i) => {
       let staff = JSON.parse(JSON.stringify(s));
       staff.key = i;
       return staff;
     });
-
     let columns;
     if (filteredStaffs.length === 0) {
       columns = [];
@@ -279,8 +282,8 @@ class StaffManagement extends PageBase {
     }
 
     return (
-      <div className="staff-management animated fadeIn">
-        <div className="staff-management__body">
+      <div className="staff-management">
+        <div className="staff-management__body animated fadeInUp">
           <Row className="staff-management__body__staffs">
             <Col span={4}>
               <div className="staff-management__body__staffs__sidebar">
@@ -314,7 +317,10 @@ class StaffManagement extends PageBase {
                 </div>
 
                 <ul className="staff-management__body__staffs__sidebar__staff-features">
-                  <li className="staff-management__body__staffs__sidebar__staff-features__feature">
+                  <li
+                    className="staff-management__body__staffs__sidebar__staff-features__feature animated fadeInRight"
+                    style={{ animationDelay: '0.4s' }}
+                  >
                     {selectedStaff ? (
                       <UpdateStaffDialog
                         selectedStaff={{ ...selectedStaff }}
@@ -323,7 +329,8 @@ class StaffManagement extends PageBase {
                     ) : (<Skeleton.Input style={{ width: '100%', height: 22 }} active={true} size="small" />)}
                   </li>
                   <li
-                    className="staff-management__body__staffs__sidebar__staff-features__feature"
+                    className="staff-management__body__staffs__sidebar__staff-features__feature animated fadeInRight"
+                    style={{ animationDelay: '0.6s' }}
                     onClick={() => this.openRemoveStaffConfirm(selectedStaff)}
                   >
                     {selectedStaff ? (

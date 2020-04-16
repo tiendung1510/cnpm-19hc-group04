@@ -69,7 +69,7 @@ class WorkScheduleReport extends Component {
     return (
       <div>
         <Card
-          className={`reporting__menu__item`}
+          className="reporting__menu__item animated jackInTheBox"
           style={{ width: '100%', animationDuration: `${0.5 * (index + 1)}s` }}
           cover={
             <img

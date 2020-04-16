@@ -37,7 +37,8 @@ class Reporting extends PageBase {
     super(props);
 
     this.state = {
-      staffs: []
+      staffs: [],
+      isLoading: true
     }
   }
 
@@ -62,6 +63,7 @@ class Reporting extends PageBase {
     ).json();
 
     this.props.setAppLoading(false);
+    this.setState({ isLoading: false });
     if (res.status !== 200) {
       message.error(res.errors[0]);
       return;
@@ -71,8 +73,11 @@ class Reporting extends PageBase {
   }
 
   render() {
+    if(this.state.isLoading)
+      return <div className="reporting"></div>
+
     return (
-      <div className="reporting animated fadeIn">
+      <div className="reporting">
         <div className="reporting__menu">
           <Row justify="center" align="middle" gutter={[70, 70]} style={{ width: '100%' }}>
             <Col span={8}>

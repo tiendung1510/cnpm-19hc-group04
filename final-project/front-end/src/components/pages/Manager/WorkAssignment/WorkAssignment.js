@@ -33,7 +33,8 @@ class WorkAssignment extends PageBase {
       selectedWorkYear: null,
       workSchedules: [],
       listWorkYears: [],
-      listStaffs: []
+      listStaffs: [],
+      isLoading: true
     }
   }
 
@@ -103,6 +104,8 @@ class WorkAssignment extends PageBase {
     ).json();
 
     this.props.setAppLoading(false);
+    this.setState({ isLoading: false });
+
     const { workSchedules, availableYears } = res.data
     const listWorkYears = availableYears.map(y => ({ text: 'Năm ' + y, value: y }));
     let { selectedWorkSchedule } = this.state;
@@ -540,6 +543,9 @@ class WorkAssignment extends PageBase {
   }
 
   render() {
+    if (this.state.isLoading)
+      return <div style={{ background: '#ff8220', width: '100%', height: '100vh' }}></div>
+
     let {
       workSchedules,
       selectedWorkSchedule,
@@ -547,7 +553,7 @@ class WorkAssignment extends PageBase {
       selectedWorkShift,
       listWorkYears,
       selectedWorkYear,
-      listStaffs
+      listStaffs,
     } = this.state;
 
     selectedWorkSchedule.workDays = this.generateWorkDays(selectedWorkSchedule);
@@ -623,7 +629,7 @@ class WorkAssignment extends PageBase {
           </Col>
           <Col className="work-assignment__content" span={20}>
             <div className="work-assignment__content__task-work-day-panel">
-              <div className="work-assignment__content__task-work-day-panel__panel">
+              <div className="work-assignment__content__task-work-day-panel__panel animated slideInRight">
 
                 <div className="work-assignment__content__task-work-day-panel__panel__main">
                   <h3>{
@@ -788,12 +794,13 @@ class WorkAssignment extends PageBase {
                       {row.map((col, iCol) => (
                         <Col key={`${iRow + 1}_${iCol}`} span={2}
                           className={`
-                            animated fadeIn
+                            animated zoomIn 
                             work-assignment__content__body__tabs__work-schedule__work-day 
                             ${col.workDayInMonth === selectedWorkDay.workDayInMonth ?
                               'work-assignment__content__body__tabs__work-schedule__work-day--selected' : ''
                             }
                           `}
+                          style={{ animationDelay: `${0.03 * iRow * iCol}s` }}
                           onClick={() => this.handleSelectWorkDay(iRow, iCol)}>
                           <span
                             className={`

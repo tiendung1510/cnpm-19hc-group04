@@ -1,0 +1,78 @@
+.importing-assignment-dialog {
+  $borderRadius0: 2px;
+  $borderRadius1: 3px;
+  $fontSize0: 9px;
+  $fontSize1: 10px;
+  $fontSize2: 11px;
+  $fontSize3: 12px;
+  
+  .styled-scrollbar {
+    &::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba($color: #000000, $alpha: 0.2);
+      border-radius: $borderRadius1;
+    }
+  }
+
+  .ant-modal-content {
+    width: 50vw;
+    left: -25%;
+  }
+
+  .importing-assignment-dialog__labels,
+  .importing-assignment-dialog__values {
+    list-style: none;
+    padding-left: 0;
+    font-size: $fontSize3;
+    line-height: 38px;
+  }
+  
+  .importing-assignment-dialog__values {
+    .importing-assignment-dialog__values__status {
+      font-weight: bold;
+      color: #ff8220;
+    }
+  }
+
+  .importing-assignment-dialog__products {
+    $tableFontSize: $fontSize2;
+    margin-top: -5px;
+    .ant-table {
+      thead > tr > th {
+        font-size: $tableFontSize;
+        color: #ff8220;
+        font-weight: bold;
+        padding: 10px 0;
+
+        &:nth-of-type(1) {
+          padding-left: 10px;
+        }
+      }
+
+      tbody > tr {
+        transition: 0.2s;
+        td {
+          font-size: $tableFontSize;
+          padding: 0;
+        }
+
+        &:hover td {
+          background: none;
+        }
+      }
+    }
+
+    .ant-table-body {
+      @extend .styled-scrollbar;
+    }
+
+    .ant-table .ant-table-container::before,
+    .ant-table .ant-table-container::after {
+      width: 0;
+    }
+  }
+}

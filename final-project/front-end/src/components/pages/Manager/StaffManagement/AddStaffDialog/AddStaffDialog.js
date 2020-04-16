@@ -83,7 +83,8 @@ class AddStaffDialog extends PageBase {
       <div className="staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog">
         <Tooltip placement="bottom" title="Thêm nhân viên">
           <Button
-            className="staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__btn-open"
+            className="staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__btn-open animated bounceIn"
+            style={{ animationDelay: '0.8s' }}
             shape="circle"
             type="link"
             icon={<PlusOutlined />}

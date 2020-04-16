@@ -70,7 +70,7 @@ class SupplierManagement extends PageBase {
   }
 
   async loadSuppliers() {
-    this.props.setAppLoading(true);
+    // this.props.setAppLoading(true);
     const res = await (
       await fetch(
         API.Manager.SupplierManagment.getSuppliers,
@@ -85,7 +85,7 @@ class SupplierManagement extends PageBase {
       )
     ).json();
 
-    this.props.setAppLoading(false);
+    // this.props.setAppLoading(false);
     if (res.status !== 200) {
       message.error(res.errors[0]);
       return;

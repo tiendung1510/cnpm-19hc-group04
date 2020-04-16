@@ -94,7 +94,9 @@ export default class ImporterAssignment extends PageBase {
                   {data.importer.fullname}
                 </span>
                 <span className="importer-assignment__summary__details__time">
-                  Bàn giao lúc {moment(data.createdAt).format('HH:mm DD-MM-YYYY')}
+                  {data.finishedAt ? (
+                    <span>Hoàn tất lúc {moment(data.finishedAt).format('HH:mm DD-MM-YYYY')}</span>
+                  ) : (<span>Bàn giao lúc {moment(data.createdAt).format('HH:mm DD-MM-YYYY')}</span>)}
                 </span>
                 <p className="importer-assignment__summary__details__products">
                   {data.importedProducts.map((item, index) => {
@@ -122,7 +124,8 @@ export default class ImporterAssignment extends PageBase {
                 <li>Người thực hiện</li>
                 <li>Bàn giao lúc</li>
                 <li>Trạng thái</li>
-                <li>Mức độ hoàn thành</li>
+                {data.finishedAt ? <></> : (<li>Mức độ hoàn thành</li>)}
+                {data.finishedAt ? (<li>Hoàn tất lúc</li>) : <></>}
                 <li>Tổng chi phí nhập hàng</li>
                 <li>Tổng sản phẩm cần nhập</li>
               </ul>
@@ -131,16 +134,28 @@ export default class ImporterAssignment extends PageBase {
               <ul className="importer-assignment__content__values">
                 <li><strong>{data.importer.fullname}</strong></li>
                 <li>{moment(data.createdAt).format('HH:mm DD-MM-YYYY')}</li>
-                <li><span className="importer-assignment__content__values__status">{IMPORTING_REQUEST.STATUS.ACCEPTED.name}</span></li>
+                <li><span className="importer-assignment__content__values__status">
+                  {data.finishedAt ? (
+                    <span>{IMPORTING_REQUEST.STATUS.FINISHED.name}</span>
+                  ) : (<span>{IMPORTING_REQUEST.STATUS.ACCEPTED.name}</span>)}
+                </span></li>
                 <li>
-                  <Progress
-                    strokeColor="#ff8220"
-                    percent={(importedQuantityTotal / requiredQuantityTotal) * 100} status="active"
-                  />
+                  {data.finishedAt ? <></> : (
+                    <Progress
+                      strokeColor="#ff8220"
+                      percent={(importedQuantityTotal / requiredQuantityTotal) * 100} status="active"
+                    />
+                  )}
                 </li>
+                {data.finishedAt ? (<li>{moment(data.finishedAt).format('HH:mm DD-MM-YYYY')}</li>) : <></>}
                 <li>
                   <strong>
-                    <span style={{ marginRight: 3 }}>{importedPriceTotal}</span>/
+                    <NumberFormat
+                      value={importedPriceTotal}
+                      displayType="text"
+                      thousandSeparator={true}
+                      style={{ marginRight: 3 }}
+                    />/
                     <NumberFormat
                       value={data.priceTotal}
                       displayType="text"

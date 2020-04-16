@@ -17,6 +17,7 @@ import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
 import { sortByCreatedAt } from '../../../../services/collection-sorting.service';
 import EditCategoryDialog from './EditCategoryDialog/EditCategoryDialog';
 import QRCode from 'qrcode.react';
+import ImportingAssignmentDialog from './ImportingAssignmentDialog/ImportingAssignmentDialog';
 
 const { confirm } = Modal;
 
@@ -40,7 +41,9 @@ class ProductManagement extends PageBase {
       filteredCategories: [],
       suppliers: [],
       isLoading: true,
-      importerAssignments: []
+      importerAssignments: [],
+      isImportingAssignmentDialogVisible: false,
+      importedProducts: []
     }
 
     this.productDetailsFormRef = React.createRef();
@@ -59,14 +62,20 @@ class ProductManagement extends PageBase {
     ]);
 
     this.props.setAppLoading(false);
+
+    //Category
     const categories = results[0];
-    const suppliers = results[1];
-    const importerAssignments = results[2];
     let { selectedCategory } = this.state;
-
     selectedCategory = categories.length > 0 ? { ...categories[0] } : {};
-
     this.loadCategoryProducts(selectedCategory);
+
+    //Supplier
+    const suppliers = results[1];
+
+    //Importer Assignment
+    const importerAssignments = results[2];
+    const importedProducts = importerAssignments.length === 0 ? [] : importerAssignments[0].importedProducts.map(item => item);
+
     this.setState({
       categories,
       filteredCategories: categories,
@@ -74,7 +83,8 @@ class ProductManagement extends PageBase {
       suppliers,
       selectedSupplier: suppliers.length > 0 ? { ...suppliers[0] } : {},
       isLoading: false,
-      importerAssignments
+      importerAssignments,
+      importedProducts
     });
   }
 
@@ -222,8 +232,12 @@ class ProductManagement extends PageBase {
     selectedCategory.products = products;
     this.loadCategoryProducts(selectedCategory);
     this.setState({ selectedProduct });
-    this.toggleProductDetailsPanel(false);
-    message.success(res.messages[0]);
+
+    if (res.data.isImporterAssignmentUpdated) {
+      this.reloadImporterAssignments(res.messages[0]);
+    } else {
+      message.success(res.messages[0]);
+    }
   }
 
   openRemoveProductDialog() {
@@ -417,7 +431,38 @@ class ProductManagement extends PageBase {
     this.setState({ suppliers });
   }
 
+  setImportingAssignmentDialogVisible(isVisible) {
+    this.setState({ isImportingAssignmentDialogVisible: isVisible });
+  }
+
+  isImportedProduct(productID) {
+    const { importedProducts } = this.state;
+    const index = _.findIndex(importedProducts, item => item.product._id === productID);
+    if (index < 0)
+      return false;
+
+    if (importedProducts[index].importedQuantity === importedProducts[index].requiredQuantity)
+      return false;
+
+    return true;
+  }
+
+  async reloadImporterAssignments(updatingProductMessage) {
+    this.props.setAppLoading(true);
+    const importerAssignments = await this.loadImporterAssignments();
+    const importedProducts = importerAssignments.length === 0 ? [] : importerAssignments[0].importedProducts.map(item => item);
+    this.props.setAppLoading(false);
+    message.success(updatingProductMessage);
+    this.setState({
+      importerAssignments,
+      importedProducts
+    });
+  }
+
   render() {
+    if (this.state.isLoading)
+      return <div className="product-management"></div>;
+
     let { selectedProduct, suppliers, importerAssignments } = this.state;
     const columns = [
       {
@@ -499,8 +544,9 @@ class ProductManagement extends PageBase {
         )
       }
     ];
+
     return (
-      <div className="product-management animated fadeIn">
+      <div className="product-management animated fadeInUp">
 
         <div className="product-management__container">
           <Row>
@@ -598,14 +644,24 @@ class ProductManagement extends PageBase {
                   <Col span={8}>
                     <div className="product-management__container__topbar__features">
                       <div className="product-management__container__topbar__features__feature">
-                        <Button
-                          className="product-management__container__topbar__features__feature__btn-show-assignment --alert"
-                          icon={<BellFilled className="product-management__container__topbar__features__feature__btn-show-assignment__icon --bell animated tada" />}
-                          type="primary"
-                          shape="round"
-                        >
-                          Có yêu cầu nhập hàng
-                        </Button>
+                        {this.state.importedProducts.length > 0 ? (
+                          <div>
+                            <Button
+                              className="product-management__container__topbar__features__feature__btn-show-assignment --alert"
+                              icon={<BellFilled className="product-management__container__topbar__features__feature__btn-show-assignment__icon --bell animated tada" />}
+                              type="primary"
+                              shape="round"
+                              onClick={() => this.setImportingAssignmentDialogVisible(true)}
+                            >
+                              Có yêu cầu nhập hàng
+                            </Button>
+                            <ImportingAssignmentDialog
+                              isVisible={this.state.isImportingAssignmentDialogVisible}
+                              setImportingAssignmentDialogVisible={isVisible => this.setImportingAssignmentDialogVisible(isVisible)}
+                              data={{ ...importerAssignments[0] }}
+                            />
+                          </div>
+                        ) : <></>}
                       </div>
                     </div>
                   </Col>
@@ -628,6 +684,7 @@ class ProductManagement extends PageBase {
                         <Row>
                           <Col span={4}>
                             <Button
+                              type="primary"
                               shape="circle"
                               icon={<CloseOutlined />}
                               className="product-management__container__content__product-details__panel__header__btn-close"
@@ -739,6 +796,7 @@ class ProductManagement extends PageBase {
                               <InputNumber
                                 formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                 parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                disabled={!this.isImportedProduct(selectedProduct._id)}
                               />
                             </Form.Item>
 
