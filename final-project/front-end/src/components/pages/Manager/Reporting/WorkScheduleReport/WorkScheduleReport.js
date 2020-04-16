@@ -74,7 +74,7 @@ class WorkScheduleReport extends Component {
           cover={
             <img
               alt="example"
-              src={basicInfo.cover}
+              src={require(`../../../../../assets/images/${basicInfo.cover}`)}
             />
           }
           onClick={() => this.setDialogVisible(true)}

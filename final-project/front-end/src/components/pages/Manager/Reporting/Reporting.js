@@ -14,19 +14,19 @@ const reportBasicInfos = [
   {
     title: REPORTS.WORK_SCHEDULE.title,
     type: REPORTS.WORK_SCHEDULE.type,
-    cover: 'https://image.freepik.com/free-vector/flat-design-characters-doing-time-management_23-2148274068.jpg',
+    cover: 'work-schedule.jpg',
     description: 'Báo cáo lịch làm việc trong tuần của một nhân viên.'
   },
   {
     title: REPORTS.SELLING.title,
     type: REPORTS.SELLING.type,
-    cover: 'https://www.wisertechsolutions.ca/wp-content/uploads/2019/05/ecom2.png',
+    cover: 'selling.png',
     description: 'Thống kê lượng sản phẩm đã bán ra và đang tồn kho trong tháng của siêu thị.'
   },
   {
     title: REPORTS.PAYMENT_REVENUE.title,
     type: REPORTS.PAYMENT_REVENUE.type,
-    cover: 'https://intuitionsoftech.com.au/wp-content/uploads/2019/09/it-home.png',
+    cover: 'revenue.png',
     description: 'Báo cáo, thống kê thu chi trong tháng của siêu thị.'
   }
 ]
@@ -73,7 +73,7 @@ class Reporting extends PageBase {
   }
 
   render() {
-    if(this.state.isLoading)
+    if (this.state.isLoading)
       return <div className="reporting"></div>
 
     return (
