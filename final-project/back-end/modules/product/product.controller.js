@@ -167,12 +167,12 @@ const updateProduct = async (req, res, next) => {
       if (productInfo.availableQuantity > product.availableQuantity) {
         const importerAssignments = await ImporterAssignmentModel
           .find({
-            _id: req.fromUser._id,
+            importer: req.fromUser._id,
             finishedAt: null
           }).populate('importedProducts');
 
         if (importerAssignments.length === 0) {
-          logger.info(`${CONTROLLER_NAME}::updateProduct::product is not required to be imported`);
+          logger.info(`${CONTROLLER_NAME}::updateProduct::product is not required to be imported 1`);
           return res.status(HttpStatus.BAD_REQUEST).json({
             status: HttpStatus.BAD_REQUEST,
             errors: [PRODUCT_MESSAGE.ERROR.UPDATE_AVAILABLE_QUANTITY_DENIED]
@@ -180,9 +180,9 @@ const updateProduct = async (req, res, next) => {
         }
 
         let importerAssignment = importerAssignments[0];
-        let importedProduct = importerAssignment.importedProducts.find(item => item.product === product._id);
+        let importedProduct = importerAssignment.importedProducts.find(item => item.product.toString() === product._id.toString());
         if (!importedProduct) {
-          logger.info(`${CONTROLLER_NAME}::updateProduct::product is not required to be imported`);
+          logger.info(`${CONTROLLER_NAME}::updateProduct::product is not required to be imported 2`);
           return res.status(HttpStatus.BAD_REQUEST).json({
             status: HttpStatus.BAD_REQUEST,
             errors: [PRODUCT_MESSAGE.ERROR.UPDATE_AVAILABLE_QUANTITY_DENIED]
@@ -190,7 +190,7 @@ const updateProduct = async (req, res, next) => {
         }
 
         const importedQuantity = productInfo.availableQuantity - product.availableQuantity;
-        if (importedQuantity > importedProduct.requiredQuanity) {
+        if (importedQuantity > importedProduct.requiredQuantity) {
           logger.info(`${CONTROLLER_NAME}::updateProduct::imported quantity exceeds required quantity`);
           return res.status(HttpStatus.BAD_REQUEST).json({
             status: HttpStatus.BAD_REQUEST,
@@ -199,6 +199,14 @@ const updateProduct = async (req, res, next) => {
         }
 
         importedProduct = await ImportedProductModel.findOne({ _id: importedProduct._id });
+        if (importedProduct.importedQuantity === importedProduct.requiredQuantity && importedProduct.requiredQuantity >= 1) {
+          logger.info(`${CONTROLLER_NAME}::updateProduct::product is not required to be imported 2`);
+          return res.status(HttpStatus.BAD_REQUEST).json({
+            status: HttpStatus.BAD_REQUEST,
+            errors: [PRODUCT_MESSAGE.ERROR.UPDATE_AVAILABLE_QUANTITY_DENIED]
+          });
+        }
+
         importedProduct.importedQuantity = importedQuantity;
         await importedProduct.save();
 
@@ -209,7 +217,7 @@ const updateProduct = async (req, res, next) => {
 
         let flag = true;
         for (const item of importerAssignment.importedProducts) {
-          if (item.importedQuantity < item.requiredQuanity) {
+          if (item.importedQuantity < item.requiredQuantity) {
             flag = false;
             break;
           }
