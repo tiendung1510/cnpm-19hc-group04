@@ -14,6 +14,8 @@ const { SUPPLIER_MESSAGE } = require('../supplier/supplier.constant');
 const mongoose = require('mongoose');
 const ImporterAssignmentModel = require('../importer-assignment/importer-assignment.model');
 const ImportedProductModel = require('../imported-product/imported-product.model');
+const ProductActionLogModel = require('../product-action-log/product-action-log.model');
+const { PRODUCT_ACTION_TYPE } = require('../product-action-log/product-action-log.constant');
 
 const addProduct = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::addProduct::was called`);
@@ -84,6 +86,13 @@ const addProduct = async (req, res, next) => {
     newProduct = await ProductModel.findOne({ _id: newProduct._id })
       .populate('category', '-products')
       .populate('supplier', '-products');
+
+    const productActionLog = new ProductActionLogModel({
+      executor: req.fromUser._id,
+      product: newProduct._id,
+      actionType: PRODUCT_ACTION_TYPE.ADD.type
+    });
+    await productActionLog.save();
 
     logger.info(`${CONTROLLER_NAME}::addProduct::a new product was added`);
     return res.status(HttpStatus.OK).json({
@@ -216,13 +225,28 @@ const updateProduct = async (req, res, next) => {
       }
     }
 
-    for (const key in productInfo)
+    let updatedFields = [];
+    for (const key in productInfo) {
       product[key] = productInfo[key];
+      updatedFields.push({
+        name: key,
+        oldValue: product[key],
+        newValue: productInfo[key]
+      });
+    }
     await product.save();
 
     product = await ProductModel.findOne({ _id: mongoose.Types.ObjectId(productID) })
       .populate('supplier', '-products')
       .populate('category', '-products');
+
+    const productActionLog = new ProductActionLogModel({
+      executor: req.fromUser._id,
+      product: product._id,
+      actionType: PRODUCT_ACTION_TYPE.UPDATE.type,
+      fields: updatedFields
+    });
+    await productActionLog.save();
 
     logger.info(`${CONTROLLER_NAME}::updateProduct::a product was updated`);
     return res.status(HttpStatus.OK).json({
@@ -277,6 +301,13 @@ const removeProduct = async (req, res, next) => {
     await category.save();
 
     await ProductModel.deleteOne({ _id: product._id });
+
+    const productActionLog = new ProductActionLogModel({
+      executor: req.fromUser._id,
+      product: product._id,
+      actionType: PRODUCT_ACTION_TYPE.REMOVE.type
+    });
+    await productActionLog.save();
 
     logger.info(`${CONTROLLER_NAME}::removeProduct::a product was removed`);
     return res.status(HttpStatus.OK).json({
