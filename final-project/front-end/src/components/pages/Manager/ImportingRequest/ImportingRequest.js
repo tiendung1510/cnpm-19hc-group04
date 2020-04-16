@@ -173,6 +173,11 @@ class ImportingRequest extends PageBase {
                     {pendingRequests.length}
                   </span>
                 </div>
+                <StatisticPendingRequestDialog
+                  pendingRequests={[...pendingRequests]}
+                  importers={staffs.filter(s => s.role === USER_ROLES.IMPORTER.type && s.isImporterAssignmentFinished)}
+                  onAcceptRequests={() => this.onAcceptRequests()}
+                />
                 <div className="importing-request__container__block__body --pending">
                   {pendingRequests.map(r => (
                     <PendingRequest
@@ -183,11 +188,6 @@ class ImportingRequest extends PageBase {
                     />
                   ))}
                 </div>
-                <StatisticPendingRequestDialog
-                  pendingRequests={[...pendingRequests]}
-                  importers={staffs.filter(s => s.role === USER_ROLES.IMPORTER.type && s.isImporterAssignmentFinished)}
-                  onAcceptRequests={() => this.onAcceptRequests()}
-                />
               </div>
             </Col>
             <Col span={5}>
