@@ -61,7 +61,6 @@ class ProductManagement extends PageBase {
       this.loadSuppliers(),
       this.loadImporterAssignments()
     ]);
-
     this.props.setAppLoading(false);
 
     //Category
