@@ -15,7 +15,8 @@ class TransactionHistory extends PageBase {
   constructor(props) {
     super(props);
     this.state = {
-      checkoutSessions: []
+      checkoutSessions: [],
+      isLoading: true
     }
   }
 
@@ -45,7 +46,7 @@ class TransactionHistory extends PageBase {
       return;
     }
 
-    this.setState({ checkoutSessions: res.data.checkoutSessions });
+    this.setState({ checkoutSessions: res.data.checkoutSessions, isLoading: false });
   }
 
   render() {
@@ -58,51 +59,53 @@ class TransactionHistory extends PageBase {
             <span className="transaction-history__header__title__text">Lịch sử giao dịch</span>
           </div>
         </div>
-        <div className="transaction-history__content animated slideInUp">
-          <div className="transaction-history__content__timeline">
-            {checkoutSessions.length === 0 ? (
-              <div className="transaction-history__content__timeline__empty">
-                <Empty description="Chưa có ghi nhận nào" />
-              </div>
-            ) : (
-                <Timeline mode="left">
-                  {checkoutSessions.map(cs => {
-                    return cs.soldItems.length > 0 ? (
-                      <Timeline.Item
-                        key={cs._id}
-                        label={cs.submittedAt ? moment(cs.submittedAt).format('DD-MM-YYYY HH:mm') : moment().format('DD-MM-YYYY HH:mm')}
-                        color="#ff8220">
-                        <div className="transaction-history__content__timeline__item animated fadeInRight">
-                          <p className="transaction-history__content__timeline__item__list-products">
-                            {cs.soldItems.map((item, index) => {
-                              return index < cs.soldItems.length - 1 ? (
-                                <span key={index}>{`${item.product.name} x${item.quantity}, `}</span>
-                              ) : (
-                                  <span key={index}>{`${item.product.name} x${item.quantity}.`}</span>
-                                )
-                            })}
-                          </p>
-                          <div className="transaction-history__content__timeline__item__price-total">
-                            <span className="transaction-history__content__timeline__item__price-total__label">
-                              Tổng tiền:
-                            </span>
-                            <NumberFormat
-                              className="transaction-history__content__timeline__item__price-total__number"
-                              value={Number(cs.priceTotal)}
-                              displayType="text"
-                              thousandSeparator={true}
-                              suffix=" VNĐ"
-                              style={{ fontWeight: 'bold' }}
-                            />
+        {!this.state.isLoading ? (
+          <div className="transaction-history__content animated slideInUp">
+            <div className="transaction-history__content__timeline">
+              {checkoutSessions.length === 0 ? (
+                <div className="transaction-history__content__timeline__empty">
+                  <Empty description="Chưa có ghi nhận nào" />
+                </div>
+              ) : (
+                  <Timeline mode="left">
+                    {checkoutSessions.map(cs => {
+                      return cs.soldItems.length > 0 ? (
+                        <Timeline.Item
+                          key={cs._id}
+                          label={cs.submittedAt ? moment(cs.submittedAt).format('DD-MM-YYYY HH:mm') : moment().format('DD-MM-YYYY HH:mm')}
+                          color="#ff8220">
+                          <div className="transaction-history__content__timeline__item animated fadeInRight" style={{ animationDelay: '0.5s' }}>
+                            <p className="transaction-history__content__timeline__item__list-products">
+                              {cs.soldItems.map((item, index) => {
+                                return index < cs.soldItems.length - 1 ? (
+                                  <span key={index}>{`${item.product.name} x${item.quantity}, `}</span>
+                                ) : (
+                                    <span key={index}>{`${item.product.name} x${item.quantity}.`}</span>
+                                  )
+                              })}
+                            </p>
+                            <div className="transaction-history__content__timeline__item__price-total">
+                              <span className="transaction-history__content__timeline__item__price-total__label">
+                                Tổng tiền:
+                              </span>
+                              <NumberFormat
+                                className="transaction-history__content__timeline__item__price-total__number"
+                                value={Number(cs.priceTotal)}
+                                displayType="text"
+                                thousandSeparator={true}
+                                suffix=" VNĐ"
+                                style={{ fontWeight: 'bold' }}
+                              />
+                            </div>
                           </div>
-                        </div>
-                      </Timeline.Item>
-                    ) : <></>
-                  })}
-                </Timeline>
-              )}
+                        </Timeline.Item>
+                      ) : <></>
+                    })}
+                  </Timeline>
+                )}
+            </div>
           </div>
-        </div>
+        ) : <></>}
       </div>
     )
   }

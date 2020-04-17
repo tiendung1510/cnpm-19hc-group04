@@ -13,6 +13,7 @@ export const API = {
       submitCheckoutSession: `${secret.API_URL}/checkout-sessions/{checkoutSessionID}`,
 
       createImportingRequest: `${secret.API_URL}/importing-requests`,
+      getImportingRequests: `${secret.API_URL}/users/importing-requests`
     }
   },
   Manager: {

@@ -8,6 +8,7 @@ import {
   MessageOutlined
 } from '@ant-design/icons';
 import MoneyCounting from '../MoneyCounting/MoneyCounting';
+import ImportingRequestHistory from '../ImportingRequestHistory/ImportingRequestHistory';
 import TransactionHistory from '../TransactionHistory/TransactionHistory';
 import { connect } from 'react-redux';
 import { API } from '../../../../constants/api.constant';
@@ -24,7 +25,7 @@ const navbarMenuItems = [
   },
   {
     key: '2',
-    title: 'Lịch sử yêu cầu nhập hàng',
+    title: 'Yêu cầu nhập hàng',
     icon: MessageOutlined
   },
   {
@@ -150,10 +151,12 @@ class CheckoutPanel extends PageBase {
               />
             ) : <></>}
 
-            {selectedMenuItem.key === '3' ? (
-              <TransactionHistory
+            {selectedMenuItem.key === '2' ? (
+              <ImportingRequestHistory />
+            ) : <></>}
 
-              />
+            {selectedMenuItem.key === '3' ? (
+              <TransactionHistory />
             ) : <></>}
           </div>
         </div>
