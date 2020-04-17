@@ -32,7 +32,8 @@ module.exports = {
       CHANGE_PASSWORD_SUCCESS: 'Đổi mật khẩu thành công',
       UPDATE_PROFILE_SUCCESS: 'Cập nhật thông tin thành công',
       DELETE_USER_SUCCESS: 'Đã xóa nhân viên khỏi hệ thống',
-      GET_IMPORTER_ASSIGNMENTS_SUCCESS: 'Lấy danh sách yêu cầu cần thực hiện thành công'
+      GET_IMPORTER_ASSIGNMENTS_SUCCESS: 'Lấy danh sách yêu cầu cần thực hiện thành công',
+      GET_IMPORTING_REQUESTS_SUCCESS: 'Lấy danh sách yêu cầu nhập hàng thành công'
     },
     ERROR: {
       WRONG_USERNAME_OR_PASSWORD: 'Tài khoản hoặc mật khẩu không đúng',

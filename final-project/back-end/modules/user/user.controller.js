@@ -16,6 +16,7 @@ const bcrypt = require('bcrypt');
 const WorkAssignmentModel = require('../work-assignment/work-assignment.model');
 const moment = require('moment');
 const ImporterAssignmentModel = require('../importer-assignment/importer-assignment.model');
+const ImportingRequestModel = require('../importing-request/importing-request.model');
 const CollectionSortingService = require('../../services/collection-sorting');
 
 const login = async (req, res, next) => {
@@ -377,6 +378,34 @@ const getImporterAssignments = async (req, res, next) => {
   }
 }
 
+const getImportingRequests = async (req, res, next) => {
+  logger.info(`${CONTROLLER_NAME}::getImportingRequests::was called`);
+  try {
+    let importingRequests = await ImportingRequestModel.find({})
+      .populate('executor')
+      .populate('accepter')
+      .populate({
+        path: 'requiredProducts',
+        select: '-importingRequest',
+        populate: {
+          path: 'product',
+          populate: { path: 'supplier' }
+        }
+      });
+    CollectionSortingService.sortByCreatedAt(importingRequests, 'desc');
+
+    logger.info(`${CONTROLLER_NAME}::getImportingRequests::success`);
+    return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
+      data: { importingRequests },
+      messages: [USER_MESSAGE.SUCCESS.GET_IMPORTING_REQUESTS_SUCCESS]
+    });
+  } catch (error) {
+    logger.error(`${CONTROLLER_NAME}::getImportingRequests::error`);
+    next(error);
+  }
+}
+
 module.exports = {
   login,
   addUser,
@@ -384,5 +413,6 @@ module.exports = {
   updateProfile,
   changePassword,
   deleteUser,
-  getImporterAssignments
+  getImporterAssignments,
+  getImportingRequests
 };
