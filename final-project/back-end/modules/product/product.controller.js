@@ -15,7 +15,9 @@ const { SUPPLIER_MESSAGE } = require('../supplier/supplier.constant');
 const ImporterAssignmentModel = require('../importer-assignment/importer-assignment.model');
 const ImportedProductModel = require('../imported-product/imported-product.model');
 const ProductActionLogModel = require('../product-action-log/product-action-log.model');
+const ImportingRequestModel = require('../importing-request/importing-request.model');
 const { PRODUCT_ACTION_TYPE } = require('../product-action-log/product-action-log.constant');
+const { STATUS } = require('../importing-request/importing-request.constant');
 
 const addProduct = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::addProduct::was called`);
@@ -226,6 +228,15 @@ const updateProduct = async (req, res, next) => {
         if (flag) {
           importerAssignment.finishedAt = new Date();
           await importerAssignment.save();
+          await Promise.all(
+            importerAssignment.importingRequests.map(async (r) => {
+              const request = await ImportingRequestModel.findOne({ _id: r._id });
+              request.status = STATUS.FINISHED.type;
+              request.finishedAt = new Date();
+              await request.save();
+              return request;
+            })
+          );
         }
 
         // Notice product's available was updated for reloading importer assignemnt from client
