@@ -72,7 +72,7 @@ class Main extends Component {
       <div className="main">
         <Layout>
           <Sidebar user={user} pagesByUserRole={pagesByUserRole} />
-          <Layout style={{ marginLeft: 200 }} className="animated fadeIn">
+          <Layout style={{ marginLeft: 200 }}>
             <Toolbar user={user} avatarMenuItems={commonPages} />
             <Content className="__content">
               <div className="__content__inner">

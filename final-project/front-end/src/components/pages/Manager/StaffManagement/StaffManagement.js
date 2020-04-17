@@ -187,10 +187,7 @@ class StaffManagement extends PageBase {
   }
 
   render() {
-    if (this.state.isLoading)
-      return <div className="staff-management"></div>
-
-    let { filteredStaffs, selectedStaff } = this.state;
+    let { filteredStaffs, selectedStaff, isLoading } = this.state;
     filteredStaffs = filteredStaffs.map((s, i) => {
       let staff = JSON.parse(JSON.stringify(s));
       staff.key = i;
@@ -282,8 +279,8 @@ class StaffManagement extends PageBase {
     }
 
     return (
-      <div className="staff-management">
-        <div className="staff-management__body animated fadeInUp">
+      <div className="staff-management animated fadeIn">
+        <div className="staff-management__body">
           <Row className="staff-management__body__staffs">
             <Col span={4}>
               <div className="staff-management__body__staffs__sidebar">
@@ -318,19 +315,17 @@ class StaffManagement extends PageBase {
 
                 <ul className="staff-management__body__staffs__sidebar__staff-features">
                   <li
-                    className="staff-management__body__staffs__sidebar__staff-features__feature animated fadeInRight"
-                    style={{ animationDelay: '0.4s' }}
+                    className="staff-management__body__staffs__sidebar__staff-features__feature"
                   >
                     {selectedStaff ? (
                       <UpdateStaffDialog
                         selectedStaff={{ ...selectedStaff }}
                         reloadStaffs={updatedStaff => this.loadStaffs(this.state.filteredStaffRole, updatedStaff)}
                       />
-                    ) : (<Skeleton.Input style={{ width: '100%', height: 22 }} active={true} size="small" />)}
+                    ) : (<Skeleton.Input style={{ width: '100%', height: 30, borderRadius: 3 }} active={true} size="small" />)}
                   </li>
                   <li
-                    className="staff-management__body__staffs__sidebar__staff-features__feature animated fadeInRight"
-                    style={{ animationDelay: '0.6s' }}
+                    className="staff-management__body__staffs__sidebar__staff-features__feature"
                     onClick={() => this.openRemoveStaffConfirm(selectedStaff)}
                   >
                     {selectedStaff ? (
@@ -343,7 +338,7 @@ class StaffManagement extends PageBase {
                             Xóa khỏi hệ thống</span>
                         </Col>
                       </Row>
-                    ) : (<Skeleton.Input style={{ width: '100%', height: 22 }} active={true} size="small" />)}
+                    ) : (<Skeleton.Input style={{ width: '100%', height: 30, borderRadius: 3 }} active={true} size="small" />)}
                   </li>
                 </ul>
 
@@ -354,11 +349,13 @@ class StaffManagement extends PageBase {
                 <div className="staff-management__body__staffs__content__toolbar">
                   <Row style={{ width: '100%' }} align="middle">
                     <Col span={7}>
-                      <Input
-                        prefix={<SearchOutlined style={{ marginRight: 5 }} />}
-                        placeholder="Tìm kiếm nhân viên..."
-                        onChange={e => this.onChangeSearchStaffInput(e.target.value)}
-                      />
+                      {!isLoading ? (
+                        <Input
+                          prefix={<SearchOutlined style={{ marginRight: 5 }} />}
+                          placeholder="Tìm kiếm nhân viên..."
+                          onChange={e => this.onChangeSearchStaffInput(e.target.value)}
+                        />
+                      ) : (<Skeleton.Input style={{ width: '100%', height: 28, borderRadius: 24 }} active={true} size="small" />)}
                     </Col>
                   </Row>
                 </div>
@@ -367,29 +364,33 @@ class StaffManagement extends PageBase {
                     <div className="staff-management__body__staffs__content__list-staffs__header__dark-bg"></div>
                     <Row>
                       <Col span={6}>
-                        <div
-                          className="staff-management__body__staffs__content__list-staffs__header__role-selection">
-                          <Select
-                            defaultValue={null}
-                            style={{ width: 200 }}
-                            onChange={value => this.filterListStaffsByRole(value)}
-                          >
-                            <Option value={null}>Tất cả nhân viên</Option>
-                            <Option value={USER_ROLES.CASHIER.type}>{USER_ROLES.CASHIER.name}</Option>
-                            <Option value={USER_ROLES.IMPORTER.type}>{USER_ROLES.IMPORTER.name}</Option>
-                            <Option value={USER_ROLES.MANAGER.type}>{USER_ROLES.MANAGER.name}</Option>
-                          </Select>
-                          <div className="staff-management__body__staffs__content__list-staffs__header__role-selection__staft-total-by-role">
-                            <TeamOutlined style={{ marginRight: 7 }} />
-                            <span>{filteredStaffs.length}</span>
+                        {!isLoading ? (
+                          <div
+                            className="staff-management__body__staffs__content__list-staffs__header__role-selection">
+                            <Select
+                              defaultValue={null}
+                              style={{ width: 200 }}
+                              onChange={value => this.filterListStaffsByRole(value)}
+                            >
+                              <Option value={null}>Tất cả nhân viên</Option>
+                              <Option value={USER_ROLES.CASHIER.type}>{USER_ROLES.CASHIER.name}</Option>
+                              <Option value={USER_ROLES.IMPORTER.type}>{USER_ROLES.IMPORTER.name}</Option>
+                              <Option value={USER_ROLES.MANAGER.type}>{USER_ROLES.MANAGER.name}</Option>
+                            </Select>
+                            <div className="staff-management__body__staffs__content__list-staffs__header__role-selection__staft-total-by-role">
+                              <TeamOutlined style={{ marginRight: 7 }} />
+                              <span>{filteredStaffs.length}</span>
+                            </div>
                           </div>
-                        </div>
+                        ) : <></>}
                       </Col>
                       <Col span={18}>
                         <div className="staff-management__body__staffs__content__list-staffs__header__dialogs">
-                          <AddStaffDialog
-                            reloadStaffs={newStaff => this.loadStaffs(this.state.filteredStaffRole, newStaff)}
-                          />
+                          {!isLoading ? (
+                            <AddStaffDialog
+                              reloadStaffs={newStaff => this.loadStaffs(this.state.filteredStaffRole, newStaff)}
+                            />
+                          ) : <></>}
                         </div>
                       </Col>
                     </Row>

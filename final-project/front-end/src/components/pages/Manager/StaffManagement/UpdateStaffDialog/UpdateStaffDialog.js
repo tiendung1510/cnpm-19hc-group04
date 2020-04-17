@@ -98,6 +98,9 @@ class UpdateStaffDialog extends PageBase {
 
   render() {
     const { selectedStaff } = this.props;
+    if (!selectedStaff)
+      return <></>;
+      
     return (
       <div>
         <div>

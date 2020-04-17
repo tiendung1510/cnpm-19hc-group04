@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Form, Input, Button, Tooltip, message } from 'antd';
 import './Login.style.scss';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
@@ -8,6 +8,9 @@ import { withCookies } from 'react-cookie';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../../redux/actions';
+import PageBase from '../../../utilities/PageBase/PageBase';
+import USER_ROLES from '../../../../constants/user-role.constant';
+import SIDEBAR from '../../../../constants/sidebar.constant';
 
 const layout = {
   labelCol: {
@@ -24,7 +27,7 @@ const tailLayout = {
   },
 };
 
-class Login extends Component {
+class Login extends PageBase {
 
   componentDidMount() {
     const { cookies } = this.props;
@@ -44,7 +47,11 @@ class Login extends Component {
     const res = await (await fetch(API.User.login, {
       method: 'POST',
       body: JSON.stringify(params),
-      headers: { 'Content-type': 'application/json; charset=UTF-8' }
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        'token': this.props.cookies.get(COOKIE_NAMES.token)
+      },
+      signal: this.abortController.signal
     })).json();
 
     this.props.setAppLoading(false);
@@ -62,7 +69,21 @@ class Login extends Component {
     const { cookies } = this.props;
     cookies.set(COOKIE_NAMES.user, user, { path: '/' });
     cookies.set(COOKIE_NAMES.token, token, { path: '/' });
-    window.location.href = '/';
+
+    let pathToNavigate;
+    if (user.role === USER_ROLES.CASHIER.type) {
+      pathToNavigate = SIDEBAR[1].pages[0].path;
+    }
+
+    if (user.role === USER_ROLES.IMPORTER.type) {
+      pathToNavigate = SIDEBAR[2].pages[0].path;
+    }
+
+    if (user.role === USER_ROLES.MANAGER.type) {
+      pathToNavigate = SIDEBAR[3].pages[0].path;
+    }
+
+    this.props.history.push(pathToNavigate);
   };
 
   render() {
