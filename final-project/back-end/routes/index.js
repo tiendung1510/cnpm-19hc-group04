@@ -11,5 +11,6 @@ router.use('/work-assignments', require('../modules/work-assignment/work-assignm
 router.use('/checkout-sessions', require('../modules/checkout-session/checkout-session.route'));
 router.use('/importing-requests', require('../modules/importing-request/importing-request.route'));
 router.use('/importer-assignments', require('../modules/importer-assignment/importer-assignment.route'));
+router.use('/product-action-logs', require('../modules/product-action-log/product-action-log.route'));
 
 module.exports = router;
