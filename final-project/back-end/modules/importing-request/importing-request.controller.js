@@ -214,11 +214,8 @@ const cancelImportingRequest = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::cancelImportingRequest::was called`);
   try {
     const { importingRequestID } = req.params;
-    const deletedImporingRequest = await ImportingRequestModel.findOneAndDelete({ 
-      _id: mongoose.Types.ObjectId(importingRequestID),
-      status: STATUS.PENDING.type
-    });
-    if (!deletedImporingRequest) {
+    const imporingRequest = await ImportingRequestModel.findOne({ _id: mongoose.Types.ObjectId(importingRequestID) });
+    if (!imporingRequest) {
       logger.info(`${CONTROLLER_NAME}::cancelImportingRequest::importing request not found`);
       return res.status(HttpStatus.NOT_FOUND).json({
         status: HttpStatus.NOT_FOUND,
@@ -226,6 +223,8 @@ const cancelImportingRequest = async (req, res, next) => {
         errors: [IMPORTING_REQUEST_MESSAGE.ERROR.IMPORTING_REQUEST_NOT_FOUND]
       });
     }
+    imporingRequest.status = STATUS.CANCELLED.type;
+    await imporingRequest.save();
 
     let importingRequests = await ImportingRequestModel.find({})
       .populate('sender')
@@ -239,7 +238,6 @@ const cancelImportingRequest = async (req, res, next) => {
           populate: { path: 'supplier' }
         }
       });
-
     CollectionSortingService.sortByCreatedAt(importingRequests, 'desc');
 
     logger.info(`${CONTROLLER_NAME}::cancelImportingRequest::an importing request was cancelled`);
