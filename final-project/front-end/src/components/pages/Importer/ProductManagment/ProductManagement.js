@@ -18,6 +18,7 @@ import { sortByCreatedAt } from '../../../../services/collection-sorting.service
 import EditCategoryDialog from './EditCategoryDialog/EditCategoryDialog';
 import QRCode from 'qrcode.react';
 import ImportingAssignmentDialog from './ImportingAssignmentDialog/ImportingAssignmentDialog';
+import ProductActionHistory from './ProductActionHistory/ProductActionHistory';
 
 const { confirm } = Modal;
 
@@ -634,7 +635,7 @@ class ProductManagement extends PageBase {
                       />
                     ) : <></>}
                   </Col>
-                  <Col span={8}>
+                  <Col span={6}>
                     {this.state.selectedCategory.products ? (
                       <div className="product-management__container__topbar__title">
                         <span>{this.state.selectedCategory.name} ({this.state.selectedCategory.products.length})</span>
@@ -673,6 +674,9 @@ class ProductManagement extends PageBase {
                         onChange={e => this.onProductSearchInputChange(e.target.value, this.state.selectedCategory.products)}
                       />
                     </div>
+                  </Col>
+                  <Col span={2}>
+                    <ProductActionHistory />
                   </Col>
                 </Row>
               </div>

@@ -140,6 +140,12 @@
       padding: $padding;
       padding-right: 0;
 
+      .product-management__container__topbar__btn {
+        border: 0;
+        box-shadow: none;
+        color: gray;
+      }
+
       .product-management__container__topbar__title {
         color: #ff8220;
         font-weight: bold;
