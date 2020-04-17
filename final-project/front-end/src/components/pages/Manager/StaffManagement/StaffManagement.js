@@ -1,7 +1,7 @@
 import React from 'react';
 import PageBase from '../../../utilities/PageBase/PageBase';
 import './StaffManagement.style.scss';
-import { SearchOutlined, UserDeleteOutlined, TeamOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { SearchOutlined, UserDeleteOutlined, TeamOutlined, ExclamationCircleOutlined, CalendarOutlined } from '@ant-design/icons';
 import { Input, Row, Col, Select, Table, Avatar, message, Skeleton, Modal, Empty } from 'antd';
 import { withCookies } from 'react-cookie';
 import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
@@ -12,6 +12,9 @@ import moment from 'moment';
 import USER_ROLES from '../../../../constants/user-role.constant';
 import AddStaffDialog from './AddStaffDialog/AddStaffDialog';
 import UpdateStaffDialog from './UpdateStaffDialog/UpdateStaffDialog';
+import ReactToPrint from 'react-to-print';
+import WorkScheduleReportToPrint from '../Reporting/WorkScheduleReport/WorkScheduleReportToPrint/WorkScheduleReportToPrint';
+import REPORTS from '../../../../constants/report.constant';
 
 const { Option } = Select;
 const { confirm } = Modal;
@@ -314,14 +317,47 @@ class StaffManagement extends PageBase {
                 </div>
 
                 <ul className="staff-management__body__staffs__sidebar__staff-features">
-                  <li
-                    className="staff-management__body__staffs__sidebar__staff-features__feature"
-                  >
+                  <li className="staff-management__body__staffs__sidebar__staff-features__feature">
                     {selectedStaff ? (
                       <UpdateStaffDialog
                         selectedStaff={{ ...selectedStaff }}
                         reloadStaffs={updatedStaff => this.loadStaffs(this.state.filteredStaffRole, updatedStaff)}
                       />
+                    ) : (<Skeleton.Input style={{ width: '100%', height: 30, borderRadius: 3 }} active={true} size="small" />)}
+                  </li>
+                  <li className="staff-management__body__staffs__sidebar__staff-features__feature">
+                    {selectedStaff ? (
+                      <div>
+                        <ReactToPrint
+                          trigger={() => (
+                            <Row align="middle">
+                              <Col span={2}>
+                                <CalendarOutlined className="staff-management__body__staffs__sidebar__staff-features__feature__icon" />
+                              </Col>
+                              <Col
+                                span={22}
+                                className="staff-management__body__staffs__sidebar__staff-features__feature__info"
+                              >
+                                <span className="staff-management__body__staffs__sidebar__staff-features__feature__info__name">
+                                  Lịch làm việc trong tuần</span>
+                              </Col>
+                            </Row>
+                          )}
+                          content={() => this.componentToPrintRef}
+                        />
+                        <div style={{ display: 'none' }}>
+                          <WorkScheduleReportToPrint
+                            ref={el => (this.componentToPrintRef = el)}
+                            staff={{ ...selectedStaff }}
+                            basicInfo={{
+                              title: REPORTS.WORK_SCHEDULE.title,
+                              type: REPORTS.WORK_SCHEDULE.type,
+                              cover: 'work-schedule.jpg',
+                              description: 'Báo cáo lịch làm việc trong tuần của một nhân viên.'
+                            }}
+                          />
+                        </div>
+                      </div>
                     ) : (<Skeleton.Input style={{ width: '100%', height: 30, borderRadius: 3 }} active={true} size="small" />)}
                   </li>
                   <li
