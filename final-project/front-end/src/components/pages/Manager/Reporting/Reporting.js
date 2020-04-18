@@ -1,105 +1,64 @@
 import React from 'react';
-import { Row, Col, message } from 'antd';
+import { DatePicker } from 'antd';
 import './Reporting.style.scss';
-import WorkScheduleReport from './WorkScheduleReport/WorkScheduleReport';
-import REPORTS from '../../../../constants/report.constant';
 import PageBase from '../../../utilities/PageBase/PageBase';
 import { connect } from 'react-redux';
 import * as actions from '../../../../redux/actions';
 import { withCookies } from 'react-cookie';
-import { API } from '../../../../constants/api.constant';
-import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
-
-const reportBasicInfos = [
-  {
-    title: REPORTS.WORK_SCHEDULE.title,
-    type: REPORTS.WORK_SCHEDULE.type,
-    cover: 'work-schedule.jpg',
-    description: 'Báo cáo lịch làm việc trong tuần của một nhân viên.'
-  },
-  {
-    title: REPORTS.SELLING.title,
-    type: REPORTS.SELLING.type,
-    cover: 'selling.png',
-    description: 'Thống kê lượng sản phẩm đã bán ra và đang tồn kho trong tháng của siêu thị.'
-  },
-  {
-    title: REPORTS.PAYMENT_REVENUE.title,
-    type: REPORTS.PAYMENT_REVENUE.type,
-    cover: 'revenue.png',
-    description: 'Báo cáo, thống kê thu chi trong tháng của siêu thị.'
-  }
-]
+// import { API } from '../../../../constants/api.constant';
+// import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
+import moment from 'moment';
+import RevenueStatistic from './RevenueStatistic/RevenueStatistic';
+import MONTHS from '../../../../constants/months.constant';
 
 class Reporting extends PageBase {
-
   constructor(props) {
     super(props);
-
     this.state = {
-      staffs: [],
-      isLoading: true
+      month: new Date().getMonth() + 1,
+      year: new Date().getFullYear()
     }
   }
 
-  componentDidMount() {
-    this.loadStaffs();
+  monthCellRender(date) {
+    const _date = new Date(date);
+    const monthIndex = _date.getMonth();
+    return MONTHS[monthIndex];
   }
 
-  loadStaffs = async () => {
-    this.props.setAppLoading(true);
-    const res = await (
-      await fetch(
-        API.Manager.StaffManagement.getListStaffs,
-        {
-          method: 'GET',
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
-
-    this.props.setAppLoading(false);
-    this.setState({ isLoading: false });
-    if (res.status !== 200) {
-      message.error(res.errors[0]);
-      return;
-    }
-
-    this.setState({ staffs: res.data.users });
+  onDatePickerChange(e) {
+    const selectedDate = new Date(e);
+    const month = selectedDate.getMonth() + 1;
+    const year = selectedDate.getFullYear();
+    this.setState({ month, year });
   }
 
   render() {
-    if (this.state.isLoading)
-      return <div className="reporting"></div>
-
+    const { month, year } = this.state;
     return (
-      <div className="reporting">
-        <div className="reporting__menu">
-          <Row justify="center" align="middle" gutter={[70, 70]} style={{ width: '100%' }}>
-            <Col span={8}>
-              <WorkScheduleReport
-                staffs={this.state.staffs}
-                basicInfo={reportBasicInfos[0]}
-                index={0} />
-            </Col>
-            <Col span={8}>
-              <WorkScheduleReport
-                staffs={this.state.staffs}
-                basicInfo={reportBasicInfos[1]}
-                index={1} />
-            </Col>
-            <Col span={8}>
-              <WorkScheduleReport
-                staffs={this.state.staffs}
-                basicInfo={reportBasicInfos[2]}
-                index={2} />
-            </Col>
-          </Row>
+      <div className="reporting animated fadeIn">
+        <div className="reporting__date-picker">
+          <span className="reporting__date-picker__label">Tháng:</span>
+          <DatePicker
+            defaultValue={moment(`${month}/${year}`, 'MM/YYYY')}
+            format={'MM/YYYY'}
+            picker="month"
+            size="small"
+            clearIcon={null}
+            placeholder="Chọn tháng"
+            bordered={false}
+            monthCellRender={date => this.monthCellRender(date)}
+            onChange={e => this.onDatePickerChange(e)}
+          />
         </div>
+
+        <RevenueStatistic
+          month={month}
+          year={year}
+        />
+
+        <div className="reporting__block-style" style={{ height: 500 }}></div>
+
       </div>
     )
   }

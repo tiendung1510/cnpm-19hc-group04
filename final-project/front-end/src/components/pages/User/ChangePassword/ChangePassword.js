@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Input, Button, message } from 'antd';
-import { LockFilled } from '@ant-design/icons'
+import { SafetyOutlined } from '@ant-design/icons'
 import './ChangePassword.style.scss';
 import { API } from '../../../../constants/api.constant';
 import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
@@ -63,10 +63,8 @@ class ChangePassword extends PageBase {
     return (
       <div className="change-password">
         <div className="change-password__content animated fadeInRight">
-          <div className="change-password__content__div-icon">
-            <div className="change-password__content__div-icon__icon-wrapper">
-              <LockFilled className="change-password__content__div-icon__icon-wrapper__icon" />
-            </div>
+          <div className="change-password__content__icon-wrapper">
+            <SafetyOutlined className="change-password__content__icon-wrapper__icon" />
           </div>
           <Form
             {...layout}
@@ -115,8 +113,8 @@ class ChangePassword extends PageBase {
             </Form.Item>
 
             <Form.Item {...tailLayout}>
-              <Button htmlType="submit" className="change-password__content__form__btn-submit">
-                Đổi mật khẩu
+              <Button shape="round" htmlType="submit" className="change-password__content__form__btn-submit">
+                Hoàn tất
               </Button>
             </Form.Item>
           </Form>

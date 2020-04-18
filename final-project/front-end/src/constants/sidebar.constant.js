@@ -60,6 +60,12 @@ export default [
     role: "MANAGER",
     pages: [
       {
+        title: 'Báo cáo - Thống kê',
+        path: '/reports',
+        icon: BarChartOutlined,
+        component: Reporting
+      },
+      {
         title: 'Tổ chức nhân sự',
         path: '/staffs',
         icon: TeamOutlined,
@@ -76,12 +82,6 @@ export default [
         path: '/importing-requests',
         icon: MessageOutlined,
         component: ImportingRequest
-      },
-      {
-        title: 'Báo cáo - thống kê',
-        path: '/reports',
-        icon: BarChartOutlined,
-        component: Reporting
       }
     ]
   }
