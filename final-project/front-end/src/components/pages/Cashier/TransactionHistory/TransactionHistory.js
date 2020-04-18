@@ -52,7 +52,7 @@ class TransactionHistory extends PageBase {
   render() {
     const { checkoutSessions } = this.state;
     return (
-      <div className="transaction-history animated fadeIn">
+      <div className="transaction-history">
         <div className="transaction-history__header">
           <div className="transaction-history__header__title">
             <HistoryOutlined className="transaction-history__header__title__icon" />

@@ -52,7 +52,7 @@ class ImportingRequestHistory extends PageBase {
   render() {
     const { importingRequests } = this.state;
     return (
-      <div className="importing-request-history animated fadeIn">
+      <div className="importing-request-history">
         <div className="importing-request-history__header">
           <div className="importing-request-history__header__title">
             <MessageOutlined className="importing-request-history__header__title__icon" />
