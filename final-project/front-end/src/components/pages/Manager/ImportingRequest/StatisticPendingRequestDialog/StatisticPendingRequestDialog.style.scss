@@ -13,17 +13,13 @@ $fontSize3: 12px;
     justify-content: center;
     .statistic-pending-request-dialog__btn-open-wrapper__btn {
       background: white;
-      color: #ff8220;
-      border-color: #ff8220;
+      color: rgba($color: #000000, $alpha: 0.6);
       font-weight: bold;
+      border: 0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.12);
       min-height: 35px;
-      min-width: 98%;
+      min-width: 99%;
       font-size: $fontSize3;
-      transition: 0.2s;
-      &:hover {
-        background: #ff8220;
-        color: white;
-      }
 
       &:disabled {
         background: #eee;

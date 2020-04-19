@@ -544,7 +544,7 @@ class WorkAssignment extends PageBase {
 
   render() {
     if (this.state.isLoading)
-      return <div style={{ background: '#ff8220', width: '100%', height: '100vh' }}></div>
+      return <div style={{ width: '100%', height: '100vh' }}></div>
 
     let {
       workSchedules,

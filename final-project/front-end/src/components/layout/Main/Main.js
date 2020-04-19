@@ -74,10 +74,8 @@ class Main extends Component {
           <Sidebar user={user} pagesByUserRole={pagesByUserRole} />
           <Layout style={{ marginLeft: 200 }}>
             <Toolbar user={user} avatarMenuItems={commonPages} />
-            <Content className="__content">
-              <div className="__content__inner">
-                {renderContents()}
-              </div>
+            <Content className="main__content">
+              {renderContents()}
             </Content>
           </Layout>
         </Layout>

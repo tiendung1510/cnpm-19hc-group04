@@ -62,7 +62,7 @@ class ChangePassword extends PageBase {
   render() {
     return (
       <div className="change-password">
-        <div className="change-password__content animated fadeInRight">
+        <div className="change-password__content animated jackInTheBox">
           <div className="change-password__content__icon-wrapper">
             <SafetyOutlined className="change-password__content__icon-wrapper__icon" />
           </div>

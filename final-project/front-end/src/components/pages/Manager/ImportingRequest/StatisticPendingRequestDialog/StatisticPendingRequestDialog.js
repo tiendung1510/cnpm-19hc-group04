@@ -183,6 +183,7 @@ class StatisticPendingRequestDialog extends PageBase {
             disabled={requiredProducts.length === 0}
           >
             Thống kê sản phẩm yêu cầu
+            <ArrowRightOutlined />
           </Button>
         </div>
 

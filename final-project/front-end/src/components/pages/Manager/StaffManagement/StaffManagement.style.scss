@@ -1,5 +1,10 @@
 .staff-management {
   $primaryPadding: 25px;
+  $boxShadow0: 0 0 5px
+    rgba(
+      $color: #000000,
+      $alpha: 0.2
+    );
   $boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.23);
   $primaryBorderColor: #eee;
@@ -21,9 +26,8 @@
     }
   }
 
-  height: 100vh;
-  padding: 0 15px;
-  background: #ff8220;
+  padding: 15px;
+  height: 92.5vh;
 
   .staff-management__role-badge {
     font-weight: bold;
@@ -58,8 +62,8 @@
 
     .staff-management__body__staffs {
       width: 100%;
-      height: 90vh;
-      box-shadow: $boxShadow2;
+      height: 100%;
+      box-shadow: $boxShadow1;
       border-radius: 5px;
       background: white;
       position: relative;
@@ -136,7 +140,6 @@
       .staff-management__body__staffs__content {
         box-sizing: border-box;
         height: 100%;
-        background: #eee;
         border-bottom-right-radius: 5px;
         border-top-right-radius: 5px;
         overflow: hidden;
@@ -159,14 +162,13 @@
           height: 100%;
           .staff-management__body__staffs__content__list-staffs__header {
             padding: $primaryPadding;
-            // background-color: #a40606;
-            // background-image: linear-gradient(315deg, #a40606 0%, #d98324 74%);
-            background:  #ff6f00;
+            background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
             position: absolute;
             top: 0;
             left: 0;
             height: 40.4%;
             width: 100%;
+            padding-left: 3%;
             text-shadow: $textShadow1;
 
             .staff-management__body__staffs__content__list-staffs__header__dialogs {
@@ -204,6 +206,7 @@
                 background: orange;
                 font-weight: bold;
                 border-radius: 24px;
+                text-shadow: none;
               }
 
               .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
@@ -230,15 +233,15 @@
           }
 
           .staff-management__body__staffs__content__list-staffs__wrapper {
-            height: 74%;
-            width: 97%;
+            height: 73%;
+            width: 96%;
             box-shadow: $boxShadow1;
             background: white;
             border-radius: 5px;
             overflow: hidden;
             position: absolute;
             z-index: 4;
-            left: 1.5%;
+            left: 2%;
             top: 15%;
 
             $tableFontSize: 10px;

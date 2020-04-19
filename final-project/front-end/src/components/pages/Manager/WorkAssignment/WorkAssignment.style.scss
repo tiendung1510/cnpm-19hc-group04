@@ -1,11 +1,13 @@
 $leftSidebarHeight: 100vh;
 $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-$boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+$boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.12);
 $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.23);
 
 .work-assignment {
-  background: #ff8220;
-  padding: 0 15px;
+  padding: 15px;
+  padding-top: 30px;
+  overflow: hidden;
+  height: 92.6vh;
 
   .centered-content {
     display: flex;
@@ -52,16 +54,16 @@ $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.23);
     }
 
     .work-assignment__left-sidebar__title {
-      padding: 15px 3px 5px 3px;
-      color: white;
-      font-weight: bold;
+      padding: 10px 3px 5px 3px;
       font-size: 12px;
+      color: rgba($color: #000000, $alpha: 0.4);
+      font-weight: bold;
     }
 
     .work-assignment__left-sidebar__list-tasks {
       .work-assignment__left-sidebar__list-tasks__wrapper {
         margin-top: 5px;
-        height: 68 / 100 * $leftSidebarHeight;
+        height: 66 / 100 * $leftSidebarHeight;
         background: white;
         border-radius: 3px;
         box-shadow: $boxShadow1;
@@ -116,9 +118,9 @@ $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.23);
   }
 
   .work-assignment__content {
-    height: 90.2vh;
+    height: 87vh;
     position: relative;
-    box-shadow: $boxShadow2;
+    box-shadow: $boxShadow1;
     border-radius: 5px;
     border-top-left-radius: 12px;
     overflow: hidden;
@@ -131,14 +133,14 @@ $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.23);
       left: 0;
 
       .work-assignment__content__task-work-day-panel__panel {
-        padding: 30px 10px 10px 15px;
+        padding: 15px 10px 10px 15px;
         height: 100%;
         width: 28%;
         background: white;
         position: absolute;
         z-index: 3;
         right: 0;
-        box-shadow: $boxShadow2;
+        box-shadow: $boxShadow1;
 
         $blockPaddingTop: 20px;
 
@@ -253,7 +255,7 @@ $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.23);
             }
 
             .work-assignment__content__task-work-day-panel__panel__main__list-work-shifts__wrapper {
-              height: 130px;
+              height: 120px;
               padding-right: 5px;
             }
 
@@ -305,17 +307,14 @@ $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.23);
       flex-direction: column;
       justify-content: center;
       box-sizing: border-box;
-      background: url("../../../../assets/images/work-shedule-cover.jpg");
-      background-size: 100% 190%;
-      background-position-y: 15%;
-
+      background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
       border-bottom: 4px solid white;
       position: relative;
 
       .work-assignment__content__header__dark-bg {
         position: absolute;
         z-index: 1;
-        background: rgba($color: #000000, $alpha: 0.5);
+        background: rgba($color: #000000, $alpha: 0.1);
         top: 0;
         left: 0;
         width: 100%;
@@ -376,9 +375,10 @@ $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.23);
             border: 1px solid #eee;
             cursor: pointer;
             transition: 0.2s;
+            margin: 2px;
 
             &:hover {
-              background: #f5f5f5;
+              background: #fff6e6;
             }
 
             &.work-assignment__content__body__tabs__work-schedule__work-day--selected {

@@ -1,11 +1,14 @@
 .reporting {
-  background: #f0f2f5;
-  padding: 25px;
-  overflow: auto;
-  overflow-x: hidden;
-  max-height: 94vh;
+  padding: 15px;
+  position: relative;
 
-  $boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  $boxShadow0: 0 0 2px
+    rgba(
+      $color: #000000,
+      $alpha: 0.2
+    );
+  $textShadow1: 1px 1px 2px rgba(0, 0, 0, 0.4);
+  $boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.12);
   $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.23);
   $borderRadius0: 3px;
   $borderRadius1: 5px;
@@ -28,41 +31,188 @@
   .reporting__block-style {
     background: white;
     border: 1px solid #eee;
-    margin: 10px 0;
+    margin: 15px 0;
     padding: 30px;
     font-size: $fontSize1;
+    border-radius: 5px;
+    box-shadow: $boxShadow1;
+    position: relative;
+    z-index: 10;
   }
 
+  .reporting__header-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 300px;
+    // background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
+    background: url("https://www.infobonaire.com/wp-content/uploads/2018/09/header-supermarkets-1.jpg");
+    background-size: 100% 100%;
+    z-index: 2;
+  }
+
+  .reporting__header-cover2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 300px;
+    background: rgba($color: #ff8220, $alpha: 0.8);
+    z-index: 3;
+  }
   .reporting__date-picker {
     $datePickerFontSize: $fontSize3;
-    $datePickerColor: rgba(0, 0, 0, 0.7);
     $datePickerLetterSpacing: 0;
-
-    color: $datePickerColor;
     font-size: $datePickerFontSize;
-    padding: 10px;
-    padding-bottom: 15px;
+    height: 80px;
     display: flex;
+    justify-content: center;
     align-items: center;
     letter-spacing: $datePickerLetterSpacing;
+    font-weight: bold;
+    margin-left: -10%;
+    position: relative;
+    z-index: 4;
 
     .reporting__date-picker__label {
       position: relative;
       top: 5px;
+      color: white;
+      text-shadow: $textShadow1;
     }
 
     .ant-picker {
       background: none;
       padding: 0;
-      margin-left: 15px;
-      border-bottom: 1px solid silver !important;
+      margin-left: 20px;
+      border-bottom: 1px solid #eee !important;
       .ant-picker-input > input {
-        color: $datePickerColor;
+        color: white;
         font-size: $datePickerFontSize;
         letter-spacing: $datePickerLetterSpacing;
+        font-weight: bold;
+        text-shadow: $textShadow1;
       }
       .anticon {
-        color: silver;
+        color: #eee;
+      }
+    }
+  }
+
+  .product-statistic {
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+
+    h1 {
+      font-size: 18px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+    }
+
+    .product-statistic__products {
+      padding-bottom: 20px;
+      background: #f8f8f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .product-statistic__products__header {
+        background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
+        height: 250px;
+        width: 100%;
+        position: relative;
+      }
+
+      .product-statistic__products__statistic {
+        width: 96%;
+        display: flex;
+        justify-content: center;
+        margin-top: -150px;
+        .product-statistic__products__statistic__item {
+          background: white;
+          height: 200px;
+          box-shadow: $boxShadow1;
+          border-radius: 5px;
+        }
+      }
+
+      .product-statistic__products__best-seller {
+        height: 340px;
+        background: white;
+        width: 96%;
+        box-shadow: $boxShadow1;
+        border-radius: 5px;
+        padding: 30px;
+        margin-top: 15px;
+
+        .product-statistic__products__best-seller__hot-badge {
+          background: crimson;
+          color: white;
+          font-size: 11px;
+          font-weight: bold;
+          padding: 2px 6px;
+          margin-left: 10px;
+        }
+
+        .product-statistic__products__best-seller__items {
+          padding-top: 10px;
+          display: flex;
+
+          .ant-card {
+            border: 0;
+            margin-right: 20px;
+            position: relative;
+            height: 200px;
+            box-shadow: $boxShadow1;
+            .ant-card-cover {
+              display: flex;
+              justify-content: center;
+              align-content: center;
+              padding: 20px;
+              padding-top: 30px;
+              height: 100%;
+              img {
+                height: 140px;
+                width: 140px;
+              }
+            }
+            .ant-card-body {
+              background: rgba($color: #000000, $alpha: 0.2);
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              width: 100%;
+              padding: 10px;
+              .ant-card-meta {
+                .ant-card-meta-detail {
+                  .ant-card-meta-title {
+                    font-size: 12px;
+                    color: white;
+                    font-weight: bold;
+                    text-shadow: $textShadow1;
+                  }
+                  .ant-card-meta-description {
+                    font-size: 11px;
+                    color: white;
+                    font-weight: bold;
+                    text-shadow: $textShadow1;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      .product-statistic__products__list {
+        width: 96%;
+        height: 600px;
+        background: white;
+        box-shadow: $boxShadow1;
+        border-radius: 5px;
+        margin-top: 15px;
       }
     }
   }
