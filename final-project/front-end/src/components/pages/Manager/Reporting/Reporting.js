@@ -43,14 +43,14 @@ class Reporting extends PageBase {
         <div className="reporting__header-cover"></div>
         <div className="reporting__header-cover2"></div>
         <div className="reporting__date-picker">
-          <span className="reporting__date-picker__label">Tháng thống kê:</span>
+          <span className="reporting__date-picker__label">Chọn tháng:</span>
           <DatePicker
             defaultValue={moment(`${month}/${year}`, 'MM/YYYY')}
             format={'MM/YYYY'}
             picker="month"
             size="small"
             clearIcon={null}
-            placeholder="Chọn tháng"
+            placeholder={null}
             bordered={false}
             monthCellRender={date => this.monthCellRender(date)}
             onChange={e => this.onDatePickerChange(e)}
