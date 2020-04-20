@@ -16,6 +16,7 @@ const ImporterAssignmentModel = require('../importer-assignment/importer-assignm
 const ImportedProductModel = require('../imported-product/imported-product.model');
 const ProductActionLogModel = require('../product-action-log/product-action-log.model');
 const ImportingRequestModel = require('../importing-request/importing-request.model');
+const CheckoutSessionModel = require('../checkout-session/checkout-session.model');
 const { PRODUCT_ACTION_TYPE } = require('../product-action-log/product-action-log.constant');
 const { STATUS } = require('../importing-request/importing-request.constant');
 
@@ -282,14 +283,88 @@ const updateProduct = async (req, res, next) => {
 const getProducts = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::getProducts::was called`);
   try {
-    const products = await ProductModel.find({})
-      .populate('category', '-products')
-      .populate('supplier', '-products');
+    let { page, limit, soldStartDate, soldEndDate } = req.query;
+    let result = {};
+    if (page && limit) {
+      page = Number(page);
+      limit = Number(limit);
+      queryResults = await ProductModel.aggregate([
+        {
+          $facet: {
+            products: [
+              { $lookup: { from: 'Suppliers', localField: 'supplier', foreignField: '_id', as: 'supplier' } },
+              { $unwind: '$supplier' },
+              { $lookup: { from: 'Categories', localField: 'category', foreignField: '_id', as: 'category' } },
+              { $unwind: '$category' },
+              { $project: { 'supplier.products': 0, 'category.products': 0 } },
+              { $skip: limit * (page - 1) },
+              { $limit: limit }
+            ],
+            entries: [
+              { $group: { _id: null, productTotal: { $sum: 1 } } },
+              { $project: { _id: 0, productTotal: 1 } }
+            ]
+          }
+        }
+      ]);
+      result = {
+        products: queryResults[0].products,
+        productTotal: queryResults[0].entries[0].productTotal
+      }
+    } else {
+      const products = await ProductModel.find({})
+        .populate('category', '-products')
+        .populate('supplier', '-products');
+      result = {
+        products: [...products],
+        productTotal: products.length
+      }
+    }
+
+    // Find the product's sold quantity
+    let cond = {};
+    if (soldStartDate && soldEndDate) {
+      cond = {
+        createdAt: {
+          $gte: new Date(Number(soldStartDate)),
+          $lte: new Date(Number(soldEndDate))
+        }
+      }
+    }
+
+    const soldProducts = await CheckoutSessionModel.aggregate([
+      { $unwind: '$soldItems' },
+      {
+        $lookup: {
+          from: 'SoldItems',
+          localField: 'soldItems',
+          foreignField: '_id',
+          as: 'soldItem'
+        }
+      },
+      { $unwind: '$soldItem' },
+      { $match: cond },
+      {
+        $group: {
+          _id: '$soldItem.product',
+          quantity: { $sum: '$soldItem.quantity' }
+        }
+      }
+    ]);
+
+    result.products = result.products
+      .map(item => {
+        let _item = JSON.parse(JSON.stringify(item));
+        const soldProduct = soldProducts.find(p => p._id.toString() === item._id.toString());
+        _item.soldQuantity = soldProduct ? soldProduct.quantity : 0;
+        return _item;
+      })
+      .sort((a, b) => b.soldQuantity - a.soldQuantity);
 
     logger.info(`${CONTROLLER_NAME}::getProducts::success`);
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
-      data: { products },
+      data: { ...result },
       messages: [PRODUCT_MESSAGE.SUCCESS.GET_PRODUCTS_SUCCESS]
     });
   } catch (error) {
