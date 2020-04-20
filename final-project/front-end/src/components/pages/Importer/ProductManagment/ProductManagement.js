@@ -3,7 +3,6 @@ import './ProductManagement.style.scss';
 import { Row, Col, Input, List, Button, Table, Form, message, InputNumber, Modal, Empty, Dropdown, Select, Menu } from 'antd';
 import { SearchOutlined, CloseOutlined, BellFilled, ExclamationCircleOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import NumberFormat from 'react-number-format';
 import ImageUploader from '../../../utilities/ImageUploader/ImageUploader';
 import * as _ from 'lodash';
 import { withCookies } from 'react-cookie';
@@ -17,6 +16,7 @@ import { COOKIE_NAMES } from '../../../../constants/cookie-name.constant';
 import { sortByCreatedAt } from '../../../../services/collection-sorting.service';
 import EditCategoryDialog from './EditCategoryDialog/EditCategoryDialog';
 import QRCode from 'qrcode.react';
+import NumberFormat from 'react-number-format';
 import ImportingAssignmentDialog from './ImportingAssignmentDialog/ImportingAssignmentDialog';
 import ProductActionHistory from './ProductActionHistory/ProductActionHistory';
 

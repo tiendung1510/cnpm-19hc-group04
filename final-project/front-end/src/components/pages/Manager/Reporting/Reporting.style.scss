@@ -1,13 +1,11 @@
 .reporting {
   padding: 15px;
   position: relative;
+  background: #eee;
+  overflow: hidden;
 
-  $boxShadow0: 0 0 2px
-    rgba(
-      $color: #000000,
-      $alpha: 0.2
-    );
   $textShadow1: 1px 1px 2px rgba(0, 0, 0, 0.4);
+  $boxShadow0: 0 0 3px rgba(0, 0, 0, 0.12);
   $boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.12);
   $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.23);
   $borderRadius0: 3px;
@@ -18,14 +16,16 @@
   $fontSize2: 16px;
   $fontSize3: 20px;
 
-  &::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-  }
+  .styled-scrollbar {
+    &::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
 
-  &::-webkit-scrollbar-thumb {
-    background-color: rgba($color: #000000, $alpha: 0.2);
-    border-radius: 7px;
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba($color: #000000, $alpha: 0.2);
+      border-radius: 5px;
+    }
   }
 
   .reporting__block-style {
@@ -38,6 +38,7 @@
     box-shadow: $boxShadow1;
     position: relative;
     z-index: 10;
+    overflow: hidden;
   }
 
   .reporting__header-cover {
@@ -45,7 +46,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 300px;
+    height: 320px;
     // background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
     background: url("https://www.infobonaire.com/wp-content/uploads/2018/09/header-supermarkets-1.jpg");
     background-size: 100% 100%;
@@ -57,8 +58,9 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 300px;
-    background: rgba($color: #ff8220, $alpha: 0.8);
+    height: 320px;
+    background: rgba($color: #ff8220, $alpha: 0.6);
+    backdrop-filter: blur(5px);
     z-index: 3;
   }
   .reporting__date-picker {
@@ -107,21 +109,21 @@
 
     h1 {
       font-size: 18px;
-      height: 50px;
+      height: 45px;
       display: flex;
       align-items: center;
     }
 
     .product-statistic__products {
       padding-bottom: 20px;
-      background: #f8f8f8;
+      background: white;
       display: flex;
       flex-direction: column;
       align-items: center;
 
       .product-statistic__products__header {
         background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
-        height: 250px;
+        height: 180px;
         width: 100%;
         position: relative;
       }
@@ -135,18 +137,20 @@
           background: white;
           height: 200px;
           box-shadow: $boxShadow1;
+          // border: 1px solid #eee;
           border-radius: 5px;
         }
       }
 
       .product-statistic__products__best-seller {
-        height: 340px;
+        height: 325px;
         background: white;
         width: 96%;
         box-shadow: $boxShadow1;
+        // border: 1px solid #eee;
         border-radius: 5px;
         padding: 30px;
-        margin-top: 15px;
+        margin-top: 30px;
 
         .product-statistic__products__best-seller__hot-badge {
           background: crimson;
@@ -162,43 +166,41 @@
           display: flex;
 
           .ant-card {
-            border: 0;
+            border-top: 0;
+            overflow: hidden;
             margin-right: 20px;
-            position: relative;
-            height: 200px;
-            box-shadow: $boxShadow1;
+            cursor: initial;
             .ant-card-cover {
+              border: 1px solid #eee;
               display: flex;
               justify-content: center;
               align-content: center;
-              padding: 20px;
-              padding-top: 30px;
-              height: 100%;
+              height: 140px;
+              position: relative;
+              background: white;
               img {
-                height: 140px;
-                width: 140px;
+                position: absolute;
+                width: 100px;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
               }
             }
             .ant-card-body {
-              background: rgba($color: #000000, $alpha: 0.2);
-              position: absolute;
-              bottom: 0;
-              left: 0;
-              width: 100%;
+              background: #f8f8f8;
               padding: 10px;
               .ant-card-meta {
                 .ant-card-meta-detail {
                   .ant-card-meta-title {
                     font-size: 12px;
-                    color: white;
+                    color: rgba($color: #000, $alpha: 0.5);
                     font-weight: bold;
-                    text-shadow: $textShadow1;
+                    // text-shadow: $textShadow1;
                   }
                   .ant-card-meta-description {
                     font-size: 11px;
-                    color: white;
-                    font-weight: bold;
-                    text-shadow: $textShadow1;
+                    color: gray;
+                    // text-shadow: $textShadow1;
                   }
                 }
               }
@@ -208,11 +210,116 @@
       }
       .product-statistic__products__list {
         width: 96%;
-        height: 600px;
-        background: white;
+        background: #f8f8f8;
         box-shadow: $boxShadow1;
+        // border: 1px solid #eee;
         border-radius: 5px;
-        margin-top: 15px;
+        overflow: hidden;
+        margin-top: 30px;
+
+        .product-statistic__products__list__header {
+          border-top-left-radius: 5px;
+          border-top-right-radius: 5px;
+          height: 200px;
+          padding: 30px;
+          padding-left: 40px;
+          background: #ff8220;
+          h1 {
+            color: white;
+            font-weight: bold;
+            .product-statistic__products__list__header__product-total {
+              background: orange;
+              height: 25px;
+              min-width: 50px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              margin-left: 20px;
+              font-size: 14px;
+              border-radius: 12px;
+            }
+          }
+          $searchBoxBackground: white;
+          .ant-input-affix-wrapper {
+            background: $searchBoxBackground;
+            border: 1px solid #eee;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: none;
+            outline-style: none;
+            padding-top: 7px;
+            padding-bottom: 7px;
+          }
+          .ant-input {
+            font-size: $fontSize1;
+            background: $searchBoxBackground;
+          }
+        }
+
+        .product-statistic__products__list__wrapper {
+          $tableFontSize: $fontSize0;
+          margin: 15px;
+          margin-top: -100px;
+          border-radius: 5px;
+          overflow: hidden;
+          box-shadow: $boxShadow0;
+          background: white;
+
+          .ant-table-body {
+            height: 545px;
+            @extend .styled-scrollbar;
+          }
+
+          .ant-table {
+            thead > tr > th {
+              font-size: $tableFontSize;
+              color: #ff8220;
+              font-weight: bold;
+              padding-left: 10px;
+              padding-right: 10px;
+
+              &:nth-child(6),
+              &:nth-child(7),
+              &:nth-child(8) {
+                text-align: center;
+              }
+            }
+
+            tbody > tr {
+              td {
+                font-size: $tableFontSize;
+                transition: 0.2s;
+                padding: 10px;
+              }
+
+              &:hover {
+                td {
+                  background: #fff6e6;
+                }
+              }
+            }
+
+            .ant-empty {
+              height: 450px;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+            }
+          }
+
+          .ant-table-pagination {
+            padding-right: 15px;
+
+            .ant-pagination-item-active a {
+              color: #ff8220;
+            }
+
+            .ant-pagination-item-active {
+              border-color: #ff8220;
+            }
+          }
+        }
       }
     }
   }

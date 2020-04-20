@@ -100,10 +100,10 @@ export default class RevenueStatistic extends Component {
     };
 
     return (
-      <div className="reporting__revenue-statistic reporting__block-style">
-        <Row style={{ width: '100%', position: 'relative' }} gutter={20}>
+      <div className="reporting__revenue-statistic reporting__block-style animated slideInUp">
+        <Row style={{ width: '100%', position: 'relative', margin: 0 }} gutter={20} justify="center">
           <Col span={8}>
-            <div className="reporting__revenue-statistic__widget --revenue-total">
+            <div className="reporting__revenue-statistic__widget --revenue-total animated fadeIn" style={{ animationDelay: '0.25s' }}>
               <div className="reporting__revenue-statistic__widget__content">
                 <div className="reporting__revenue-statistic__widget__content__value">
                   <DollarCircleOutlined />
@@ -115,12 +115,12 @@ export default class RevenueStatistic extends Component {
                     className="reporting__revenue-statistic__revenue__number"
                   />
                 </div>
-                <span className="reporting__revenue-statistic__widget__content__label">Tổng doanh thu siêu thị</span>
+                <span className="reporting__revenue-statistic__widget__content__label">Tổng doanh thu</span>
               </div>
             </div>
           </Col>
           <Col span={8}>
-            <div className="reporting__revenue-statistic__widget --payment-total">
+            <div className="reporting__revenue-statistic__widget --payment-total animated fadeIn" style={{ animationDelay: '0.5s' }}>
               <div className="reporting__revenue-statistic__widget__content">
                 <div className="reporting__revenue-statistic__widget__content__value">
                   <MinusCircleOutlined />
@@ -137,7 +137,7 @@ export default class RevenueStatistic extends Component {
             </div>
           </Col>
           <Col span={8}>
-            <div className="reporting__revenue-statistic__widget --profit-total">
+            <div className="reporting__revenue-statistic__widget --profit-total animated fadeIn" style={{ animationDelay: '0.75s' }}>
               <div className="reporting__revenue-statistic__widget__content">
                 <div className="reporting__revenue-statistic__widget__content__value">
                   <CoffeeOutlined />

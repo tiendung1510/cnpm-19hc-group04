@@ -17,12 +17,15 @@ export const API = {
     }
   },
   Manager: {
+    Reporting: {
+      getProducts: `${secret.API_URL}/products?page={page}&limit={limit}&soldStartDate={soldStartDate}&soldEndDate={soldEndDate}`
+    },
     ImportingRequestManagement: {
       getImportingRequest: `${secret.API_URL}/importing-requests`,
       acceptImportingRequests: `${secret.API_URL}/importing-requests`,
       cancelImportingRequest: `${secret.API_URL}/importing-requests/{importingRequestID}`,
 
-      getImporterAssignments: `${secret.API_URL}/importer-assignments`
+      getImporterAssignments: `${secret.API_URL}/importer-assignments`,
     },
     StaffManagement: {
       getListStaffs: `${secret.API_URL}/users`,
