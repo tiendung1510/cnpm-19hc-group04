@@ -122,7 +122,7 @@
       align-items: center;
 
       .product-statistic__products__header {
-        background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
+        // background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
         height: 180px;
         width: 100%;
         position: relative;
@@ -136,18 +136,19 @@
         .product-statistic__products__statistic__item {
           background: white;
           height: 200px;
-          box-shadow: $boxShadow1;
-          // border: 1px solid #eee;
+          // box-shadow: $boxShadow1;
+          border: 1px solid #eee;
           border-radius: 5px;
+          background: #f8f8f8;
         }
       }
 
       .product-statistic__products__best-seller {
         height: 325px;
-        background: white;
+        background: #f8f8f8;
         width: 96%;
-        box-shadow: $boxShadow1;
-        // border: 1px solid #eee;
+        // box-shadow: $boxShadow1;
+        border: 1px solid #eee;
         border-radius: 5px;
         padding: 30px;
         margin-top: 30px;
@@ -165,11 +166,18 @@
           padding-top: 10px;
           display: flex;
 
+          .ant-card-hoverable:hover {
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22) !important;
+            transform: scale(1.02, 1.02);
+          }
+
           .ant-card {
             border-top: 0;
             overflow: hidden;
             margin-right: 20px;
             cursor: initial;
+            box-shadow: $boxShadow1;
+
             .ant-card-cover {
               border: 1px solid #eee;
               display: flex;
@@ -211,7 +219,7 @@
       .product-statistic__products__list {
         width: 96%;
         background: #f8f8f8;
-        box-shadow: $boxShadow1;
+        // box-shadow: $boxShadow1;
         // border: 1px solid #eee;
         border-radius: 5px;
         overflow: hidden;
@@ -223,10 +231,12 @@
           height: 200px;
           padding: 30px;
           padding-left: 40px;
-          background: #ff8220;
+          // background: #ff8220;
+          background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
           h1 {
             color: white;
             font-weight: bold;
+            text-shadow: 1px 1px 2px rgba($color: #000000, $alpha: 0.4);
             .product-statistic__products__list__header__product-total {
               background: orange;
               height: 25px;
@@ -262,7 +272,7 @@
           margin-top: -100px;
           border-radius: 5px;
           overflow: hidden;
-          box-shadow: $boxShadow0;
+          box-shadow: $boxShadow1;
           background: white;
 
           .ant-table-body {

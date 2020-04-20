@@ -19,7 +19,7 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
     background: #f8f8f8;
 
     .sidebar__header__company-logo {
-      width: 25px;
+      width: 26px;
       margin-right: 7px;
       margin-top: -1px;
     }
@@ -48,7 +48,8 @@ $primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
   }
 
   .ant-menu-item-selected {
-    background: #ff8220 !important;
+    // background: #ff8220 !important;
+    background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
     font-weight: bold;
     color: white !important;
     border-top-right-radius: 24px;
