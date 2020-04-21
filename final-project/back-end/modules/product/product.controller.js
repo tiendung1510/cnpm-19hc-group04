@@ -352,11 +352,23 @@ const getProducts = async (req, res, next) => {
       }
     ]);
 
+    // Find the product's imported quantity
+    const importedProducts = await ImportedProductModel.aggregate([
+      {
+        $group: {
+          _id: '$product',
+          quantity: { $sum: '$importedQuantity' }
+        }
+      }
+    ]);
+
     result.products = result.products
       .map(item => {
         let _item = JSON.parse(JSON.stringify(item));
         const soldProduct = soldProducts.find(p => p._id.toString() === item._id.toString());
+        const importedProduct = importedProducts.find(p => p._id.toString() === item._id.toString());
         _item.soldQuantity = soldProduct ? soldProduct.quantity : 0;
+        _item.importedQuantity = importedProduct ? importedProduct.quantity : 0;
         return _item;
       })
       .sort((a, b) => b.soldQuantity - a.soldQuantity);
