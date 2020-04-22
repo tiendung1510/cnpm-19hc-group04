@@ -93,7 +93,7 @@ class TransactionHistory extends PageBase {
                                 value={Number(cs.priceTotal)}
                                 displayType="text"
                                 thousandSeparator={true}
-                                suffix=" VNĐ"
+                                suffix=" đ̲"
                                 style={{ fontWeight: 'bold' }}
                               />
                             </div>

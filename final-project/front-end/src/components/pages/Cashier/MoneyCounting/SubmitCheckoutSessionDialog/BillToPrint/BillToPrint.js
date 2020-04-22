@@ -73,7 +73,7 @@ class BillToPrint extends Component {
                 value={Number(checkoutSession.priceTotal)}
                 displayType="text"
                 thousandSeparator={true}
-                suffix={' VNĐ'}
+                suffix={' đ̲'}
               />
             </Col>
           </Row>

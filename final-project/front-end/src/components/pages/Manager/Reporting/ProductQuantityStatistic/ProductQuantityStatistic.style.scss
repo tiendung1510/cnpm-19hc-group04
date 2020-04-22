@@ -1,0 +1,38 @@
+.product-quantity-statistic {
+  padding: 25px;
+
+  .product-quantity-statistic__item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 15%;
+    height: 120px;
+    display: flex;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+
+    &.--sold {
+      background: orange;
+      color: white;
+    }
+
+    &.--new {
+      background: #40a5ec;
+      color: white;
+    }
+
+    &.--available {
+      background: #ff6f61;
+      color: white;
+    }
+
+    .product-quantity-statistic__item__quantity {
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .product-quantity-statistic__item__label {
+      font-size: 14px;
+    }
+  }
+}

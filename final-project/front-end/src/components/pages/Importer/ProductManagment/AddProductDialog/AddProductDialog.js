@@ -147,7 +147,7 @@ class AddProductDialog extends PageBase {
 
               <Form.Item
                 name="price"
-                label="Giá bán (VNĐ)"
+                label="Giá bán (đ̲)"
                 rules={[
                   {
                     required: true,

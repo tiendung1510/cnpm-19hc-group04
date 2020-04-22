@@ -65,7 +65,7 @@ class Sidebar extends Component {
           {pagesByUserRole.map((page, pageIndex) => {
             const Page = { Icon: page.icon };
             return (
-              <Menu.Item key={pageIndex} className="animated slideInLeft"
+              <Menu.Item key={pageIndex}
                 onClick={() => {
                   this.props.setCurrentPageTitle(page.title, page.icon);
                   this.props.setSidebarSelectedIndex(pageIndex);

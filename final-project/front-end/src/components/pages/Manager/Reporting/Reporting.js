@@ -1,5 +1,5 @@
 import React from 'react';
-import { DatePicker, Row, Col, Table, Input, Progress } from 'antd';
+import { DatePicker, Row, Col, Table, Input } from 'antd';
 import './Reporting.style.scss';
 import PageBase from '../../../utilities/PageBase/PageBase';
 import { connect } from 'react-redux';
@@ -14,7 +14,8 @@ import QRCode from 'qrcode.react';
 import NumberFormat from 'react-number-format';
 import { SearchOutlined } from '@ant-design/icons';
 import BestSelling from './BestSelling/BestSelling';
-import * as _ from 'lodash';
+import ImportingStatistic from './ImportingStatistic/ImportingStatistic';
+import ProductQuantityStatistic from './ProductQuantityStatistic/ProductQuantityStatistic';
 
 class Reporting extends PageBase {
   constructor(props) {
@@ -23,6 +24,12 @@ class Reporting extends PageBase {
       month: new Date().getMonth() + 1,
       year: new Date().getFullYear(),
       products: [],
+      bestSellingProducts: [],
+      importedQuantityTotal: 0,
+      requiredQuantityTotal: 0,
+      importingCostTotal: 0,
+      requiredImportingCostTotal: 0,
+      soldQuantityTotal: 0,
       productCurrentPage: 1,
       productPageLimit: 10,
       productTotal: 0,
@@ -106,15 +113,21 @@ class Reporting extends PageBase {
     if (this.state.isLoading)
       return null;
 
-    let { month, year, products, productCurrentPage, productPageLimit, productTotal } = this.state;
+    let {
+      month,
+      year,
+      products,
+      bestSellingProducts,
+      importedQuantityTotal,
+      requiredQuantityTotal,
+      importingCostTotal,
+      requiredImportingCostTotal,
+      soldQuantityTotal,
+      productCurrentPage,
+      productPageLimit,
+      productTotal
+    } = this.state;
     products = products.map((p, i) => ({ ...p, key: i }));
-    const bestSellingProducts = products.slice(0, 7);
-    const importedQuantityTotal = products.reduce((acc, cur) => acc + cur.importedQuantity, 0);
-    const importingPriceTotal = products.reduce((acc, cur) => acc + cur.importedQuantity * cur.price, 0);
-    const requiredQuantityTotal = products.reduce((acc, cur) => acc + cur.requiredQuantity, 0);
-    const requiredPriceTotal = products.reduce((acc, cur) => acc + cur.requiredQuantity * cur.price, 0);
-    const importingCompleteRatio = _.round(importedQuantityTotal * 100 / (importedQuantityTotal + requiredQuantityTotal), 2);
-    // const soldQuantityTotal = products.reduce((acc, cur) => acc + cur.soldQuantity, 0);
     const isPaginationShown = Math.ceil(productTotal / productPageLimit) > 1;
     const columns = [
       {
@@ -159,20 +172,20 @@ class Reporting extends PageBase {
             value={Number(text)}
             displayType="text"
             thousandSeparator={true}
-            suffix=" VNĐ"
+            suffix=" đ̲"
             style={{ fontWeight: 'bold' }}
           />
         )
       },
       {
-        title: 'SL đã nhập',
+        title: `SL đã nhập (Th${this.state.month}/${this.state.year})`,
         dataIndex: 'importedQuantity',
         key: 'importedQuantity',
         width: 80,
         render: (text) => (<center>{text}</center>),
       },
       {
-        title: 'SL đã bán',
+        title: `SL đã bán (Th${this.state.month}/${this.state.year})`,
         dataIndex: 'soldQuantity',
         key: 'soldQuantity',
         width: 80,
@@ -246,86 +259,30 @@ class Reporting extends PageBase {
                 </div>
                 <div className="product-statistic__products__statistic">
                   <Row style={{ width: '100%' }} gutter={10}>
-                    <Col span={6} style={{ paddingLeft: 0 }}>
-                      <div className="product-statistic__products__statistic__item">
-                        <div className="product-statistic__products__statistic__item__header">
-                          <span className="product-statistic__products__statistic__item__header__title">Tổng thể nhập hàng</span>
-                          <div className="product-statistic__products__statistic__item__header__importing-cost">
-                            <span>Chi phí đã nhập:</span>
-                            <NumberFormat
-                              value={importingPriceTotal}
-                              displayType="text"
-                              thousandSeparator={true}
-                              suffix=" VNĐ"
-                              className="product-statistic__products__statistic__item__header__importing-cost__number"
-                            />
-                          </div>
-                          <div className="product-statistic__products__statistic__item__header__importing-cost">
-                            <span>Chi phí dự kiến:</span>
-                            <NumberFormat
-                              value={requiredPriceTotal}
-                              displayType="text"
-                              thousandSeparator={true}
-                              suffix=" VNĐ"
-                              className="product-statistic__products__statistic__item__header__importing-cost__number"
-                            />
-                          </div>
-                        </div>
 
-                        <div className="product-statistic__products__statistic__item__progress-wrapper">
-                          <Progress
-                            type="circle"
-                            strokeColor={importingCompleteRatio < 100 ? '#ff8220' : ''}
-                            percent={importingCompleteRatio}
-                            format={percent => (
-                              <div className="product-statistic__products__statistic__item__progress-wrapper__progress-inner">
-                                <span className="product-statistic__products__statistic__item__progress-wrapper__progress-inner__value">
-                                  {importedQuantityTotal}/{requiredQuantityTotal}
-                                </span>
-                                <span className="product-statistic__products__statistic__item__progress-wrapper__progress-inner__label">
-                                  Sản phẩm
-                                </span>
-                              </div>
-                            )}
-                          />
-                        </div>
-                        <div className="product-statistic__products__statistic__item__footer">
-                          <Row style={{ width: '100%', height: '100%' }} justify="center">
-                            <Col span={12}>
-                              <div className="product-statistic__products__statistic__item__footer__col">
-                                <span className="product-statistic__products__statistic__item__footer__col__value">
-                                  {importedQuantityTotal}
-                                </span>
-                                <span className="product-statistic__products__statistic__item__footer__col__label">
-                                  Sản phẩm đã nhập
-                                </span>
-                              </div>
-                            </Col>
-                            <Col span={12}>
-                              <div className="product-statistic__products__statistic__item__footer__col">
-                                <span className="product-statistic__products__statistic__item__footer__col__value">
-                                  {requiredQuantityTotal}
-                                </span>
-                                <span className="product-statistic__products__statistic__item__footer__col__label">
-                                  Sản phẩm cần nhập
-                                </span>
-                              </div>
-                            </Col>
-                          </Row>
-                        </div>
-                      </div>
+                    <Col span={6} style={{ paddingLeft: 0 }}>
+                      <ImportingStatistic
+                        importedQuantityTotal={importedQuantityTotal}
+                        requiredQuantityTotal={requiredQuantityTotal}
+                        importingCostTotal={importingCostTotal}
+                        requiredImportingCostTotal={requiredImportingCostTotal}
+                      />
                     </Col>
+
                     <Col span={18} style={{ paddingRight: 0 }}>
                       <div className="product-statistic__products__statistic__item">
-
+                        <ProductQuantityStatistic
+                          soldQuantityTotal={soldQuantityTotal}
+                          availableQuantityTotal={productTotal}
+                        />
+                        <BestSelling
+                          products={[...bestSellingProducts]}
+                        />
                       </div>
                     </Col>
+
                   </Row>
                 </div>
-
-                <BestSelling
-                  products={[...bestSellingProducts]}
-                />
 
                 <div className="product-statistic__products__list">
                   <div className="product-statistic__products__list__header">

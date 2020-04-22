@@ -500,7 +500,7 @@ class ProductManagement extends PageBase {
             value={Number(text)}
             displayType="text"
             thousandSeparator={true}
-            suffix=" VNĐ"
+            suffix=" đ̲"
             style={{ fontWeight: 'bold' }}
           />
         )
@@ -772,7 +772,7 @@ class ProductManagement extends PageBase {
 
                             <Form.Item
                               name="price"
-                              label="Giá bán (VNĐ)"
+                              label="Giá bán (đ̲)"
                               rules={[
                                 {
                                   required: true,

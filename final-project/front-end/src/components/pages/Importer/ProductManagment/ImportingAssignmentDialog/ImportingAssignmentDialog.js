@@ -4,6 +4,7 @@ import './ImportingAssignmentDialog.style.scss';
 import moment from 'moment';
 import NumberFormat from 'react-number-format';
 import IMPORTING_REQUEST from '../../../../../constants/importing-request.constant';
+import * as _ from 'lodash';
 
 export default class ImportingAssignmentDialog extends Component {
   constructor(props) {
@@ -54,7 +55,7 @@ export default class ImportingAssignmentDialog extends Component {
             value={record.product.price}
             displayType="text"
             thousandSeparator={true}
-            suffix=" VNĐ"
+            suffix=" đ̲"
             style={{ fontWeight: 'bold' }}
           />
         )
@@ -108,7 +109,7 @@ export default class ImportingAssignmentDialog extends Component {
               <li>
                 <Progress
                   strokeColor="#ff8220"
-                  percent={(importedQuantityTotal / requiredQuantityTotal) * 100} status="active"
+                  percent={_.round((importedQuantityTotal / requiredQuantityTotal) * 100, 0)} status="active"
                 />
               </li>
               <li>
@@ -118,7 +119,7 @@ export default class ImportingAssignmentDialog extends Component {
                     value={data.priceTotal}
                     displayType="text"
                     thousandSeparator={true}
-                    suffix=" VNĐ"
+                    suffix=" đ̲"
                     style={{ marginLeft: 3 }}
                   />
                 </strong>

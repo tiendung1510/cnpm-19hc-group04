@@ -291,7 +291,7 @@ class MoneyCounting extends PageBase {
 						value={Number(text)}
 						displayType="text"
 						thousandSeparator={true}
-						suffix=" VNĐ"
+						suffix=" đ̲"
 						style={{ fontWeight: 'bold' }}
 					/>
 				)
@@ -436,7 +436,7 @@ class MoneyCounting extends PageBase {
 																		value={scannedProduct.price}
 																		displayType="text"
 																		thousandSeparator={true}
-																		suffix=" VNĐ"
+																		suffix=" đ̲"
 																		style={{ fontWeight: 'bold' }} />
 																</li>
 																<li>{scannedProduct.category.name}</li>
@@ -477,7 +477,7 @@ class MoneyCounting extends PageBase {
 																value={priceTotal}
 																displayType="text"
 																thousandSeparator={true}
-																suffix=" VNĐ"
+																suffix=" đ̲"
 																className="money-counting__panel__right__header__total-price__price"
 															/>
 														</div>

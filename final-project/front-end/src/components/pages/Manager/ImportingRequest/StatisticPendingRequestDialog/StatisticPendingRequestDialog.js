@@ -136,7 +136,7 @@ class StatisticPendingRequestDialog extends PageBase {
             value={record.product.price}
             displayType="text"
             thousandSeparator={true}
-            suffix=" VNĐ"
+            suffix=" đ̲"
             style={{ fontWeight: 'bold' }}
           />
         )
@@ -218,7 +218,7 @@ class StatisticPendingRequestDialog extends PageBase {
                 value={priceTotal}
                 displayType="text"
                 thousandSeparator={true}
-                suffix=" VNĐ"
+                suffix=" đ̲"
                 style={{ fontWeight: 'bold' }}
               />
             </Col>

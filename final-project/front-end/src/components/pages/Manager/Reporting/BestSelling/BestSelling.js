@@ -37,33 +37,39 @@ export default class BestSelling extends Component {
       <div className="product-statistic__products__best-selling">
         <h1>
           Sản phẩm bán chạy
-                    <div className="product-statistic__products__best-selling__hot-badge">HOT</div>
+          <span className="product-statistic__products__best-selling__hot-badge">HOT</span>
         </h1>
-        <div className="product-statistic__products__best-selling__items">
-          <Carousel
-            swipeable={false}
-            draggable={true}
-            ssr={true} // means to render carousel on server-side.
-            keyBoardControl={true}
-            responsive={responsive}
-            containerClass="carousel-container"
-            removeArrowOnDeviceType={["tablet", "mobile"]}
-            deviceType={deviceType}
-            itemClass="carousel-item-padding-40-px"
+        {products.length === 0 ? (
+          <div className="product-statistic__products__best-selling__items" style={{ paddingLeft: 5 }}>
+            <span>Chưa ghi nhận.</span>
+          </div>
+        ) : (
+            <div className="product-statistic__products__best-selling__items">
+              <Carousel
+                swipeable={false}
+                draggable={true}
+                ssr={true} // means to render carousel on server-side.
+                keyBoardControl={true}
+                responsive={responsive}
+                containerClass="carousel-container"
+                removeArrowOnDeviceType={["tablet", "mobile"]}
+                deviceType={deviceType}
+                itemClass="carousel-item-padding-40-px"
 
-          >
-            {products.map((p, i) => {
-              return (
-                <Card
-                  cover={<img alt="example" src={p.image} />}
-                  key={i}
-                >
-                  <Meta title={p.name} description={<span>SL đã bán: <strong>{p.soldQuantity}</strong></span>} />
-                </Card>
-              );
-            })}
-          </Carousel>
-        </div>
+              >
+                {products.map((p, i) => {
+                  return (
+                    <Card
+                      cover={<img alt="example" src={p.details.image} />}
+                      key={i}
+                    >
+                      <Meta title={p.details.name} description={<span>SL đã bán: <strong>{p.quantity}</strong></span>} />
+                    </Card>
+                  );
+                })}
+              </Carousel>
+            </div>
+          )}
       </div>
     )
   }

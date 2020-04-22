@@ -14,7 +14,7 @@
     width: 100%;
     height: 89vh;
     background: $primaryBgColor;
-    box-shadow: $boxShadow2;
+    box-shadow: $boxShadow1;
     border-radius: $primaryBorderRadius;
     overflow: hidden;
     display: flex;
@@ -38,11 +38,10 @@
         margin-top: 10px;
         margin-bottom: 20px;
         background: white;
-        border: 1px solid #eee;
+        box-shadow: $boxShadow1;
 
         &.checkout-panel__main-board__navbar__item--selected {
           background: #ff8220 !important;
-          box-shadow: $boxShadow1;
           border: 0;
 
           .checkout-panel__main-board__navbar__item__icon {

@@ -1,7 +1,7 @@
 .product-statistic__products__best-selling {
   $textShadow1: 1px 1px 2px rgba(0, 0, 0, 0.4);
   $boxShadow0: 0 0 5px rgba(0, 0, 0, 0.15);
-  $boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.12);
+  $boxShadow1: 0 1px 2px rgba(0, 0, 0, 0.2);
   $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.23);
   $borderRadius0: 3px;
   $borderRadius1: 5px;
@@ -13,16 +13,18 @@
 
   background: white;
   width: 100%;
-  box-shadow: $boxShadow1;
-  padding: 30px;
-  padding-top: 15px;
-  margin-top: 15px;
+  // box-shadow: $boxShadow1;
+  padding: 20px 25px;
+  padding-top: 0;
   border-radius: 10px;
+  position: absolute;
+  bottom: 0;
 
   h1 {
-    height: 60px !important;
-    color: rgba($color: #000000, $alpha: 0.7);
+    height: 45px !important;
+    color: #ff8220;
     font-size: $fontSize2 !important;
+    font-weight: bold;
   }
 
   .product-statistic__products__best-selling__hot-badge {
@@ -42,7 +44,7 @@
     // background: #eee;
 
     .react-multi-carousel-item {
-      width: 200px !important;
+      width: 180px !important;
       padding-bottom: 1px;
     }
 
@@ -61,7 +63,7 @@
         display: flex;
         justify-content: center;
         align-content: center;
-        height: 140px;
+        height: 120px;
         position: relative;
         background: white;
         img {

@@ -93,7 +93,7 @@ class PendingRequest extends PageBase {
             value={record.product.price}
             displayType="text"
             thousandSeparator={true}
-            suffix=" VNĐ"
+            suffix=" đ̲"
             style={{ fontWeight: 'bold' }}
           />
         )

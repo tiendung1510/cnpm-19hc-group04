@@ -76,7 +76,10 @@ class StaffManagement extends PageBase {
 
     if (filteredStaffs.length > 0) {
       if (defaultStaff) {
-        selectedStaff = defaultStaff;
+        if (selectedStaff.workAssignments) {
+          const { workAssignments } = selectedStaff;
+          selectedStaff = { ...defaultStaff, workAssignments }
+        }
       } else {
         selectedStaff = filteredStaffs[0];
       }
