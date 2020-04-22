@@ -349,25 +349,39 @@ const getProducts = async (req, res, next) => {
           _id: '$soldItem.product',
           quantity: { $sum: '$soldItem.quantity' }
         }
-      }
+      },
+      { $sort: { quantity: -1 } },
+      { $lookup: { from: 'Products', localField: '_id', foreignField: '_id', as: 'details' } },
+      { $unwind: '$details' }
     ]);
+    result.soldQuantityTotal = soldProducts.reduce((acc, cur) => acc + cur.quantity, 0);
+    result.bestSellingProducts = [...soldProducts].splice(0, 11);
 
     // Find the product's imported quantity
     const importedProducts = await ImportedProductModel.aggregate([
+      { $lookup: { from: 'Products', localField: 'product', foreignField: '_id', as: 'product' } },
+      { $unwind: '$product' },
+      { $match: cond },
       {
         $group: {
-          _id: '$product',
+          _id: '$product._id',
           importedQuantity: { $sum: '$importedQuantity' },
           requiredQuantity: { $sum: '$requiredQuantity' }
         }
-      }
+      },
+      { $lookup: { from: 'Products', localField: '_id', foreignField: '_id', as: 'details' } },
+      { $unwind: '$details' }
     ]);
+    result.importedQuantityTotal = importedProducts.reduce((acc, cur) => acc + cur.importedQuantity, 0);
+    result.requiredQuantityTotal = importedProducts.reduce((acc, cur) => acc + cur.requiredQuantity, 0);
+    result.importingCostTotal = importedProducts.reduce((acc, cur) => acc + cur.importedQuantity * cur.details.price, 0);
+    result.requiredImportingCostTotal = importedProducts.reduce((acc, cur) => acc + cur.requiredQuantity * cur.details.price, 0);
 
     result.products = result.products
       .map(item => {
         let _item = JSON.parse(JSON.stringify(item));
-        const soldProduct = soldProducts.find(p => p._id.toString() === item._id.toString());
-        const importedProduct = importedProducts.find(p => p._id.toString() === item._id.toString());
+        const soldProduct = soldProducts.find(p => p.details._id.toString() === _item._id.toString());
+        const importedProduct = importedProducts.find(p => p.details._id.toString() === _item._id.toString());
         _item.soldQuantity = soldProduct ? soldProduct.quantity : 0;
         _item.importedQuantity = importedProduct ? importedProduct.importedQuantity : 0;
         _item.requiredQuantity = importedProduct ? importedProduct.requiredQuantity : 0;
