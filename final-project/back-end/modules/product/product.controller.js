@@ -17,8 +17,12 @@ const ImportedProductModel = require('../imported-product/imported-product.model
 const ProductActionLogModel = require('../product-action-log/product-action-log.model');
 const ImportingRequestModel = require('../importing-request/importing-request.model');
 const CheckoutSessionModel = require('../checkout-session/checkout-session.model');
+const UserModel = require('../user/user.model');
+const SoldItemModel = require('../sold-item/sold-item.model');
+const { BASIC_SALARY } = require('../user/user.constant');
 const { PRODUCT_ACTION_TYPE } = require('../product-action-log/product-action-log.constant');
 const { STATUS } = require('../importing-request/importing-request.constant');
+const moment = require('moment');
 
 const addProduct = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::addProduct::was called`);
@@ -283,85 +287,130 @@ const updateProduct = async (req, res, next) => {
 const getProducts = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::getProducts::was called`);
   try {
-    let { page, limit, soldStartDate, soldEndDate } = req.query;
-    let result = {};
-    if (page && limit) {
-      page = Number(page);
-      limit = Number(limit);
-      queryResults = await ProductModel.aggregate([
-        {
-          $facet: {
-            products: [
-              { $lookup: { from: 'Suppliers', localField: 'supplier', foreignField: '_id', as: 'supplier' } },
-              { $unwind: '$supplier' },
-              { $lookup: { from: 'Categories', localField: 'category', foreignField: '_id', as: 'category' } },
-              { $unwind: '$category' },
-              { $project: { 'supplier.products': 0, 'category.products': 0 } },
-              { $skip: limit * (page - 1) },
-              { $limit: limit }
-            ],
-            entries: [
-              { $group: { _id: null, productTotal: { $sum: 1 } } },
-              { $project: { _id: 0, productTotal: 1 } }
-            ]
-          }
-        }
-      ]);
-      result = {
-        products: queryResults[0].products,
-        productTotal: queryResults[0].entries[0].productTotal
-      }
-    } else {
+    let { page, limit, statisticStartDate, statisticEndDate } = req.query;
+    if (!(page && limit && statisticStartDate && statisticEndDate)) {
       const products = await ProductModel.find({})
         .populate('category', '-products')
         .populate('supplier', '-products');
-      result = {
-        products: [...products],
-        productTotal: products.length
+      return res.status(HttpStatus.OK).json({
+        status: HttpStatus.OK,
+        data: { products },
+        messages: [PRODUCT_MESSAGE.SUCCESS.GET_PRODUCTS_SUCCESS]
+      });
+    }
+
+    let result = {};
+    page = Number(page);
+    limit = Number(limit);
+    statisticStartDate = Number(statisticStartDate);
+    statisticEndDate = Number(statisticEndDate);
+    const month = new Date(statisticStartDate).getMonth() + 1;
+    const year = new Date(statisticStartDate).getFullYear();
+    const daysInMonth = moment(`${month}/${year}`, 'MM/YYYY').daysInMonth();
+    const createdAtCond = {
+      createdAt: {
+        $gte: new Date(statisticStartDate),
+        $lte: new Date(statisticEndDate)
       }
     }
 
-    // Find the product's sold quantity
-    let cond = {};
-    if (soldStartDate && soldEndDate) {
-      cond = {
-        createdAt: {
-          $gte: new Date(Number(soldStartDate)),
-          $lte: new Date(Number(soldEndDate))
+    // get paginated list of products and count the total number of products
+    queryResults = await ProductModel.aggregate([
+      {
+        $facet: {
+          products: [
+            { $lookup: { from: 'Suppliers', localField: 'supplier', foreignField: '_id', as: 'supplier' } },
+            { $unwind: '$supplier' },
+            { $lookup: { from: 'Categories', localField: 'category', foreignField: '_id', as: 'category' } },
+            { $unwind: '$category' },
+            { $project: { 'supplier.products': 0, 'category.products': 0 } },
+            { $skip: limit * (page - 1) },
+            { $limit: limit }
+          ],
+          entries: [
+            { $group: { _id: null, productTotal: { $sum: 1 } } },
+            { $project: { _id: 0, productTotal: 1 } }
+          ]
         }
       }
+    ]);
+    result = {
+      products: queryResults[0].products,
+      productTotal: queryResults[0].entries[0].productTotal
     }
 
+    // Calculate product's sold quantity total, find a list of best-selling products
     const soldProducts = await CheckoutSessionModel.aggregate([
-      { $unwind: '$soldItems' },
-      {
-        $lookup: {
-          from: 'SoldItems',
-          localField: 'soldItems',
-          foreignField: '_id',
-          as: 'soldItem'
-        }
-      },
+      { $lookup: { from: 'SoldItems', localField: 'soldItems', foreignField: '_id', as: 'soldItem' } },
       { $unwind: '$soldItem' },
-      { $match: cond },
-      {
-        $group: {
-          _id: '$soldItem.product',
-          quantity: { $sum: '$soldItem.quantity' }
-        }
-      },
+      { $match: createdAtCond },
+      { $group: { _id: '$soldItem.product', quantity: { $sum: '$soldItem.quantity' } } },
       { $sort: { quantity: -1 } },
       { $lookup: { from: 'Products', localField: '_id', foreignField: '_id', as: 'details' } },
       { $unwind: '$details' }
     ]);
     result.soldQuantityTotal = soldProducts.reduce((acc, cur) => acc + cur.quantity, 0);
-    result.bestSellingProducts = [...soldProducts].splice(0, 11);
+    result.bestSellingProducts = [...soldProducts].filter(p => p.quantity > 0).slice(0, 11);
 
-    // Find the product's imported quantity
+    // statistic daily sold quantity in month
+    const sellingDates = await CheckoutSessionModel.aggregate([
+      { $lookup: { from: 'SoldItems', localField: 'soldItems', foreignField: '_id', as: 'soldItem' } },
+      { $unwind: '$soldItem' },
+      { $match: createdAtCond },
+      { $group: { _id: '$submittedAt', quantity: { $sum: '$soldItem.quantity' } } },
+      { $project: { _id: 0, submittedAt: '$_id', quantity: 1 } }
+    ]);
+    let soldQuantityStatisticData = [];
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = moment(`${day}/${month}/${year}`, 'DD/MM/YYYY');
+      soldQuantityStatisticData.push({
+        date,
+        quantity: sellingDates.reduce((acc, cur) => moment(cur.submittedAt).format('DD/MM/YYYY') === date.format('DD/MM/YYYY') ? (acc + cur.quantity) : acc, 0)
+      });
+    }
+    result.soldQuantityStatisticData = [...soldQuantityStatisticData];
+
+    // Calculate revenue total and statistic daily revenue total in month
+    result.revenueTotal = soldProducts.reduce((acc, cur) => acc + cur.quantity * cur.details.price, 0);
+    const checkoutSessions = await CheckoutSessionModel.aggregate([
+      {
+        $match: {
+          submittedAt: {
+            $gte: new Date(statisticStartDate),
+            $lte: new Date(statisticEndDate)
+          }
+        }
+      },
+      {
+        $group: {
+          _id: '$submittedAt',
+          priceTotal: { $sum: '$priceTotal' }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          submittedAt: '$_id',
+          priceTotal: 1
+        }
+      }
+    ]);
+
+    let revenueStatisticData = [];
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = moment(`${day}/${month}/${year}`, 'DD/MM/YYYY');
+      revenueStatisticData.push({
+        date,
+        revenue: checkoutSessions.reduce((acc, cur) => moment(cur.submittedAt).format('DD/MM/YYYY') === date.format('DD/MM/YYYY') ? (acc + cur.priceTotal) : acc, 0)
+      });
+    }
+    result.revenueStatisticData = [...revenueStatisticData];
+
+    // Calculate product's imported quantity total, required quantity total, importing cost total & required importing cost total
     const importedProducts = await ImportedProductModel.aggregate([
       { $lookup: { from: 'Products', localField: 'product', foreignField: '_id', as: 'product' } },
       { $unwind: '$product' },
-      { $match: cond },
+      { $match: createdAtCond },
       {
         $group: {
           _id: '$product._id',
@@ -376,6 +425,24 @@ const getProducts = async (req, res, next) => {
     result.requiredQuantityTotal = importedProducts.reduce((acc, cur) => acc + cur.requiredQuantity, 0);
     result.importingCostTotal = importedProducts.reduce((acc, cur) => acc + cur.importedQuantity * cur.details.price, 0);
     result.requiredImportingCostTotal = importedProducts.reduce((acc, cur) => acc + cur.requiredQuantity * cur.details.price, 0);
+
+    // Find new product total
+    const productActionLogs = await ProductActionLogModel.aggregate([
+      {
+        $match: {
+          ...createdAtCond,
+          actionType: PRODUCT_ACTION_TYPE.ADD.type
+        }
+      }
+    ]);
+    result.newProductTotal = productActionLogs.length;
+
+    // Calculate payment total
+    const salaryTotalResults = await UserModel.aggregate([
+      { $group: { _id: null, salaryTotal: { $sum: { $multiply: ['$salaryRate', BASIC_SALARY] } } } },
+      { $unwind: '$salaryTotal' }
+    ]);
+    result.paymentTotal = salaryTotalResults[0].salaryTotal + result.importingCostTotal;
 
     result.products = result.products
       .map(item => {
