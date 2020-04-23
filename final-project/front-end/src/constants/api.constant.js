@@ -18,7 +18,7 @@ export const API = {
   },
   Manager: {
     Reporting: {
-      getProducts: `${secret.API_URL}/products?page={page}&limit={limit}&soldStartDate={soldStartDate}&soldEndDate={soldEndDate}`
+      getProducts: `${secret.API_URL}/products?page={page}&limit={limit}&statisticStartDate={statisticStartDate}&statisticEndDate={statisticEndDate}`
     },
     ImportingRequestManagement: {
       getImportingRequest: `${secret.API_URL}/importing-requests`,

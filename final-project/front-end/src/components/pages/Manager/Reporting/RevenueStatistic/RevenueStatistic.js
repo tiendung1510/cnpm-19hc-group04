@@ -2,81 +2,59 @@ import React, { Component } from 'react';
 import './RevenueStatistic.style.scss';
 import moment from 'moment';
 import NumberFormat from 'react-number-format';
-import { Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import { Row, Col } from 'antd';
 import { DollarCircleOutlined, MinusCircleOutlined, CoffeeOutlined } from '@ant-design/icons';
 
 export default class RevenueStatistic extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: []
-    }
-  }
-
-  componentDidMount() {
-    const { month, year } = this.props;
-    this.loadData(month, year);
-  }
-
-  componentWillReceiveProps(props) {
-    const { month, year } = props;
-    this.loadData(month, year);
-  }
-
-  loadData(month, year) {
-    let data = [];
-    const daysInMonth = moment(`${month}/${year}`, 'MM/YYYY').daysInMonth();
-    for (let day = 1; day <= daysInMonth; day++)
-      data.push({
-        date: moment(`${day}/${month}/${year}`, 'DD/MM/YYYY'),
-        revenue: Math.random(),
-        payment: Math.random()
-      });
-    this.setState({ data });
-  }
-
   render() {
-    const { data } = this.state;
-    const revenueTotal = data.reduce((acc, cur) => acc + cur.revenue, 0);
-    const paymentTotal = data.reduce((acc, cur) => acc + cur.payment, 0);
+    const { statisticData, revenueTotal, paymentTotal } = this.props;
     const profitTotal = revenueTotal - paymentTotal;
     const height = 55;
+    const chartOptions = {
+      scales: {
+        xAxes: [{
+          gridLines: {
+            display: false
+          }
+        }]
+      }
+    };
     const lineChartData = (canvas) => {
       const ctx = canvas.getContext("2d")
       const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-      gradient.addColorStop(0, '#ffb833');
-      gradient.addColorStop(1, 'rgba(255, 237, 204, 0)');
+      gradient.addColorStop(0, '#f09819');
+      gradient.addColorStop(1, '#ff5858');
       return {
-        labels: data.map(item => item.date.format('DD/MM')),
+        labels: statisticData.map(item => moment(item.date).format('DD/MM')),
         datasets: [
           {
             label: 'Doanh thu bán hàng',
             fill: true,
             lineTension: 0.3,
             backgroundColor: gradient,
-            borderColor: 'orange',
+            borderColor: '#ff8220',
             borderCapStyle: 'butt',
             borderDash: [],
             borderDashOffset: 0.0,
             borderJoinStyle: 'miter',
-            pointBorderColor: 'orange',
+            pointBorderColor: '#ff8220',
             pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
+            pointBorderWidth: 2,
             pointHoverRadius: 5,
             pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'orange',
+            pointHoverBorderColor: '#ff8220',
             pointHoverBorderWidth: 2,
-            pointRadius: 1,
+            pointRadius: 3,
             pointHitRadius: 10,
-            data: data.map(item => item.revenue)
+            data: statisticData.map(item => item.revenue)
           }
         ]
       }
     };
 
     return (
-      <div className="reporting__revenue-statistic reporting__block-style animated slideInUp">
+      <div className="reporting__revenue-statistic reporting__block-style">
         <Row style={{ width: '100%', position: 'relative', margin: 0 }} gutter={20} justify="center">
           <Col span={8}>
             <div className="reporting__revenue-statistic__widget --revenue-total">
@@ -131,7 +109,11 @@ export default class RevenueStatistic extends Component {
           </Col>
         </Row>
         <div className="reporting__revenue-statistic__chart">
-          <Line data={lineChartData} height={height} />
+          <Bar
+            data={lineChartData}
+            options={chartOptions}
+            height={height}
+          />
         </div>
       </div>
     )

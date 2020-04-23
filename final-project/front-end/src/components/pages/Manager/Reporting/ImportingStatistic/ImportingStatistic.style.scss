@@ -1,6 +1,6 @@
 $fontSize0: 11px;
 $fontSize1: 12px;
-$fontSize2: 16px;
+$fontSize2: 15px;
 $fontSize3: 20px;
 
 .--importing-statistic__header {
@@ -71,10 +71,10 @@ $fontSize3: 20px;
     align-items: center;
     border: 1px solid #eee;
     height: 100%;
-    line-height: 25px;
+    line-height: 27px;
 
     .--importing-statistic__footer__col__value {
-      font-size: $fontSize3;
+      font-size: $fontSize3 + 2;
       font-weight: bold;
     }
 

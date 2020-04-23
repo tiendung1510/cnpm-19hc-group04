@@ -68,7 +68,7 @@ class Toolbar extends Component {
                 <Row align="middle">
                   <Col span={4}><Avatar size={30} src={user.avatar} /></Col>
                   <Col span={20}>
-                    <span style={{ margin: '0 10px' }}>{user.fullname || ''}</span><CaretDownFilled style={{ color: 'silver' }} />
+                    <span style={{ margin: '0 10px' }}>{user.fullname || ''}</span><CaretDownFilled style={{ color: 'white' }} />
                   </Col>
                 </Row>
               </Dropdown>

@@ -30,6 +30,11 @@ class Reporting extends PageBase {
       importingCostTotal: 0,
       requiredImportingCostTotal: 0,
       soldQuantityTotal: 0,
+      newProductTotal: 0,
+      revenueTotal: 0,
+      paymentTotal: 0,
+      revenueStatisticData: [],
+      soldQuantityStatisticData: [],
       productCurrentPage: 1,
       productPageLimit: 10,
       productTotal: 0,
@@ -57,16 +62,16 @@ class Reporting extends PageBase {
   }
 
   async loadProducts(page, month, year) {
-    const soldStartDate = new Date(moment(`${month}/${year}`, 'MM/YYYY').startOf('day')).getTime();
-    const soldEndDate = new Date(moment(`${moment(new Date(soldStartDate)).daysInMonth()}/${month}/${year}`, 'DD/MM/YYYY').endOf('day')).getTime();
+    const statisticStartDate = new Date(moment(`${month}/${year}`, 'MM/YYYY').startOf('day')).getTime();
+    const statisticEndDate = new Date(moment(`${moment(new Date(statisticStartDate)).daysInMonth()}/${month}/${year}`, 'DD/MM/YYYY').endOf('day')).getTime();
 
     const res = await (
       await fetch(
         API.Manager.Reporting.getProducts
           .replace('{page}', page)
           .replace('{limit}', this.state.productPageLimit)
-          .replace('{soldStartDate}', soldStartDate.toString())
-          .replace('{soldEndDate}', soldEndDate.toString()),
+          .replace('{statisticStartDate}', statisticStartDate.toString())
+          .replace('{statisticEndDate}', statisticEndDate.toString()),
         {
           method: 'GET',
           headers: {
@@ -110,9 +115,6 @@ class Reporting extends PageBase {
   }
 
   render() {
-    if (this.state.isLoading)
-      return null;
-
     let {
       month,
       year,
@@ -123,6 +125,11 @@ class Reporting extends PageBase {
       importingCostTotal,
       requiredImportingCostTotal,
       soldQuantityTotal,
+      newProductTotal,
+      revenueTotal,
+      paymentTotal,
+      revenueStatisticData,
+      soldQuantityStatisticData,
       productCurrentPage,
       productPageLimit,
       productTotal
@@ -167,6 +174,7 @@ class Reporting extends PageBase {
         dataIndex: 'price',
         key: 'price',
         width: 120,
+        sorter: (a, b) => a.price - b.price,
         render: (text) => (
           <NumberFormat
             value={Number(text)}
@@ -182,21 +190,24 @@ class Reporting extends PageBase {
         dataIndex: 'importedQuantity',
         key: 'importedQuantity',
         width: 80,
-        render: (text) => (<center>{text}</center>),
+        sorter: (a, b) => a.importedQuantity - b.importedQuantity,
+        render: (text) => (<center>{text}</center>)
       },
       {
         title: `SL đã bán (Th${this.state.month}/${this.state.year})`,
         dataIndex: 'soldQuantity',
         key: 'soldQuantity',
         width: 80,
-        render: (text) => (<center>{text}</center>),
+        sorter: (a, b) => a.soldQuantity - b.soldQuantity,
+        render: (text) => (<center>{text}</center>)
       },
       {
         title: 'SL tồn kho',
         dataIndex: 'availableQuantity',
         key: 'availableQuantity',
         width: 80,
-        render: (text) => (<center>{text}</center>),
+        sorter: (a, b) => a.availableQuantity - b.availableQuantity,
+        render: (text) => (<center>{text}</center>)
       },
       {
         title: 'Trạng thái',
@@ -248,9 +259,12 @@ class Reporting extends PageBase {
         <RevenueStatistic
           month={month}
           year={year}
+          revenueTotal={revenueTotal}
+          paymentTotal={paymentTotal}
+          statisticData={[...revenueStatisticData]}
         />
 
-        <div className="product-statistic reporting__block-style animated slideInUp">
+        <div className="product-statistic reporting__block-style">
           <Row style={{ width: '100%' }}>
             <Col span={24}>
               <div className="product-statistic__products">
@@ -273,7 +287,9 @@ class Reporting extends PageBase {
                       <div className="product-statistic__products__statistic__item">
                         <ProductQuantityStatistic
                           soldQuantityTotal={soldQuantityTotal}
+                          newProductTotal={newProductTotal}
                           availableQuantityTotal={productTotal}
+                          soldQuantityStatisticData={[...soldQuantityStatisticData]}
                         />
                         <BestSelling
                           products={[...bestSellingProducts]}

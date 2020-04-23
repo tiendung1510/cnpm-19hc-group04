@@ -460,9 +460,6 @@ class ProductManagement extends PageBase {
   }
 
   render() {
-    if (this.state.isLoading)
-      return <div className="product-management"></div>;
-
     let { selectedProduct, suppliers, importerAssignments } = this.state;
     const columns = [
       {
@@ -546,7 +543,7 @@ class ProductManagement extends PageBase {
     ];
 
     return (
-      <div className="product-management animated fadeInUp">
+      <div className="product-management">
 
         <div className="product-management__container">
           <Row>

@@ -39,7 +39,12 @@ class ProductActionHistory extends PageBase {
     if (this.state.isLoading)
       return <></>;
 
-    const { logs } = this.state;
+    let { logs } = this.state;
+    logs.sort((a, b) => {
+      const d1 = new Date(a.createdAt).getTime();
+      const d2 = new Date(b.createdAt).getTime();
+      return d2 - d1;
+    });
     const title = <span>Lịch sử thao tác</span>;
     const content = (
       <div className="product-action-logs">
@@ -48,11 +53,9 @@ class ProductActionHistory extends PageBase {
             key={i}
             className="product-action-logs__item"
           >
-            {l.actionType === PRODUCT_ACTION_TYPES.UPDATE.type ? (
-              <p className="product-action-logs__item__content">
-                {PRODUCT_ACTION_TYPES.UPDATE.name} <strong>{l.product.name}</strong>
-              </p>
-            ) : <></>}
+            <p className="product-action-logs__item__content">
+              {PRODUCT_ACTION_TYPES[l.actionType].name} <strong>{l.product.name}</strong>
+            </p>
             <span className="product-action-logs__item__time">Vào lúc {moment(l.createdAt).format('HH:mm DD-MM-YYYY')}</span>
           </div>
         ))}

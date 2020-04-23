@@ -8,23 +8,20 @@
   $borderRadius2: 7px;
   $fontSize0: 11px;
   $fontSize1: 12px;
-  $fontSize2: 16px;
+  $fontSize2: 15px;
   $fontSize3: 20px;
 
   background: white;
   width: 100%;
   // box-shadow: $boxShadow1;
-  padding: 20px 25px;
-  padding-top: 0;
-  border-radius: 10px;
+  padding: 0 25px;
+  padding-bottom: 20px;
   position: absolute;
   bottom: 0;
 
   h1 {
     height: 45px !important;
-    color: #ff8220;
     font-size: $fontSize2 !important;
-    font-weight: bold;
   }
 
   .product-statistic__products__best-selling__hot-badge {
@@ -40,7 +37,6 @@
     // padding: 15px;
     border-radius: 5px;
     display: flex;
-    margin-top: 5px;
     // background: #eee;
 
     .react-multi-carousel-item {
@@ -84,7 +80,7 @@
         .ant-card-meta {
           .ant-card-meta-detail {
             .ant-card-meta-title {
-              font-size: 12px;
+              font-size: 11px;
               color: rgba($color: #000000, $alpha: 0.6);
               font-weight: bold;
               // text-shadow: $textShadow1;
