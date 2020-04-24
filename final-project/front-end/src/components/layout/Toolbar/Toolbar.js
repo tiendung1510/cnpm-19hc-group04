@@ -27,6 +27,7 @@ class Toolbar extends Component {
     const { cookies } = this.props;
     cookies.remove(COOKIE_NAMES.token, { path: '/' });
     cookies.remove(COOKIE_NAMES.user, { path: '/' });
+    this.props.history.length = 0;
     this.props.history.push('/login');
   }
 

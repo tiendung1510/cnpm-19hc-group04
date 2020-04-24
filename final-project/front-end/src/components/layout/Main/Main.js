@@ -14,29 +14,23 @@ import { connect } from 'react-redux';
 const { Content } = Layout;
 
 class Main extends Component {
-  cookies;
-
   constructor(props) {
     super(props);
-    this.cookies = this.props.cookies;
-    this.checkLoggedInUser();
-  }
-
-  checkLoggedInUser() {
-    const user = this.cookies.get(COOKIE_NAMES.user);
-    const token = this.cookies.get(COOKIE_NAMES.token);
-
-    if (!(user && token)) {
-      this.cookies.remove(COOKIE_NAMES.token);
-      this.cookies.remove(COOKIE_NAMES.user);
-      window.location.href = '/login';
+    const loggedUser = this.props.cookies.get(COOKIE_NAMES.user);
+    const token = this.props.cookies.get(COOKIE_NAMES.token);
+    if (!(loggedUser && token)) {
+      this.isAuthenticated = false;
+      this.props.history.length = 0;
+      this.props.history.push('/login');
     } else {
-      this.props.login(user, token);
+      this.isAuthenticated = true;
     }
   }
-
   render() {
-    const user = this.cookies.get(COOKIE_NAMES.user) || this.props.loggedInUser.user;
+    if(!this.isAuthenticated)
+      return null;
+      
+    const user = this.props.cookies.get(COOKIE_NAMES.user) || this.props.loggedInUser.user;
     let pagesByUserRole = links.find(link => link.role === user.role).pages;
     const commonPages = links.find(link => link.role === USER_ROLE.USER.type).pages
       .map((page, index) => ({ ...page, sidebarIndex: pagesByUserRole.length + index }));
@@ -60,7 +54,7 @@ class Main extends Component {
                 key={pageIndex}
                 exact={true}
                 component={page.component}
-                path={`${page.path}`}
+                path={page.path}
               />
             )
           })}

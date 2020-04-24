@@ -17,7 +17,7 @@ export default class UserInfo extends Component {
     }
 
     return (
-      <div className="user-info animated fadeIn">
+      <div className="user-info">
         <div className="__wallpaper" style={{backgroundImage: `url(${user.avatar})`}}>
           <div className="__wallpaper__dark-bg"></div>
           <div className={`__wallpaper__role ${userRoleStyle}`}>

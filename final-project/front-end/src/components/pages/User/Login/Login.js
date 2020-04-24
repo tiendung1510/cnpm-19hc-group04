@@ -38,57 +38,61 @@ class Login extends PageBase {
   }
 
   login = async (values) => {
-    this.props.setAppLoading(true);
-    const params = {
-      username: values.username,
-      password: values.password
-    };
+    try {
+      this.props.setAppLoading(true);
+      const params = {
+        username: values.username,
+        password: values.password
+      };
 
-    const res = await (await fetch(API.User.login, {
-      method: 'POST',
-      body: JSON.stringify(params),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-        'token': this.props.cookies.get(COOKIE_NAMES.token)
-      },
-      signal: this.abortController.signal
-    })).json();
+      const res = await (await fetch(API.User.login, {
+        method: 'POST',
+        body: JSON.stringify(params),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          'token': this.props.cookies.get(COOKIE_NAMES.token)
+        },
+        signal: this.abortController.signal
+      })).json();
 
-    this.props.setAppLoading(false);
+      this.props.setAppLoading(false);
+      if (res.status !== 200) {
+        message.error(res.errors[0]);
+        return;
+      }
 
-    if (res.status !== 200) {
-      message.error(res.errors[0]);
-      return;
+      const user = res.data.user;
+      const token = res.data.meta.token;
+
+      this.props.login(user, token);
+
+      const { cookies } = this.props;
+      cookies.set(COOKIE_NAMES.user, user, { path: '/' });
+      cookies.set(COOKIE_NAMES.token, token, { path: '/' });
+
+      let pathToNavigate;
+      if (user.role === USER_ROLES.CASHIER.type) {
+        pathToNavigate = SIDEBAR[1].pages[0].path;
+      }
+
+      if (user.role === USER_ROLES.IMPORTER.type) {
+        pathToNavigate = SIDEBAR[2].pages[0].path;
+      }
+
+      if (user.role === USER_ROLES.MANAGER.type) {
+        pathToNavigate = SIDEBAR[3].pages[0].path;
+      }
+
+      this.props.history.length = 0;
+      this.props.history.push(pathToNavigate);
+    } catch (error) {
+      return error;
     }
-
-    const user = res.data.user;
-    const token = res.data.meta.token;
-
-    this.props.login(user, token);
-
-    const { cookies } = this.props;
-    cookies.set(COOKIE_NAMES.user, user, { path: '/' });
-    cookies.set(COOKIE_NAMES.token, token, { path: '/' });
-
-    let pathToNavigate;
-    if (user.role === USER_ROLES.CASHIER.type) {
-      pathToNavigate = SIDEBAR[1].pages[0].path;
-    }
-
-    if (user.role === USER_ROLES.IMPORTER.type) {
-      pathToNavigate = SIDEBAR[2].pages[0].path;
-    }
-
-    if (user.role === USER_ROLES.MANAGER.type) {
-      pathToNavigate = SIDEBAR[3].pages[0].path;
-    }
-
-    this.props.history.push(pathToNavigate);
   };
 
   render() {
     return (
-      <div className="container animated fadeIn">
+      <div className="container">
         <div className="dark-bg"></div>
         <div className="__header">
           <img className="__company-logo" src={require('../../../../assets/images/app-logo.png')} alt="logo" />

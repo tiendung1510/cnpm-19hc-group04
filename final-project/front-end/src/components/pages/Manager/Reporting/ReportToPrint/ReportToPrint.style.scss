@@ -1,0 +1,34 @@
+.reporting__report-to-print__content {
+  width: 100%;
+  height: 100%;
+  padding: 30px;
+  background: white;
+
+  .reporting__report-to-print__content__header {
+    .reporting__report-to-print__content__header__company {
+      display: flex;
+      align-items: center;
+
+      .reporting__report-to-print__content__header__company__logo {
+        width: 24px;
+        margin-right: 7px;
+      }
+
+      .reporting__report-to-print__content__header__company__brand {
+        .reporting__report-to-print__content__header__company__brand__name {
+          font-size: 13px;
+          letter-spacing: 2px;
+          color: #ff8220;
+          font-weight: bold;
+        }
+
+        .reporting__report-to-print__content__header__company__brand__slogan {
+          font-size: 8px;
+          font-style: italic;
+          margin-top: -3px;
+          color: gray;
+        }
+      }
+    }
+  }
+}

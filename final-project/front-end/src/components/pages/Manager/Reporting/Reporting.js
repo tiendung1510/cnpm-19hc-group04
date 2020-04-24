@@ -1,5 +1,5 @@
 import React from 'react';
-import { DatePicker, Row, Col, Table, Input } from 'antd';
+import { DatePicker, Row, Col, Table, Input, Button, Tooltip } from 'antd';
 import './Reporting.style.scss';
 import PageBase from '../../../utilities/PageBase/PageBase';
 import { connect } from 'react-redux';
@@ -12,10 +12,12 @@ import RevenueStatistic from './RevenueStatistic/RevenueStatistic';
 import MONTHS from '../../../../constants/months.constant';
 import QRCode from 'qrcode.react';
 import NumberFormat from 'react-number-format';
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined, PrinterFilled } from '@ant-design/icons';
 import BestSelling from './BestSelling/BestSelling';
 import ImportingStatistic from './ImportingStatistic/ImportingStatistic';
 import ProductQuantityStatistic from './ProductQuantityStatistic/ProductQuantityStatistic';
+import ReportToPrint from './ReportToPrint/ReportToPrint';
+import ReactToPrint from 'react-to-print';
 
 class Reporting extends PageBase {
   constructor(props) {
@@ -47,47 +49,54 @@ class Reporting extends PageBase {
   }
 
   async loadData(month, year) {
-    this.props.setAppLoading(true);
-    const res = await Promise.all([
-      this.loadProducts(1, month, year)
-    ]);
-
-    const loadProductResult = res[0];
-    this.setState({
-      ...loadProductResult,
-      productCurrentPage: 1,
-      isLoading: false
-    });
-    this.props.setAppLoading(false);
+    try {
+      this.props.setAppLoading(true);
+      const res = await Promise.all([
+        this.loadProducts(1, month, year)
+      ]);
+      this.props.setAppLoading(false);
+      const loadProductResult = res[0];
+      this.setState({
+        ...loadProductResult,
+        productCurrentPage: 1,
+        isLoading: false
+      });
+    } catch (error) {
+      return error;
+    }
   }
 
   async loadProducts(page, month, year) {
-    const statisticStartDate = new Date(moment(`${month}/${year}`, 'MM/YYYY').startOf('day')).getTime();
-    const statisticEndDate = new Date(moment(`${moment(new Date(statisticStartDate)).daysInMonth()}/${month}/${year}`, 'DD/MM/YYYY').endOf('day')).getTime();
+    try {
+      const statisticStartDate = new Date(moment(`${month}/${year}`, 'MM/YYYY').startOf('day')).getTime();
+      const statisticEndDate = new Date(moment(`${moment(new Date(statisticStartDate)).daysInMonth()}/${month}/${year}`, 'DD/MM/YYYY').endOf('day')).getTime();
 
-    const res = await (
-      await fetch(
-        API.Manager.Reporting.getProducts
-          .replace('{page}', page)
-          .replace('{limit}', this.state.productPageLimit)
-          .replace('{statisticStartDate}', statisticStartDate.toString())
-          .replace('{statisticEndDate}', statisticEndDate.toString()),
-        {
-          method: 'GET',
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+      const res = await (
+        await fetch(
+          API.Manager.Reporting.getProducts
+            .replace('{page}', page)
+            .replace('{limit}', this.state.productPageLimit)
+            .replace('{statisticStartDate}', statisticStartDate.toString())
+            .replace('{statisticEndDate}', statisticEndDate.toString()),
+          {
+            method: 'GET',
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    if (res.status !== 200) {
-      return Promise.reject(res.errors[0]);
+      if (res.status !== 200) {
+        return Promise.reject(res.errors[0]);
+      }
+
+      return Promise.resolve({ ...res.data });
+    } catch (error) {
+      return error;
     }
-
-    return Promise.resolve({ ...res.data });
   }
 
   monthCellRender(date) {
@@ -238,22 +247,43 @@ class Reporting extends PageBase {
     ];
 
     return (
-      <div className="reporting animated fadeIn">
+      <div className="reporting">
         <div className="reporting__header-cover"></div>
         <div className="reporting__header-cover2"></div>
-        <div className="reporting__date-picker">
-          <span className="reporting__date-picker__label">Chọn tháng:</span>
-          <DatePicker
-            defaultValue={moment(`${month}/${year}`, 'MM/YYYY')}
-            format={'MM/YYYY'}
-            picker="month"
-            size="small"
-            clearIcon={null}
-            placeholder={null}
-            bordered={false}
-            monthCellRender={date => this.monthCellRender(date)}
-            onChange={e => this.onDatePickerChange(e)}
+        <ReactToPrint
+          trigger={() => (
+            <Tooltip title="In báo cáo" placement="left">
+              <Button
+                className="reporting__btn-print-report"
+                shape="circle"
+                type="primary"
+                icon={<PrinterFilled />}
+              />
+            </Tooltip>
+          )}
+          content={() => this.reportToPrintRef}
+        />
+        <div className="reporting__report-to-print">
+          <ReportToPrint
+            ref={el => (this.reportToPrintRef = el)}
           />
+        </div>
+        <div className="reporting__header">
+          <div className="reporting__header__date-picker">
+            <span className="reporting__header__date-picker__label">Chọn tháng:</span>
+            <DatePicker
+              defaultValue={moment(`${month}/${year}`, 'MM/YYYY')}
+              format={'MM/YYYY'}
+              picker="month"
+              size="small"
+              clearIcon={null}
+              placeholder={null}
+              bordered={false}
+              monthCellRender={date => this.monthCellRender(date)}
+              onChange={e => this.onDatePickerChange(e)}
+            />
+          </div>
+
         </div>
 
         <RevenueStatistic

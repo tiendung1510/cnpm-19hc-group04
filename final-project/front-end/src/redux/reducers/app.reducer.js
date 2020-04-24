@@ -1,6 +1,15 @@
 import { APP_LOADING, SET_CURRENT_PAGE_TITLE, SET_SIDEBAR_SELECTED_INDEX } from '../actions/types.action';
+import { UserOutlined } from '@ant-design/icons';
 
-export default function (state = { isLoading: false }, action) {
+export default function (
+	state = {
+		isLoading: false,
+		currentPageTitle: '',
+		currentPageIcon: UserOutlined,
+		sidebarSelectedIndex: 0
+	},
+	action
+) {
 	switch (action.type) {
 		case APP_LOADING:
 			return {
