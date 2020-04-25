@@ -351,6 +351,7 @@ const getProducts = async (req, res, next) => {
     ]);
     result.soldQuantityTotal = soldProducts.reduce((acc, cur) => acc + cur.quantity, 0);
     result.bestSellingProducts = [...soldProducts].filter(p => p.quantity > 0).slice(0, 11);
+    result.soldProducts = [...soldProducts];
 
     // statistic daily sold quantity in month
     const sellingDates = await CheckoutSessionModel.aggregate([
@@ -418,6 +419,7 @@ const getProducts = async (req, res, next) => {
           requiredQuantity: { $sum: '$requiredQuantity' }
         }
       },
+      { $sort: { importedQuantity: -1 } },
       { $lookup: { from: 'Products', localField: '_id', foreignField: '_id', as: 'details' } },
       { $unwind: '$details' }
     ]);
@@ -425,6 +427,7 @@ const getProducts = async (req, res, next) => {
     result.requiredQuantityTotal = importedProducts.reduce((acc, cur) => acc + cur.requiredQuantity, 0);
     result.importingCostTotal = importedProducts.reduce((acc, cur) => acc + cur.importedQuantity * cur.details.price, 0);
     result.requiredImportingCostTotal = importedProducts.reduce((acc, cur) => acc + cur.requiredQuantity * cur.details.price, 0);
+    result.importedProducts = importedProducts;
 
     // Find new product total
     const productActionLogs = await ProductActionLogModel.aggregate([
@@ -443,6 +446,7 @@ const getProducts = async (req, res, next) => {
       { $unwind: '$salaryTotal' }
     ]);
     result.paymentTotal = salaryTotalResults[0].salaryTotal + result.importingCostTotal;
+    result.salaryTotal = salaryTotalResults[0].salaryTotal;
 
     result.products = result.products
       .map(item => {
