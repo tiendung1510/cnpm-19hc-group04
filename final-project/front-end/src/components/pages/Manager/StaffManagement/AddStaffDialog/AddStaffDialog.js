@@ -44,38 +44,42 @@ class AddStaffDialog extends PageBase {
   }
 
   onFinish = async (values) => {
-    let params = { ...values };
-    if (params.password !== params.confirmedPassword) {
-      message.error('Nhập lại mật khẩu không chính xác');
-      return;
+    try {
+      let params = { ...values };
+      if (params.password !== params.confirmedPassword) {
+        message.error('Nhập lại mật khẩu không chính xác');
+        return;
+      }
+
+      params.dateOfBirth = moment(params.dateOfBirth).format('DD-MM-YYYY');
+      delete params.confirmedPassword;
+
+      const res = await (
+        await fetch(
+          API.Manager.StaffManagement.addStaff,
+          {
+            method: 'POST',
+            body: JSON.stringify(params),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
+
+      if (res.status !== 200) {
+        message.error(res.errors[0]);
+        return;
+      }
+
+      this.props.reloadStaffs(res.data.user);
+      this.setDialogVisible(false);
+      message.success(res.messages[0]);
+    } catch (error) {
+      return error;
     }
-
-    params.dateOfBirth = moment(params.dateOfBirth).format('DD-MM-YYYY');
-    delete params.confirmedPassword;
-
-    const res = await (
-      await fetch(
-        API.Manager.StaffManagement.addStaff,
-        {
-          method: 'POST',
-          body: JSON.stringify(params),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
-
-    if (res.status !== 200) {
-      message.error(res.errors[0]);
-      return;
-    }
-
-    this.props.reloadStaffs(res.data.user);
-    this.setDialogVisible(false);
-    message.success(res.messages[0]);
   };
 
   render() {

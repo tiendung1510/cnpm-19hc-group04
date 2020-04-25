@@ -31,32 +31,36 @@ class ChangePassword extends PageBase {
   }
 
   onFinish = async (values) => {
-    this.props.setAppLoading(true);
-    const params = { ...values };
-    const res = await (
-      await fetch(
-        API.User.changePassword,
-        {
-          method: 'PUT',
-          body: JSON.stringify(params),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+    try {
+      this.props.setAppLoading(true);
+      const params = { ...values };
+      const res = await (
+        await fetch(
+          API.User.changePassword,
+          {
+            method: 'PUT',
+            body: JSON.stringify(params),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    this.props.setAppLoading(false);
+      this.props.setAppLoading(false);
 
-    if (res.status !== 200) {
-      message.error(res.errors[0]);
-      return;
+      if (res.status !== 200) {
+        message.error(res.errors[0]);
+        return;
+      }
+
+      this.formRef.current.resetFields();
+      message.success(res.messages[0]);
+    } catch (error) {
+      return error;
     }
-
-    this.formRef.current.resetFields();
-    message.success(res.messages[0]);
   }
 
   render() {

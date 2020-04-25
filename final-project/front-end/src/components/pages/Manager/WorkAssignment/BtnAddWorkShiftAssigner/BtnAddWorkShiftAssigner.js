@@ -37,63 +37,67 @@ class BtnAddWorkShiftAssigner extends PageBase {
   }
 
   onOK = async () => {
-    const { assigners } = this.state;
-    if (assigners.length === 0) {
-      message.error('Vui lòng chọn nhân viên để phân công');
-      return;
-    }
+    try {
+      const { assigners } = this.state;
+      if (assigners.length === 0) {
+        message.error('Vui lòng chọn nhân viên để phân công');
+        return;
+      }
 
-    const {
-      workSchedules,
-      selectedWorkSchedule,
-      selectedWorkDay,
-      selectedWorkShift
-    } = this.props;
+      const {
+        workSchedules,
+        selectedWorkSchedule,
+        selectedWorkDay,
+        selectedWorkShift
+      } = this.props;
 
-    const res = await (
-      await fetch(
-        API.Manager.WorkAssignment.addWorkAssignments,
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            workShift: selectedWorkShift._id,
-            assigners
-          }),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
+      const res = await (
+        await fetch(
+          API.Manager.WorkAssignment.addWorkAssignments,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              workShift: selectedWorkShift._id,
+              assigners
+            }),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
+
+      if (res.status !== 200) {
+        message.error(res.errors[0]);
+        return;
+      }
+
+      const { workAssignments } = res.data;
+      selectedWorkShift.workAssignments = workAssignments;
+
+      for (let ws of selectedWorkDay.workShifts) {
+        if (ws._id === selectedWorkShift._id) {
+          ws = selectedWorkShift;
+          break;
         }
-      )
-    ).json();
-
-    if (res.status !== 200) {
-      message.error(res.errors[0]);
-      return;
-    }
-
-    const { workAssignments } = res.data;
-    selectedWorkShift.workAssignments = workAssignments;
-
-    for (let ws of selectedWorkDay.workShifts) {
-      if (ws._id === selectedWorkShift._id) {
-        ws = selectedWorkShift;
-        break;
       }
-    }
 
-    for (let wsc of workSchedules) {
-      if (wsc._id === selectedWorkSchedule._id) {
-        const workShift = wsc.workShifts.find(ws => ws._id === selectedWorkShift._id);
-        workShift.workAssignments = workAssignments;
-        break;
+      for (let wsc of workSchedules) {
+        if (wsc._id === selectedWorkSchedule._id) {
+          const workShift = wsc.workShifts.find(ws => ws._id === selectedWorkShift._id);
+          workShift.workAssignments = workAssignments;
+          break;
+        }
       }
-    }
 
-    this.props.reloadWorkSchedules(workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift);
-    this.setModalVisible(false);
-    message.success(res.messages[0]);
+      this.props.reloadWorkSchedules(workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift);
+      this.setModalVisible(false);
+      message.success(res.messages[0]);
+    } catch (error) {
+      return error;
+    }
   }
 
   onCancel() {

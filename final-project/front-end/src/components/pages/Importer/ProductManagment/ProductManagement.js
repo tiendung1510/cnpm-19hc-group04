@@ -55,103 +55,119 @@ class ProductManagement extends PageBase {
   }
 
   async loadData() {
-    this.props.setAppLoading(true);
-    const results = await Promise.all([
-      this.loadCategories(),
-      this.loadSuppliers(),
-      this.loadImporterAssignments()
-    ]);
-    this.props.setAppLoading(false);
+    try {
+      this.props.setAppLoading(true);
+      const results = await Promise.all([
+        this.loadCategories(),
+        this.loadSuppliers(),
+        this.loadImporterAssignments()
+      ]);
+      this.props.setAppLoading(false);
 
-    //Category
-    const categories = results[0];
-    let { selectedCategory } = this.state;
-    selectedCategory = categories.length > 0 ? { ...categories[0] } : {};
-    this.loadCategoryProducts(selectedCategory);
+      //Category
+      const categories = results[0];
+      let { selectedCategory } = this.state;
+      selectedCategory = categories.length > 0 ? { ...categories[0] } : {};
+      this.loadCategoryProducts(selectedCategory);
 
-    //Supplier
-    const suppliers = results[1];
+      //Supplier
+      const suppliers = results[1];
 
-    //Importer Assignment
-    const importerAssignments = results[2];
-    const importedProducts = importerAssignments.length === 0 ? [] : importerAssignments[0].importedProducts.map(item => item);
+      //Importer Assignment
+      const importerAssignments = results[2];
+      const importedProducts = importerAssignments.length === 0 ? [] : importerAssignments[0].importedProducts.map(item => item);
 
-    this.setState({
-      categories,
-      filteredCategories: categories,
-      selectedCategory,
-      suppliers,
-      selectedSupplier: suppliers.length > 0 ? { ...suppliers[0] } : {},
-      isLoading: false,
-      importerAssignments,
-      importedProducts
-    });
+      this.setState({
+        categories,
+        filteredCategories: categories,
+        selectedCategory,
+        suppliers,
+        selectedSupplier: suppliers.length > 0 ? { ...suppliers[0] } : {},
+        isLoading: false,
+        importerAssignments,
+        importedProducts
+      });
+    } catch (error) {
+      return error;
+    }
   }
 
   async loadSuppliers() {
-    const res = await (
-      await fetch(
-        API.Importer.ProductManagement.getSuppliers,
-        {
-          method: 'GET',
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+    try {
+      const res = await (
+        await fetch(
+          API.Importer.ProductManagement.getSuppliers,
+          {
+            method: 'GET',
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    if (res.status !== 200) {
-      return Promise.reject(res.errors[0]);
+      if (res.status !== 200) {
+        return Promise.reject(res.errors[0]);
+      }
+
+      return Promise.resolve(res.data.suppliers);
+    } catch (error) {
+      return error;
     }
-
-    return Promise.resolve(res.data.suppliers);
   }
 
   async loadCategories() {
-    const res = await (
-      await fetch(
-        API.Importer.ProductManagement.getCategories,
-        {
-          method: 'GET',
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+    try {
+      const res = await (
+        await fetch(
+          API.Importer.ProductManagement.getCategories,
+          {
+            method: 'GET',
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    if (res.status !== 200) {
-      return Promise.reject(res.errors[0]);
+      if (res.status !== 200) {
+        return Promise.reject(res.errors[0]);
+      }
+
+      return Promise.resolve(res.data.categories);
+    } catch (error) {
+      return error;
     }
-
-    return Promise.resolve(res.data.categories);
   }
 
   async loadImporterAssignments() {
-    const res = await (
-      await fetch(
-        API.Importer.ImporterAssignmentManagement.getImporterAssignments,
-        {
-          method: 'GET',
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+    try {
+      const res = await (
+        await fetch(
+          API.Importer.ImporterAssignmentManagement.getImporterAssignments,
+          {
+            method: 'GET',
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    if (res.status !== 200) {
-      return Promise.reject(res.errors[0]);
+      if (res.status !== 200) {
+        return Promise.reject(res.errors[0]);
+      }
+
+      return Promise.resolve(res.data.importerAssignments);
+    } catch (error) {
+      return error;
     }
-
-    return Promise.resolve(res.data.importerAssignments);
   }
 
   loadCategoryProducts(category) {
@@ -199,44 +215,48 @@ class ProductManagement extends PageBase {
   }
 
   async updateProductDetails(values) {
-    this.props.setAppLoading(true);
-    const res = await (
-      await fetch(
-        API.Importer.ProductManagement.updateProduct.replace('{productID}', this.state.selectedProduct._id),
-        {
-          method: 'PUT',
-          body: JSON.stringify(values),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+    try {
+      this.props.setAppLoading(true);
+      const res = await (
+        await fetch(
+          API.Importer.ProductManagement.updateProduct.replace('{productID}', this.state.selectedProduct._id),
+          {
+            method: 'PUT',
+            body: JSON.stringify(values),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    this.props.setAppLoading(false);
-    if (res.status !== 200) {
-      message.error(res.errors[0]);
-      return;
-    }
+      this.props.setAppLoading(false);
+      if (res.status !== 200) {
+        message.error(res.errors[0]);
+        return;
+      }
 
-    let { products, selectedProduct, selectedCategory } = this.state;
-    selectedProduct = { ...res.data.product };
+      let { products, selectedProduct, selectedCategory } = this.state;
+      selectedProduct = { ...res.data.product };
 
-    const index = _.findIndex(products, p => p._id === selectedProduct._id);
-    if (index >= 0) {
-      products[index] = { ...selectedProduct };
-    }
+      const index = _.findIndex(products, p => p._id === selectedProduct._id);
+      if (index >= 0) {
+        products[index] = { ...selectedProduct };
+      }
 
-    selectedCategory.products = products;
-    this.loadCategoryProducts(selectedCategory);
-    this.setState({ selectedProduct });
+      selectedCategory.products = products;
+      this.loadCategoryProducts(selectedCategory);
+      this.setState({ selectedProduct });
 
-    if (res.data.isImporterAssignmentUpdated) {
-      this.reloadImporterAssignments(res.messages[0]);
-    } else {
-      message.success(res.messages[0]);
+      if (res.data.isImporterAssignmentUpdated) {
+        this.reloadImporterAssignments(res.messages[0]);
+      } else {
+        message.success(res.messages[0]);
+      }
+    } catch (error) {
+      return error;
     }
   }
 
@@ -251,33 +271,37 @@ class ProductManagement extends PageBase {
       okType: 'danger',
       cancelText: 'Không, cảm ơn',
       async onOk() {
-        that.props.setAppLoading(false);
-        const res = await (
-          await fetch(
-            API.Importer.ProductManagement.removeProduct.replace('{productID}', selectedProduct._id),
-            {
-              method: 'DELETE',
-              headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-                'token': that.props.cookies.get(COOKIE_NAMES.token)
-              },
-              signal: that.abortController.signal
-            }
-          )
-        ).json();
+        try {
+          that.props.setAppLoading(false);
+          const res = await (
+            await fetch(
+              API.Importer.ProductManagement.removeProduct.replace('{productID}', selectedProduct._id),
+              {
+                method: 'DELETE',
+                headers: {
+                  'Content-type': 'application/json; charset=UTF-8',
+                  'token': that.props.cookies.get(COOKIE_NAMES.token)
+                },
+                signal: that.abortController.signal
+              }
+            )
+          ).json();
 
-        that.props.setAppLoading(false);
-        if (res.status !== 200) {
-          message.error(res.errors[0]);
-          return;
+          that.props.setAppLoading(false);
+          if (res.status !== 200) {
+            message.error(res.errors[0]);
+            return;
+          }
+
+          let { products, selectedCategory } = that.state;
+          products = products.filter(p => p._id !== selectedProduct._id);
+          selectedCategory.products = products;
+          that.loadCategoryProducts(selectedCategory);
+          that.toggleProductDetailsPanel(false);
+          message.success(res.messages[0]);
+        } catch (error) {
+          return error;
         }
-
-        let { products, selectedCategory } = that.state;
-        products = products.filter(p => p._id !== selectedProduct._id);
-        selectedCategory.products = products;
-        that.loadCategoryProducts(selectedCategory);
-        that.toggleProductDetailsPanel(false);
-        message.success(res.messages[0]);
       },
       onCancel() { },
     });
@@ -356,32 +380,36 @@ class ProductManagement extends PageBase {
       okType: 'danger',
       cancelText: 'Không, cảm ơn',
       async onOk() {
-        that.props.setAppLoading(true);
-        const res = await (
-          await fetch(
-            API.Importer.ProductManagement.removeCategory.replace('{categoryID}', selectedCategory._id),
-            {
-              method: 'DELETE',
-              headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-                'token': that.props.cookies.get(COOKIE_NAMES.token)
-              },
-              signal: that.abortController.signal
-            }
-          )
-        ).json();
+        try {
+          that.props.setAppLoading(true);
+          const res = await (
+            await fetch(
+              API.Importer.ProductManagement.removeCategory.replace('{categoryID}', selectedCategory._id),
+              {
+                method: 'DELETE',
+                headers: {
+                  'Content-type': 'application/json; charset=UTF-8',
+                  'token': that.props.cookies.get(COOKIE_NAMES.token)
+                },
+                signal: that.abortController.signal
+              }
+            )
+          ).json();
 
-        that.props.setAppLoading(false);
-        if (res.status !== 200) {
-          message.error(res.errors[0]);
-          return;
+          that.props.setAppLoading(false);
+          if (res.status !== 200) {
+            message.error(res.errors[0]);
+            return;
+          }
+
+          let { categories } = that.state;
+          categories = categories.filter(c => c._id !== selectedCategory._id);
+          that.setState({ categories });
+          that.onCategorySearchInputChange(that.state.categorySearchText, categories);
+          message.success(res.messages[0]);
+        } catch (error) {
+          return error;
         }
-
-        let { categories } = that.state;
-        categories = categories.filter(c => c._id !== selectedCategory._id);
-        that.setState({ categories });
-        that.onCategorySearchInputChange(that.state.categorySearchText, categories);
-        message.success(res.messages[0]);
       },
       onCancel() { },
     });
@@ -448,15 +476,19 @@ class ProductManagement extends PageBase {
   }
 
   async reloadImporterAssignments(updatingProductMessage) {
-    this.props.setAppLoading(true);
-    const importerAssignments = await this.loadImporterAssignments();
-    const importedProducts = importerAssignments.length === 0 ? [] : importerAssignments[0].importedProducts.map(item => item);
-    this.props.setAppLoading(false);
-    message.success(updatingProductMessage);
-    this.setState({
-      importerAssignments,
-      importedProducts
-    });
+    try {
+      this.props.setAppLoading(true);
+      const importerAssignments = await this.loadImporterAssignments();
+      const importedProducts = importerAssignments.length === 0 ? [] : importerAssignments[0].importedProducts.map(item => item);
+      this.props.setAppLoading(false);
+      message.success(updatingProductMessage);
+      this.setState({
+        importerAssignments,
+        importedProducts
+      });
+    } catch (error) {
+      return error;
+    }
   }
 
   render() {

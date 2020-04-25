@@ -33,45 +33,49 @@ class AddProductDialog extends PageBase {
     this.setState({ isVisible });
   }
 
-  async onOK() {
+  onOK() {
     document.getElementById('product-management-add-product-dialog-btn-submit').click();
   }
 
   async onFinish(values) {
-    this.props.setAppLoading(true);
-    const params = {
-      image: values.image,
-      name: values.name,
-      supplierID: values.supplier,
-      categoryID: this.props.selectedCategory._id,
-      price: values.price,
-      availableQuantity: values.availableQuantity
-    }
-    const res = await (
-      await fetch(
-        API.Importer.ProductManagement.addProduct,
-        {
-          method: 'POST',
-          body: JSON.stringify(params),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+    try {
+      this.props.setAppLoading(true);
+      const params = {
+        image: values.image,
+        name: values.name,
+        supplierID: values.supplier,
+        categoryID: this.props.selectedCategory._id,
+        price: values.price,
+        availableQuantity: values.availableQuantity
+      }
+      const res = await (
+        await fetch(
+          API.Importer.ProductManagement.addProduct,
+          {
+            method: 'POST',
+            body: JSON.stringify(params),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    this.props.setAppLoading(false);
-    if (res.status !== 200) {
-      message.error(res.errors[0]);
-      return;
-    }
+      this.props.setAppLoading(false);
+      if (res.status !== 200) {
+        message.error(res.errors[0]);
+        return;
+      }
 
-    const { product } = res.data;
-    this.setDialogVisible(false);
-    this.props.addToListProducts({ ...product });
-    message.success(res.messages[0]);
+      const { product } = res.data;
+      this.setDialogVisible(false);
+      this.props.addToListProducts({ ...product });
+      message.success(res.messages[0]);
+    } catch (error) {
+      return error;
+    }
   }
 
   render() {

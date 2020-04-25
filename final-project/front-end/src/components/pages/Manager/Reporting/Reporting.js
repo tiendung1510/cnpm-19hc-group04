@@ -27,6 +27,8 @@ class Reporting extends PageBase {
       year: new Date().getFullYear(),
       products: [],
       bestSellingProducts: [],
+      soldProducts: [],
+      importedProducts: [],
       importedQuantityTotal: 0,
       requiredQuantityTotal: 0,
       importingCostTotal: 0,
@@ -35,6 +37,7 @@ class Reporting extends PageBase {
       newProductTotal: 0,
       revenueTotal: 0,
       paymentTotal: 0,
+      salaryTotal: 0,
       revenueStatisticData: [],
       soldQuantityStatisticData: [],
       productCurrentPage: 1,
@@ -42,6 +45,13 @@ class Reporting extends PageBase {
       productTotal: 0,
       isLoading: true
     }
+  }
+
+  componentWillUnmount() {
+    // fix Warning: Can't perform a React state update on an unmounted component
+    this.setState = (state, callback) => {
+      return;
+    };
   }
 
   componentDidMount() {
@@ -114,13 +124,17 @@ class Reporting extends PageBase {
   }
 
   async onProductPageChange(page) {
-    this.props.setAppLoading(true);
-    const res = await this.loadProducts(page);
-    this.props.setAppLoading(false);
-    this.setState({
-      productCurrentPage: page,
-      products: res.products
-    });
+    try {
+      this.props.setAppLoading(true);
+      const res = await this.loadProducts(page);
+      this.props.setAppLoading(false);
+      this.setState({
+        productCurrentPage: page,
+        products: res.products
+      });
+    } catch (error) {
+      return error;
+    }
   }
 
   render() {
@@ -266,6 +280,13 @@ class Reporting extends PageBase {
         <div className="reporting__report-to-print">
           <ReportToPrint
             ref={el => (this.reportToPrintRef = el)}
+            soldProducts={[...this.state.soldProducts]}
+            importedProducts={[...this.state.importedProducts]}
+            sellingRevenueTotal={this.state.revenueTotal}
+            salaryTotal={this.state.salaryTotal}
+            importingCostTotal={this.state.importingCostTotal}
+            month={this.state.month}
+            year={this.state.year}
           />
         </div>
         <div className="reporting__header">

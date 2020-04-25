@@ -34,29 +34,33 @@ class PendingRequest extends PageBase {
       okType: 'danger',
       cancelText: 'Không, cảm ơn',
       async onOk() {
-        that.props.setAppLoading(true);
-        const res = await (
-          await fetch(
-            API.Manager.ImportingRequestManagement.cancelImportingRequest.replace('{importingRequestID}', that.props.details._id),
-            {
-              method: 'DELETE',
-              headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-                'token': that.props.cookies.get(COOKIE_NAMES.token)
-              },
-              signal: that.abortController.signal
-            }
-          )
-        ).json();
-        that.props.setAppLoading(false);
-        if (res.status !== 200) {
-          message.error(res.errors[0]);
-          return;
-        }
+        try {
+          that.props.setAppLoading(true);
+          const res = await (
+            await fetch(
+              API.Manager.ImportingRequestManagement.cancelImportingRequest.replace('{importingRequestID}', that.props.details._id),
+              {
+                method: 'DELETE',
+                headers: {
+                  'Content-type': 'application/json; charset=UTF-8',
+                  'token': that.props.cookies.get(COOKIE_NAMES.token)
+                },
+                signal: that.abortController.signal
+              }
+            )
+          ).json();
+          that.props.setAppLoading(false);
+          if (res.status !== 200) {
+            message.error(res.errors[0]);
+            return;
+          }
 
-        that.props.onUpdateImportingRequests(res.data.importingRequests);
-        that.setDialogVisible(false);
-        message.success(res.messages[0]);
+          that.props.onUpdateImportingRequests(res.data.importingRequests);
+          that.setDialogVisible(false);
+          message.success(res.messages[0]);
+        } catch (error) {
+          return error;
+        }
       }
     });
   }

@@ -40,60 +40,68 @@ class SupplierManagement extends PageBase {
       okType: 'danger',
       cancelText: 'Không, cảm ơn',
       async onOk() {
-        that.props.setAppLoading(true);
-        const res = await (
-          await fetch(
-            API.Manager.SupplierManagment.removeSupplier.replace('{supplierID}', supplierID),
-            {
-              method: 'DELETE',
-              headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-                'token': that.props.cookies.get(COOKIE_NAMES.token)
-              },
-              signal: that.abortController.signal
-            }
-          )
-        ).json();
+        try {
+          that.props.setAppLoading(true);
+          const res = await (
+            await fetch(
+              API.Manager.SupplierManagment.removeSupplier.replace('{supplierID}', supplierID),
+              {
+                method: 'DELETE',
+                headers: {
+                  'Content-type': 'application/json; charset=UTF-8',
+                  'token': that.props.cookies.get(COOKIE_NAMES.token)
+                },
+                signal: that.abortController.signal
+              }
+            )
+          ).json();
 
-        that.props.setAppLoading(false);
-        if (res.status !== 200) {
-          message.error(res.errors[0]);
-          return;
+          that.props.setAppLoading(false);
+          if (res.status !== 200) {
+            message.error(res.errors[0]);
+            return;
+          }
+
+          suppliersDataSource = suppliersDataSource.filter(s => s._id !== supplierID);
+          that.onSupplierSearchInputChange(that.state.supplierSearchText, suppliersDataSource);
+          that.setState({ suppliersDataSource });
+          message.success(res.messages[0]);
+        } catch (error) {
+          return error;
         }
-
-        suppliersDataSource = suppliersDataSource.filter(s => s._id !== supplierID);
-        that.onSupplierSearchInputChange(that.state.supplierSearchText, suppliersDataSource);
-        that.setState({ suppliersDataSource });
-        message.success(res.messages[0]);
       }
     });
   }
 
   async loadSuppliers() {
-    // this.props.setAppLoading(true);
-    const res = await (
-      await fetch(
-        API.Manager.SupplierManagment.getSuppliers,
-        {
-          method: 'GET',
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+    try {
+      // this.props.setAppLoading(true);
+      const res = await (
+        await fetch(
+          API.Manager.SupplierManagment.getSuppliers,
+          {
+            method: 'GET',
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    // this.props.setAppLoading(false);
-    if (res.status !== 200) {
-      message.error(res.errors[0]);
-      return;
+      // this.props.setAppLoading(false);
+      if (res.status !== 200) {
+        message.error(res.errors[0]);
+        return;
+      }
+
+      const { suppliers } = res.data;
+      this.onSupplierSearchInputChange(this.state.supplierSearchText, suppliers);
+      this.setState({ suppliersDataSource: suppliers });
+    } catch (error) {
+      return error;
     }
-
-    const { suppliers } = res.data;
-    this.onSupplierSearchInputChange(this.state.supplierSearchText, suppliers);
-    this.setState({ suppliersDataSource: suppliers });
   }
 
   onSupplierSearchInputChange(text, suppliersDataSource, defaultSelectedSupplier) {

@@ -40,50 +40,54 @@ class SubmitCheckoutSessionDialog extends PageBase {
   }
 
   async submitCheckoutSession() {
-    const { checkoutSessionID, checkedOutProducts } = this.props;
-    const params = { products: checkedOutProducts.map(p => p._id) };
-    this.props.setAppLoading(true);
-    const res = await (
-      await fetch(
-        API.Cashier.Checkout.submitCheckoutSession.replace('{checkoutSessionID}', checkoutSessionID),
-        {
-          method: 'PUT',
-          body: JSON.stringify(params),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
+    try {
+      const { checkoutSessionID, checkedOutProducts } = this.props;
+      const params = { products: checkedOutProducts.map(p => p._id) };
+      this.props.setAppLoading(true);
+      const res = await (
+        await fetch(
+          API.Cashier.Checkout.submitCheckoutSession.replace('{checkoutSessionID}', checkoutSessionID),
+          {
+            method: 'PUT',
+            body: JSON.stringify(params),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
+
+      this.props.setAppLoading(false);
+      if (res.status !== 200) {
+        if (res.status === 404 && res.data) {
+          const { notExistedProductIDs } = res.data;
+          let notExistedProducts = checkedOutProducts
+            .filter(p => _.findIndex(notExistedProductIDs, id => id === p._id) >= 0);
+          notExistedProducts = _.uniqBy(notExistedProducts, '_id');
+          this.notifyNotExistedProducts(notExistedProducts, res.errors[0]);
+          return;
         }
-      )
-    ).json();
 
-    this.props.setAppLoading(false);
-    if (res.status !== 200) {
-      if (res.status === 404 && res.data) {
-        const { notExistedProductIDs } = res.data;
-        let notExistedProducts = checkedOutProducts
-          .filter(p => _.findIndex(notExistedProductIDs, id => id === p._id) >= 0);
-        notExistedProducts = _.uniqBy(notExistedProducts, '_id');
-        this.notifyNotExistedProducts(notExistedProducts, res.errors[0]);
+        if (res.status === 400 && res.data) {
+          this.props.loadLackingItems(res.data.lackingItems);
+          this.props.setLackingItemsDialogVisible(true);
+          return;
+        }
+
+        message.error(res.errors[0]);
         return;
       }
 
-      if (res.status === 400 && res.data) {
-        this.props.loadLackingItems(res.data.lackingItems);
-        this.props.setLackingItemsDialogVisible(true);
-        return;
-      }
-
-      message.error(res.errors[0]);
-      return;
+      const { checkoutSession } = res.data;
+      this.setState({ checkoutSession });
+      this.props.setCheckoutDoneScreenVisible(true);
+      this.props.setMainPanelOnWorking(false);
+      this.setDialogVisible(true);
+    } catch (error) {
+      return error;
     }
-
-    const { checkoutSession } = res.data;
-    this.setState({ checkoutSession });
-    this.props.setCheckoutDoneScreenVisible(true);
-    this.props.setMainPanelOnWorking(false);
-    this.setDialogVisible(true);
   }
 
   notifyNotExistedProducts(products, message) {

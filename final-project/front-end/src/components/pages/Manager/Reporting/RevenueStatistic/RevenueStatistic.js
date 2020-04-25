@@ -3,8 +3,8 @@ import './RevenueStatistic.style.scss';
 import moment from 'moment';
 import NumberFormat from 'react-number-format';
 import { Bar } from 'react-chartjs-2';
-import { Row, Col } from 'antd';
-import { DollarCircleOutlined, MinusCircleOutlined, CoffeeOutlined } from '@ant-design/icons';
+import { Row, Col, Tooltip, Button } from 'antd';
+import { MoreOutlined, TagsFilled, ScheduleFilled, StarFilled } from '@ant-design/icons';
 
 export default class RevenueStatistic extends Component {
   render() {
@@ -12,6 +12,7 @@ export default class RevenueStatistic extends Component {
     const profitTotal = revenueTotal - paymentTotal;
     const height = 55;
     const chartOptions = {
+      legend: { display: false },
       scales: {
         xAxes: [{
           gridLines: {
@@ -23,8 +24,8 @@ export default class RevenueStatistic extends Component {
     const lineChartData = (canvas) => {
       const ctx = canvas.getContext("2d")
       const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-      gradient.addColorStop(0, '#f09819');
-      gradient.addColorStop(1, '#ff5858');
+      gradient.addColorStop(0, '#fff6e6');
+      gradient.addColorStop(1, 'darkorange');
       return {
         labels: statisticData.map(item => moment(item.date).format('DD/MM')),
         datasets: [
@@ -60,7 +61,7 @@ export default class RevenueStatistic extends Component {
             <div className="reporting__revenue-statistic__widget --revenue-total">
               <div className="reporting__revenue-statistic__widget__content">
                 <div className="reporting__revenue-statistic__widget__content__value">
-                  <DollarCircleOutlined />
+                  <StarFilled />
                   <NumberFormat
                     value={revenueTotal}
                     displayType="text"
@@ -75,9 +76,16 @@ export default class RevenueStatistic extends Component {
           </Col>
           <Col span={8}>
             <div className="reporting__revenue-statistic__widget --payment-total">
+              <Tooltip title="Xem hạng mục cần chi trả" placement="top">
+                <Button
+                  shape="circle"
+                  icon={<MoreOutlined />}
+                  className="reporting__revenue-statistic__widget__btn"
+                />
+              </Tooltip>
               <div className="reporting__revenue-statistic__widget__content">
                 <div className="reporting__revenue-statistic__widget__content__value">
-                  <MinusCircleOutlined />
+                  <TagsFilled />
                   <NumberFormat
                     value={paymentTotal}
                     displayType="text"
@@ -94,7 +102,7 @@ export default class RevenueStatistic extends Component {
             <div className="reporting__revenue-statistic__widget --profit-total">
               <div className="reporting__revenue-statistic__widget__content">
                 <div className="reporting__revenue-statistic__widget__content__value">
-                  <CoffeeOutlined />
+                  <ScheduleFilled />
                   <NumberFormat
                     value={profitTotal}
                     displayType="text"
@@ -109,6 +117,7 @@ export default class RevenueStatistic extends Component {
           </Col>
         </Row>
         <div className="reporting__revenue-statistic__chart">
+          <h1>Doanh thu bán hàng mỗi ngày</h1>
           <Bar
             data={lineChartData}
             options={chartOptions}

@@ -40,77 +40,81 @@ class BtnAddWorkShift extends PageBase {
   }
 
   onOK = async () => {
-    const { startTime, endTime } = this.state;
-    if (!(startTime && endTime)) {
-      message.error('Vui lòng chọn đầy đủ các mốc thời gian');
-      return;
-    }
-
-    if (startTime >= endTime) {
-      message.error('Khoảng thời gian đã chọn không hợp lệ');
-      return;
-    }
-
-    let {
-      workSchedules,
-      selectedWorkSchedule,
-      selectedWorkDay,
-      selectedWorkShift
-    } = this.props;
-
-    const res = await (
-      await fetch(
-        API.Manager.WorkShift.addWorkShift,
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            workScheduleID: selectedWorkSchedule._id,
-            startTime,
-            endTime
-          }),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
-
-    if (res.status === 200) {
-      this.setModalVisible(false);
-      message.success(res.messages[0]);
-
-      const { workShift } = res.data;
-      selectedWorkDay.workShifts.push(workShift);
-      this.sortWorkShiftsByStartTime(selectedWorkDay.workShifts);
-
-      const selectedWorkShiftIndex = selectedWorkDay.workShifts.findIndex(ws => ws._id === workShift._id);
-      if (selectedWorkShiftIndex >= 0) {
-        selectedWorkShift = selectedWorkDay.workShifts[selectedWorkShiftIndex];
-        selectedWorkShift.index = selectedWorkShiftIndex;
+    try {
+      const { startTime, endTime } = this.state;
+      if (!(startTime && endTime)) {
+        message.error('Vui lòng chọn đầy đủ các mốc thời gian');
+        return;
       }
 
-      for (const week of selectedWorkSchedule.workDays) {
-        const day = _.find(week, d => selectedWorkDay.workDayInMonth === d.workDayInMonth);
-        if (day) {
-          day.workShifts.push(workShift);
-          this.sortWorkShiftsByStartTime(day.workShifts);
-          break;
-        }
+      if (startTime >= endTime) {
+        message.error('Khoảng thời gian đã chọn không hợp lệ');
+        return;
       }
 
-      for (let wsc of workSchedules) {
-        if (wsc._id === selectedWorkSchedule._id) {
-          wsc.workShifts.push(workShift);
-          this.sortWorkShiftsByStartTime(wsc.workShifts);
-          break;
-        }
-      }
+      let {
+        workSchedules,
+        selectedWorkSchedule,
+        selectedWorkDay,
+        selectedWorkShift
+      } = this.props;
 
-      this.props.reloadWorkSchedules(workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift);
-    } else {
-      message.error(res.errors[0]);
+      const res = await (
+        await fetch(
+          API.Manager.WorkShift.addWorkShift,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              workScheduleID: selectedWorkSchedule._id,
+              startTime,
+              endTime
+            }),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
+
+      if (res.status === 200) {
+        this.setModalVisible(false);
+        message.success(res.messages[0]);
+
+        const { workShift } = res.data;
+        selectedWorkDay.workShifts.push(workShift);
+        this.sortWorkShiftsByStartTime(selectedWorkDay.workShifts);
+
+        const selectedWorkShiftIndex = selectedWorkDay.workShifts.findIndex(ws => ws._id === workShift._id);
+        if (selectedWorkShiftIndex >= 0) {
+          selectedWorkShift = selectedWorkDay.workShifts[selectedWorkShiftIndex];
+          selectedWorkShift.index = selectedWorkShiftIndex;
+        }
+
+        for (const week of selectedWorkSchedule.workDays) {
+          const day = _.find(week, d => selectedWorkDay.workDayInMonth === d.workDayInMonth);
+          if (day) {
+            day.workShifts.push(workShift);
+            this.sortWorkShiftsByStartTime(day.workShifts);
+            break;
+          }
+        }
+
+        for (let wsc of workSchedules) {
+          if (wsc._id === selectedWorkSchedule._id) {
+            wsc.workShifts.push(workShift);
+            this.sortWorkShiftsByStartTime(wsc.workShifts);
+            break;
+          }
+        }
+
+        this.props.reloadWorkSchedules(workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift);
+      } else {
+        message.error(res.errors[0]);
+      }
+    } catch (error) {
+      return error;
     }
   }
 

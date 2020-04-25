@@ -15,16 +15,20 @@ export default class PlacesAutocomplete extends Component {
   }
 
   async handleSelectPlace(e) {
-    const { description } = e;
-    const res = await geocodeByAddress(description);
-    const placeInfo = {
-      address: description,
-      location: {
-        lat: res[0].geometry.location.lat(),
-        lng: res[0].geometry.location.lng()
-      }
-    };
-    this.props.setAddress(placeInfo);
+    try {
+      const { description } = e;
+      const res = await geocodeByAddress(description);
+      const placeInfo = {
+        address: description,
+        location: {
+          lat: res[0].geometry.location.lat(),
+          lng: res[0].geometry.location.lng()
+        }
+      };
+      this.props.setAddress(placeInfo);
+    } catch (error) {
+      return error;
+    }
   }
 
   render() {

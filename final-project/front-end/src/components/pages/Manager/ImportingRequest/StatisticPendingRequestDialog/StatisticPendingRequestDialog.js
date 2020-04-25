@@ -53,46 +53,50 @@ class StatisticPendingRequestDialog extends PageBase {
   }
 
   async acceptRequests(values) {
-    if (!values.executor) {
-      message.error('Thông tin bàn giao chưa đầy đủ, vui lòng kiểm tra lại');
-      return;
-    }
+    try {
+      if (!values.executor) {
+        message.error('Thông tin bàn giao chưa đầy đủ, vui lòng kiểm tra lại');
+        return;
+      }
 
-    this.props.setAppLoading(true);
-    const { requiredProducts, priceTotal } = this.state;
-    let { pendingRequests } = this.props;
-    const params = {
-      ...values,
-      priceTotal,
-      requests: pendingRequests.map(r => ({ _id: r._id })),
-      importedProducts: requiredProducts.map(rp => ({
-        productID: rp.product._id,
-        requiredQuantity: rp.requiredQuantity
-      }))
-    }
-    const res = await (
-      await fetch(
-        API.Manager.ImportingRequestManagement.acceptImportingRequests,
-        {
-          method: 'PUT',
-          body: JSON.stringify(params),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+      this.props.setAppLoading(true);
+      const { requiredProducts, priceTotal } = this.state;
+      let { pendingRequests } = this.props;
+      const params = {
+        ...values,
+        priceTotal,
+        requests: pendingRequests.map(r => ({ _id: r._id })),
+        importedProducts: requiredProducts.map(rp => ({
+          productID: rp.product._id,
+          requiredQuantity: rp.requiredQuantity
+        }))
+      }
+      const res = await (
+        await fetch(
+          API.Manager.ImportingRequestManagement.acceptImportingRequests,
+          {
+            method: 'PUT',
+            body: JSON.stringify(params),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    this.props.setAppLoading(false);
-    if (res.status !== 200) {
-      message.error(res.errors[0]);
-      return;
-    }
+      this.props.setAppLoading(false);
+      if (res.status !== 200) {
+        message.error(res.errors[0]);
+        return;
+      }
 
-    this.props.onAcceptRequests();
-    this.setDialogVisible(false);
+      this.props.onAcceptRequests();
+      this.setDialogVisible(false);
+    } catch (error) {
+      return error;
+    }
   }
 
   handleSelectExcecutor(data) {

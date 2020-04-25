@@ -18,7 +18,11 @@ class ProductActionHistory extends PageBase {
     }
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.loadData();
+  }
+
+  async loadData() {
     const res = await (
       await fetch(
         API.Importer.ProductManagement.getProductActionLogs,

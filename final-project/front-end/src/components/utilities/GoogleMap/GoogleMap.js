@@ -28,13 +28,21 @@ export default class GoogleMap extends Component {
     }
   }
 
-  async componentWillReceiveProps(props) {
-    const { address } = props;
-    const location = await this.getAddressLocation(address);
-    this.setState({
-      address: address || defaultAddress,
-      location
-    });
+  componentWillReceiveProps(props) {
+    this.loadData({ ...props });
+  }
+
+  async loadData(props) {
+    try {
+      const { address } = props;
+      const location = await this.getAddressLocation(address);
+      this.setState({
+        address: address || defaultAddress,
+        location
+      });
+    } catch (error) {
+      return error;
+    }
   }
 
   async getAddressText(latitude, longitude) {

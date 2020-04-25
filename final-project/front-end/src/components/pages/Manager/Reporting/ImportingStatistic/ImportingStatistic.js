@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Row, Col, Progress } from 'antd';
+import { Row, Col, Progress, Tooltip, Button } from 'antd';
+import { HistoryOutlined } from '@ant-design/icons';
 import NumberFormat from 'react-number-format';
 import * as _ from 'lodash';
 import './ImportingStatistic.style.scss';
@@ -16,9 +17,16 @@ export default class ImportingStatistic extends Component {
     return (
       <div className="product-statistic__products__statistic__item --importing-statistic">
         <div className="--importing-statistic__header">
+          <Tooltip  title="Xem lịch sử nhập hàng" placement="top">
+            <Button
+              shape="circle"
+              icon={<HistoryOutlined />}
+              className="--importing-statistic__header__btn-show-history"
+            />
+          </Tooltip>
           <span className="--importing-statistic__header__title">Thống kê nhập hàng</span>
           <div className="--importing-statistic__header__importing-cost">
-            <span>Chi phí đã nhập:</span>
+            <span>Tổng chi phí đã nhập:</span>
             <NumberFormat
               value={importingCostTotal}
               displayType="text"
@@ -28,7 +36,7 @@ export default class ImportingStatistic extends Component {
             />
           </div>
           <div className="--importing-statistic__header__importing-cost">
-            <span>Chi phí dự kiến:</span>
+            <span>Tổng chi phí dự kiến:</span>
             <NumberFormat
               value={requiredImportingCostTotal}
               displayType="text"
@@ -68,7 +76,7 @@ export default class ImportingStatistic extends Component {
                 </span>
                 <span className="--importing-statistic__footer__col__label">
                   Sản phẩm đã nhập
-                                </span>
+                </span>
               </div>
             </Col>
             <Col span={12}>

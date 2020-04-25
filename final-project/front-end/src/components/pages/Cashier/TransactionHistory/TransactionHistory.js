@@ -25,28 +25,32 @@ class TransactionHistory extends PageBase {
   }
 
   async loadCheckoutSessions() {
-    this.props.setAppLoading(true);
-    const res = await (
-      await fetch(
-        API.Cashier.Checkout.getCheckoutSessions,
-        {
-          method: 'GET',
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+    try {
+      this.props.setAppLoading(true);
+      const res = await (
+        await fetch(
+          API.Cashier.Checkout.getCheckoutSessions,
+          {
+            method: 'GET',
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    this.props.setAppLoading(false);
-    if (res.status !== 200) {
-      message.error(res.errors[0]);
-      return;
+      this.props.setAppLoading(false);
+      if (res.status !== 200) {
+        message.error(res.errors[0]);
+        return;
+      }
+
+      this.setState({ checkoutSessions: res.data.checkoutSessions, isLoading: false });
+    } catch (error) {
+      return error;
     }
-
-    this.setState({ checkoutSessions: res.data.checkoutSessions, isLoading: false });
   }
 
   render() {
@@ -99,7 +103,7 @@ class TransactionHistory extends PageBase {
                             </div>
                           </div>
                         </Timeline.Item>
-                      ) : <></>
+                      ) : <span key={cs._id}></span>
                     })}
                   </Timeline>
                 )}

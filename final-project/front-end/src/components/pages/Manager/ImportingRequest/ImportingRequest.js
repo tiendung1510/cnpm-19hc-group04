@@ -27,6 +27,13 @@ class ImportingRequest extends PageBase {
     }
   }
 
+  componentWillUnmount() {
+    // fix Warning: Can't perform a React state update on an unmounted component
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
+
   componentDidMount() {
     this.loadData();
   }
@@ -53,75 +60,87 @@ class ImportingRequest extends PageBase {
   }
 
   async loadStaffs() {
-    this.props.setAppLoading(true);
-    const res = await (
-      await fetch(
-        API.Manager.StaffManagement.getListStaffs,
-        {
-          method: 'GET',
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+    try {
+      this.props.setAppLoading(true);
+      const res = await (
+        await fetch(
+          API.Manager.StaffManagement.getListStaffs,
+          {
+            method: 'GET',
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    this.props.setAppLoading(false);
-    if (res.status !== 200) {
-      return Promise.reject(res.errors[0]);
+      this.props.setAppLoading(false);
+      if (res.status !== 200) {
+        return Promise.reject(res.errors[0]);
+      }
+
+      return Promise.resolve(res.data.users);
+    } catch (error) {
+      return error;
     }
-
-    return Promise.resolve(res.data.users);
   }
 
   async loadImportingRequests() {
-    this.props.setAppLoading(true);
-    const res = await (
-      await fetch(
-        API.Manager.ImportingRequestManagement.getImportingRequest,
-        {
-          method: 'GET',
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+    try {
+      this.props.setAppLoading(true);
+      const res = await (
+        await fetch(
+          API.Manager.ImportingRequestManagement.getImportingRequest,
+          {
+            method: 'GET',
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    this.props.setAppLoading(false);
-    if (res.status !== 200) {
-      return Promise.reject(res.errors[0]);
+      this.props.setAppLoading(false);
+      if (res.status !== 200) {
+        return Promise.reject(res.errors[0]);
+      }
+
+      return Promise.resolve(res.data.importingRequests);
+    } catch (error) {
+      return error;
     }
-
-    return Promise.resolve(res.data.importingRequests);
   }
 
   async loadImporterAssignments() {
-    this.props.setAppLoading(true);
-    const res = await (
-      await fetch(
-        API.Manager.ImportingRequestManagement.getImporterAssignments,
-        {
-          method: 'GET',
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+    try {
+      this.props.setAppLoading(true);
+      const res = await (
+        await fetch(
+          API.Manager.ImportingRequestManagement.getImporterAssignments,
+          {
+            method: 'GET',
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    this.props.setAppLoading(false);
-    if (res.status !== 200) {
-      return Promise.reject(res.errors[0]);
+      this.props.setAppLoading(false);
+      if (res.status !== 200) {
+        return Promise.reject(res.errors[0]);
+      }
+
+      return Promise.resolve(res.data.importerAssignments);
+    } catch (error) {
+      return error;
     }
-
-    return Promise.resolve(res.data.importerAssignments);
   }
 
   getStaffByID(staffID) {
@@ -141,8 +160,12 @@ class ImportingRequest extends PageBase {
   }
 
   async reloadImportingRequests() {
-    const importingRequests = await this.loadImportingRequests();
-    this.setState({ importingRequests });
+    try {
+      const importingRequests = await this.loadImportingRequests();
+      this.setState({ importingRequests });
+    } catch (error) {
+      return error;
+    }
   }
 
   render() {

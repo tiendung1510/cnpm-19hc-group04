@@ -64,40 +64,44 @@ class SupplierDialog extends PageBase {
   }
 
   async submitFrmAddSupplier(values) {
-    this.props.setAppLoading(true);
-    const res = await (
-      await fetch(
-        API.Importer.ProductManagement.addSupplier,
-        {
-          method: 'POST',
-          body: JSON.stringify(values),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+    try {
+      this.props.setAppLoading(true);
+      const res = await (
+        await fetch(
+          API.Importer.ProductManagement.addSupplier,
+          {
+            method: 'POST',
+            body: JSON.stringify(values),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    this.props.setAppLoading(false);
-    if (res.status !== 200) {
-      message.error(res.errors[0]);
-      return;
+      this.props.setAppLoading(false);
+      if (res.status !== 200) {
+        message.error(res.errors[0]);
+        return;
+      }
+
+      const { supplier } = res.data;
+      let { suppliers } = this.state;
+      suppliers.push({ ...supplier, key: supplier._id, order: suppliers.length + 1 });
+      this.onChangeSearchInput(this.state.supplierSearchText, [...suppliers]);
+      this.props.addToListSuppliers(supplier);
+      this.setState({ suppliers });
+
+      if (this.frmAddSupplierRef.current) {
+        this.frmAddSupplierRef.current.resetFields();
+      }
+
+      message.success(res.messages[0]);
+    } catch (error) {
+      return error;
     }
-
-    const { supplier } = res.data;
-    let { suppliers } = this.state;
-    suppliers.push({ ...supplier, key: supplier._id, order: suppliers.length + 1 });
-    this.onChangeSearchInput(this.state.supplierSearchText, [...suppliers]);
-    this.props.addToListSuppliers(supplier);
-    this.setState({ suppliers });
-
-    if (this.frmAddSupplierRef.current) {
-      this.frmAddSupplierRef.current.resetFields();
-    }
-
-    message.success(res.messages[0]);
   }
 
   onChangeSearchInput(text, suppliers) {
@@ -138,38 +142,42 @@ class SupplierDialog extends PageBase {
       okType: 'danger',
       cancelText: 'Không, cảm ơn',
       async onOk() {
-        that.props.setAppLoading(false);
-        const res = await (
-          await fetch(
-            API.Importer.ProductManagement.removeSupplier.replace('{supplierID}', supplier._id),
-            {
-              method: 'DELETE',
-              headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-                'token': that.props.cookies.get(COOKIE_NAMES.token)
-              },
-              signal: that.abortController.signal
-            }
-          )
-        ).json();
+        try {
+          that.props.setAppLoading(false);
+          const res = await (
+            await fetch(
+              API.Importer.ProductManagement.removeSupplier.replace('{supplierID}', supplier._id),
+              {
+                method: 'DELETE',
+                headers: {
+                  'Content-type': 'application/json; charset=UTF-8',
+                  'token': that.props.cookies.get(COOKIE_NAMES.token)
+                },
+                signal: that.abortController.signal
+              }
+            )
+          ).json();
 
-        that.props.setAppLoading(false);
-        if (res.status !== 200) {
-          message.error(res.errors[0]);
-          return;
+          that.props.setAppLoading(false);
+          if (res.status !== 200) {
+            message.error(res.errors[0]);
+            return;
+          }
+
+          let { suppliers } = that.state;
+          suppliers = suppliers
+            .filter(s => s._id !== supplier._id)
+            .map((s, i) => {
+              s.order = i + 1;
+              return s;
+            });
+          that.onChangeSearchInput(that.state.supplierSearchText, suppliers);
+          that.props.removeFromListSuppliers(supplier);
+          that.setState({ suppliers });
+          message.success(res.messages[0]);
+        } catch (error) {
+          return error;
         }
-
-        let { suppliers } = that.state;
-        suppliers = suppliers
-          .filter(s => s._id !== supplier._id)
-          .map((s, i) => {
-            s.order = i + 1;
-            return s;
-          });
-        that.onChangeSearchInput(that.state.supplierSearchText, suppliers);
-        that.props.removeFromListSuppliers(supplier);
-        that.setState({ suppliers });
-        message.success(res.messages[0]);
       },
       onCancel() { },
     });

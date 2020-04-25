@@ -23,16 +23,27 @@
     justify-content: center;
     padding-left: 15%;
     box-sizing: border-box;
-    box-shadow: $boxShadow1;
+    // box-shadow: $boxShadow1;
     border-radius: 5px;
     color: white;
     font-weight: bold;
-    text-shadow: $textShadow1;
+    // text-shadow: $textShadow1;
+    position: relative;
+
+    .reporting__revenue-statistic__widget__btn {
+      position: absolute;
+      top: 20px;
+      right: 15px;
+      border: 0;
+      color: white;
+      background: none;
+      box-shadow: none;
+    }
 
     &.--revenue-total {
-      background: darkorange;
+      background: orange;
       .anticon {
-        color: gold;
+        color: yellow;
       }
     }
 
@@ -72,7 +83,18 @@
 
   .reporting__revenue-statistic__chart {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     margin-top: 30px;
+
+    h1 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 30px;
+      font-size: 15px;
+      font-weight: bold;
+      color: #ff8220;
+    }
   }
 }

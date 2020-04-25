@@ -7,6 +7,17 @@ $fontSize3: 20px;
   padding: 25px 20px 0 20px;
   height: 115px;
   border-bottom: 1px solid #eee;
+  position: relative;
+
+  .--importing-statistic__header__btn-show-history {
+    position: absolute;
+    top: 20px;
+    right: 15px;
+    border: 0;
+    color: silver;
+    box-shadow: none;
+  }
+
   .--importing-statistic__header__title {
     display: flex;
     align-items: center;

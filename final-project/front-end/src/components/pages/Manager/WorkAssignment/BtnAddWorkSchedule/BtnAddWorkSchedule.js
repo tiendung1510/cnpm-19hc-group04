@@ -28,36 +28,40 @@ class BtnAddWorkSchedule extends PageBase {
   }
 
   onOK = async () => {
-    const { selectedDate } = this.state;
-    if (!selectedDate) {
-      message.error('Bạn chưa chọn tháng làm việc');
-      return;
-    }
+    try {
+      const { selectedDate } = this.state;
+      if (!selectedDate) {
+        message.error('Bạn chưa chọn tháng làm việc');
+        return;
+      }
 
-    const month = selectedDate.getMonth() + 1;
-    const year = selectedDate.getFullYear();
-    const res = await (
-      await fetch(
-        API.Manager.WorkSchedule.addWorkSchedule,
-        {
-          method: 'POST',
-          body: JSON.stringify({ month, year }),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+      const month = selectedDate.getMonth() + 1;
+      const year = selectedDate.getFullYear();
+      const res = await (
+        await fetch(
+          API.Manager.WorkSchedule.addWorkSchedule,
+          {
+            method: 'POST',
+            body: JSON.stringify({ month, year }),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    if (res.status === 200) {
-      this.setState({ selectedDate: null });
-      this.props.reloadWorkSchedules(year);
-      this.setModalVisible(false);
-      message.success(res.messages[0]);
-    } else {
-      message.error(res.errors[0]);
+      if (res.status === 200) {
+        this.setState({ selectedDate: null });
+        this.props.reloadWorkSchedules(year);
+        this.setModalVisible(false);
+        message.success(res.messages[0]);
+      } else {
+        message.error(res.errors[0]);
+      }
+    } catch (error) {
+      return error;
     }
   }
 

@@ -1,14 +1,13 @@
 .toolbar {
-  width: 90%;
+  width: 100%;
   height: 55px;
   box-sizing: border-box;
-  padding: 12px 48px 12px 24px;
+  padding: 0;
+  padding-left: 24px;
   background: #ff8220;
   // box-shadow: 0 5px 5px -5px rgba($color: #000000, $alpha: 0.4);
   color: white;
   font-weight: bold;
-  position: absolute;
-  z-index: 1000;
 
   .__page-title {
     color: white;

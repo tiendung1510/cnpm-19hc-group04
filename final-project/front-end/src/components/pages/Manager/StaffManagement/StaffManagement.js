@@ -37,57 +37,61 @@ class StaffManagement extends PageBase {
   }
 
   loadStaffs = async (role, defaultStaff) => {
-    this.props.setAppLoading(true);
+    try {
+      this.props.setAppLoading(true);
 
-    let url = API.Manager.StaffManagement.getListStaffs;
-    if (role) {
-      url += `?role=${role}`;
-    }
+      let url = API.Manager.StaffManagement.getListStaffs;
+      if (role) {
+        url += `?role=${role}`;
+      }
 
-    const res = await (
-      await fetch(
-        url,
-        {
-          method: 'GET',
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+      const res = await (
+        await fetch(
+          url,
+          {
+            method: 'GET',
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    this.props.setAppLoading(false);
-    this.setState({ isLoading: false });
-    if (res.status !== 200) {
-      message.error(res.errors[0]);
-      return;
-    }
+      this.props.setAppLoading(false);
+      this.setState({ isLoading: false });
+      if (res.status !== 200) {
+        message.error(res.errors[0]);
+        return;
+      }
 
-    const { users } = res.data;
-    let { filteredStaffs, selectedStaff } = this.state;
+      const { users } = res.data;
+      let { filteredStaffs, selectedStaff } = this.state;
 
-    if (!role) {
-      filteredStaffs = [...users];
-    } else {
-      filteredStaffs = users.filter(u => u.role === role);
-    }
+      if (!role) {
+        filteredStaffs = [...users];
+      } else {
+        filteredStaffs = users.filter(u => u.role === role);
+      }
 
-    if (filteredStaffs.length > 0) {
-      if (defaultStaff) {
-        if (selectedStaff.workAssignments) {
-          const { workAssignments } = selectedStaff;
-          selectedStaff = { ...defaultStaff, workAssignments }
+      if (filteredStaffs.length > 0) {
+        if (defaultStaff) {
+          if (selectedStaff.workAssignments) {
+            const { workAssignments } = selectedStaff;
+            selectedStaff = { ...defaultStaff, workAssignments }
+          }
+        } else {
+          selectedStaff = filteredStaffs[0];
         }
       } else {
-        selectedStaff = filteredStaffs[0];
+        selectedStaff = null;
       }
-    } else {
-      selectedStaff = null;
-    }
 
-    this.setState({ staffs: users, filteredStaffs, selectedStaff });
+      this.setState({ staffs: users, filteredStaffs, selectedStaff });
+    } catch (error) {
+      return error;
+    }
   }
 
   onClickListStaffsRow(record) {
@@ -122,50 +126,54 @@ class StaffManagement extends PageBase {
       okType: 'danger',
       cancelText: 'Không, cảm ơn',
       async onOk() {
-        that.props.setAppLoading(true);
+        try {
+          that.props.setAppLoading(true);
 
-        const staffID = staff._id;
-        const res = await (
-          await fetch(
-            API.Manager.StaffManagement.removeStaff.replace('{deletedUserID}', staffID),
-            {
-              method: 'DELETE',
-              headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-                'token': that.props.cookies.get(COOKIE_NAMES.token)
-              },
-              signal: that.abortController.signal
-            }
-          )
-        ).json();
+          const staffID = staff._id;
+          const res = await (
+            await fetch(
+              API.Manager.StaffManagement.removeStaff.replace('{deletedUserID}', staffID),
+              {
+                method: 'DELETE',
+                headers: {
+                  'Content-type': 'application/json; charset=UTF-8',
+                  'token': that.props.cookies.get(COOKIE_NAMES.token)
+                },
+                signal: that.abortController.signal
+              }
+            )
+          ).json();
 
-        that.props.setAppLoading(false);
-        if (res.status !== 200) {
-          message.error(res.errors[0]);
-          return;
+          that.props.setAppLoading(false);
+          if (res.status !== 200) {
+            message.error(res.errors[0]);
+            return;
+          }
+
+          let { staffs, filteredStaffRole, filteredStaffs, selectedStaff } = that.state;
+          staffs = staffs.filter(s => s._id !== staffID);
+          staffs.sort((a, b) => {
+            const time1 = new Date(a.createdAt).getTime();
+            const time2 = new Date(b.createdAt).getTime();
+            return time2 - time1;
+          });
+
+          filteredStaffs = staffs.filter(s => {
+            if (filteredStaffRole)
+              return s.role === filteredStaffRole;
+            return true;
+          });
+          if (filteredStaffs.length > 0) {
+            selectedStaff = filteredStaffs[0];
+          } else {
+            selectedStaff = null;
+          }
+
+          that.setState({ staffs, selectedStaff, filteredStaffs });
+          message.success(res.messages[0]);
+        } catch (error) {
+          return error;
         }
-
-        let { staffs, filteredStaffRole, filteredStaffs, selectedStaff } = that.state;
-        staffs = staffs.filter(s => s._id !== staffID);
-        staffs.sort((a, b) => {
-          const time1 = new Date(a.createdAt).getTime();
-          const time2 = new Date(b.createdAt).getTime();
-          return time2 - time1;
-        });
-
-        filteredStaffs = staffs.filter(s => {
-          if (filteredStaffRole)
-            return s.role === filteredStaffRole;
-          return true;
-        });
-        if (filteredStaffs.length > 0) {
-          selectedStaff = filteredStaffs[0];
-        } else {
-          selectedStaff = null;
-        }
-
-        that.setState({ staffs, selectedStaff, filteredStaffs });
-        message.success(res.messages[0]);
       },
       onCancel() { },
     });

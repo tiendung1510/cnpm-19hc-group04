@@ -32,31 +32,35 @@ class AddCategoryDialog extends PageBase {
   }
 
   async onFinish(values) {
-    this.props.setAppLoading(true);
-    const res = await (
-      await fetch(
-        API.Importer.ProductManagement.addCategory,
-        {
-          method: 'POST',
-          body: JSON.stringify(values),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+    try {
+      this.props.setAppLoading(true);
+      const res = await (
+        await fetch(
+          API.Importer.ProductManagement.addCategory,
+          {
+            method: 'POST',
+            body: JSON.stringify(values),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    this.props.setAppLoading(false);
-    if (res.status !== 200) {
-      message.error(res.errors[0]);
-      return;
+      this.props.setAppLoading(false);
+      if (res.status !== 200) {
+        message.error(res.errors[0]);
+        return;
+      }
+
+      this.props.addToListCategories(res.data.category);
+      this.setDialogVisible(false);
+      message.success(res.messages[0]);
+    } catch (error) {
+      return error;
     }
-
-    this.props.addToListCategories(res.data.category);
-    this.setDialogVisible(false);
-    message.success(res.messages[0]);
   }
 
   render() {

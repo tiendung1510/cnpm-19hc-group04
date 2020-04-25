@@ -44,29 +44,33 @@ class WorkAssignment extends PageBase {
   }
 
   loadStaffs = async () => {
-    this.props.setAppLoading(true);
-    const res = await (
-      await fetch(
-        API.Manager.StaffManagement.getListStaffs,
-        {
-          method: 'GET',
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+    try {
+      this.props.setAppLoading(true);
+      const res = await (
+        await fetch(
+          API.Manager.StaffManagement.getListStaffs,
+          {
+            method: 'GET',
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    if (res.status === 200) {
-      const { users } = res.data;
-      this.setState({ listStaffs: users });
-    } else {
-      message.error(res.errors[0]);
+      if (res.status === 200) {
+        const { users } = res.data;
+        this.setState({ listStaffs: users });
+      } else {
+        message.error(res.errors[0]);
+      }
+
+      this.props.setAppLoading(false);
+    } catch (error) {
+      return error;
     }
-
-    this.props.setAppLoading(false);
   }
 
   refreshAllCurrenStates() {
@@ -84,75 +88,79 @@ class WorkAssignment extends PageBase {
   }
 
   loadWorkSchedules = async (workYear) => {
-    this.props.setAppLoading(true);
-    this.refreshAllCurrenStates();
+    try {
+      this.props.setAppLoading(true);
+      this.refreshAllCurrenStates();
 
-    let url = API.Manager.WorkSchedule.getWorkSchedules;
-    if (workYear) {
-      url += `?year=${workYear}`;
-    }
-
-    const res = await (
-      await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          'token': this.props.cookies.get(COOKIE_NAMES.token)
-        },
-        signal: this.abortController.signal
-      })
-    ).json();
-
-    this.props.setAppLoading(false);
-    this.setState({ isLoading: false });
-
-    const { workSchedules, availableYears } = res.data
-    const listWorkYears = availableYears.map(y => ({ text: 'Năm ' + y, value: y }));
-    let { selectedWorkSchedule } = this.state;
-    selectedWorkSchedule = { ...selectedWorkSchedule, ...workSchedules[0] };
-
-    this.setState({
-      selectedWorkSchedule,
-      workSchedules,
-      listWorkYears,
-      selectedWorkYear: workYear || listWorkYears[0].value
-    });
-
-    let isWorkShiftFound = false;
-    for (let i = 0; i < selectedWorkSchedule.workDays.length; i++) {
-      for (let j = 0; j < selectedWorkSchedule.workDays[i].length; j++) {
-        if (selectedWorkSchedule.workDays[i][j].staffs.length > 0) {
-          let { selectedWorkShift } = this.state;
-          const selectedWorkDay = selectedWorkSchedule.workDays[i][j];
-
-          selectedWorkShift = selectedWorkDay.workShifts[0];
-          selectedWorkShift.index = 0;
-          isWorkShiftFound = true;
-
-          this.setState({
-            selectedWorkDay,
-            selectedWorkShift
-          });
-
-          break;
-        }
+      let url = API.Manager.WorkSchedule.getWorkSchedules;
+      if (workYear) {
+        url += `?year=${workYear}`;
       }
-    }
 
-    if (!isWorkShiftFound) {
-      const selectedWorkDay = selectedWorkSchedule.workDays[0][0];
+      const res = await (
+        await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+            'token': this.props.cookies.get(COOKIE_NAMES.token)
+          },
+          signal: this.abortController.signal
+        })
+      ).json();
 
-      let selectedWorkShift = selectedWorkDay.workShifts[0];
-      if (selectedWorkShift) {
-        selectedWorkShift.index = 0;
-      } else {
-        selectedWorkShift = { index: 0 }
-      }
+      this.props.setAppLoading(false);
+      this.setState({ isLoading: false });
+
+      const { workSchedules, availableYears } = res.data
+      const listWorkYears = availableYears.map(y => ({ text: 'Năm ' + y, value: y }));
+      let { selectedWorkSchedule } = this.state;
+      selectedWorkSchedule = { ...selectedWorkSchedule, ...workSchedules[0] };
 
       this.setState({
-        selectedWorkDay,
-        selectedWorkShift
-      })
+        selectedWorkSchedule,
+        workSchedules,
+        listWorkYears,
+        selectedWorkYear: workYear || listWorkYears[0].value
+      });
+
+      let isWorkShiftFound = false;
+      for (let i = 0; i < selectedWorkSchedule.workDays.length; i++) {
+        for (let j = 0; j < selectedWorkSchedule.workDays[i].length; j++) {
+          if (selectedWorkSchedule.workDays[i][j].staffs.length > 0) {
+            let { selectedWorkShift } = this.state;
+            const selectedWorkDay = selectedWorkSchedule.workDays[i][j];
+
+            selectedWorkShift = selectedWorkDay.workShifts[0];
+            selectedWorkShift.index = 0;
+            isWorkShiftFound = true;
+
+            this.setState({
+              selectedWorkDay,
+              selectedWorkShift
+            });
+
+            break;
+          }
+        }
+      }
+
+      if (!isWorkShiftFound) {
+        const selectedWorkDay = selectedWorkSchedule.workDays[0][0];
+
+        let selectedWorkShift = selectedWorkDay.workShifts[0];
+        if (selectedWorkShift) {
+          selectedWorkShift.index = 0;
+        } else {
+          selectedWorkShift = { index: 0 }
+        }
+
+        this.setState({
+          selectedWorkDay,
+          selectedWorkShift
+        })
+      }
+    } catch (error) {
+      return error;
     }
   }
 
@@ -328,57 +336,61 @@ class WorkAssignment extends PageBase {
       okType: 'danger',
       cancelText: 'Không, cảm ơn',
       async onOk() {
-        that.props.setAppLoading(true);
-        const res = await (
-          await fetch(
-            API.Manager.WorkShift.removeWorkShift.replace('{workShiftID}', workShiftID),
-            {
-              method: 'DELETE',
-              headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-                'token': that.props.cookies.get(COOKIE_NAMES.token)
-              },
-              signal: that.abortController.signal
+        try {
+          that.props.setAppLoading(true);
+          const res = await (
+            await fetch(
+              API.Manager.WorkShift.removeWorkShift.replace('{workShiftID}', workShiftID),
+              {
+                method: 'DELETE',
+                headers: {
+                  'Content-type': 'application/json; charset=UTF-8',
+                  'token': that.props.cookies.get(COOKIE_NAMES.token)
+                },
+                signal: that.abortController.signal
+              }
+            )
+          ).json();
+
+          if (res.status !== 200) {
+            that.props.setAppLoading(false);
+            message.error(res.errors[0]);
+            return;
+          }
+
+          let { selectedWorkShift, selectedWorkDay, selectedWorkSchedule, workSchedules } = that.state;
+
+          selectedWorkDay.workShifts = selectedWorkDay.workShifts.filter(ws => ws._id !== workShiftID);
+          if (selectedWorkDay.workShifts.length > 0) {
+            selectedWorkShift = selectedWorkDay.workShifts[0];
+            selectedWorkShift.index = 0;
+          } else {
+            selectedWorkShift = { index: 0 }
+          }
+
+          for (const week of selectedWorkSchedule.workDays) {
+            for (let day of week) {
+              if (day.workDayInMonth === selectedWorkDay.workDayInMonth) {
+                day = selectedWorkDay;
+                break;
+              }
             }
-          )
-        ).json();
+          }
+          selectedWorkSchedule.workShifts = selectedWorkSchedule.workShifts.filter(ws => ws._id !== workShiftID);
 
-        if (res.status !== 200) {
-          that.props.setAppLoading(false);
-          message.error(res.errors[0]);
-          return;
-        }
-
-        let { selectedWorkShift, selectedWorkDay, selectedWorkSchedule, workSchedules } = that.state;
-
-        selectedWorkDay.workShifts = selectedWorkDay.workShifts.filter(ws => ws._id !== workShiftID);
-        if (selectedWorkDay.workShifts.length > 0) {
-          selectedWorkShift = selectedWorkDay.workShifts[0];
-          selectedWorkShift.index = 0;
-        } else {
-          selectedWorkShift = { index: 0 }
-        }
-
-        for (const week of selectedWorkSchedule.workDays) {
-          for (let day of week) {
-            if (day.workDayInMonth === selectedWorkDay.workDayInMonth) {
-              day = selectedWorkDay;
+          for (let i = 0; i < workSchedules.length; i++) {
+            if (workSchedules[i]._id === selectedWorkSchedule._id) {
+              workSchedules[i] = selectedWorkSchedule;
               break;
             }
           }
-        }
-        selectedWorkSchedule.workShifts = selectedWorkSchedule.workShifts.filter(ws => ws._id !== workShiftID);
 
-        for (let i = 0; i < workSchedules.length; i++) {
-          if (workSchedules[i]._id === selectedWorkSchedule._id) {
-            workSchedules[i] = selectedWorkSchedule;
-            break;
-          }
+          that.reloadWorkSchedules(workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift);
+          message.success(res.messages[0]);
+          that.props.setAppLoading(false);
+        } catch (error) {
+          return error;
         }
-
-        that.reloadWorkSchedules(workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift);
-        message.success(res.messages[0]);
-        that.props.setAppLoading(false);
       },
       onCancel() { },
     });
@@ -394,76 +406,80 @@ class WorkAssignment extends PageBase {
       okType: 'danger',
       cancelText: 'Không, cảm ơn',
       async onOk() {
-        that.props.setAppLoading(true);
-        const res = await (
-          await fetch(
-            API.Manager.WorkSchedule.removeWorkSchedule.replace('{workScheduleID}', workScheduleID),
-            {
-              method: 'DELETE',
-              headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-                'token': that.props.cookies.get(COOKIE_NAMES.token)
-              },
-              signal: that.abortController.signal
+        try {
+          that.props.setAppLoading(true);
+          const res = await (
+            await fetch(
+              API.Manager.WorkSchedule.removeWorkSchedule.replace('{workScheduleID}', workScheduleID),
+              {
+                method: 'DELETE',
+                headers: {
+                  'Content-type': 'application/json; charset=UTF-8',
+                  'token': that.props.cookies.get(COOKIE_NAMES.token)
+                },
+                signal: that.abortController.signal
+              }
+            )
+          ).json();
+
+          if (res.status !== 200) {
+            that.props.setAppLoading(false);
+            message.error(res.errors[0]);
+            return;
+          }
+
+          let {
+            workSchedules,
+            selectedWorkSchedule,
+            selectedWorkDay,
+            selectedWorkShift
+          } = that.state;
+
+          workSchedules = workSchedules.filter(wsc => wsc._id !== workScheduleID);
+
+          if (workSchedules.length === 0) {
+            let { listWorkYears, selectedWorkYear } = that.state;
+            listWorkYears = listWorkYears.filter(y => y !== selectedWorkYear);
+            that.loadWorkSchedules(listWorkYears[0].value);
+            message.success(res.messages[0]);
+            return;
+          }
+
+          workSchedules.sort((a, b) => a.month - b.month);
+
+          selectedWorkSchedule = workSchedules[0];
+          selectedWorkSchedule.index = 0;
+          selectedWorkSchedule.workDays = that.generateWorkDays(selectedWorkSchedule);
+
+          let isWorkShiftFound = false;
+          for (let i = 0; i < selectedWorkSchedule.workDays.length; i++) {
+            for (let j = 0; j < selectedWorkSchedule.workDays[i].length; j++) {
+              if (selectedWorkSchedule.workDays[i][j].staffs.length > 0) {
+                selectedWorkDay = selectedWorkSchedule.workDays[i][j];
+                selectedWorkShift = selectedWorkDay.workShifts[0];
+                selectedWorkShift.index = 0;
+                isWorkShiftFound = true;
+                break;
+              }
             }
-          )
-        ).json();
+          }
 
-        if (res.status !== 200) {
-          that.props.setAppLoading(false);
-          message.error(res.errors[0]);
-          return;
-        }
-
-        let {
-          workSchedules,
-          selectedWorkSchedule,
-          selectedWorkDay,
-          selectedWorkShift
-        } = that.state;
-
-        workSchedules = workSchedules.filter(wsc => wsc._id !== workScheduleID);
-
-        if (workSchedules.length === 0) {
-          let { listWorkYears, selectedWorkYear } = that.state;
-          listWorkYears = listWorkYears.filter(y => y !== selectedWorkYear);
-          that.loadWorkSchedules(listWorkYears[0].value);
-          message.success(res.messages[0]);
-          return;
-        }
-
-        workSchedules.sort((a, b) => a.month - b.month);
-
-        selectedWorkSchedule = workSchedules[0];
-        selectedWorkSchedule.index = 0;
-        selectedWorkSchedule.workDays = that.generateWorkDays(selectedWorkSchedule);
-
-        let isWorkShiftFound = false;
-        for (let i = 0; i < selectedWorkSchedule.workDays.length; i++) {
-          for (let j = 0; j < selectedWorkSchedule.workDays[i].length; j++) {
-            if (selectedWorkSchedule.workDays[i][j].staffs.length > 0) {
-              selectedWorkDay = selectedWorkSchedule.workDays[i][j];
-              selectedWorkShift = selectedWorkDay.workShifts[0];
+          if (!isWorkShiftFound) {
+            selectedWorkDay = selectedWorkSchedule.workDays[0][0];
+            let selectedWorkShift = selectedWorkDay.workShifts[0];
+            if (selectedWorkShift) {
               selectedWorkShift.index = 0;
-              isWorkShiftFound = true;
-              break;
+            } else {
+              selectedWorkShift = { index: 0 }
             }
           }
-        }
 
-        if (!isWorkShiftFound) {
-          selectedWorkDay = selectedWorkSchedule.workDays[0][0];
-          let selectedWorkShift = selectedWorkDay.workShifts[0];
-          if (selectedWorkShift) {
-            selectedWorkShift.index = 0;
-          } else {
-            selectedWorkShift = { index: 0 }
-          }
+          that.reloadWorkSchedules(workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift);
+          message.success(res.messages[0]);
+          that.props.setAppLoading(false);
+        } catch (error) {
+          return error;
         }
-
-        that.reloadWorkSchedules(workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift);
-        message.success(res.messages[0]);
-        that.props.setAppLoading(false);
       },
       onCancel() { },
     });
@@ -478,60 +494,64 @@ class WorkAssignment extends PageBase {
       okType: 'danger',
       cancelText: 'Không, cảm ơn',
       async onOk() {
-        that.props.setAppLoading(true);
-        const { selectedWorkShift, selectedWorkDay, selectedWorkSchedule, workSchedules } = that.state;
-        const { workAssignments } = selectedWorkShift;
-        const workAssignment = workAssignments.find(wa => wa.assigner._id === assinger._id);
-        const workAssignmentID = workAssignment._id;
+        try {
+          that.props.setAppLoading(true);
+          const { selectedWorkShift, selectedWorkDay, selectedWorkSchedule, workSchedules } = that.state;
+          const { workAssignments } = selectedWorkShift;
+          const workAssignment = workAssignments.find(wa => wa.assigner._id === assinger._id);
+          const workAssignmentID = workAssignment._id;
 
-        const res = await (
-          await fetch(
-            API.Manager.WorkAssignment.removeWorkAssignment.replace('{workAssignmentID}', workAssignmentID),
-            {
-              method: 'DELETE',
-              headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-                'token': that.props.cookies.get(COOKIE_NAMES.token)
-              },
-              signal: that.abortController.signal
-            }
-          )
-        ).json();
+          const res = await (
+            await fetch(
+              API.Manager.WorkAssignment.removeWorkAssignment.replace('{workAssignmentID}', workAssignmentID),
+              {
+                method: 'DELETE',
+                headers: {
+                  'Content-type': 'application/json; charset=UTF-8',
+                  'token': that.props.cookies.get(COOKIE_NAMES.token)
+                },
+                signal: that.abortController.signal
+              }
+            )
+          ).json();
 
-        if (res.status !== 200) {
-          that.props.setAppLoading(false);
-          message.error(res.errors[0]);
-          return;
-        }
-
-        selectedWorkShift.workAssignments = selectedWorkShift.workAssignments.filter(wa => wa._id !== workAssignmentID);
-
-        for (let ws of selectedWorkDay.workShifts) {
-          if (ws._id === selectedWorkShift._id) {
-            ws.workAssignments = selectedWorkShift.workAssignments;
-            break;
+          if (res.status !== 200) {
+            that.props.setAppLoading(false);
+            message.error(res.errors[0]);
+            return;
           }
-        }
 
-        for (const week of selectedWorkSchedule.workDays) {
-          for (let day of week) {
-            if (day.workDayInMonth === selectedWorkDay.workDayInMonth) {
-              day = selectedWorkDay;
+          selectedWorkShift.workAssignments = selectedWorkShift.workAssignments.filter(wa => wa._id !== workAssignmentID);
+
+          for (let ws of selectedWorkDay.workShifts) {
+            if (ws._id === selectedWorkShift._id) {
+              ws.workAssignments = selectedWorkShift.workAssignments;
               break;
             }
           }
-        }
 
-        for (let wsc of workSchedules) {
-          if (wsc._id === selectedWorkSchedule._id) {
-            wsc = selectedWorkSchedule;
-            break;
+          for (const week of selectedWorkSchedule.workDays) {
+            for (let day of week) {
+              if (day.workDayInMonth === selectedWorkDay.workDayInMonth) {
+                day = selectedWorkDay;
+                break;
+              }
+            }
           }
-        }
 
-        that.reloadWorkSchedules(workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift);
-        message.success(res.messages[0]);
-        that.props.setAppLoading(false);
+          for (let wsc of workSchedules) {
+            if (wsc._id === selectedWorkSchedule._id) {
+              wsc = selectedWorkSchedule;
+              break;
+            }
+          }
+
+          that.reloadWorkSchedules(workSchedules, selectedWorkSchedule, selectedWorkDay, selectedWorkShift);
+          message.success(res.messages[0]);
+          that.props.setAppLoading(false);
+        } catch (error) {
+          return error;
+        }
       },
       onCancel() { },
     });

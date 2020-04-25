@@ -67,40 +67,44 @@ class UpdateStaffDialog extends PageBase {
   }
 
   onFinish = async (values) => {
-    let params = { ...values };
-    params.dateOfBirth = moment(params.dateOfBirth).format('DD-MM-YYYY');
-    params.sex = _.find(USER_SEX, s => s.name === params.sex).type;
+    try {
+      let params = { ...values };
+      params.dateOfBirth = moment(params.dateOfBirth).format('DD-MM-YYYY');
+      params.sex = _.find(USER_SEX, s => s.name === params.sex).type;
 
-    const res = await (
-      await fetch(
-        API.Manager.StaffManagement.updateStaffProfile.replace('{updatedUserID}', this.props.selectedStaff._id),
-        {
-          method: 'PUT',
-          body: JSON.stringify(params),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
+      const res = await (
+        await fetch(
+          API.Manager.StaffManagement.updateStaffProfile.replace('{updatedUserID}', this.props.selectedStaff._id),
+          {
+            method: 'PUT',
+            body: JSON.stringify(params),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
 
-    if (res.status !== 200) {
-      message.error(res.errors[0]);
-      return;
+      if (res.status !== 200) {
+        message.error(res.errors[0]);
+        return;
+      }
+
+      this.props.reloadStaffs(res.data.user);
+      this.setDialogVisible(false);
+      message.success(res.messages[0]);
+    } catch (error) {
+      return error;
     }
-
-    this.props.reloadStaffs(res.data.user);
-    this.setDialogVisible(false);
-    message.success(res.messages[0]);
   }
 
   render() {
     const { selectedStaff } = this.props;
     if (!selectedStaff)
       return <></>;
-      
+
     return (
       <div>
         <div>

@@ -27,35 +27,39 @@ class ImportingRequestDialog extends PageBase {
   }
 
   async sendImportingRequest() {
-    const params = {
-      products: this.props.lackingItems.map(item => item.product._id)
+    try {
+      const params = {
+        products: this.props.lackingItems.map(item => item.product._id)
+      }
+
+      this.props.setAppLoading(true);
+      const res = await (
+        await fetch(
+          API.Cashier.Checkout.createImportingRequest,
+          {
+            method: 'POST',
+            body: JSON.stringify(params),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'token': this.props.cookies.get(COOKIE_NAMES.token)
+            },
+            signal: this.abortController.signal
+          }
+        )
+      ).json();
+
+      this.props.setAppLoading(false);
+      if (res.status !== 200) {
+        message.error(res.errors[0]);
+        return;
+      }
+
+      message.success(res.messages[0]);
+      this.setDialogVisible(false);
+      this.props.setLackingItemsDialogVisible(false);
+    } catch (error) {
+      return error;
     }
-
-    this.props.setAppLoading(true);
-    const res = await (
-      await fetch(
-        API.Cashier.Checkout.createImportingRequest,
-        {
-          method: 'POST',
-          body: JSON.stringify(params),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'token': this.props.cookies.get(COOKIE_NAMES.token)
-          },
-          signal: this.abortController.signal
-        }
-      )
-    ).json();
-
-    this.props.setAppLoading(false);
-    if (res.status !== 200) {
-      message.error(res.errors[0]);
-      return;
-    }
-
-    message.success(res.messages[0]);
-    this.setDialogVisible(false);
-    this.props.setLackingItemsDialogVisible(false);
   }
 
   render() {

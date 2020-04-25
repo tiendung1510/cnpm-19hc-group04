@@ -50,63 +50,71 @@ class MoneyCounting extends PageBase {
 	}
 
 	async createCheckoutSession() {
-		this.props.setAppLoading(true);
-		const res = await (
-			await fetch(
-				API.Cashier.Checkout.createCheckoutSession,
-				{
-					method: 'POST',
-					headers: {
-						'Content-type': 'application/json; charset=UTF-8',
-						'token': this.props.cookies.get(COOKIE_NAMES.token)
-					},
-					signal: this.abortController.signal
-				}
-			)
-		).json();
+		try {
+			this.props.setAppLoading(true);
+			const res = await (
+				await fetch(
+					API.Cashier.Checkout.createCheckoutSession,
+					{
+						method: 'POST',
+						headers: {
+							'Content-type': 'application/json; charset=UTF-8',
+							'token': this.props.cookies.get(COOKIE_NAMES.token)
+						},
+						signal: this.abortController.signal
+					}
+				)
+			).json();
 
-		this.props.setAppLoading(false);
-		if (res.status !== 200) {
-			message.error(res.errors[0]);
-			return;
+			this.props.setAppLoading(false);
+			if (res.status !== 200) {
+				message.error(res.errors[0]);
+				return;
+			}
+
+			const { _id } = res.data.checkoutSession;
+			const { availableProducts } = res.data;
+			message.success(res.messages[0]);
+
+			this.setOnWorking(true);
+			this.props.setCheckoutPanelCheckoutSessionID(_id);
+			this.setState({
+				checkoutSessionID: _id,
+				availableProducts
+			});
+		} catch (error) {
+			return error;
 		}
-
-		const { _id } = res.data.checkoutSession;
-		const { availableProducts } = res.data;
-		message.success(res.messages[0]);
-
-		this.setOnWorking(true);
-		this.props.setCheckoutPanelCheckoutSessionID(_id);
-		this.setState({
-			checkoutSessionID: _id,
-			availableProducts
-		});
 	}
 
 	async cancelCheckoutSession() {
-		this.props.setAppLoading(true);
-		const res = await (
-			await fetch(
-				API.Cashier.Checkout.cancelCheckoutSession.replace('{checkoutSessionID}', this.state.checkoutSessionID),
-				{
-					method: 'DELETE',
-					headers: {
-						'Content-type': 'application/json; charset=UTF-8',
-						'token': this.props.cookies.get(COOKIE_NAMES.token)
-					},
-					signal: this.abortController.signal
-				}
-			)
-		).json();
+		try {
+			this.props.setAppLoading(true);
+			const res = await (
+				await fetch(
+					API.Cashier.Checkout.cancelCheckoutSession.replace('{checkoutSessionID}', this.state.checkoutSessionID),
+					{
+						method: 'DELETE',
+						headers: {
+							'Content-type': 'application/json; charset=UTF-8',
+							'token': this.props.cookies.get(COOKIE_NAMES.token)
+						},
+						signal: this.abortController.signal
+					}
+				)
+			).json();
 
-		this.props.setAppLoading(false);
-		if (res.status !== 200) {
-			message.error(res.errors[0]);
-			return;
+			this.props.setAppLoading(false);
+			if (res.status !== 200) {
+				message.error(res.errors[0]);
+				return;
+			}
+
+			this.setOnWorking(false);
+			message.success(res.messages[0]);
+		} catch (error) {
+			return error;
 		}
-
-		this.setOnWorking(false);
-		message.success(res.messages[0]);
 	}
 
 	openNotification = (message, description, placement) => {

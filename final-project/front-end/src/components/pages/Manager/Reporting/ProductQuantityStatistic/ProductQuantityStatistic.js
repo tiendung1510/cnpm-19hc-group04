@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Row, Col } from 'antd';
+import { Row, Col, Tooltip, Button } from 'antd';
+import { HistoryOutlined } from '@ant-design/icons';
 import NumberFormat from 'react-number-format';
 import './ProductQuantityStatistic.style.scss';
 import { Line } from 'react-chartjs-2';
@@ -67,6 +68,13 @@ export default class ProductQuantityStatistic extends Component {
         <Row style={{ width: '100%' }} gutter={20}>
           <Col span={8}>
             <div className="product-quantity-statistic__item --sold">
+              <Tooltip title="Xem lịch sử bán hàng" placement="top">
+                <Button
+                  shape="circle"
+                  icon={<HistoryOutlined />}
+                  className="product-quantity-statistic__item__btn"
+                />
+              </Tooltip>
               <div className="product-quantity-statistic__item__metric">
                 <NumberFormat
                   value={soldQuantityTotal}
@@ -88,6 +96,13 @@ export default class ProductQuantityStatistic extends Component {
           </Col>
           <Col span={8}>
             <div className="product-quantity-statistic__item --new">
+              <Tooltip title="Xem các sản phẩm mới" placement="top">
+                <Button
+                  shape="circle"
+                  icon={<HistoryOutlined />}
+                  className="product-quantity-statistic__item__btn"
+                />
+              </Tooltip>
               <div className="product-quantity-statistic__item__metric">
                 <NumberFormat
                   value={newProductTotal}
