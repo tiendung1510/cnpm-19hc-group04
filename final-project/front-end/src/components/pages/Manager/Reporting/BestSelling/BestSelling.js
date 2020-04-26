@@ -63,7 +63,7 @@ export default class BestSelling extends Component {
                     <Popover
                       key={i}
                       overlayClassName="product-statistic__products__best-selling__item__details"
-                      placement="top"
+                      placement="bottomLeft"
                       title={p.details.name}
                       content={
                         <div>
