@@ -1,24 +1,25 @@
 import React, { Component } from 'react';
 import Carousel from "react-multi-carousel";
 import 'react-multi-carousel/lib/styles.css';
-import { Card } from 'antd';
+import { Card, Popover, Row, Col } from 'antd';
 import './BestSelling.style.scss';
+import NumberFormat from 'react-number-format';
 
 const { Meta } = Card;
 const responsive = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
-    items: 3,
+    item: 3,
     paritialVisibilityGutter: 60
   },
   tablet: {
     breakpoint: { max: 1024, min: 464 },
-    items: 2,
+    item: 2,
     paritialVisibilityGutter: 50
   },
   mobile: {
     breakpoint: { max: 464, min: 0 },
-    items: 1,
+    item: 1,
     paritialVisibilityGutter: 30
   }
 };
@@ -40,11 +41,11 @@ export default class BestSelling extends Component {
           <span className="product-statistic__products__best-selling__hot-badge">HOT</span>
         </h1>
         {products.length === 0 ? (
-          <div className="product-statistic__products__best-selling__items" style={{ paddingLeft: 5 }}>
-            <span>Chưa ghi nhận.</span>
+          <div className="product-statistic__products__best-selling__item" style={{ paddingLeft: 5 }}>
+            <p>Chưa ghi nhận.</p>
           </div>
         ) : (
-            <div className="product-statistic__products__best-selling__items">
+            <div className="product-statistic__products__best-selling__item">
               <Carousel
                 swipeable={false}
                 draggable={true}
@@ -59,12 +60,54 @@ export default class BestSelling extends Component {
               >
                 {products.map((p, i) => {
                   return (
-                    <Card
-                      cover={<img alt="example" src={p.details.image} />}
+                    <Popover
                       key={i}
-                    >
-                      <Meta title={p.details.name} description={<span>SL đã bán: <strong>{p.quantity}</strong></span>} />
-                    </Card>
+                      overlayClassName="product-statistic__products__best-selling__item__details"
+                      placement="top"
+                      title={p.details.name}
+                      content={
+                        <div>
+                          <Row style={{ width: '100%' }} gutter={10}>
+                            <Col span={8}>Thể loại</Col>
+                            <Col span={16}>{p.category.name}</Col>
+                          </Row>
+                          <Row style={{ width: '100%' }} gutter={10}>
+                            <Col span={8}>Nhà cung cấp</Col>
+                            <Col span={16}>{p.supplier.name}</Col>
+                          </Row>
+                          <Row style={{ width: '100%' }} gutter={10}>
+                            <Col span={8}>Giá bán</Col>
+                            <Col span={16}>
+                              <NumberFormat
+                                value={p.details.price}
+                                displayType="text"
+                                thousandSeparator={true}
+                                suffix=" đ̲"
+                                style={{ fontWeight: 'bold' }}
+                              />
+                            </Col>
+                          </Row>
+                          <Row style={{ width: '100%' }} gutter={10}>
+                            <Col span={8}>SL đã bán</Col>
+                            <Col span={16}>{p.quantity}</Col>
+                          </Row>
+                          <Row style={{ width: '100%' }} gutter={10}>
+                            <Col span={8}>SL tồn kho</Col>
+                            <Col span={16}>{p.details.availableQuantity}</Col>
+                          </Row>
+                        </div>
+                      }
+                      trigger="hover">
+                      <Card
+                        className="animated zoomIn"
+                        cover={<img alt="example" src={p.details.image} />}
+                        key={i}
+                        style={{ animationDelay: `${0.2 * i}s` }}
+                      >
+                        <Meta title={p.details.name} description={<span>SL đã bán: <strong>{p.quantity}</strong></span>} />
+                      </Card>
+                    </Popover>
+
                   );
                 })}
               </Carousel>

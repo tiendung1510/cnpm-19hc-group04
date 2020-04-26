@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Row, Col, Progress, Tooltip, Button } from 'antd';
-import { HistoryOutlined } from '@ant-design/icons';
+import { Row, Col, Progress } from 'antd';
 import NumberFormat from 'react-number-format';
 import * as _ from 'lodash';
 import './ImportingStatistic.style.scss';
+import ImportingHistory from '../ImportingHistory/ImportingHistory';
 
 export default class ImportingStatistic extends Component {
   render() {
@@ -11,19 +11,16 @@ export default class ImportingStatistic extends Component {
       importedQuantityTotal,
       requiredQuantityTotal,
       importingCostTotal,
-      requiredImportingCostTotal
+      requiredImportingCostTotal,
+      importedProducts
     } = this.props;
     const importingCompletedRatio = _.round(importedQuantityTotal * 100 / (importedQuantityTotal + requiredQuantityTotal), 2);
     return (
       <div className="product-statistic__products__statistic__item --importing-statistic">
         <div className="--importing-statistic__header">
-          <Tooltip  title="Xem lịch sử nhập hàng" placement="top">
-            <Button
-              shape="circle"
-              icon={<HistoryOutlined />}
-              className="--importing-statistic__header__btn-show-history"
-            />
-          </Tooltip>
+          <ImportingHistory
+            importedProducts={[...importedProducts]}
+          />
           <span className="--importing-statistic__header__title">Thống kê nhập hàng</span>
           <div className="--importing-statistic__header__importing-cost">
             <span>Tổng chi phí đã nhập:</span>

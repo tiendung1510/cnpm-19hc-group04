@@ -153,7 +153,7 @@ class SupplierManagement extends PageBase {
   render() {
     const { filteredSuppliers, selectedSupplier } = this.state;
     return (
-      <div className="importing-request__container__suppliers">
+      <div className="importing-request__container__suppliers animated fadeInRight" style={{ animationDelay: '0.8s' }}>
         <div className="importing-request__container__suppliers__header">
           <span className="importing-request__container__suppliers__header__title">
             Nhà cung cấp sản phẩm ({filteredSuppliers.length})
@@ -243,17 +243,19 @@ class SupplierManagement extends PageBase {
             </Row>
 
             <div className="importing-request__container__suppliers__details__content__map">
-              <GoogleMap
-                width={'100%'}
-                height={200}
-                address={selectedSupplier.address}
-                locationIcon={
-                  <EnvironmentTwoTone
-                    twoToneColor="#ff8220"
-                    style={{ fontSize: 24 }}
-                  />
-                }
-              />
+              {selectedSupplier.address ? (
+                <GoogleMap
+                  width={'100%'}
+                  height={200}
+                  address={selectedSupplier.address}
+                  locationIcon={
+                    <EnvironmentTwoTone
+                      twoToneColor="#ff8220"
+                      style={{ fontSize: 24 }}
+                    />
+                  }
+                />
+              ) : <></>}
             </div>
 
           </div>

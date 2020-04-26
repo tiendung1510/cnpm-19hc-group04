@@ -1,0 +1,45 @@
+.importing-history__btn-show {
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  border: 0;
+  box-shadow: none;
+  background: none;
+  color: rgba($color: #000000, $alpha: 0.4);
+
+  &:hover,
+  &:focus {
+    background: none;
+    color: #ff8220;
+  }
+}
+
+.importing-history__content {
+  width: 500px;
+
+  .ant-popover-inner-content {
+    padding: 0;
+  }
+
+  $tableFontSize: 10px;
+  .ant-table {
+    thead > tr > th {
+      font-size: $tableFontSize;
+      color: rgba($color: #000000, $alpha: 0.6);
+      font-weight: bold;
+      padding: 10px;
+    }
+
+    tbody > tr {
+      td {
+        font-size: $tableFontSize;
+        padding: 10px;
+      }
+    }
+  }
+
+  .ant-table .ant-table-container::before,
+  .ant-table .ant-table-container::after {
+    width: 0;
+  }
+}

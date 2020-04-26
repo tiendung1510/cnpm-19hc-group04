@@ -9,15 +9,6 @@ $fontSize3: 20px;
   border-bottom: 1px solid #eee;
   position: relative;
 
-  .--importing-statistic__header__btn-show-history {
-    position: absolute;
-    top: 20px;
-    right: 15px;
-    border: 0;
-    color: silver;
-    box-shadow: none;
-  }
-
   .--importing-statistic__header__title {
     display: flex;
     align-items: center;
@@ -28,6 +19,7 @@ $fontSize3: 20px;
   .--importing-statistic__header__importing-cost {
     font-size: $fontSize0;
     display: flex;
+    line-height: 20px;
 
     span {
       display: block;
@@ -43,10 +35,10 @@ $fontSize3: 20px;
     }
 
     &:nth-of-type(1) {
-      padding-top: 15px;
+      padding-top: 30px;
     }
     &:nth-of-type(2) {
-      padding-top: 5px;
+      padding-top: 15px;
     }
   }
 }

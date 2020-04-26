@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Row, Col, Tooltip, Button } from 'antd';
-import { HistoryOutlined } from '@ant-design/icons';
+import { Row, Col } from 'antd';
 import NumberFormat from 'react-number-format';
 import './ProductQuantityStatistic.style.scss';
 import { Line } from 'react-chartjs-2';
 import moment from 'moment';
+import SellingHistory from '../SellingHistory/SellingHistory';
+import NewProductList from '../NewProductList/NewProductList';
 
 export default class ProductQuantityStatistic extends Component {
   render() {
@@ -12,7 +13,9 @@ export default class ProductQuantityStatistic extends Component {
       soldQuantityTotal,
       newProductTotal,
       availableQuantityTotal,
-      soldQuantityStatisticData
+      soldQuantityStatisticData,
+      sellingHistories,
+      newProducts
     } = this.props;
 
     const chartOptions = {
@@ -68,13 +71,9 @@ export default class ProductQuantityStatistic extends Component {
         <Row style={{ width: '100%' }} gutter={20}>
           <Col span={8}>
             <div className="product-quantity-statistic__item --sold">
-              <Tooltip title="Xem lịch sử bán hàng" placement="top">
-                <Button
-                  shape="circle"
-                  icon={<HistoryOutlined />}
-                  className="product-quantity-statistic__item__btn"
-                />
-              </Tooltip>
+              <SellingHistory
+                sellingHistories={[...sellingHistories]}
+              />
               <div className="product-quantity-statistic__item__metric">
                 <NumberFormat
                   value={soldQuantityTotal}
@@ -96,13 +95,9 @@ export default class ProductQuantityStatistic extends Component {
           </Col>
           <Col span={8}>
             <div className="product-quantity-statistic__item --new">
-              <Tooltip title="Xem các sản phẩm mới" placement="top">
-                <Button
-                  shape="circle"
-                  icon={<HistoryOutlined />}
-                  className="product-quantity-statistic__item__btn"
-                />
-              </Tooltip>
+              <NewProductList
+                newProducts={[...newProducts]}
+              />
               <div className="product-quantity-statistic__item__metric">
                 <NumberFormat
                   value={newProductTotal}

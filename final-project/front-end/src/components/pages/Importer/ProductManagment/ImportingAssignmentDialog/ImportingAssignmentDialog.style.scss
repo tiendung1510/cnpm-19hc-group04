@@ -41,10 +41,19 @@
   .importing-assignment-dialog__products {
     $tableFontSize: $fontSize2;
     margin-top: -5px;
+
+    .importing-assignment-dialog__products__btn-show-supplier-info {
+      font-size: $tableFontSize;
+      padding: 0;
+      height: auto;
+      span {
+        text-decoration: underline;
+        color: #ff8200;
+      }
+    }
     .ant-table {
       thead > tr > th {
         font-size: $tableFontSize;
-        color: #ff8220;
         font-weight: bold;
         padding: 10px 0;
 

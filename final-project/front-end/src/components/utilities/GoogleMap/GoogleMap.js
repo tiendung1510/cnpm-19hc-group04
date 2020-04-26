@@ -28,6 +28,10 @@ export default class GoogleMap extends Component {
     }
   }
 
+  componentWillMount() {
+    this.loadData({ ...this.props });
+  }
+
   componentWillReceiveProps(props) {
     this.loadData({ ...props });
   }
@@ -84,7 +88,7 @@ export default class GoogleMap extends Component {
     return (
       <div className="google-map" style={{ width, height }}>
         <GoogleMapReact
-          apiKey={GOOGLE_MAPS.API_KEY}
+          bootstrapURLKeys={GOOGLE_MAPS.API_KEY}
           center={location}
           defaultZoom={15}
         >

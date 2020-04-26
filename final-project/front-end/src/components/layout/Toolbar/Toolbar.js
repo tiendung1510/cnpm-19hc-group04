@@ -66,7 +66,7 @@ class Toolbar extends Component {
                   </Menu.Item>
                 </Menu>
               } className="__account__avatar-menu">
-                <Row align="middle">
+                <Row align="middle" gutter={5}>
                   <Col span={4}><Avatar size={30} src={user.avatar} /></Col>
                   <Col span={20}>
                     <span style={{ margin: '0 10px' }}>{user.fullname || ''}</span><CaretDownFilled style={{ color: 'white' }} />

@@ -3,12 +3,18 @@ import './RevenueStatistic.style.scss';
 import moment from 'moment';
 import NumberFormat from 'react-number-format';
 import { Bar } from 'react-chartjs-2';
-import { Row, Col, Tooltip, Button } from 'antd';
-import { MoreOutlined, TagsFilled, ScheduleFilled, StarFilled } from '@ant-design/icons';
+import { Row, Col, Button, Popover, Table, Tooltip } from 'antd';
+import { ScheduleFilled, StarFilled, TagFilled, UnorderedListOutlined } from '@ant-design/icons';
 
 export default class RevenueStatistic extends Component {
   render() {
-    const { statisticData, revenueTotal, paymentTotal } = this.props;
+    const {
+      statisticData,
+      revenueTotal,
+      paymentTotal,
+      salaryTotal,
+      importingCostTotal
+    } = this.props;
     const profitTotal = revenueTotal - paymentTotal;
     const height = 55;
     const chartOptions = {
@@ -24,8 +30,8 @@ export default class RevenueStatistic extends Component {
     const lineChartData = (canvas) => {
       const ctx = canvas.getContext("2d")
       const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-      gradient.addColorStop(0, '#fff6e6');
-      gradient.addColorStop(1, 'darkorange');
+      gradient.addColorStop(0, 'orange');
+      gradient.addColorStop(1, '#ff5858');
       return {
         labels: statisticData.map(item => moment(item.date).format('DD/MM')),
         datasets: [
@@ -54,6 +60,50 @@ export default class RevenueStatistic extends Component {
       }
     };
 
+    let paymentItems = [
+      {
+        key: 1,
+        name: 'Lương nhân viên',
+        value: salaryTotal
+      }
+    ];
+
+    if (importingCostTotal > 0) {
+      paymentItems.push({
+        key: paymentItems.length + 1,
+        name: 'Chi phí nhập hàng',
+        value: importingCostTotal
+      });
+    }
+    const paymentItemColumns = [
+      {
+        title: '#',
+        dataIndex: 'key',
+        key: 'key',
+        width: 100
+      },
+      {
+        title: 'Hạng mục',
+        dataIndex: 'name',
+        key: 'name',
+        width: 300
+      },
+      {
+        title: 'Chi phí',
+        dataIndex: 'value',
+        key: 'value',
+        width: 200,
+        render: value => (
+          <NumberFormat
+            value={value}
+            displayType="text"
+            thousandSeparator={true}
+            suffix=" đ̲"
+          />
+        )
+      }
+    ];
+
     return (
       <div className="reporting__revenue-statistic reporting__block-style">
         <Row style={{ width: '100%', position: 'relative', margin: 0 }} gutter={20} justify="center">
@@ -76,16 +126,30 @@ export default class RevenueStatistic extends Component {
           </Col>
           <Col span={8}>
             <div className="reporting__revenue-statistic__widget --payment-total">
-              <Tooltip title="Xem hạng mục cần chi trả" placement="top">
-                <Button
-                  shape="circle"
-                  icon={<MoreOutlined />}
-                  className="reporting__revenue-statistic__widget__btn"
-                />
-              </Tooltip>
+              <Popover
+                content={
+                  <Table
+                    dataSource={paymentItems}
+                    columns={paymentItemColumns}
+                    pagination={false}
+                  />
+                }
+                title="Hạng mục cần chi trả"
+                trigger="click"
+                placement="bottom"
+                overlayClassName="reporting__revenue-statistic__widget__popover"
+              >
+                <Tooltip title="Hạng mục cần chi trả" placement="top">
+                  <Button
+                    shape="circle"
+                    icon={<UnorderedListOutlined />}
+                    className="reporting__revenue-statistic__widget__btn"
+                  />
+                </Tooltip>
+              </Popover>
               <div className="reporting__revenue-statistic__widget__content">
                 <div className="reporting__revenue-statistic__widget__content__value">
-                  <TagsFilled />
+                  <TagFilled />
                   <NumberFormat
                     value={paymentTotal}
                     displayType="text"

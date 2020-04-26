@@ -11,6 +11,7 @@ import { API } from '../../../../../constants/api.constant';
 import { COOKIE_NAMES } from '../../../../../constants/cookie-name.constant';
 import PageBase from '../../../../utilities/PageBase/PageBase';
 import { withCookies } from 'react-cookie';
+import SupplierContactPopover from '../../../../utilities/SupplierContactPopover/SupplierContactPopover';
 
 class PendingRequest extends PageBase {
   constructor(props) {
@@ -85,7 +86,14 @@ class PendingRequest extends PageBase {
         dataIndex: 'supplier',
         key: 'supplier',
         width: 200,
-        render: (value, record) => record.product.supplier.name
+        render: (value, record) => (
+          <SupplierContactPopover
+            supplier={{ ...record.product.supplier }}
+            buttonText={record.product.supplier.name}
+            buttonStyle={{ fontSize: 11 }}
+            placement="right"
+          />
+        )
       },
       {
         title: 'Giá bán',

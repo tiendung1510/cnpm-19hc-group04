@@ -18,7 +18,7 @@
     background: #f8f8f8;
     min-height: 60px;
     width: 100%;
-    margin-bottom: 5px;
+    margin: 5px;
     border: 1px solid #eee;
     padding: 10px;
     border-radius: 3px;
@@ -32,5 +32,11 @@
       font-size: $fontSize0;
       color: gray;
     }
+  }
+}
+
+.product-action-logs__content {
+  .ant-popover-inner-content {
+    padding: 0;
   }
 }

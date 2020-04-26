@@ -19,6 +19,7 @@ import QRCode from 'qrcode.react';
 import NumberFormat from 'react-number-format';
 import ImportingAssignmentDialog from './ImportingAssignmentDialog/ImportingAssignmentDialog';
 import ProductActionHistory from './ProductActionHistory/ProductActionHistory';
+import SupplierContactPopover from '../../../utilities/SupplierContactPopover/SupplierContactPopover';
 
 const { confirm } = Modal;
 
@@ -516,14 +517,21 @@ class ProductManagement extends PageBase {
         title: 'Nhà cung cấp',
         dataIndex: 'supplier',
         key: 'supplier',
-        width: 160,
-        render: (text, record) => (<span>{record.supplier.name}</span>)
+        width: 200,
+        render: (value, record) => (
+          <SupplierContactPopover
+            supplier={{ ...record.supplier }}
+            buttonText={record.supplier.name}
+            buttonStyle={{ fontSize: 11 }}
+            placement="right"
+          />
+        )
       },
       {
         title: 'Giá bán',
         dataIndex: 'price',
         key: 'price',
-        width: 140,
+        width: 100,
         render: (text) => (
           <NumberFormat
             value={Number(text)}
@@ -535,7 +543,7 @@ class ProductManagement extends PageBase {
         )
       },
       {
-        title: 'SL hiện có',
+        title: <center>SL hiện có</center>,
         dataIndex: 'availableQuantity',
         key: 'availableQuantity',
         width: 120,
@@ -549,10 +557,10 @@ class ProductManagement extends PageBase {
         render: (text) => (<span>{moment(text).format('HH:mm DD-MM-YYYY')}</span>)
       },
       {
-        title: 'Trạng thái',
+        title: <center>Trạng thái</center>,
         dataIndex: 'status',
         key: 'status',
-        width: 100,
+        width: 80,
         render: (text, record) => (<center>
           {record.availableQuantity === 0 ? (
             <span style={{ color: 'crimson', fontWeight: 'bold' }}>Hết hàng</span>
@@ -577,7 +585,7 @@ class ProductManagement extends PageBase {
     return (
       <div className="product-management">
 
-        <div className="product-management__container">
+        <div className="product-management__container animated fadeInUp">
           <Row>
             <Col span={4}>
               <div className="product-management__container__left-sidebar">

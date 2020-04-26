@@ -244,8 +244,8 @@ class StaffManagement extends PageBase {
         if (k === 'fullname') {
           column.render = (text, record) => (
             <Row align="middle" style={{ width: '100%' }}>
-              <Col span={6}><Avatar src={record.avatar} size={24} /></Col>
-              <Col span={18}><span style={{ marginLeft: 7, fontWeight: 'bold' }}>{text}</span></Col>
+              <Col span={6}><Avatar src={record.avatar} size={22} /></Col>
+              <Col span={18}><span style={{ fontWeight: 'bold' }}>{text}</span></Col>
             </Row>
           );
           column.width = 160;
@@ -293,9 +293,9 @@ class StaffManagement extends PageBase {
     }
 
     return (
-      <div className="staff-management animated fadeIn">
+      <div className="staff-management">
         <div className="staff-management__body">
-          <Row className="staff-management__body__staffs">
+          <Row className="staff-management__body__staffs animated fadeInUp">
             <Col span={4}>
               <div className="staff-management__body__staffs__sidebar">
                 <div className="staff-management__body__staffs__sidebar__staff-details">

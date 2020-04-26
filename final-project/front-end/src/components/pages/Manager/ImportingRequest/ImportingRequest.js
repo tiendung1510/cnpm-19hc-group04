@@ -175,12 +175,12 @@ class ImportingRequest extends PageBase {
     const finishedAssignments = importerAssignments.filter(a => a.finishedAt !== null);
 
     return (
-      <div className="importing-request animated fadeIn">
+      <div className="importing-request">
         <div className="importing-request__container">
           <Row gutter={10} style={{ width: '100%', height: '100%', margin: 0 }}>
             <Col span={5}>
               <div
-                className="importing-request__container__block">
+                className="importing-request__container__block animated fadeInUp" style={{ animationDelay: '0.2s' }}>
                 <div className="importing-request__container__block__header">
                   <span className="importing-request__container__block__header__title --pending">
                     Đang chờ duyệt
@@ -215,7 +215,7 @@ class ImportingRequest extends PageBase {
             </Col>
             <Col span={5}>
               <div
-                className="importing-request__container__block">
+                className="importing-request__container__block animated fadeInUp" style={{ animationDelay: '0.4s' }}>
                 <div className="importing-request__container__block__header">
                   <span className="importing-request__container__block__header__title --accepted">
                     Đang thực hiện
@@ -233,7 +233,7 @@ class ImportingRequest extends PageBase {
             </Col>
             <Col span={5}>
               <div
-                className="importing-request__container__block">
+                className="importing-request__container__block animated fadeInUp" style={{ animationDelay: '0.6s' }}>
                 <div className="importing-request__container__block__header">
                   <span className="importing-request__container__block__header__title --finished">
                     Đã hoàn tất

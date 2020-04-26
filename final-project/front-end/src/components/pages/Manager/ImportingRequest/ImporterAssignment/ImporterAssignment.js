@@ -6,6 +6,7 @@ import './ImporterAssignment.style.scss';
 import NumberFormat from 'react-number-format';
 import IMPORTING_REQUEST from '../../../../../constants/importing-request.constant';
 import * as _ from 'lodash';
+import SupplierContactPopover from '../../../../utilities/SupplierContactPopover/SupplierContactPopover';
 
 export default class ImporterAssignment extends PageBase {
   constructor(props) {
@@ -40,7 +41,14 @@ export default class ImporterAssignment extends PageBase {
         dataIndex: 'supplier',
         key: 'supplier',
         width: 200,
-        render: (value, record) => record.product.supplier.name
+        render: (value, record) => (
+          <SupplierContactPopover
+            supplier={{ ...record.product.supplier }}
+            buttonText={record.product.supplier.name}
+            buttonStyle={{ fontSize: 11 }}
+            placement="right"
+          />
+        )
       },
       {
         title: 'Giá bán',

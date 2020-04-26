@@ -563,9 +563,6 @@ class WorkAssignment extends PageBase {
   }
 
   render() {
-    if (this.state.isLoading)
-      return <div style={{ width: '100%', height: '100vh' }}></div>
-
     let {
       workSchedules,
       selectedWorkSchedule,
@@ -579,9 +576,9 @@ class WorkAssignment extends PageBase {
     selectedWorkSchedule.workDays = this.generateWorkDays(selectedWorkSchedule);
 
     return (
-      <div className="work-assignment animated fadeIn">
+      <div className="work-assignment">
         <Row>
-          <Col className="work-assignment__left-sidebar" span={4}>
+          <Col className="work-assignment__left-sidebar animated slideInLeft" span={4}>
             <BtnAddWorkSchedule reloadWorkSchedules={selectedYear => this.loadWorkSchedules(selectedYear)} />
 
             <div className="work-assignment__left-sidebar__year-selection">

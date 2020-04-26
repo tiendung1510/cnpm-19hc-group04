@@ -414,7 +414,7 @@ class MoneyCounting extends PageBase {
 											<div className="money-counting__panel__left__product-details">
 												<Row align="middle">
 													<Col span={21}>
-														<span className="money-counting__panel__left__product-details__title">Thông tin checkout</span>
+														<span className="money-counting__panel__left__product-details__title">Thông tin quét mã</span>
 													</Col>
 													<Col span={3} align="center">
 														<Tooltip title="Làm sạch" placement="bottom">

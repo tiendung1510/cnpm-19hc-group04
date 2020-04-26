@@ -1,7 +1,7 @@
 .importing-request__container__suppliers {
   $boxShadow0: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.12);
   $boxShadow1: 0 1px 2px rgba(0, 0, 0, 0.2);
-  $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.23);
+  $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.13);
   $textShadow1: 1px 1px 2px rgba(0, 0, 0, 0.4);
   $borderRadius0: 3px;
   $borderRadius1: 5px;
@@ -10,7 +10,7 @@
 
   background: white;
   border-radius: $borderRadius2;
-  box-shadow: $boxShadow1;
+  box-shadow: $boxShadow2;
   height: 100%;
   width: 100%;
   padding: 10px;
@@ -93,7 +93,7 @@
       .ant-list-item {
         padding-left: 4%;
         transition: 0.2s;
-        &:hover {
+        &:hover:not(.--selected) {
           background: #f8f8f8;
         }
       }

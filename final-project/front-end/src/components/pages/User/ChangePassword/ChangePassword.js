@@ -118,7 +118,7 @@ class ChangePassword extends PageBase {
 
             <Form.Item {...tailLayout}>
               <Button shape="round" htmlType="submit" className="change-password__content__form__btn-submit">
-                Hoàn tất
+                Lưu thay đổi
               </Button>
             </Form.Item>
           </Form>

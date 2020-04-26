@@ -10,6 +10,7 @@ import { withCookies } from 'react-cookie';
 import { COOKIE_NAMES } from '../../../../../constants/cookie-name.constant';
 import { API } from '../../../../../constants/api.constant';
 import PageBase from '../../../../utilities/PageBase/PageBase';
+import SupplierContactPopover from '../../../../utilities/SupplierContactPopover/SupplierContactPopover';
 
 class StatisticPendingRequestDialog extends PageBase {
   constructor(props) {
@@ -128,7 +129,14 @@ class StatisticPendingRequestDialog extends PageBase {
         dataIndex: 'supplier',
         key: 'supplier',
         width: 220,
-        render: (value, record) => record.product.supplier.name
+        render: (value, record) => (
+          <SupplierContactPopover
+            supplier={{ ...record.product.supplier }}
+            buttonText={record.product.supplier.name}
+            buttonStyle={{ fontSize: 11 }}
+            placement="right"
+          />
+        )
       },
       {
         title: 'Giá bán',

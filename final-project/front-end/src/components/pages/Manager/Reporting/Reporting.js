@@ -18,6 +18,7 @@ import ImportingStatistic from './ImportingStatistic/ImportingStatistic';
 import ProductQuantityStatistic from './ProductQuantityStatistic/ProductQuantityStatistic';
 import ReportToPrint from './ReportToPrint/ReportToPrint';
 import ReactToPrint from 'react-to-print';
+import SupplierContactPopover from '../../../utilities/SupplierContactPopover/SupplierContactPopover';
 
 class Reporting extends PageBase {
   constructor(props) {
@@ -29,6 +30,8 @@ class Reporting extends PageBase {
       bestSellingProducts: [],
       soldProducts: [],
       importedProducts: [],
+      newProducts: [],
+      sellingHistories: [],
       importedQuantityTotal: 0,
       requiredQuantityTotal: 0,
       importingCostTotal: 0,
@@ -125,9 +128,7 @@ class Reporting extends PageBase {
 
   async onProductPageChange(page) {
     try {
-      this.props.setAppLoading(true);
       const res = await this.loadProducts(page);
-      this.props.setAppLoading(false);
       this.setState({
         productCurrentPage: page,
         products: res.products
@@ -190,7 +191,14 @@ class Reporting extends PageBase {
         dataIndex: 'supplier',
         key: 'supplier',
         width: 200,
-        render: (text, record) => (<span>{record.supplier.name}</span>)
+        render: (text, record) => (
+          <SupplierContactPopover
+            supplier={{ ...record.supplier }}
+            buttonText={record.supplier.name}
+            buttonStyle={{ fontSize: 11 }}
+            placement="right"
+          />
+        )
       },
       {
         title: 'Giá bán',
@@ -204,7 +212,6 @@ class Reporting extends PageBase {
             displayType="text"
             thousandSeparator={true}
             suffix=" đ̲"
-            style={{ fontWeight: 'bold' }}
           />
         )
       },
@@ -312,6 +319,8 @@ class Reporting extends PageBase {
           year={year}
           revenueTotal={revenueTotal}
           paymentTotal={paymentTotal}
+          salaryTotal={this.state.salaryTotal}
+          importingCostTotal={importingCostTotal}
           statisticData={[...revenueStatisticData]}
         />
 
@@ -327,6 +336,7 @@ class Reporting extends PageBase {
 
                     <Col span={6} style={{ paddingLeft: 0 }}>
                       <ImportingStatistic
+                        importedProducts={[...this.state.importedProducts]}
                         importedQuantityTotal={importedQuantityTotal}
                         requiredQuantityTotal={requiredQuantityTotal}
                         importingCostTotal={importingCostTotal}
@@ -341,6 +351,8 @@ class Reporting extends PageBase {
                           newProductTotal={newProductTotal}
                           availableQuantityTotal={productTotal}
                           soldQuantityStatisticData={[...soldQuantityStatisticData]}
+                          sellingHistories={[...this.state.sellingHistories]}
+                          newProducts={[...this.state.newProducts]}
                         />
                         <BestSelling
                           products={[...bestSellingProducts]}

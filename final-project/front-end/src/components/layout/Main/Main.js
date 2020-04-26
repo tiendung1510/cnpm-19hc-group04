@@ -27,9 +27,9 @@ class Main extends Component {
     }
   }
   render() {
-    if(!this.isAuthenticated)
+    if (!this.isAuthenticated)
       return null;
-      
+
     const user = this.props.cookies.get(COOKIE_NAMES.user) || this.props.loggedInUser.user;
     let pagesByUserRole = links.find(link => link.role === user.role).pages;
     const commonPages = links.find(link => link.role === USER_ROLE.USER.type).pages
@@ -67,7 +67,9 @@ class Main extends Component {
         <Layout>
           <Sidebar user={user} pagesByUserRole={pagesByUserRole} />
           <Layout style={{ marginLeft: 200 }}>
-            <Toolbar user={user} avatarMenuItems={commonPages} />
+            <div style={{ position: 'relative' }}>
+              <Toolbar user={user} avatarMenuItems={commonPages} />
+            </div>
             <Content className="main__content">
               {renderContents()}
             </Content>

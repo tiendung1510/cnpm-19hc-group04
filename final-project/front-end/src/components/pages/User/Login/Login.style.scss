@@ -19,14 +19,14 @@ $fontSize: 12px;
   background-size: 100% 100%;
 
   .dark-bg {
-    background: rgba($color: #000, $alpha: 0.7);
+    background: rgba($color: #000, $alpha: 0.6);
     position: absolute;
     z-index: 1;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(6px);
   }
 
   .__header {
@@ -42,7 +42,7 @@ $fontSize: 12px;
     left: 15%;
 
     .__company-logo {
-      width: 28px;
+      width: 29px;
       margin-right: 9px;
     }
 
@@ -50,7 +50,7 @@ $fontSize: 12px;
       .__name {
         font-size: 15px;
         letter-spacing: 2px;
-        color: darkorange;
+        color: orange;
         font-weight: bold;
       }
 
@@ -59,7 +59,7 @@ $fontSize: 12px;
         font-style: italic;
         color: white;
         letter-spacing: 0.5px;
-        margin-top: -2.5px;
+        margin-top: -2px;
       }
     }
   }
@@ -71,7 +71,7 @@ $fontSize: 12px;
     filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.8));
 
     path {
-      fill: #ff981a;
+      fill: darkorange;
     }
   }
 
@@ -98,7 +98,8 @@ $fontSize: 12px;
     margin-top: -3%;
     background: white;
     @extend .centered-content;
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.1), 0 15px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eee;
     background: white;
     position: relative;
 

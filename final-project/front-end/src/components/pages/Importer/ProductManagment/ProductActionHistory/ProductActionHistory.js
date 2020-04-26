@@ -67,7 +67,13 @@ class ProductActionHistory extends PageBase {
     );
 
     return (
-      <Popover placement="bottomRight" title={title} content={content} trigger="hover">
+      <Popover
+        overlayClassName="product-action-logs__content"
+        placement="bottomRight"
+        title={title}
+        content={content}
+        trigger="hover"
+      >
         <Button
           shape="circle"
           icon={<HistoryOutlined />}

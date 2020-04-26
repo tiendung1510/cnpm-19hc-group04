@@ -1,0 +1,15 @@
+.supplier-contact-popover__content {
+  padding: 10px;
+  padding-top: 20px;
+  font-size: 10px;
+  width: 300px;
+}
+
+.supplier-contact-popover__popover {
+  .ant-popover-inner-content {
+    padding: 0;
+  }
+  .ant-row {
+    padding-bottom: 10px;
+  }
+}

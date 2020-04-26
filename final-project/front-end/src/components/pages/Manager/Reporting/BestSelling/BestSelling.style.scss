@@ -15,7 +15,7 @@
   width: 100%;
   // box-shadow: $boxShadow1;
   padding: 0 25px;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
   position: absolute;
   bottom: 0;
 
@@ -33,7 +33,7 @@
     margin-left: 10px;
   }
 
-  .product-statistic__products__best-selling__items {
+  .product-statistic__products__best-selling__item {
     // padding: 15px;
     border-radius: 5px;
     display: flex;
@@ -46,13 +46,14 @@
 
     .ant-card {
       // box-shadow: $boxShadow1;
+      $cardBorderRadius: 7px;
       border-top: 0;
       margin-right: 10px;
-      cursor: initial;
-      border-radius: 7px !important;
+      border-radius: $cardBorderRadius !important;
       overflow: hidden;
       min-width: 140px;
       position: relative;
+      cursor: initial;
 
       .ant-card-cover {
         border: 1px solid #eee;
@@ -62,13 +63,14 @@
         height: 100px;
         position: relative;
         background: white;
-        opacity: 0.7;
         img {
+          border-radius: $cardBorderRadius;
           position: absolute;
           width: 100%;
-          // top: 50%;
-          // left: 50%;
-          // transform: translate(-50%, -50%);
+          transition: 0.2s ease-in-out;
+          &:hover {
+            transform: scale(1.2, 1.2);
+          }
         }
       }
       .ant-card-body {
@@ -78,6 +80,7 @@
         bottom: 0;
         left: 0;
         width: 100%;
+        display: none;
         .ant-card-meta {
           .ant-card-meta-detail {
             line-height: 10px;
@@ -97,4 +100,10 @@
       }
     }
   }
+}
+
+.product-statistic__products__best-selling__item__details {
+  width: 300px;
+  font-size: 10px;
+  line-height: 20px;
 }

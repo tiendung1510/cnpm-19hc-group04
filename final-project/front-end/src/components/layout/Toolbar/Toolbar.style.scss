@@ -2,10 +2,10 @@
   width: 100%;
   height: 55px;
   box-sizing: border-box;
-  padding: 0;
   padding-left: 24px;
-  background: #ff8220;
-  // box-shadow: 0 5px 5px -5px rgba($color: #000000, $alpha: 0.4);
+  position: absolute;
+  z-index: 200;
+  width: 87vw;
   color: white;
   font-weight: bold;
 
@@ -16,6 +16,7 @@
     .__page-title__text {
       font-weight: bold;
       margin-left: 3px;
+      letter-spacing: 1px;
     }
 
     .__page-title__icon {
@@ -29,7 +30,7 @@
       align-items: center;
       margin-top: -2px;
       color: white;
-      font-size: 14px;
+      font-size: 16px;
     }
   }
 

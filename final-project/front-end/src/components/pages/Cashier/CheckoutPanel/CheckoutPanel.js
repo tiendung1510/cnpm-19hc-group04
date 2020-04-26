@@ -137,7 +137,7 @@ class CheckoutPanel extends PageBase {
             >
               {navbarMenuItems.map(item => (
                 <Menu.Item key={item.key}
-                  className={`checkout-panel__main-board__navbar__item animated bounceIn ${selectedMenuItem.key === item.key ?
+                  className={`checkout-panel__main-board__navbar__item animated fadeIn ${selectedMenuItem.key === item.key ?
                     'checkout-panel__main-board__navbar__item--selected' : ''}`}
                 >
                   <item.icon className="checkout-panel__main-board__navbar__item__icon" />

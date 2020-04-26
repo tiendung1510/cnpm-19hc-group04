@@ -1,21 +1,22 @@
 .checkout-panel {
   width: 100%;
-  height: 92.6vh;
+  height: 100vh;
   overflow: hidden;
   padding: 15px;
+  padding-top: 60px;
   background: #ff8220;
 
   $boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.23);
+  $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.13);
   $primaryFontSize: 12px;
   $primaryBorderRadius: 10px;
   $primaryBgColor: #f8f8f8;
 
   .checkout-panel__main-board {
     width: 100%;
-    height: 89vh;
+    height: 90.5vh;
     background: $primaryBgColor;
-    box-shadow: $boxShadow1;
+    box-shadow: $boxShadow2;
     border-radius: $primaryBorderRadius;
     overflow: hidden;
     display: flex;
@@ -39,10 +40,11 @@
         margin-top: 10px;
         margin-bottom: 20px;
         background: white;
-        box-shadow: $boxShadow1;
+        border: 1px solid #eee;
 
         &.checkout-panel__main-board__navbar__item--selected {
-          background: #ff8220 !important;
+          background: darkorange !important;
+          box-shadow: 0px 1px 3px rgba($color: #000000, $alpha: 0.4);
           border: 0;
 
           .checkout-panel__main-board__navbar__item__icon {
