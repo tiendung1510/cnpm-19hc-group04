@@ -18,7 +18,6 @@ const ProductActionLogModel = require('../product-action-log/product-action-log.
 const ImportingRequestModel = require('../importing-request/importing-request.model');
 const CheckoutSessionModel = require('../checkout-session/checkout-session.model');
 const UserModel = require('../user/user.model');
-const SoldItemModel = require('../sold-item/sold-item.model');
 const { BASIC_SALARY } = require('../user/user.constant');
 const { PRODUCT_ACTION_TYPE } = require('../product-action-log/product-action-log.constant');
 const { STATUS } = require('../importing-request/importing-request.constant');
@@ -347,11 +346,41 @@ const getProducts = async (req, res, next) => {
       { $group: { _id: '$soldItem.product', quantity: { $sum: '$soldItem.quantity' } } },
       { $sort: { quantity: -1 } },
       { $lookup: { from: 'Products', localField: '_id', foreignField: '_id', as: 'details' } },
-      { $unwind: '$details' }
+      { $unwind: '$details' },
+      { $lookup: { from: 'Suppliers', localField: 'details.supplier', foreignField: '_id', as: 'supplier' } },
+      { $unwind: '$supplier' },
+      { $lookup: { from: 'Categories', localField: 'details.category', foreignField: '_id', as: 'category' } },
+      { $unwind: '$category' },
     ]);
     result.soldQuantityTotal = soldProducts.reduce((acc, cur) => acc + cur.quantity, 0);
     result.bestSellingProducts = [...soldProducts].filter(p => p.quantity > 0).slice(0, 11);
     result.soldProducts = [...soldProducts];
+
+    // Find list of new products created in month
+    const addingProductActionLogs = await ProductActionLogModel.find({
+      ...createdAtCond,
+      actionType: PRODUCT_ACTION_TYPE.ADD.type
+    })
+      .populate('executor')
+      .populate({
+        path: 'product',
+        populate: {
+          path: 'category',
+          select: '-products'
+        }
+      })
+      .populate({
+        path: 'product',
+        populate: {
+          path: 'supplier',
+          select: '-products'
+        }
+      })
+      .sort({ createdAt: 'desc' });
+    result.newProducts = addingProductActionLogs.map(l => {
+      const newLog = JSON.parse(JSON.stringify(l));
+      return { ...newLog.product, executor: newLog.executor, addedAt: newLog.createdAt };
+    });
 
     // statistic daily sold quantity in month
     const sellingDates = await CheckoutSessionModel.aggregate([
@@ -396,6 +425,22 @@ const getProducts = async (req, res, next) => {
         }
       }
     ]);
+
+    const sellingHistories = await CheckoutSessionModel.find({
+      submittedAt: {
+        $gte: new Date(statisticStartDate),
+        $lte: new Date(statisticEndDate)
+      }
+    })
+      .sort({ submittedAt: 'desc' })
+      .populate('cashier')
+      .populate({
+        path: 'soldItems',
+        populate: {
+          path: 'product'
+        }
+      });
+    result.sellingHistories = sellingHistories;
 
     let revenueStatisticData = [];
     for (let day = 1; day <= daysInMonth; day++) {
