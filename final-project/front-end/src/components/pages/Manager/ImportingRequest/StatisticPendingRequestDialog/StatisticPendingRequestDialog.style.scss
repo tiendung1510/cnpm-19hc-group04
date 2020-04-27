@@ -1,14 +1,14 @@
-$borderRadius0: 2px;
-$borderRadius1: 3px;
-$fontSize0: 9px;
-$fontSize1: 10px;
-$fontSize2: 11px;
-$fontSize3: 12px;
+$borderRadius0: 0.125rem;
+$borderRadius1: 0.1875rem;
+$fontSize0: 0.5625rem;
+$fontSize1: 0.625rem;
+$fontSize2: 0.6875rem;
+$fontSize3: 0.75rem;
 
 .statistic-pending-request-dialog {
   .statistic-pending-request-dialog__btn-open-wrapper {
-    padding-top: 5px;
-    height: 55px;
+    padding-top: 0.3125rem;
+    height: 3.4375rem;
     display: flex;
     justify-content: center;
     .statistic-pending-request-dialog__btn-open-wrapper__btn {
@@ -16,8 +16,8 @@ $fontSize3: 12px;
       color: white;
       font-weight: bold;
       border: 0;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-      min-height: 35px;
+      box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
+      min-height: 2.1875rem;
       min-width: 99%;
       font-size: $fontSize3;
 
@@ -35,8 +35,8 @@ $fontSize3: 12px;
 .statistic-pending-request-dialog__content {
   .styled-scrollbar {
     &::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
+      width: 0.3125rem;
+      height: 0.3125rem;
     }
 
     &::-webkit-scrollbar-thumb {
@@ -46,8 +46,8 @@ $fontSize3: 12px;
   }
 
   .ant-modal-content {
-    width: 50vw;
-    left: -25%;
+    width: 46.875rem;
+    left: -6.25rem;
   }
 
   .ant-modal-body {
@@ -61,10 +61,10 @@ $fontSize3: 12px;
         font-size: $tableFontSize;
         color: #ff8220;
         font-weight: bold;
-        padding: 10px 0;
+        padding: 0.625rem 0;
 
         &:nth-of-type(1) {
-          padding-left: 10px;
+          padding-left: 0.625rem;
         }
       }
 
@@ -91,11 +91,11 @@ $fontSize3: 12px;
     }
 
     .ant-input-number {
-      width: 70px;
-      margin-left: 15px;
+      width: 4.375rem;
+      margin-left: 0.9375rem;
       .ant-input-number-input {
         font-size: $tableFontSize;
-        height: 25px;
+        height: 1.5625rem;
         text-align: center;
       }
     }
@@ -103,7 +103,7 @@ $fontSize3: 12px;
 
   .statistic-pending-request-dialog__content__price-total {
     width: 100%;
-    padding: 15px 10px 5px 15px;
+    padding: 0.9375rem 0.625rem 0.3125rem 0.9375rem;
   }
 
   .statistic-pending-request-dialog__content__labels,
@@ -111,16 +111,16 @@ $fontSize3: 12px;
     padding-left: 0;
     list-style: none;
     font-size: $fontSize3;
-    line-height: 35px;
+    line-height: 2.1875rem;
   }
 
   .statistic-pending-request-dialog__content__executor {
-    margin-top: 20px;
+    margin-top: 1.25rem;
     .statistic-pending-request-dialog__content__executor__title {
       display: flex;
       align-items: center;
-      font-size: 16px;
-      padding-top: 10px;
+      font-size: 1rem;
+      padding-top: 0.625rem;
       color: #ff8220;
       font-weight: bold;
     }
@@ -129,19 +129,19 @@ $fontSize3: 12px;
       border: 0;
       font-size: $fontSize3;
       font-weight: bold;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-      min-width: 150px;
+      box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.12), 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.24);
+      min-width: 9.375rem;
     }
 
     .ant-divider-horizontal {
-      margin-top: 12px;
-      margin-bottom: 24px;
+      margin-top: 0.75rem;
+      margin-bottom: 1.5rem;
     }
 
     .ant-form-item .ant-mentions,
     .ant-form-item textarea.ant-input {
-      margin-top: -10px;
-      height: 80px;
+      margin-top: -0.625rem;
+      height: 5rem;
       font-size: $fontSize2;
     }
   }

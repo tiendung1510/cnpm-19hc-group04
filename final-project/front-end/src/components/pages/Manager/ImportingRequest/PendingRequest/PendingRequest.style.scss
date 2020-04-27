@@ -1,18 +1,18 @@
-$borderRadius0: 2px;
-$borderRadius1: 3px;
-$fontSize0: 9px;
-$fontSize1: 10px;
-$fontSize2: 11px;
-$fontSize3: 12px;
+$borderRadius0: 0.125rem;
+$borderRadius1: 0.1875rem;
+$fontSize0: 0.5625rem;
+$fontSize1: 0.625rem;
+$fontSize2: 0.6875rem;
+$fontSize3: 0.75rem;
 
 .pending-importing-request {
   .pending-importing-request__summary {
     width: 100%;
-    min-height: 95px;
-    padding: 12.5px 10px 10px 12.5px;
+    min-height: 5.9375rem;
+    padding: 0.7813rem 0.625rem 0.625rem 0.7813rem;
     background: white;
-    border: 1px solid #eee;
-    margin-bottom: 5px;
+    border: 0.0625rem solid #eee;
+    margin-bottom: 0.3125rem;
     cursor: pointer;
     position: relative;
     z-index: 1;
@@ -24,15 +24,15 @@ $fontSize3: 12px;
       right: 0;
       font-size: $fontSize2;
       color: silver;
-      width: 30px;
-      height: 30px;
+      width: 1.875rem;
+      height: 1.875rem;
       display: flex;
       justify-content: center;
       align-items: center;
     }
   
     .pending-importing-request__summary__avatar {
-      margin-top: 2px;
+      margin-top: 0.125rem;
     }
 
     .pending-importing-request__summary__details {
@@ -53,7 +53,7 @@ $fontSize3: 12px;
 
       .pending-importing-request__summary__details__products {
         font-size: $fontSize1;
-        padding-top: 5px;
+        padding-top: 0.3125rem;
         margin: 0;
         display: block;
         display: -webkit-box;
@@ -69,8 +69,8 @@ $fontSize3: 12px;
 .pending-importing-request__content {
   .styled-scrollbar {
     &::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
+      width: 0.3125rem;
+      height: 0.3125rem;
     }
 
     &::-webkit-scrollbar-thumb {
@@ -93,7 +93,7 @@ $fontSize3: 12px;
     list-style: none;
     padding-left: 0;
     font-size: $fontSize3;
-    line-height: 35px;
+    line-height: 2.1875rem;
   }
   
   .pending-importing-request__content__values {
@@ -105,15 +105,15 @@ $fontSize3: 12px;
 
   .pending-importing-request__content__products {
     $tableFontSize: $fontSize2;
-    margin-top: -5px;
+    margin-top: -0.3125rem;
     .ant-table {
       thead > tr > th {
         font-size: $tableFontSize;
         font-weight: bold;
-        padding: 10px 0;
+        padding: 0.625rem 0;
 
         &:nth-of-type(1) {
-          padding-left: 10px;
+          padding-left: 0.625rem;
         }
       }
 
@@ -141,7 +141,7 @@ $fontSize3: 12px;
   }
 
   .pending-importing-request__content__btn-cancel-wrapper {
-    height: 120px;
+    height: 7.5rem;
     display: flex;
     justify-content: center;
     align-items: center;

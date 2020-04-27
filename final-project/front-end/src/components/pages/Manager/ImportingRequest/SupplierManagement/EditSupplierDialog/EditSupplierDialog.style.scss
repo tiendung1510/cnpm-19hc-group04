@@ -1,23 +1,23 @@
-$boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-$primaryFontSize: 12px;
+$boxShadow1: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.12), 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.24);
+$primaryFontSize: 0.75rem;
 
 .importing-request__container__suppliers__details__header__toolbar__edit-supplier-dialog {
   .importing-request__container__suppliers__details__header__toolbar__edit-supplier-dialog__btn-open {
     color: rgba($color: #000000, $alpha: 0.3);
     border: 0;
     box-shadow: none;
-    font-size: $primaryFontSize + 1;
-    margin-right: 5px;
+    font-size: $primaryFontSize;
+    margin-right: 0.3125rem;
   }
 }
 
 .importing-request__container__suppliers__details__header__toolbar__edit-supplier-dialog__content {
   .ant-modal-body {
-    padding-bottom: 10px;
+    padding-bottom: 0.625rem;
   }
 
   .ant-form-item {
-    margin-bottom: 15px;
+    margin-bottom: 0.9375rem;
     label {
       font-size: $primaryFontSize;
       color: rgba($color: #000000, $alpha: 0.65);
@@ -31,8 +31,8 @@ $primaryFontSize: 12px;
 
   .ant-form-item-has-error .ant-form-item-explain,
   .ant-form-item-has-error .ant-form-item-split {
-    font-size: 10px;
+    font-size: 0.625rem;
     min-height: 0;
-    height: 10px;
+    height: 0.625rem;
   }
 }

@@ -1,15 +1,15 @@
 .staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog {
   .staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__btn-open {
     color: #ff8220;
-    font-size: 20px;
+    font-size: 1.25rem;
     border: 0;
     background: #ffedcc;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07), 0 4px 8px rgba(0, 0, 0, 0.07),
-      0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
-    margin-top: 15px;
-    margin-right: 5px;
-    width: 40px;
-    height: 40px;
+    box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.07), 0 0.125rem 0.25rem rgba(0, 0, 0, 0.07), 0 0.25rem 0.5rem rgba(0, 0, 0, 0.07),
+      0 0.5rem 1rem rgba(0, 0, 0, 0.07), 0 1rem 2rem rgba(0, 0, 0, 0.07), 0 2rem 4rem rgba(0, 0, 0, 0.07);
+    margin-top: 0.9375rem;
+    margin-right: 0.3125rem;
+    width: 2.5rem;
+    height: 2.5rem;
 
     &:hover {
       opacity: 0.8;
@@ -18,33 +18,33 @@
 }
 
 .staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__form {
-  $fontSize1: 12px;
+  $fontSize1: 0.75rem;
 
   .staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__form__img-uploader {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-left: 45px;
-    padding-bottom: 30px;
+    padding-left: 2.8125rem;
+    padding-bottom: 1.875rem;
   }
 
   .staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__form__title {
-    padding-bottom: 20px;
+    padding-bottom: 1.25rem;
     display: flex;
     align-items: center;
 
     .staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__form__title__icon {
       display: block;
-      width: 25px;
-      height: 25px;
-      font-size: 13px;
+      width: 1.5625rem;
+      height: 1.5625rem;
+      font-size: 0.8125rem;
       display: flex;
       justify-content: center;
       align-items: center;
       background: #ff8220;
       color: white;
       border-radius: 50%;
-      margin-right: 10px;
+      margin-right: 0.625rem;
     }
   }
 
@@ -54,7 +54,7 @@
   }
 
   .ant-form-item {
-    margin-bottom: 15px;
+    margin-bottom: 0.9375rem;
     label {
       font-size: $fontSize1;
       color: rgba($color: #000000, $alpha: 0.7);
@@ -67,9 +67,9 @@
 
   .ant-form-item-has-error .ant-form-item-explain,
   .ant-form-item-has-error .ant-form-item-split {
-    font-size: 10px;
+    font-size: 0.625rem;
     min-height: 0;
-    height: 5px;
+    height: 0.3125rem;
   }
 
   .ant-picker-input {
@@ -87,7 +87,7 @@
 
 .staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__content {
   .ant-modal-content {
-    width: 67vw;
-    left: -40%;
+    width: 64rem;
+    left: -12.5rem;
   }
 }

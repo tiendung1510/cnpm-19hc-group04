@@ -18,7 +18,7 @@ export default class UserInfo extends Component {
 
     return (
       <div className="user-info">
-        <div className="__wallpaper" style={{backgroundImage: `url(${user.avatar})`}}>
+        <div className="__wallpaper" style={{ backgroundImage: `url(${user.avatar})` }}>
           <div className="__wallpaper__dark-bg"></div>
           <div className={`__wallpaper__role ${userRoleStyle}`}>
             <span>{userRoleName}</span>
@@ -29,7 +29,7 @@ export default class UserInfo extends Component {
           </div>
         </div>
         <div className="__avatar">
-          <Avatar size={58} src={user.avatar} className="__avatar__image" />
+          <Avatar style={{ width: '3.625rem', height: '3.625rem' }} src={user.avatar} className="__avatar__image" />
         </div>
       </div>
     )

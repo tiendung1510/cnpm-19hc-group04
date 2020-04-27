@@ -1,15 +1,15 @@
 .importing-assignment-dialog {
-  $borderRadius0: 2px;
-  $borderRadius1: 3px;
-  $fontSize0: 9px;
-  $fontSize1: 10px;
-  $fontSize2: 11px;
-  $fontSize3: 12px;
+  $borderRadius0: 0.125rem;
+  $borderRadius1: 0.1875rem;
+  $fontSize0: 0.5625rem;
+  $fontSize1: 0.625rem;
+  $fontSize2: 0.6875rem;
+  $fontSize3: 0.75rem;
   
   .styled-scrollbar {
     &::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
+      width: 0.3125rem;
+      height: 0.3125rem;
     }
 
     &::-webkit-scrollbar-thumb {
@@ -19,8 +19,8 @@
   }
 
   .ant-modal-content {
-    width: 50vw;
-    left: -25%;
+    width: 50rem;
+    left: -8rem;
   }
 
   .importing-assignment-dialog__labels,
@@ -28,7 +28,7 @@
     list-style: none;
     padding-left: 0;
     font-size: $fontSize3;
-    line-height: 38px;
+    line-height: 2.375rem;
   }
   
   .importing-assignment-dialog__values {
@@ -40,7 +40,7 @@
 
   .importing-assignment-dialog__products {
     $tableFontSize: $fontSize2;
-    margin-top: -5px;
+    margin-top: -0.3125rem;
 
     .importing-assignment-dialog__products__btn-show-supplier-info {
       font-size: $tableFontSize;
@@ -55,10 +55,10 @@
       thead > tr > th {
         font-size: $tableFontSize;
         font-weight: bold;
-        padding: 10px 0;
+        padding: 0.625rem 0;
 
         &:nth-of-type(1) {
-          padding-left: 10px;
+          padding-left: 0.625rem;
         }
       }
 

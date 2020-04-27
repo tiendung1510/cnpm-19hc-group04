@@ -1,28 +1,29 @@
 .product-quantity-statistic {
-  padding: 25px;
-  padding-right: 10px;
+  padding: 1.5625rem;
+  padding-right: 0.625rem;
 
   .product-quantity-statistic__item {
-    height: 130px;
+    height: 8.125rem;
     display: flex;
-    border-radius: 5px;
+    border-radius: 0.3125rem;
     align-items: center;
     position: relative;
 
     .product-quantity-statistic__item__btn {
       position: absolute;
-      top: 5px;
-      right: 5px;
+      top: 0.3125rem;
+      right: 0.3125rem;
       border: 0;
       box-shadow: none;
       background: none;
+      font-size: 1rem;
     }
 
     &.--sold {
       background: #fff6e6;
       color: #ff8220;
       display: flex;
-      border-bottom: 5px solid #ff8220;
+      border-bottom: 0.3125rem solid #ff8220;
 
       .product-quantity-statistic__item__btn {
         color: #ff8220;
@@ -40,24 +41,24 @@
     &.--new {
       background: #edf8ec;
       color: green;
-      border-bottom: 5px solid green;
+      border-bottom: 0.3125rem solid green;
 
       .product-quantity-statistic__item__btn {
         color: green;
       }
 
       .product-quantity-statistic__item__metric {
-        padding: 0 40px;
+        padding: 0 2.5rem;
       }
     }
 
     &.--available {
       background: #f5f5f5;
       color: rgba($color: #000000, $alpha: 0.5);
-      border-bottom: 5px solid gray;
+      border-bottom: 0.3125rem solid gray;
 
       .product-quantity-statistic__item__metric {
-        padding: 0 40px;
+        padding: 0 2.5rem;
       }
     }
 
@@ -65,19 +66,19 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding-left: 30px;
-      padding-top: 25px !important;
+      padding-left: 1.875rem;
+      padding-top: 1.5625rem !important;
       height: 100%;
 
       .product-quantity-statistic__item__metric__quantity {
-        font-size: 22px;
+        font-size: 1.375rem;
         font-weight: bold;
       }
 
       .product-quantity-statistic__item__metric__label {
-        font-size: 11px;
+        font-size: 0.6875rem;
         font-weight: bold;
-        padding-top: 2px;
+        padding-top: 0.125rem;
       }
     }
 
@@ -88,7 +89,7 @@
       justify-content: center;
 
       canvas {
-        padding-right: 20px;
+        padding-right: 1.25rem;
       }
     }
   }

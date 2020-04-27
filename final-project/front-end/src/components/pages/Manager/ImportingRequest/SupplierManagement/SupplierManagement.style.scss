@@ -1,24 +1,25 @@
 .importing-request__container__suppliers {
-  $boxShadow0: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.12);
-  $boxShadow1: 0 1px 2px rgba(0, 0, 0, 0.2);
-  $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.13);
-  $textShadow1: 1px 1px 2px rgba(0, 0, 0, 0.4);
-  $borderRadius0: 3px;
-  $borderRadius1: 5px;
-  $borderRadius2: 7px;
-  $fontSize: 12px;
+  $boxShadow0: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.12), 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.12);
+  $boxShadow1: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
+  $boxShadow2: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.16), 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.13);
+  $textShadow1: 0.0625rem 0.0625rem 0.125rem rgba(0, 0, 0, 0.4);
+  $borderRadius0: 0.1875rem;
+  $borderRadius1: 0.3125rem;
+  $borderRadius2: 0.4375rem;
+  $fontSize: 0.6875rem;
+  $fontSize1: 1rem;
 
   background: white;
   border-radius: $borderRadius2;
   box-shadow: $boxShadow2;
   height: 100%;
   width: 100%;
-  padding: 10px;
+  padding: 0.625rem;
 
   .styled-scrollbar {
     &::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
+      width: 0.3125rem;
+      height: 0.3125rem;
     }
 
     &::-webkit-scrollbar-thumb {
@@ -35,15 +36,15 @@
     color: white;
     background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
     margin: 2% 0 1% -2.3%;
-    border-radius: 2px;
-    border-top-right-radius: 24px;
-    border-bottom-right-radius: 24px;
+    border-radius: 0.125rem;
+    border-top-right-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
     padding-left: 5%;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    box-shadow: 0 0.0625rem 0.1875rem rgba(0,0,0,0.12), 0 0.0625rem 0.125rem rgba(0,0,0,0.24);
     text-shadow: $textShadow1;
-    font-size: $fontSize + 2;
+    font-size: $fontSize1;
     width: 100%;
-    padding-right: 10px;
+    padding-right: 0.625rem;
   }
 
   .importing-request__container__suppliers__toolbar {
@@ -53,13 +54,13 @@
     $searchBoxBackground: white;
     .ant-input-affix-wrapper {
       background: $searchBoxBackground;
-      border: 1px solid #eee;
-      border-radius: 24px;
+      border: 0.0625rem solid #eee;
+      border-radius: 1.5rem;
       overflow: hidden;
       box-shadow: none;
       outline-style: none;
-      padding-top: 5px;
-      padding-bottom: 5px;
+      padding-top: 0.3125rem;
+      padding-bottom: 0.3125rem;
     }
     .ant-input {
       font-size: $fontSize;
@@ -68,14 +69,15 @@
   }
 
   .importing-request__container__suppliers__list {
-    height: 160px;
-    border: 1px solid #eee;
+    height: 10rem;
+    border: 0.0625rem solid #eee;
     border-radius: $borderRadius0;
     background: #f8f8f8;
     overflow: auto;
     @extend .styled-scrollbar;
     
     .importing-request__container__suppliers__list__item {
+      font-size: $fontSize;
       transition: 0.2s;
       cursor: pointer;
 
@@ -102,6 +104,7 @@
 
   .importing-request__container__suppliers__details {
     padding-top: 4%;
+    font-size: $fontSize;
 
     .importing-request__container__suppliers__details__header {
       padding-left: 2%;
@@ -111,7 +114,7 @@
       .importing-request__container__suppliers__details__header__title {
         font-weight: bold;
         color: #ff8220;
-        font-size: $fontSize + 3;
+        font-size: $fontSize1;
       }
 
       .importing-request__container__suppliers__details__header__toolbar {
@@ -123,19 +126,19 @@
           color: rgba($color: #000000, $alpha: 0.3);
           border: 0;
           box-shadow: none;
-          font-size: $fontSize + 1;
-          margin-right: 5px;
+          font-size: $fontSize;
+          margin-right: 0.3125rem;
         }
       }
     }
 
     .ant-divider-horizontal {
-      margin: 5px 0;
+      margin: 0.3125rem 0;
     }
 
     .importing-request__container__suppliers__details__content {
       font-size: $fontSize - 1;
-      line-height: 25px;
+      line-height: 1.5625rem;
       padding-left: 2%;
 
       .importing-request__container__suppliers__details__content__label {
@@ -143,7 +146,7 @@
       }
 
       .importing-request__container__suppliers__details__content__map {
-        margin-top: 5px;
+        margin-top: 0.3125rem;
       }
     }
   }

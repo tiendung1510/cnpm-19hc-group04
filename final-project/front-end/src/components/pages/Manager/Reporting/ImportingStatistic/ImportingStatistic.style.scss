@@ -1,12 +1,12 @@
-$fontSize0: 11px;
-$fontSize1: 12px;
-$fontSize2: 15px;
-$fontSize3: 20px;
+$fontSize0: 0.6875rem;
+$fontSize1: 0.75rem;
+$fontSize2: 0.9375rem;
+$fontSize3: 1.25rem;
 
 .--importing-statistic__header {
-  padding: 25px 20px 0 20px;
-  height: 115px;
-  border-bottom: 1px solid #eee;
+  padding: 1.5625rem 1.25rem 0 1.25rem;
+  height: 7.1875rem;
+  border-bottom: 0.0625rem solid #eee;
   position: relative;
 
   .--importing-statistic__header__title {
@@ -19,7 +19,7 @@ $fontSize3: 20px;
   .--importing-statistic__header__importing-cost {
     font-size: $fontSize0;
     display: flex;
-    line-height: 20px;
+    line-height: 1.25rem;
 
     span {
       display: block;
@@ -35,24 +35,30 @@ $fontSize3: 20px;
     }
 
     &:nth-of-type(1) {
-      padding-top: 30px;
+      padding-top: 1.875rem;
     }
     &:nth-of-type(2) {
-      padding-top: 15px;
+      padding-top: 0.9375rem;
     }
   }
 }
 
 .--importing-statistic__progress-wrapper {
   width: 100%;
-  height: 175px;
+  height: 10.9375rem;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  .ant-progress-inner {
+    width: 7.5rem !important;
+    height: 7.5rem !important
+  }
+
   .--importing-statistic__progress-wrapper__progress-inner {
     display: flex;
     flex-direction: column;
-    line-height: 20px;
+    line-height: 1.25rem;
 
     .--importing-statistic__progress-wrapper__progress-inner__value {
       font-size: $fontSize2;
@@ -65,19 +71,19 @@ $fontSize3: 20px;
 }
 
 .--importing-statistic__footer {
-  height: 75px;
+  height: 4.6875rem;
   background: white;
   .--importing-statistic__footer__col {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 1px solid #eee;
+    border: 0.0625rem solid #eee;
     height: 100%;
-    line-height: 27px;
+    line-height: 1.6875rem;
 
     .--importing-statistic__footer__col__value {
-      font-size: $fontSize3 + 2;
+      font-size: $fontSize3;
       font-weight: bold;
     }
 

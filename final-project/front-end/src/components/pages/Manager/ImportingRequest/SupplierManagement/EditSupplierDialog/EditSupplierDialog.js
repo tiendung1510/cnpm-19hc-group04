@@ -11,8 +11,8 @@ import { COOKIE_NAMES } from '../../../../../../constants/cookie-name.constant';
 import GooglePlacesAutocomplete from '../../../../../utilities/GooglePlacesAutocomplete/GooglePlacesAutocomplete';
 
 const layout = {
-  labelCol: { span: 5 },
-  wrapperCol: { span: 19 },
+  labelCol: { span: 6 },
+  wrapperCol: { span: 18 },
 };
 
 class EditSupplierDialog extends PageBase {

@@ -1,6 +1,6 @@
-$boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-$primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
-$primaryBorderRadius: 7px;
+$boxShadow1: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.12), 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.24);
+$primaryTextShadow: 0.0625rem 0.0625rem 0.125rem rgba(0, 0, 0, 0.4);
+$primaryBorderRadius: 0.4375rem;
 
 .money-counting__submit-checkout-session-dialog {
   .money-counting__submit-checkout-session-dialog__btn-open {
@@ -8,13 +8,14 @@ $primaryBorderRadius: 7px;
     color: white;
     border: 0;
     font-weight: bold;
-    border-radius: 24px;
+    border-radius: 1.5rem;
     box-shadow: $boxShadow1;
-    min-width: 180px;
-    min-height: 38px;
+    min-width: 11.25rem;
+    min-height: 2.375rem;
     text-shadow: none;
     display: table;
     margin: 0 auto;
+    font-size: 0.85rem;
 
     &:disabled {
       background: #eee;
@@ -26,7 +27,7 @@ $primaryBorderRadius: 7px;
 
 .money-counting__submit-checkout-session-dialog__content {
   .money-counting__submit-checkout-session-dialog__content__bill {
-    padding: 40px 0;
+    padding: 2.5rem 0;
     background: #eee;
     position: relative;
 
@@ -34,7 +35,7 @@ $primaryBorderRadius: 7px;
       position: absolute;
       top: 0;
       right: 0;
-      padding: 20px 10px;
+      padding: 1.25rem 0.625rem;
 
       .money-counting__submit-checkout-session-dialog__content__bill__toolbar__item {
         border: 0;
@@ -48,7 +49,7 @@ $primaryBorderRadius: 7px;
       width: 68%;
       display: table;
       margin: 0 auto;
-      border: 1px solid #eee;
+      border: 0.0625rem solid #eee;
     }
   }
 

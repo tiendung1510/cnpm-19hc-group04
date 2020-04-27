@@ -128,11 +128,6 @@ $fontSize: 0.75rem;
       width: 100%;
       padding-top: 0.9375rem;
 
-      .ant-form-item-has-error .ant-form-item-explain,
-      .ant-form-item-has-error .ant-form-item-split {
-        font-size: 0.625rem;
-      }
-
       .ant-form-item-control {
         max-width: 100%;
         flex: 0 0 100%;
@@ -163,6 +158,7 @@ $fontSize: 0.75rem;
       .ant-form-item-has-error .ant-form-item-explain,
       .ant-form-item-has-error .ant-form-item-split {
         font-size: 0.625rem;
+        height: 1.875rem;
       }
 
       .__form__icon {
