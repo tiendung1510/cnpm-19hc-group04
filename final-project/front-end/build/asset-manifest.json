@@ -1,19 +1,18 @@
 {
   "files": {
-    "main.css": "/static/css/main.b8a9b941.chunk.css",
-    "main.js": "/static/js/main.36a1a72f.chunk.js",
-    "main.js.map": "/static/js/main.36a1a72f.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.a0a66673.js",
-    "runtime-main.js.map": "/static/js/runtime-main.a0a66673.js.map",
-    "static/css/2.93d77f2b.chunk.css": "/static/css/2.93d77f2b.chunk.css",
-    "static/js/2.ede804e2.chunk.js": "/static/js/2.ede804e2.chunk.js",
-    "static/js/2.ede804e2.chunk.js.map": "/static/js/2.ede804e2.chunk.js.map",
+    "main.css": "/static/css/main.3f0bee5c.chunk.css",
+    "main.js": "/static/js/main.e2c6d4ee.chunk.js",
+    "main.js.map": "/static/js/main.e2c6d4ee.chunk.js.map",
+    "runtime~main.js": "/static/js/runtime~main.e3fce77a.js",
+    "runtime~main.js.map": "/static/js/runtime~main.e3fce77a.js.map",
+    "static/css/2.f52281a7.chunk.css": "/static/css/2.f52281a7.chunk.css",
+    "static/js/2.5373eedc.chunk.js": "/static/js/2.5373eedc.chunk.js",
+    "static/js/2.5373eedc.chunk.js.map": "/static/js/2.5373eedc.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.09f474b1a9339c5cbb4ddde1c1b10ed8.js": "/precache-manifest.09f474b1a9339c5cbb4ddde1c1b10ed8.js",
+    "precache-manifest.b0ef2b1da7da57d0f15e7bf4d021c5b4.js": "/precache-manifest.b0ef2b1da7da57d0f15e7bf4d021c5b4.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/2.93d77f2b.chunk.css.map": "/static/css/2.93d77f2b.chunk.css.map",
-    "static/css/main.b8a9b941.chunk.css.map": "/static/css/main.b8a9b941.chunk.css.map",
-    "static/js/2.ede804e2.chunk.js.LICENSE.txt": "/static/js/2.ede804e2.chunk.js.LICENSE.txt",
+    "static/css/2.f52281a7.chunk.css.map": "/static/css/2.f52281a7.chunk.css.map",
+    "static/css/main.3f0bee5c.chunk.css.map": "/static/css/main.3f0bee5c.chunk.css.map",
     "static/media/Login.style.scss": "/static/media/bg.cbe61826.jpg",
     "static/media/cashing.wav": "/static/media/cashing.9897c7f7.wav",
     "static/media/MoneyCounting.style.scss": "/static/media/checkout-cover-2.b8618457.gif",
@@ -21,12 +20,5 @@
     "static/media/styles.css": "/static/media/revicons.2feb69cc.eot",
     "static/media/warning.wav": "/static/media/warning.4af9c980.wav",
     "static/media/WorkAssignment.style.scss": "/static/media/work-schedule-header-cover.7123ada4.png"
-  },
-  "entrypoints": [
-    "static/js/runtime-main.a0a66673.js",
-    "static/css/2.93d77f2b.chunk.css",
-    "static/js/2.ede804e2.chunk.js",
-    "static/css/main.b8a9b941.chunk.css",
-    "static/js/main.36a1a72f.chunk.js"
-  ]
+  }
 }
