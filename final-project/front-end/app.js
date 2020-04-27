@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = 8000;
 app.disable('x-powered-by');
 app.use(express.static(path.join(__dirname, 'build')));
 // need to declare a "catch all" route on your express server 
