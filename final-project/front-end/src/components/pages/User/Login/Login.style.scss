@@ -1,5 +1,5 @@
-$primaryTextShadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-$fontSize: 12px;
+$primaryTextShadow: 0.0625rem 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
+$fontSize: 0.75rem;
 
 .centered-content {
   display: flex;
@@ -33,7 +33,7 @@ $fontSize: 12px;
     position: absolute;
     top: 0;
     left: 0;
-    padding: 20px;
+    padding: 1.25rem;
     display: flex;
     align-items: center;
     position: absolute;
@@ -42,24 +42,24 @@ $fontSize: 12px;
     left: 15%;
 
     .__company-logo {
-      width: 29px;
-      margin-right: 9px;
+      width: 1.8125rem;
+      margin-right: 0.5625rem;
     }
 
     .__company-brand {
       .__name {
-        font-size: 15px;
-        letter-spacing: 2px;
+        font-size: 0.9375rem;
+        letter-spacing: 0.125rem;
         color: orange;
         font-weight: bold;
       }
 
       .__slogan {
-        font-size: 8px;
+        font-size: 0.5rem;
         font-style: italic;
         color: white;
-        letter-spacing: 0.5px;
-        margin-top: -2px;
+        letter-spacing: 0.0313rem;
+        margin-top: -0.125rem;
       }
     }
   }
@@ -89,8 +89,8 @@ $fontSize: 12px;
   }
 
   .login {
-    border-radius: 12px;
-    padding: 70px 40px 50px 40px;
+    border-radius: 0.75rem;
+    padding: 4.375rem 2.5rem 3.125rem 2.5rem;
     position: relative;
     z-index: 10;
     width: 24%;
@@ -98,8 +98,8 @@ $fontSize: 12px;
     margin-top: -3%;
     background: white;
     @extend .centered-content;
-    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.1), 0 15px 12px rgba(0, 0, 0, 0.1);
-    border: 1px solid #eee;
+    box-shadow: 0 1.1875rem 2.375rem rgba(0, 0, 0, 0.1), 0 0.9375rem 0.75rem rgba(0, 0, 0, 0.1);
+    border: 0.0625rem solid #eee;
     background: white;
     position: relative;
 
@@ -110,27 +110,27 @@ $fontSize: 12px;
       text-align: center;
       font-weight: bold;
       color: #ff8220;
-      letter-spacing: 2px;
-      font-size: 24px;
+      letter-spacing: 0.125rem;
+      font-size: 1.5rem;
     }
 
     .__cover-img {
       background: url("https://cdn0.iconfinder.com/data/icons/business-office-and-people-in-flat/256/Businessman-2-512.png");
       background-size: 100% 100%;
       background-position: center center;
-      height: 60px;
-      width: 60px;
-      margin: 20px;
-      margin-top: 10px;
+      height: 3.75rem;
+      width: 3.75rem;
+      margin: 1.25rem;
+      margin-top: 0.625rem;
     }
 
     .__form {
       width: 100%;
-      padding-top: 15px;
+      padding-top: 0.9375rem;
 
       .ant-form-item-has-error .ant-form-item-explain,
       .ant-form-item-has-error .ant-form-item-split {
-        font-size: 10px;
+        font-size: 0.625rem;
       }
 
       .ant-form-item-control {
@@ -142,13 +142,13 @@ $fontSize: 12px;
       $inputBgColor: white;
       .ant-input-affix-wrapper {
         background: $inputBgColor;
-        border: 1px solid #eee;
+        border: 0.0625rem solid #eee;
         overflow: hidden;
         box-shadow: none;
         outline-style: none;
-        padding-top: 7px;
-        padding-bottom: 7px;
-        margin-bottom: 3px;
+        padding-top: 0.4375rem;
+        padding-bottom: 0.4375rem;
+        margin-bottom: 0.1875rem;
 
         .anticon {
           color: rgba($color: #000, $alpha: 0.4);
@@ -157,23 +157,23 @@ $fontSize: 12px;
       .ant-input {
         font-size: $fontSize;
         background: $inputBgColor;
-        padding-left: 3px;
+        padding-left: 0.1875rem;
       }
 
       .ant-form-item-has-error .ant-form-item-explain,
       .ant-form-item-has-error .ant-form-item-split {
-        font-size: 10px;
+        font-size: 0.625rem;
       }
 
       .__form__icon {
-        margin-right: 5px;
+        margin-right: 0.3125rem;
       }
 
       .__form__forgot-password {
-        height: 25px;
+        height: 1.5625rem;
         width: 100%;
         text-align: center;
-        font-size: 12px;
+        font-size: 0.75rem;
         font-weight: bold;
 
         a {
@@ -187,11 +187,11 @@ $fontSize: 12px;
         border: 0;
         width: 100%;
         font-weight: bold;
-        min-height: 40px;
-        margin-top: 15px;
-        border-radius: 24px;
+        min-height: 2.5rem;
+        margin-top: 0.9375rem;
+        border-radius: 1.5rem;
         text-shadow: $primaryTextShadow;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.12), 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.24);
       }
     }
   }
@@ -202,7 +202,7 @@ $fontSize: 12px;
     bottom: 1%;
     width: 100vw;
     text-align: center;
-    font-size: 11px;
+    font-size: 0.6875rem;
     color: white;
     font-weight: bold;
   }
