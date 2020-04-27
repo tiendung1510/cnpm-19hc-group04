@@ -1,0 +1,32 @@
+{
+  "files": {
+    "main.css": "/static/css/main.bbe014c5.chunk.css",
+    "main.js": "/static/js/main.81ef54d8.chunk.js",
+    "main.js.map": "/static/js/main.81ef54d8.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.a0a66673.js",
+    "runtime-main.js.map": "/static/js/runtime-main.a0a66673.js.map",
+    "static/css/2.93d77f2b.chunk.css": "/static/css/2.93d77f2b.chunk.css",
+    "static/js/2.ede804e2.chunk.js": "/static/js/2.ede804e2.chunk.js",
+    "static/js/2.ede804e2.chunk.js.map": "/static/js/2.ede804e2.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.a1afb277ede4103777aeeb8f0b24039a.js": "/precache-manifest.a1afb277ede4103777aeeb8f0b24039a.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.93d77f2b.chunk.css.map": "/static/css/2.93d77f2b.chunk.css.map",
+    "static/css/main.bbe014c5.chunk.css.map": "/static/css/main.bbe014c5.chunk.css.map",
+    "static/js/2.ede804e2.chunk.js.LICENSE.txt": "/static/js/2.ede804e2.chunk.js.LICENSE.txt",
+    "static/media/Login.style.scss": "/static/media/bg.cbe61826.jpg",
+    "static/media/cashing.wav": "/static/media/cashing.9897c7f7.wav",
+    "static/media/MoneyCounting.style.scss": "/static/media/checkout-cover-2.b8618457.gif",
+    "static/media/rejecting.wav": "/static/media/rejecting.01f737d7.wav",
+    "static/media/styles.css": "/static/media/revicons.2feb69cc.eot",
+    "static/media/warning.wav": "/static/media/warning.4af9c980.wav",
+    "static/media/WorkAssignment.style.scss": "/static/media/work-schedule-header-cover.7123ada4.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a0a66673.js",
+    "static/css/2.93d77f2b.chunk.css",
+    "static/js/2.ede804e2.chunk.js",
+    "static/css/main.bbe014c5.chunk.css",
+    "static/js/main.81ef54d8.chunk.js"
+  ]
+}
