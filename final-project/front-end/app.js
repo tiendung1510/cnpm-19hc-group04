@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+const PORT = process.env.PORT || 3001;
 app.disable('x-powered-by');
 app.use(express.static(path.join(__dirname, 'build')));
 // need to declare a "catch all" route on your express server 
@@ -10,8 +11,8 @@ app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 app.listen(
-  process.env.PORT || 8000,
+  PORT,
   function () {
-    console.log(`Mini-mart Frontend start on http://localhost:5000`)
+    console.log(`Mini-mart Frontend is running on port ${PORT}`)
   }
 );
