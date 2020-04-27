@@ -10,7 +10,7 @@ app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 app.listen(
-  process.env.PORT || 5000,
+  process.env.PORT || 8000,
   function () {
     console.log(`Mini-mart Frontend start on http://localhost:5000`)
   }
