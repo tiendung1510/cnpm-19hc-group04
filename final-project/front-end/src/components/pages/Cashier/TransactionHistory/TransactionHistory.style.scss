@@ -1,28 +1,28 @@
 .transaction-history {
-  $primaryBorderRadius: 7px;
-  $secondaryBorderRadius: 3px;
-  $boxShadow0: 0 0 5px
+  $primaryBorderRadius: 0.4375rem;
+  $secondaryBorderRadius: 0.1875rem;
+  $boxShadow0: 0 0 0.3125rem
     rgba(
       $color: #000000,
       $alpha: 0.2
     );
-  $boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  $textShadow1: 1px 1px 2px
+  $boxShadow1: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.12), 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.24);
+  $textShadow1: 0.0625rem 0.0625rem 0.125rem
     rgba(
       $color: #000000,
       $alpha: 0.4
     );
-  $primaryFontSize: 12px;
+  $primaryFontSize: 0.75rem;
 
   .styled-scrollbar {
     &::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
+      width: 0.3125rem;
+      height: 0.3125rem;
     }
 
     &::-webkit-scrollbar-thumb {
       background-color: rgba($color: #000000, $alpha: 0.2);
-      border-radius: 5px;
+      border-radius: 0.3125rem;
     }
   }
 
@@ -31,7 +31,7 @@
   height: 100%;
   border-radius: $primaryBorderRadius;
   overflow: hidden;
-  border: 1px solid #eee;
+  border: 0.0625rem solid #eee;
   position: relative;
   z-index: 1;
 
@@ -53,7 +53,7 @@
       align-items: center;
       height: 15%;
       color: white;
-      font-size: 1.2rem;
+      font-size: 19.2px;
 
       .transaction-history__header__title__icon {
         margin-right: 1%;
@@ -70,12 +70,12 @@
     height: 82%;
     width: 96%;
     background: white;
-    border: 1px solid #eee;
+    border: 0.0625rem solid #eee;
     position: absolute;
     top: 15%;
     left: 2%;
     z-index: 3;
-    border-radius: $primaryBorderRadius - 2;
+    border-radius: $primaryBorderRadius;
     overflow: hidden;
     padding: 2% 0;
 
@@ -98,11 +98,11 @@
       }
 
       .transaction-history__content__timeline__item {
-        min-height: 60px;
-        border: 1px solid #eee;
+        min-height: 3.75rem;
+        border: 0.0625rem solid #eee;
         background: #f8f8f8;
         border-radius: $secondaryBorderRadius;
-        padding: 15px;
+        padding: 0.9375rem;
         font-size: $primaryFontSize - 1;
 
         .transaction-history__content__timeline__item__price-total__label {
@@ -111,8 +111,8 @@
 
         .transaction-history__content__timeline__item__price-total {
           .transaction-history__content__timeline__item__price-total__number {
-            font-size: $primaryFontSize + 0.5;
-            margin-left: 10px;
+            font-size: $primaryFontSize;
+            margin-left: 0.625rem;
           }
         }
       }
@@ -122,15 +122,15 @@
       }
 
       .ant-timeline.ant-timeline-label .ant-timeline-item-label {
-        width: calc(12% - 12px);
+        width: calc(12% - 0.75rem);
         text-align: left;
       }
 
       .ant-timeline.ant-timeline-alternate .ant-timeline-item-left .ant-timeline-item-content,
       .ant-timeline.ant-timeline-right .ant-timeline-item-left .ant-timeline-item-content,
       .ant-timeline.ant-timeline-label .ant-timeline-item-left .ant-timeline-item-content {
-        left: calc(17% - 4px);
-        width: calc(80.5% - 14px);
+        left: calc(17% - 0.25rem);
+        width: calc(80.5% - 0.875rem);
       }
 
       .ant-timeline-item-tail,

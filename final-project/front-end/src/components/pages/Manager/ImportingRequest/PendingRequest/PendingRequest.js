@@ -90,7 +90,7 @@ class PendingRequest extends PageBase {
           <SupplierContactPopover
             supplier={{ ...record.product.supplier }}
             buttonText={record.product.supplier.name}
-            buttonStyle={{ fontSize: 11 }}
+            buttonStyle={{ fontSize: '0.6875rem' }}
             placement="right"
           />
         )

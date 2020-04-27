@@ -244,7 +244,7 @@ class StaffManagement extends PageBase {
         if (k === 'fullname') {
           column.render = (text, record) => (
             <Row align="middle" style={{ width: '100%' }}>
-              <Col span={6}><Avatar src={record.avatar} size={22} /></Col>
+              <Col span={6}><Avatar src={record.avatar} style={{ width: '1.375rem', height: '1.375rem' }} /></Col>
               <Col span={18}><span style={{ fontWeight: 'bold' }}>{text}</span></Col>
             </Row>
           );
@@ -448,7 +448,7 @@ class StaffManagement extends PageBase {
                       columns={columns}
                       dataSource={filteredStaffs}
                       pagination={false}
-                      scroll={{ y: 445 }}
+                      scroll={{ y: '27.8125rem' }}
                       onRow={(record) => {
                         return {
                           onClick: () => this.onClickListStaffsRow(record)

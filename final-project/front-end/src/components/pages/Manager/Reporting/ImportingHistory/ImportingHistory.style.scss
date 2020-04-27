@@ -1,7 +1,7 @@
 .importing-history__btn-show {
   position: absolute;
-  top: 20px;
-  right: 10px;
+  top: 1.25rem;
+  right: 0.625rem;
   border: 0;
   box-shadow: none;
   background: none;
@@ -15,25 +15,25 @@
 }
 
 .importing-history__content {
-  width: 500px;
+  width: 31.25rem;
 
   .ant-popover-inner-content {
     padding: 0;
   }
 
-  $tableFontSize: 10px;
+  $tableFontSize: 0.625rem;
   .ant-table {
     thead > tr > th {
       font-size: $tableFontSize;
       color: rgba($color: #000000, $alpha: 0.6);
       font-weight: bold;
-      padding: 10px;
+      padding: 0.625rem;
     }
 
     tbody > tr {
       td {
         font-size: $tableFontSize;
-        padding: 10px;
+        padding: 0.625rem;
       }
     }
   }

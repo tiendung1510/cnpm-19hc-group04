@@ -246,7 +246,7 @@ class SupplierManagement extends PageBase {
               {selectedSupplier.address ? (
                 <GoogleMap
                   width={'100%'}
-                  height={200}
+                  height={'14rem'}
                   address={selectedSupplier.address}
                   locationIcon={
                     <EnvironmentTwoTone

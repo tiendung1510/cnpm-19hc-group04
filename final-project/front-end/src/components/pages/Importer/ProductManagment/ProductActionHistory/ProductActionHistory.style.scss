@@ -1,13 +1,13 @@
 .product-action-logs {
-  $fontSize0: 9px;
-  $fontSize1: 11px;
+  $fontSize0: 0.5625rem;
+  $fontSize1: 0.6875rem;
 
-  max-height: 300px;
+  max-height: 18.75rem;
   overflow: auto;
-  padding-right: 5px;
+  padding-right: 0.3125rem;
   &::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 0.3125rem;
+    height: 0.3125rem;
   }
   &::-webkit-scrollbar-thumb {
     background-color: rgba($color: #000000, $alpha: 0.2);
@@ -16,12 +16,12 @@
 
   .product-action-logs__item {
     background: #f8f8f8;
-    min-height: 60px;
+    min-height: 3.75rem;
     width: 100%;
-    margin: 5px;
-    border: 1px solid #eee;
-    padding: 10px;
-    border-radius: 3px;
+    margin: 0.3125rem;
+    border: 0.0625rem solid #eee;
+    padding: 0.625rem;
+    border-radius: 0.1875rem;
 
     .product-action-logs__item__content {
       font-size: $fontSize1;

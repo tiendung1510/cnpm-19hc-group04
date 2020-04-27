@@ -8,29 +8,29 @@
 .product-management {
   height: 100vh;
   overflow: hidden;
-  padding: 60px 15px 12.5px 15px;
+  padding: 3.75rem 0.9375rem 0.7813rem 0.9375rem;
   background: #ff8220;
 
-  $boxShadow0: 0 0 5px
+  $boxShadow0: 0 0 0.3125rem
     rgba(
       $color: #000000,
       $alpha: 0.2
     );
-  $boxShadow1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  $boxShadow2: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.13);
-  $primaryFontSize: 12px;
-  $padding: 20px;
-  $textShadow1: 1px 1px 2px rgba(0, 0, 0, 0.4);
+  $boxShadow1: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.12), 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.24);
+  $boxShadow2: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.16), 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.13);
+  $primaryFontSize: 0.75rem;
+  $padding: 1.25rem;
+  $textShadow1: 0.0625rem 0.0625rem 0.125rem rgba(0, 0, 0, 0.4);
 
   .styled-scrollbar {
     &::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
+      width: 0.3125rem;
+      height: 0.3125rem;
     }
 
     &::-webkit-scrollbar-thumb {
       background-color: rgba($color: #000000, $alpha: 0.2);
-      border-radius: 5px;
+      border-radius: 0.3125rem;
     }
   }
 
@@ -45,7 +45,7 @@
     height: 100%;
     background: white;
     box-shadow: $boxShadow2;
-    border-radius: 5px;
+    border-radius: 0.3125rem;
     overflow: hidden;
 
     .ant-row {
@@ -59,7 +59,7 @@
 
       .product-management__container__left-sidebar__title {
         height: 11%;
-        padding-top: 5px;
+        padding-top: 0.3125rem;
         display: flex;
         align-items: center;
 
@@ -67,19 +67,19 @@
           font-weight: bold;
           background: white;
           color: #ff8220;
-          padding-left: 30px;
-          min-width: 220px;
-          min-height: 35px;
+          padding-left: 1.875rem;
+          min-width: 13.75rem;
+          min-height: 2.1875rem;
           display: flex;
           align-items: center;
-          border-top-right-radius: 24px;
-          border-bottom-right-radius: 24px;
+          border-top-right-radius: 1.5rem;
+          border-bottom-right-radius: 1.5rem;
           margin-left: -10%;
         }
       }
 
       .product-management__container__left-sidebar__search-box {
-        $searchBoxBackground: white;
+        $searchBoxBackground: #f5f5f5;
 
         .ant-row {
           height: auto;
@@ -87,10 +87,11 @@
 
         .ant-input-affix-wrapper {
           background: $searchBoxBackground;
-          border-radius: 3px;
+          border-radius: 0.1875rem;
           overflow: hidden;
           box-shadow: none;
           outline-style: none;
+          border: 0;
         }
         .ant-input {
           font-size: $primaryFontSize;
@@ -99,24 +100,24 @@
       }
 
       .product-management__container__left-sidebar__categories {
-        margin-top: 10px;
+        margin-top: 0.625rem;
         background: #f8f8f8;
-        border: 1px solid #eee;
+        border: 0.0625rem solid #eee;
         max-height: 80%;
-        border-radius: 3px;
+        border-radius: 0.1875rem;
         overflow: auto;
         @extend .styled-scrollbar;
 
         .product-management__container__left-sidebar__categories__wrapper {
           .product-management__container__left-sidebar__categories__item {
-            font-size: $primaryFontSize - 1;
+            font-size: $primaryFontSize;
             color: rgba($color: #000000, $alpha: 0.5);
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
             width: 100%;
             display: inline-block;
-            padding: 7px 5px 7px 10px;
+            padding: 0.4375rem 0.3125rem 0.4375rem 0.625rem;
             transition: 0.2s;
             cursor: pointer;
 
@@ -128,7 +129,7 @@
               color: white;
               font-weight: bold;
               background: #ff8220;
-              border-top-left-radius: 3px;
+              border-top-left-radius: 0.1875rem;
             }
           }
 
@@ -159,29 +160,29 @@
       .product-management__container__topbar__supplier-select {
         @extend .centered-content;
         justify-content: flex-start;
-        margin-top: -5px;
+        margin-top: -0.3125rem;
 
         .product-management__container__topbar__supplier-select__label {
-          margin-right: 15px;
-          margin-top: 15px;
-          font-size: 10px;
+          margin-right: 0.9375rem;
+          margin-top: 0.9375rem;
+          font-size: 0.625rem;
           color: rgba($color: #000000, $alpha: 0.4);
         }
 
         .ant-select {
-          width: 220px;
+          width: 13.75rem;
         }
 
         .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
           border: 0;
-          border-bottom: 1px solid #dcdcdc;
+          border-bottom: 0.0625rem solid #dcdcdc;
           color: #ff8220;
           font-weight: bold;
           background: transparent;
-          height: 30px;
-          font-size: 14px;
+          height: 1.875rem;
+          font-size: 0.875rem;
           padding: 0;
-          padding-top: 3px;
+          padding-top: 0.1875rem;
           border-radius: 0;
           outline-style: none;
           box-shadow: none;
@@ -190,7 +191,7 @@
         .ant-select-arrow {
           color: silver;
           right: 0;
-          top: 18px;
+          top: 1.125rem;
         }
       }
 
@@ -204,8 +205,8 @@
           cursor: pointer;
 
           .product-management__container__topbar__features__feature__btn-show-assignment {
-            min-width: 190px;
-            min-height: 35px;
+            min-width: 11.875rem;
+            min-height: 2.1875rem;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -218,7 +219,7 @@
 
             &.--alert {
               .--bell {
-                font-size: 16px;
+                font-size: 1rem;
                 color: white;
                 animation-iteration-count: infinite !important;
               }
@@ -229,7 +230,7 @@
 
             sup {
               font-weight: bold;
-              font-size: 10px;
+              font-size: 0.625rem;
             }
 
             .ant-badge-count {
@@ -243,9 +244,9 @@
         $searchBoxBackground: white;
         .ant-input-affix-wrapper {
           background: $searchBoxBackground;
-          border-radius: 24px;
+          border-radius: 1.5rem;
           overflow: hidden;
-          line-height: 27px;
+          line-height: 1.6875rem;
           box-shadow: none;
           outline-style: none;
         }
@@ -276,13 +277,13 @@
           top: 0;
           right: 0;
           background: white;
-          border-top: 1px solid #eee;
-          box-shadow: -5px 0 5px -5px rgba(0, 0, 0, 0.24);
+          border-top: 0.0625rem solid #eee;
+          box-shadow: -0.3125rem 0 0.3125rem -0.3125rem rgba(0, 0, 0, 0.24);
 
           .product-management__container__content__product-details__panel__header {
             position: relative;
-            height: 50px;
-            padding: 10px;
+            height: 3.125rem;
+            padding: 0.625rem;
             @extend .centered-content;
 
             .product-management__container__content__product-details__panel__header__btn-close {
@@ -304,7 +305,7 @@
 
           .product-management__container__content__product-details__panel__product-details {
             height: 100%;
-            padding: 20px;
+            padding: 1.25rem;
             padding-top: 0;
 
             .product-management__container__content__product-details__panel__product-details__img {
@@ -317,27 +318,27 @@
               .ant-form-item {
                 display: flex;
                 flex-direction: column;
-                margin-bottom: 5px;
+                margin-bottom: 0.3125rem;
 
-                $formInputWidth: 290px;
+                $formInputWidth: 18.125rem;
                 .ant-form-item-control-input {
                   width: $formInputWidth;
-                  margin-top: -5px;
+                  margin-top: -0.3125rem;
                 }
 
                 .ant-input-number {
                   width: $formInputWidth;
-                  margin-top: 2px;
+                  margin-top: 0.125rem;
                 }
 
                 .ant-form-item-label {
                   text-align: left;
-                  padding-left: 5px;
+                  padding-left: 0.3125rem;
                 }
 
                 label {
                   font-size: $primaryFontSize;
-                  margin-left: -5px;
+                  margin-left: -0.3125rem;
                   color: rgba($color: #000000, $alpha: 0.5);
                 }
 
@@ -348,23 +349,23 @@
 
               .ant-form-item-has-error .ant-form-item-explain,
               .ant-form-item-has-error .ant-form-item-split {
-                font-size: 10px;
+                font-size: 0.625rem;
               }
             }
 
             .product-management__container__content__product-details__panel__product-details__btn-update__wrapper {
               @extend .centered-content;
               justify-content: center;
-              height: 80px;
+              height: 5rem;
 
               .product-management__container__content__product-details__panel__product-details__btn-update__wrapper__btn {
                 background: #ff8220;
                 border: 0;
                 font-weight: bold;
-                border-radius: 24px;
-                min-height: 40px;
+                border-radius: 1.5rem;
+                min-height: 2.5rem;
                 box-shadow: $boxShadow1;
-                font-size: $primaryFontSize + 1;
+                font-size: $primaryFontSize + '0.0625rem';
                 width: 100%;
               }
             }
@@ -373,12 +374,12 @@
       }
 
       .product-management__container__content__list-products {
-        $tableFontSize: 11px;
+        $tableFontSize: 0.6875rem;
         position: relative;
-        padding: 10px;
+        padding: 0.625rem;
 
         .product-management__container__content__list-products__product-img {
-          width: 25px;
+          width: 1.5625rem;
         }
 
         .product-management__container__content__list-products__selected-row {
@@ -386,7 +387,7 @@
         }
 
         .ant-table-body {
-          height: 545px;
+          height: 34.0625rem;
           @extend .styled-scrollbar;
         }
 
@@ -395,9 +396,7 @@
             font-size: $tableFontSize;
             color: #ff8220;
             font-weight: bold;
-            &:nth-child(6) {
-              text-align: left;
-            }
+            padding: 0.625rem;
           }
 
           tbody > tr {
@@ -405,7 +404,7 @@
               font-size: $tableFontSize;
               transition: 0.2s;
               cursor: pointer;
-              padding: 10px;
+              padding: 0.625rem;
             }
 
             &:hover {
@@ -416,7 +415,7 @@
           }
 
           .ant-empty {
-            height: 450px;
+            height: 28.125rem;
             display: flex;
             flex-direction: column;
             align-items: center;

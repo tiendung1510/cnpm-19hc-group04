@@ -522,7 +522,7 @@ class ProductManagement extends PageBase {
           <SupplierContactPopover
             supplier={{ ...record.supplier }}
             buttonText={record.supplier.name}
-            buttonStyle={{ fontSize: 11 }}
+            buttonStyle={{ fontSize: '0.6875rem' }}
             placement="right"
           />
         )
@@ -550,11 +550,11 @@ class ProductManagement extends PageBase {
         render: (text) => (<center>{text}</center>),
       },
       {
-        title: 'Cập nhật lần cuối',
+        title: <center>Cập nhật lần cuối</center>,
         dataIndex: 'updatedAt',
         key: 'updatedAt',
         width: 160,
-        render: (text) => (<span>{moment(text).format('HH:mm DD-MM-YYYY')}</span>)
+        render: (text) => (<center><span>{moment(text).format('HH:mm DD-MM-YYYY')}</span></center>)
       },
       {
         title: <center>Trạng thái</center>,
@@ -597,14 +597,14 @@ class ProductManagement extends PageBase {
 
                 <div className="product-management__container__left-sidebar__search-box">
                   <Row align="middle" style={{ width: '100%' }}>
-                    <Col span={19}>
+                    <Col span={20}>
                       <Input
                         prefix={<SearchOutlined style={{ marginRight: 5 }} />}
                         placeholder="Tìm kiếm..."
                         onChange={e => this.onCategorySearchInputChange(e.target.value, this.state.categories)}
                       />
                     </Col>
-                    <Col span={5}>
+                    <Col span={4}>
                       {!this.state.isLoading ? (
                         <AddCategoryDialog
                           addToListCategories={category => this.addToListCategories(category)}

@@ -67,9 +67,9 @@ class Toolbar extends Component {
                 </Menu>
               } className="__account__avatar-menu">
                 <Row align="middle" gutter={5}>
-                  <Col span={4}><Avatar size={30} src={user.avatar} /></Col>
+                  <Col span={4}><Avatar src={user.avatar} /></Col>
                   <Col span={20}>
-                    <span style={{ margin: '0 10px' }}>{user.fullname || ''}</span><CaretDownFilled style={{ color: 'white' }} />
+                    <span className="__account__avatar-menu__name">{user.fullname || ''}</span><CaretDownFilled style={{ color: 'white' }} />
                   </Col>
                 </Row>
               </Dropdown>

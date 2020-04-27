@@ -165,10 +165,10 @@ class Reporting extends PageBase {
         title: '',
         dataIndex: 'image',
         key: 'image',
-        width: 60,
+        width: '3.75rem',
         render: (text) => (
           <img
-            style={{ width: 25, marginLeft: 10 }}
+            style={{ width: '1.5625rem', marginLeft: '0.625rem' }}
             src={text}
             alt="product" />
         )
@@ -177,25 +177,25 @@ class Reporting extends PageBase {
         title: 'Sản phẩm',
         dataIndex: 'name',
         key: 'name',
-        width: 200
+        width: '12.5rem'
       },
       {
         title: 'Thể loại',
         dataIndex: 'category',
         key: 'category',
-        width: 180,
+        width: '11.25rem',
         render: (text, record) => (<span>{record.category.name}</span>)
       },
       {
         title: 'Nhà cung cấp',
         dataIndex: 'supplier',
         key: 'supplier',
-        width: 200,
+        width: '12.5rem',
         render: (text, record) => (
           <SupplierContactPopover
             supplier={{ ...record.supplier }}
             buttonText={record.supplier.name}
-            buttonStyle={{ fontSize: 11 }}
+            buttonStyle={{ fontSize: '0.6875rem' }}
             placement="right"
           />
         )
@@ -204,7 +204,7 @@ class Reporting extends PageBase {
         title: 'Giá bán',
         dataIndex: 'price',
         key: 'price',
-        width: 120,
+        width: '7.5rem',
         sorter: (a, b) => a.price - b.price,
         render: (text) => (
           <NumberFormat
@@ -219,7 +219,7 @@ class Reporting extends PageBase {
         title: `SL đã nhập (Th${this.state.month}/${this.state.year})`,
         dataIndex: 'importedQuantity',
         key: 'importedQuantity',
-        width: 80,
+        width: '5rem',
         sorter: (a, b) => a.importedQuantity - b.importedQuantity,
         render: (text) => (<center>{text}</center>)
       },
@@ -227,7 +227,7 @@ class Reporting extends PageBase {
         title: `SL đã bán (Th${this.state.month}/${this.state.year})`,
         dataIndex: 'soldQuantity',
         key: 'soldQuantity',
-        width: 80,
+        width: '5rem',
         sorter: (a, b) => a.soldQuantity - b.soldQuantity,
         render: (text) => (<center>{text}</center>)
       },
@@ -235,7 +235,7 @@ class Reporting extends PageBase {
         title: 'SL tồn kho',
         dataIndex: 'availableQuantity',
         key: 'availableQuantity',
-        width: 80,
+        width: '5rem',
         sorter: (a, b) => a.availableQuantity - b.availableQuantity,
         render: (text) => (<center>{text}</center>)
       },
@@ -243,7 +243,7 @@ class Reporting extends PageBase {
         title: 'Trạng thái',
         dataIndex: 'status',
         key: 'status',
-        width: 100,
+        width: '6.25rem',
         render: (text, record) => (
           <center>
             {record.availableQuantity === 0 ? (
@@ -260,7 +260,7 @@ class Reporting extends PageBase {
           <center>
             <QRCode
               value={record._id}
-              style={{ width: 25, height: 25 }}
+              style={{ width: '1.5625rem', height: '1.5625rem' }}
             />
           </center>
         )

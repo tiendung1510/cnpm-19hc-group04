@@ -274,14 +274,14 @@ class MoneyCounting extends PageBase {
 				title: <center>STT</center>,
 				dataIndex: 'order',
 				key: 'order',
-				width: 80,
+				width: '5rem',
 				render: order => <center>{order}</center>
 			},
 			{
 				title: 'Sản phẩm',
 				dataIndex: 'name',
 				key: 'name',
-				width: 250,
+				width: '15.625rem',
 				render: (text, record) => (
 					<div className="money-counting__panel__right__shopping-cart__list-products__item">
 						{record.image ? (<img src={record.image} alt="product" />) : (<QuestionCircleOutlined />)}
@@ -293,7 +293,7 @@ class MoneyCounting extends PageBase {
 				title: 'Giá bán',
 				dataIndex: 'price',
 				key: 'price',
-				width: 150,
+				width: '9.375rem',
 				render: (text) => (
 					<NumberFormat
 						value={Number(text)}
@@ -308,13 +308,13 @@ class MoneyCounting extends PageBase {
 				title: 'Danh mục',
 				dataIndex: 'category',
 				key: 'category',
-				width: 150
+				width: '9.375rem'
 			},
 			{
 				title: 'Nhà cung cấp',
 				dataIndex: 'supplier',
 				key: 'supplier',
-				width: 150
+				width: '9.375rem'
 			},
 			{
 				title: '',

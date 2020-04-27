@@ -53,14 +53,14 @@
 
     .image-uploader--empty {
       background: #f8f8f8;
-      border: 1px dashed silver;
+      border: 0.0625rem dashed silver;
       color: silver;
-      font-size: 24px;
+      font-size: 1.5rem;
       @extend .centered-content;
 
       .image-uploader--empty__text {
-        font-size: 12px;
-        margin-top: 10px;
+        font-size: 0.75rem;
+        margin-top: 0.625rem;
       }
     }
   }
