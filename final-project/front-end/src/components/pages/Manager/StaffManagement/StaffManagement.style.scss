@@ -93,6 +93,7 @@
             .staff-management__body__staffs__sidebar__staff-details__basic-info__role {
               font-size: 0.5625rem;
               color: rgba($color: #000000, $alpha: 0.4);
+              padding-top: 0.3125rem;
             }
           }
         }
@@ -247,7 +248,7 @@
             left: 2%;
             top: 15%;
 
-            $tableFontSize: 0.625rem;
+            $tableFontSize: 0.6563rem;
 
             .staff-management__body__staffs__content__list-staffs__selected-row {
               background: #fff6e6;
@@ -288,7 +289,7 @@
             }
 
             .ant-table-body {
-              height: 100%;
+              height: 27.8125rem;
               @extend .styled-scrollbar;
             }
 
