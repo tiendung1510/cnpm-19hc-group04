@@ -7,7 +7,7 @@
   $borderRadius1: 0.3125rem;
   $borderRadius2: 0.4375rem;
   $fontSize: 0.6875rem;
-  $fontSize1: 1rem;
+  $fontSize1: 0.85rem;
 
   background: white;
   border-radius: $borderRadius2;
@@ -35,7 +35,7 @@
     font-weight: bold;
     color: white;
     background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
-    margin: 2% 0 1% -0.625rem;
+    margin: 2% 0 1% -0.7rem;
     border-radius: 0.125rem;
     border-top-right-radius: 1.5rem;
     border-bottom-right-radius: 1.5rem;
