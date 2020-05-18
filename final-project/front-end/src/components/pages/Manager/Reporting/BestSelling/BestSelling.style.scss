@@ -107,3 +107,9 @@
   font-size: 0.625rem;
   line-height: 1.25rem;
 }
+
+@media screen and (max-width: 768px) {
+  .product-statistic__products__best-selling {
+    padding: 0 0.5rem 0.5rem 0.5rem;
+  }
+}
