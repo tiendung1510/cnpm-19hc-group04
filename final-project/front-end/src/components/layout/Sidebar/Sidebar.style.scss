@@ -26,18 +26,20 @@ $primaryTextShadow: 0.0625rem 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
 
   &__btn-toggle {
     $bg: whitesmoke;
-    $txtColor: orange;
+    $txtColor: #ff8220;
+    $br: 0.3125rem;
     position: fixed;
     z-index: 1000;
-    top: 45%;
+    top: 1rem;
     background: $bg;
     color: $txtColor;
     border: 0;
     border-radius: 0;
-    border-top-right-radius: 24px;
-    border-bottom-right-radius: 24px;
+    border-top-right-radius: $br;
+    border-bottom-right-radius: $br;
     box-shadow: 0.5px 1px 4px rgba(0, 0, 0, 0.2);
-    min-height: 3.125rem;
+    min-height: 2.5rem;
+    width: 2.5rem;
 
     &--hidden {
       display: none;

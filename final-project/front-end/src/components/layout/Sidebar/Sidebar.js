@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined, CaretRightFilled } from '@ant-design/icons';
+import { ArrowLeftOutlined, CaretRightFilled, MenuOutlined } from '@ant-design/icons';
 import { Button, Layout, Menu } from 'antd';
 import React, { Component } from 'react';
 import { withCookies } from 'react-cookie';
@@ -73,7 +73,7 @@ class Sidebar extends Component {
       <div className="sidebar-container">
         <Button
           className={isMobile && !isToggled ? 'sidebar__btn-toggle' : 'sidebar__btn-toggle--hidden'}
-          icon={<CaretRightFilled />}
+          icon={<MenuOutlined />}
           onClick={() => this.setState({ isToggled: true })}
         />
         <Sider className={(isToggled && isMobile) || !isMobile ? 'sidebar animated slideInLeft' : 'sidebar--hidden'}>
@@ -102,7 +102,12 @@ class Sidebar extends Component {
                   onClick={() => {
                     this.props.setCurrentPageTitle(page.title, page.icon);
                     this.props.setSidebarSelectedIndex(pageIndex);
-                    this.setState({ isToggled: false })
+                    this.setState({ isToggled: false });
+
+                    const user = this.props.cookies.get(COOKIE_NAMES.user);
+                    if (!user) {
+                      this.props.history.push('/login');
+                    }
                   }}>
                   <Page.Icon style={{ color: '#ff8220' }} />
                   <span className="sidebar__nav-title">{page.title}</span>

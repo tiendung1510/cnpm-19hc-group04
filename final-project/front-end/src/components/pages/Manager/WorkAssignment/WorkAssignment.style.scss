@@ -1,13 +1,10 @@
-$leftSidebarHeight: 100vh;
 $primaryTextShadow: 0.0625rem 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
 $boxShadow1: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
 $boxShadow2: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.16), 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.12);
 
 .work-assignment {
   padding: 0.9375rem;
-  padding-top: 4.0625rem;
-  overflow: hidden;
-  height: 100vh;
+  padding-top: 4rem;
   background: #ff8220;
 
   .centered-content {
@@ -30,7 +27,6 @@ $boxShadow2: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.16), 0 0.125rem 0.3125rem rgba
     border-color: #eee;
   }
   .work-assignment__left-sidebar {
-    height: $leftSidebarHeight;
     padding-right: 0.625rem;
 
     .work-assignment__left-sidebar__year-selection {
@@ -64,7 +60,7 @@ $boxShadow2: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.16), 0 0.125rem 0.3125rem rgba
     .work-assignment__left-sidebar__list-tasks {
       .work-assignment__left-sidebar__list-tasks__wrapper {
         margin-top: 0.3125rem;
-        height: 34rem;
+        height: 34.2rem;
         background: white;
         border-radius: 0.1875rem;
         box-shadow: $boxShadow1;
@@ -314,7 +310,6 @@ $boxShadow2: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.16), 0 0.125rem 0.3125rem rgba
       box-sizing: border-box;
       background: url("../../../../assets/images/work-schedule-header-cover.png");
       background-size: cover;
-      border-bottom: 0.25rem solid white;
       position: relative;
 
       .work-assignment__content__header__dark-bg {
@@ -346,7 +341,7 @@ $boxShadow2: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.16), 0 0.125rem 0.3125rem rgba
     }
 
     .work-assignment__content__body {
-      margin-top: -5%;
+      margin-top: -3.125rem;
       position: relative;
       z-index: 2;
 
@@ -375,7 +370,7 @@ $boxShadow2: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.16), 0 0.125rem 0.3125rem rgba
           padding: 1.25rem;
           background: white;
           background: #f8f8f8;
-          height: 100vh;
+          height: 40rem;
 
           .work-assignment__content__body__tabs__work-schedule__work-day {
             padding: 0.625rem;
@@ -450,5 +445,80 @@ $boxShadow2: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.16), 0 0.125rem 0.3125rem rgba
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .work-assignment {
+    padding-top: 5rem;
+  }
+
+  .work-assignment
+    .work-assignment__left-sidebar
+    .work-assignment__left-sidebar__list-tasks
+    .work-assignment__left-sidebar__list-tasks__wrapper {
+    height: auto;
+    margin-bottom: 15px;
+  }
+
+  .work-assignment
+    .work-assignment__content
+    .work-assignment__content__task-work-day-panel
+    .work-assignment__content__task-work-day-panel__panel {
+    width: 80%;
+    position: absolute;
+
+    &--hidden {
+      display: none;
+    }
+  }
+
+  .work-assignment
+    .work-assignment__content
+    .work-assignment__content__body
+    .work-assignment__content__body__tabs
+    .work-assignment__content__body__tabs__work-schedule {
+    padding: 5px;
+  }
+
+  .work-assignment
+    .work-assignment__content
+    .work-assignment__content__body
+    .work-assignment__content__body__tabs
+    .work-assignment__content__body__tabs__work-schedule
+    .work-assignment__content__body__tabs__work-schedule__work-day {
+    min-width: 46px;
+    height: 46px;
+    padding: 5px 0 0 5px;
+  }
+
+  .work-assignment .work-assignment__content {
+    border-radius: 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+  .work-assignment .work-assignment__left-sidebar {
+    padding-right: 0;
+  }
+
+  .work-assignment
+    .work-assignment__content
+    .work-assignment__content__body
+    .work-assignment__content__body__tabs
+    .work-assignment__content__body__tabs__work-schedule
+    .work-assignment__content__body__tabs__work-schedule__work-day
+    .work-assignment__content__body__tabs__work-schedule__work-day__week-day {
+    font-size: 0.5rem;
+  }
+
+  .work-assignment
+    .work-assignment__content
+    .work-assignment__content__body
+    .work-assignment__content__body__tabs
+    .work-assignment__content__body__tabs__work-schedule
+    .work-assignment__content__body__tabs__work-schedule__work-day
+    .work-assignment__content__body__tabs__work-schedule__work-day__staffs {
+    display: none;
   }
 }

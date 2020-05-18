@@ -94,7 +94,7 @@ export default class ImporterAssignment extends PageBase {
             <Col span={4}>
               <Avatar
                 className="importer-assignment__summary__avatar"
-                src={data.importer.avatar} size={24}
+                src={data.importer.avatar}
               />
             </Col>
             <Col span={20}>

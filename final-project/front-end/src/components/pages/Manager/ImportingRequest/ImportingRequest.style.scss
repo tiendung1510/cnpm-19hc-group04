@@ -1,10 +1,10 @@
 .importing-request {
   width: 100%;
   padding: 0.625rem;
-  padding-top: 3.75rem;
-  height: 100vh;
+  padding-top: 4rem;
+  min-height: 100vh;
   background: #ff8220;
-  overflow: hidden;
+  // overflow: hidden;
 
   $boxShadow0: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.12), 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.12);
   $boxShadow1: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
@@ -43,7 +43,8 @@
     .importing-request__container__block {
       @extend .block-style;
       padding: 0.625rem;
-      height: 90.5vh;
+      height: 43rem;
+      overflow: hidden;
 
       .importing-request__container__block__header {
         height: 7%;
@@ -55,10 +56,11 @@
 
         $todoColor: #ff8220;
         $acceptedColor: #40a5ec;
-        $finishiedColor: #4bb543;
+        $finishedColor: #4bb543;
 
         .importing-request__container__block__header__title {
           font-weight: bold;
+          font-size: 0.8rem;
 
           &.--pending {
             color: $todoColor;
@@ -69,7 +71,7 @@
           }
 
           &.--finished {
-            color: $finishiedColor;
+            color: $finishedColor;
           }
         }
 
@@ -94,15 +96,18 @@
           border-radius: 1.5rem;
 
           &.--pending {
-            background: $todoColor;
+            background: #fff6e6;
+            color: #ff8220;
           }
 
           &.--accepted {
-            background: $acceptedColor;
+            background: #e6f6ff;
+            color: #039be5;
           }
 
           &.--finished {
-            background: $finishiedColor;
+            background: #edf8ec;
+            color: green;
           }
         }
       }
@@ -115,9 +120,21 @@
         overflow: auto;
 
         &.--pending {
-          height: 84.5%;
+          height: 85%;
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .importing-request .importing-request__container .importing-request__container__block {
+    height: 30rem;
+  }
+  .importing-request
+    .importing-request__container
+    .importing-request__container__block
+    .importing-request__container__block__body.--pending {
+    height: 81%;
   }
 }

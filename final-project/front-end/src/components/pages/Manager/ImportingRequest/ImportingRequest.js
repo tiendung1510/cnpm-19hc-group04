@@ -177,10 +177,10 @@ class ImportingRequest extends PageBase {
     return (
       <div className="importing-request">
         <div className="importing-request__container">
-          <Row gutter={10} style={{ width: '100%', height: '100%', margin: 0 }}>
-            <Col span={5}>
+          <Row gutter={[10, 10]} style={{ width: '100%', height: '100%', margin: 0 }}>
+            <Col span={5} md={5} xs={24}>
               <div
-                className="importing-request__container__block animated fadeInUp" style={{ animationDelay: '0.2s' }}>
+                className="importing-request__container__block">
                 <div className="importing-request__container__block__header">
                   <span className="importing-request__container__block__header__title --pending">
                     Đang chờ duyệt
@@ -213,9 +213,9 @@ class ImportingRequest extends PageBase {
                 </div>
               </div>
             </Col>
-            <Col span={5}>
+            <Col span={5} md={5} xs={24}>
               <div
-                className="importing-request__container__block animated fadeInUp" style={{ animationDelay: '0.4s' }}>
+                className="importing-request__container__block">
                 <div className="importing-request__container__block__header">
                   <span className="importing-request__container__block__header__title --accepted">
                     Đang thực hiện
@@ -231,9 +231,9 @@ class ImportingRequest extends PageBase {
                 </div>
               </div>
             </Col>
-            <Col span={5}>
+            <Col span={5} md={5} xs={24}>
               <div
-                className="importing-request__container__block animated fadeInUp" style={{ animationDelay: '0.6s' }}>
+                className="importing-request__container__block">
                 <div className="importing-request__container__block__header">
                   <span className="importing-request__container__block__header__title --finished">
                     Đã hoàn tất
@@ -249,7 +249,7 @@ class ImportingRequest extends PageBase {
                 </div>
               </div>
             </Col>
-            <Col span={9}>
+            <Col span={9} md={9} xs={24}>
               <SupplierManagement />
             </Col>
           </Row>

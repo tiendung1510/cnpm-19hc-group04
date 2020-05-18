@@ -1,7 +1,7 @@
 .checkout-panel {
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  // overflow: hidden;
   padding: 0.9375rem;
   padding-top: 3.75rem;
   background: #ff8220;
@@ -26,8 +26,7 @@
     }
 
     .checkout-panel__main-board__navbar {
-      height: 100%;
-      padding-top: 0.5%;
+      padding-top: 1.25rem;
 
       .checkout-panel__main-board__navbar__item {
         width: 2.5rem;
@@ -43,12 +42,12 @@
         border: 0.0625rem solid #eee;
 
         &.checkout-panel__main-board__navbar__item--selected {
-          background: darkorange !important;
-          box-shadow: 0rem 0.0625rem 0.1875rem rgba($color: #000000, $alpha: 0.4);
-          border: 0;
+          // background: darkorange !important;
+          // box-shadow: 0rem 0.0625rem 0.1875rem rgba($color: #000000, $alpha: 0.4);
+          background: #e6f6ff !important;
 
           .checkout-panel__main-board__navbar__item__icon {
-            color: white !important;
+            color: #0e9be5 !important;
           }
         }
 
@@ -86,5 +85,31 @@
     height: 100%;
     padding: 0.625rem;
     background: $primaryBgColor;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .checkout-panel {
+    padding: 5.5em 0.5em 0.5em 0.5em;
+  }
+
+  .checkout-panel .checkout-panel__main-board {
+    flex-direction: column;
+  }
+
+  .checkout-panel .checkout-panel__main-board .checkout-panel__main-board__navbar {
+    height: 80px;
+  }
+
+  .checkout-panel .checkout-panel__main-board .checkout-panel__main-board__navbar .ant-menu-dark.ant-menu-inline,
+  .checkout-panel .checkout-panel__main-board .checkout-panel__main-board__navbar .ant-menu-dark.ant-menu-vertical,
+  .checkout-panel .checkout-panel__main-board .checkout-panel__main-board__navbar .ant-menu-dark.ant-menu-vertical-left,
+  .checkout-panel
+    .checkout-panel__main-board
+    .checkout-panel__main-board__navbar
+    .ant-menu-dark.ant-menu-vertical-right {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
   }
 }

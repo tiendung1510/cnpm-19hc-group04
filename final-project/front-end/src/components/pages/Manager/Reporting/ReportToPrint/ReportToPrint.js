@@ -9,6 +9,9 @@ import NumberFormat from 'react-number-format';
 class ReportToPrint extends Component {
   render() {
     const manager = this.props.cookies.get(COOKIE_NAMES.user);
+    if (!manager) {
+      window.location.href = '/login';
+    }
     let {
       soldProducts,
       importedProducts,

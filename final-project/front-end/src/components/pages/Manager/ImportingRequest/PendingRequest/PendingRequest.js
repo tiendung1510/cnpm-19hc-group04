@@ -123,7 +123,7 @@ class PendingRequest extends PageBase {
             <Col span={4}>
               <Avatar
                 className="pending-importing-request__summary__avatar"
-                src={details.sender.avatar} size={24} />
+                src={details.sender.avatar} />
             </Col>
             <Col span={20}>
               <div className="pending-importing-request__summary__details">

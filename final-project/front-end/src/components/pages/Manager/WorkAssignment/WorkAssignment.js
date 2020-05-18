@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Tabs, Select, List, Avatar, Button, Modal, message, Tooltip, Skeleton, Empty } from 'antd';
-import { CloseCircleOutlined, ExclamationCircleOutlined, LogoutOutlined } from '@ant-design/icons';
+import { CloseCircleOutlined, ExclamationCircleOutlined, LogoutOutlined, CloseOutlined } from '@ant-design/icons';
 import USER_ROLE from '../../../../constants/user-role.constant';
 import './WorkAssignment.style.scss';
 import * as moment from 'moment';
@@ -34,7 +34,8 @@ class WorkAssignment extends PageBase {
       workSchedules: [],
       listWorkYears: [],
       listStaffs: [],
-      isLoading: true
+      isLoading: true,
+      isTaskWorkDayPanelToggled: false
     }
   }
 
@@ -571,14 +572,16 @@ class WorkAssignment extends PageBase {
       listWorkYears,
       selectedWorkYear,
       listStaffs,
+      isTaskWorkDayPanelToggled
     } = this.state;
 
     selectedWorkSchedule.workDays = this.generateWorkDays(selectedWorkSchedule);
+    const isMobile = window.innerWidth <= 768;
 
     return (
       <div className="work-assignment">
         <Row>
-          <Col className="work-assignment__left-sidebar animated slideInLeft" span={4}>
+          <Col className="work-assignment__left-sidebar" span={4} md={4} xs={24}>
             <BtnAddWorkSchedule reloadWorkSchedules={selectedYear => this.loadWorkSchedules(selectedYear)} />
 
             <div className="work-assignment__left-sidebar__year-selection">
@@ -626,10 +629,10 @@ class WorkAssignment extends PageBase {
                         }
                         onClick={() => this.handleSelectWorkSchedule(item, index)}>
                         <Row style={{ width: '90%' }}>
-                          <Col span={22}>
+                          <Col span={22} md={22} xs={23}>
                             <span className="work-assignment__left-sidebar__list-tasks__item__task-name">Tháng {item.month}</span>
                           </Col>
-                          <Col span={2}>
+                          <Col span={2} md={2} xs={1}>
                             <Button
                               onClick={() => this.openRemoveWorkScheduleConfirm(item._id)}
                               className="work-assignment__left-sidebar__list-tasks__item__btn-remove"
@@ -644,9 +647,18 @@ class WorkAssignment extends PageBase {
               </div>
             </div>
           </Col>
-          <Col className="work-assignment__content" span={20}>
+          <Col className="work-assignment__content" span={20} md={20} xs={24}>
             <div className="work-assignment__content__task-work-day-panel">
-              <div className="work-assignment__content__task-work-day-panel__panel animated slideInRight">
+              <div className={(isMobile && isTaskWorkDayPanelToggled) || !isMobile ? 'work-assignment__content__task-work-day-panel__panel animated slideInRight' : 'work-assignment__content__task-work-day-panel__panel--hidden'}>
+
+                {isMobile && (
+                  <Button
+                    className="work-assignment__content__task-work-day-panel__panel__btn-close"
+                    shape="circle"
+                    icon={<CloseOutlined />}
+                    onClick={() => this.setState({ isTaskWorkDayPanelToggled: false })}
+                  />
+                )}
 
                 <div className="work-assignment__content__task-work-day-panel__panel__main">
                   <h3>{
@@ -818,7 +830,10 @@ class WorkAssignment extends PageBase {
                             }
                           `}
                           style={{ animationDelay: `${0.03 * iRow * iCol}s` }}
-                          onClick={() => this.handleSelectWorkDay(iRow, iCol)}>
+                          onClick={() => {
+                            this.handleSelectWorkDay(iRow, iCol);
+                            this.setState({ isTaskWorkDayPanelToggled: true })
+                          }}>
                           <span
                             className={`
                               work-assignment__content__body__tabs__work-schedule__work-day__day-in-month

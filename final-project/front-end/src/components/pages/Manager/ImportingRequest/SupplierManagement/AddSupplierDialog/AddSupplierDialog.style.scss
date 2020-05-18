@@ -8,6 +8,10 @@ $primaryFontSize: 0.75rem;
     color: white;
     border-radius: 50%;
     box-shadow: $boxShadow1;
+    width: 2rem;
+    height: 2rem;
+    margin-top: -0.1875rem;
+    font-size: 1rem;
   }
 }
 
@@ -15,7 +19,7 @@ $primaryFontSize: 0.75rem;
   .ant-modal-body {
     padding-bottom: 0.625rem;
   }
-  
+
   .ant-form-item {
     margin-bottom: 0.9375rem;
     label {

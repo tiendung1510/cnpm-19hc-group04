@@ -153,7 +153,7 @@ class SupplierManagement extends PageBase {
   render() {
     const { filteredSuppliers, selectedSupplier } = this.state;
     return (
-      <div className="importing-request__container__suppliers animated fadeInRight" style={{ animationDelay: '0.8s' }}>
+      <div className="importing-request__container__suppliers" style={{ animationDelay: '0.8s' }}>
         <div className="importing-request__container__suppliers__header">
           <span className="importing-request__container__suppliers__header__title">
             Nhà cung cấp sản phẩm ({filteredSuppliers.length})
