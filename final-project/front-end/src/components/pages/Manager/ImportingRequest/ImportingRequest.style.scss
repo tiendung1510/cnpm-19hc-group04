@@ -1,7 +1,7 @@
 .importing-request {
   width: 100%;
   padding: 0.625rem;
-  padding-top: 4rem;
+  padding-top: 3.5rem;
   min-height: 100vh;
   background: #ff8220;
   // overflow: hidden;
@@ -43,7 +43,7 @@
     .importing-request__container__block {
       @extend .block-style;
       padding: 0.625rem;
-      height: 43rem;
+      height: 42rem;
       overflow: hidden;
 
       .importing-request__container__block__header {
