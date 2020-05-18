@@ -143,11 +143,11 @@ export default class ImporterAssignment extends PageBase {
               <ul className="importer-assignment__content__values">
                 <li><strong>{data.importer.fullname}</strong></li>
                 <li>{moment(data.createdAt).format('HH:mm DD-MM-YYYY')}</li>
-                <li><span className="importer-assignment__content__values__status">
+                <li>
                   {data.finishedAt ? (
-                    <span>{IMPORTING_REQUEST.STATUS.FINISHED.name}</span>
-                  ) : (<span>{IMPORTING_REQUEST.STATUS.ACCEPTED.name}</span>)}
-                </span></li>
+                    <span className="importer-assignment__content__values__status--finished">{IMPORTING_REQUEST.STATUS.FINISHED.name}</span>
+                  ) : (<span className="importer-assignment__content__values__status--accepted">{IMPORTING_REQUEST.STATUS.ACCEPTED.name}</span>)}
+                </li>
                 <li>
                   {data.finishedAt ? <></> : (
                     <Progress

@@ -12,11 +12,12 @@ $fontSize3: 0.75rem;
     display: flex;
     justify-content: center;
     .statistic-pending-request-dialog__btn-open-wrapper__btn {
-      background: #fff6e6;
-      // font-weight: bold;
+      background: #ff8220;
+      font-weight: bold;
+      color: white;
       border: 0;
       box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
-      min-height: 2.1875rem;
+      min-height: 40px;
       min-width: 99%;
       font-size: $fontSize3;
 

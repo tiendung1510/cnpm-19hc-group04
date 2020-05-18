@@ -30,7 +30,7 @@ $fontSize3: 0.75rem;
       justify-content: center;
       align-items: center;
     }
-  
+
     .pending-importing-request__summary__avatar {
       margin-top: 0.125rem;
     }
@@ -95,11 +95,11 @@ $fontSize3: 0.75rem;
     font-size: $fontSize3;
     line-height: 2.1875rem;
   }
-  
+
   .pending-importing-request__content__values {
     .pending-importing-request__content__values__status {
       font-weight: bold;
-      color: #ff8220;
+      color: crimson;
     }
   }
 
@@ -152,5 +152,12 @@ $fontSize3: 0.75rem;
       color: crimson;
       box-shadow: none;
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .pending-importing-request__content .ant-modal-content {
+    width: 100%;
+    left: 0;
   }
 }

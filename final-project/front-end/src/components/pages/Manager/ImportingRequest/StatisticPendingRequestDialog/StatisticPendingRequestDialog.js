@@ -110,7 +110,7 @@ class StatisticPendingRequestDialog extends PageBase {
 
   render() {
     const { importers } = this.props;
-    const { requiredProducts, executor, priceTotal } = this.state;
+    let { requiredProducts, executor, priceTotal } = this.state;
     const columns = [
       {
         title: 'Sản phẩm',

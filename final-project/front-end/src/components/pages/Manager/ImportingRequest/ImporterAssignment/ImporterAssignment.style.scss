@@ -75,11 +75,18 @@ $fontSize3: 0.75rem;
     font-size: $fontSize3;
     line-height: 2.375rem;
   }
-  
+
   .importer-assignment__content__values {
     .importer-assignment__content__values__status {
-      font-weight: bold;
-      color: #ff8220;
+      &--accepted {
+        color: #039be5;
+        font-weight: bold;
+      }
+
+      &--finished {
+        color: green;
+        font-weight: bold;
+      }
     }
   }
 
@@ -119,5 +126,12 @@ $fontSize3: 0.75rem;
     .ant-table .ant-table-container::after {
       width: 0;
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .importer-assignment__content .ant-modal-content {
+    width: 100%;
+    left: 0;
   }
 }

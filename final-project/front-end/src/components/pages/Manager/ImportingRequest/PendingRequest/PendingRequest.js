@@ -68,6 +68,7 @@ class PendingRequest extends PageBase {
 
   render() {
     const { details } = this.props;
+    const requiredProducts = details.requiredProducts.map(p => ({ ...p, key: p._id }));
     const columns = [
       {
         title: 'Sản phẩm',
@@ -173,7 +174,7 @@ class PendingRequest extends PageBase {
 
           <div className="pending-importing-request__content__products">
             <Table
-              dataSource={[...details.requiredProducts]}
+              dataSource={[...requiredProducts]}
               columns={columns}
               pagination={false}
               scroll={{ y: 250 }}

@@ -43,11 +43,11 @@
     .importing-request__container__block {
       @extend .block-style;
       padding: 0.625rem;
-      height: 42rem;
+      height: 43.5rem;
       overflow: hidden;
 
       .importing-request__container__block__header {
-        height: 7%;
+        height: 3rem;
         display: flex;
         align-items: center;
         padding-left: 2%;
@@ -55,8 +55,8 @@
         font-size: $fontSize;
 
         $todoColor: #ff8220;
-        $acceptedColor: #40a5ec;
-        $finishedColor: #4bb543;
+        $acceptedColor: #039be5;
+        $finishedColor: green;
 
         .importing-request__container__block__header__title {
           font-weight: bold;
@@ -128,6 +128,10 @@
 }
 
 @media screen and (max-width: 768px) {
+  .importing-request {
+    padding-top: 4rem;
+  }
+
   .importing-request .importing-request__container .importing-request__container__block {
     height: 25rem;
   }
@@ -135,6 +139,6 @@
     .importing-request__container
     .importing-request__container__block
     .importing-request__container__block__body.--pending {
-    height: 81%;
+    height: 73%;
   }
 }
