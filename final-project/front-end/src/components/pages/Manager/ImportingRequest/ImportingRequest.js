@@ -170,9 +170,9 @@ class ImportingRequest extends PageBase {
 
   render() {
     const { importingRequests, staffs, importerAssignments } = this.state;
-    const pendingRequests = importingRequests.filter(r => r.status === CONSTANT.STATUS.PENDING.type);
-    const notFinishedAssignments = importerAssignments.filter(a => a.finishedAt === null);
-    const finishedAssignments = importerAssignments.filter(a => a.finishedAt !== null);
+    const pendingRequests = (importingRequests || []).filter(r => r.status === CONSTANT.STATUS.PENDING.type);
+    const notFinishedAssignments = (importerAssignments || []).filter(a => a.finishedAt === null);
+    const finishedAssignments = (importerAssignments || []).filter(a => a.finishedAt !== null);
 
     return (
       <div className="importing-request">

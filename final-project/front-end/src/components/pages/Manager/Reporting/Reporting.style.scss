@@ -75,8 +75,8 @@
 
   .reporting__btn-print-report {
     position: fixed;
-    background: #ffe4b3;
-    color: orange;
+    background: orange;
+    color: white;
     z-index: 100;
     border: 0;
     box-shadow: 0 0.0625rem 0.1875rem rgba($color: #000000, $alpha: 0.3);
@@ -165,7 +165,7 @@
 
         .product-statistic__products__statistic__item {
           background: white;
-          height: 22.8125rem;
+          min-height: 22.8125rem;
           box-shadow: $boxShadow1;
           border-radius: 0.625rem;
           overflow: hidden;
@@ -280,5 +280,32 @@
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .reporting {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .reporting
+    .product-statistic
+    .product-statistic__products
+    .product-statistic__products__list
+    .product-statistic__products__list__wrapper {
+    margin: -4rem 0.4375rem 0.4375rem 0.4375rem;
+  }
+
+  .reporting
+    .product-statistic
+    .product-statistic__products
+    .product-statistic__products__list
+    .product-statistic__products__list__header {
+    padding: 1.25rem 0.625rem 0 0.625rem;
+  }
+
+  .reporting .reporting__btn-print-report {
+    top: 88%;
   }
 }

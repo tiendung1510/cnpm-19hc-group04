@@ -332,9 +332,9 @@ class Reporting extends PageBase {
                   <div className="product-statistic__products__header__cover"></div>
                 </div>
                 <div className="product-statistic__products__statistic">
-                  <Row style={{ width: '100%' }} gutter={10}>
+                  <Row style={{ width: '100%' }} gutter={[0, 10]}>
 
-                    <Col span={6} style={{ paddingLeft: 0 }}>
+                    <Col span={6} xs={24} md={6} style={{ paddingLeft: 0 }}>
                       <ImportingStatistic
                         importedProducts={[...this.state.importedProducts]}
                         importedQuantityTotal={importedQuantityTotal}
@@ -344,7 +344,7 @@ class Reporting extends PageBase {
                       />
                     </Col>
 
-                    <Col span={18} style={{ paddingRight: 0 }}>
+                    <Col span={18} xs={24} md={18} style={{ paddingRight: 0 }}>
                       <div className="product-statistic__products__statistic__item">
                         <ProductQuantityStatistic
                           soldQuantityTotal={soldQuantityTotal}
@@ -365,8 +365,8 @@ class Reporting extends PageBase {
 
                 <div className="product-statistic__products__list">
                   <div className="product-statistic__products__list__header">
-                    <Row style={{ width: '100%' }}>
-                      <Col span={8}>
+                    <Row style={{ width: '100%' }} gutter={{ xs: [10, 10] }}>
+                      <Col span={8} xs={24} md={8}>
                         <h1>
                           Sản phẩm siêu thị
                           <span className="product-statistic__products__list__header__product-total">
@@ -374,8 +374,8 @@ class Reporting extends PageBase {
                           </span>
                         </h1>
                       </Col>
-                      <Col span={10}></Col>
-                      <Col span={6} align="center">
+                      <Col span={10} xs={0} md={10}></Col>
+                      <Col span={6} align="center" xs={24} md={6}>
                         <Input
                           prefix={<SearchOutlined style={{ marginRight: 3 }} />}
                           placeholder="Tìm kiếm sản phẩm..."

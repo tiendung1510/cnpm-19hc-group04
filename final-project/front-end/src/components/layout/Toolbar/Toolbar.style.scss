@@ -50,3 +50,12 @@
     }
   }
 }
+
+@media screen and (max-width: 768px) {
+  .toolbar {
+    padding: 1.25rem 0 0 1.25rem;
+  }
+  .toolbar .__account .__account__avatar-menu .__account__avatar-menu__name {
+    display: none;
+  }
+}

@@ -106,8 +106,8 @@ export default class RevenueStatistic extends Component {
 
     return (
       <div className="reporting__revenue-statistic reporting__block-style">
-        <Row style={{ width: '100%', position: 'relative', margin: 0 }} gutter={20} justify="center">
-          <Col span={8}>
+        <Row style={{ width: '100%', position: 'relative', margin: 0 }} gutter={[20, 10]} justify="center">
+          <Col span={8} xs={24} md={8}>
             <div className="reporting__revenue-statistic__widget --revenue-total">
               <div className="reporting__revenue-statistic__widget__content">
                 <div className="reporting__revenue-statistic__widget__content__value">
@@ -124,7 +124,7 @@ export default class RevenueStatistic extends Component {
               </div>
             </div>
           </Col>
-          <Col span={8}>
+          <Col span={8} xs={24} md={8}>
             <div className="reporting__revenue-statistic__widget --payment-total">
               <Popover
                 content={
@@ -162,7 +162,7 @@ export default class RevenueStatistic extends Component {
               </div>
             </div>
           </Col>
-          <Col span={8}>
+          <Col span={8} xs={24} md={8}>
             <div className="reporting__revenue-statistic__widget --profit-total">
               <div className="reporting__revenue-statistic__widget__content">
                 <div className="reporting__revenue-statistic__widget__content__value">

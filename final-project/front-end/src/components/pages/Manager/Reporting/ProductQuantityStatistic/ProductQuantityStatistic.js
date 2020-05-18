@@ -68,8 +68,8 @@ export default class ProductQuantityStatistic extends Component {
 
     return (
       <div className="product-quantity-statistic">
-        <Row style={{ width: '100%' }} gutter={20}>
-          <Col span={8}>
+        <Row style={{ width: '100%' }} gutter={[20, 10]} justify="space-between">
+          <Col span={8} xs={24} md={8}>
             <div className="product-quantity-statistic__item --sold">
               <SellingHistory
                 sellingHistories={[...sellingHistories]}
@@ -93,7 +93,7 @@ export default class ProductQuantityStatistic extends Component {
               </div>
             </div>
           </Col>
-          <Col span={8}>
+          <Col span={8} xs={24} md={8}>
             <div className="product-quantity-statistic__item --new">
               <NewProductList
                 newProducts={[...newProducts]}
@@ -110,7 +110,7 @@ export default class ProductQuantityStatistic extends Component {
               </div>
             </div>
           </Col>
-          <Col span={8}>
+          <Col span={8} xs={24} md={8}>
             <div className="product-quantity-statistic__item --available">
               <div className="product-quantity-statistic__item__metric">
                 <NumberFormat
@@ -124,7 +124,7 @@ export default class ProductQuantityStatistic extends Component {
             </div>
           </Col>
         </Row>
-      </div>
+      </div >
     )
   }
 }

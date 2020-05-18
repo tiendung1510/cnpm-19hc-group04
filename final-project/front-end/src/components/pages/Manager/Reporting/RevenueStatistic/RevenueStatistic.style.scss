@@ -23,11 +23,11 @@
     justify-content: center;
     padding-left: 15%;
     box-sizing: border-box;
-    box-shadow: $boxShadow1;
+    // box-shadow: $boxShadow1;
     border-radius: 0.3125rem;
     color: white;
     font-weight: bold;
-    text-shadow: $textShadow1;
+    // text-shadow: $textShadow1;
     position: relative;
 
     .reporting__revenue-statistic__widget__btn {
@@ -41,30 +41,27 @@
     }
 
     &.--revenue-total {
-      // background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
-      background: #ff8220;
+      background: #fff6e6;
+      color: #ff8220;
       .anticon {
-        color: yellow;
+        color: gold;
       }
     }
 
     &.--payment-total {
-      background: #ff6f61;
-      // background-color: #bd4f6c;
-      // background-image: linear-gradient(326deg, #bd4f6c 0%, #d7816a 74%);
-
+      background: #ffe6e6;
+      color: crimson;
       .anticon {
-        color: white;
+        color: crimson;
       }
     }
 
     &.--profit-total {
-      background: #039be5;
-      // background-color: #20bf55;
-      // background-image: linear-gradient(315deg, #20bf55 0%, #01baef 74%);
+      background: #e6f6ff;
+      color: #039be5;
 
       .anticon {
-        color: white;
+        color: #039be5;
       }
     }
 
@@ -82,7 +79,7 @@
       }
 
       .reporting__revenue-statistic__widget__content__label {
-        color: white;
+        color: rgba($color: #000000, $alpha: 0.5);
         font-size: 0.75rem;
       }
     }
@@ -132,5 +129,11 @@
   .ant-table .ant-table-container::before,
   .ant-table .ant-table-container::after {
     width: 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .reporting__revenue-statistic {
+    padding: 1rem 0.5rem !important;
   }
 }

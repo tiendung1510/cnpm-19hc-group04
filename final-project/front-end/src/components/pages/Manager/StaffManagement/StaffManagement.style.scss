@@ -303,3 +303,25 @@
     }
   }
 }
+
+@media screen and (max-width: 768px) {
+  .staff-management
+    .staff-management__body
+    .staff-management__body__staffs
+    .staff-management__body__staffs__sidebar
+    .staff-management__body__staffs__sidebar__staff-features
+    .staff-management__body__staffs__sidebar__staff-features__feature
+    .staff-management__body__staffs__sidebar__staff-features__feature__info
+    .staff-management__body__staffs__sidebar__staff-features__feature__info__name {
+    font-size: 0.5313rem;
+    margin-left: 0.3125rem;
+  }
+
+  .staff-management
+    .staff-management__body
+    .staff-management__body__staffs
+    .staff-management__body__staffs__sidebar
+    .staff-management__body__staffs__sidebar__staff-features {
+    margin-top: 1.25rem;
+  }
+}

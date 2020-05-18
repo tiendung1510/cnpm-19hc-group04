@@ -296,7 +296,7 @@ class StaffManagement extends PageBase {
       <div className="staff-management">
         <div className="staff-management__body">
           <Row className="staff-management__body__staffs animated fadeInUp">
-            <Col span={4}>
+            <Col span={4} md={4} xs={8}>
               <div className="staff-management__body__staffs__sidebar">
                 <div className="staff-management__body__staffs__sidebar__staff-details">
                   {selectedStaff ? (
@@ -391,11 +391,11 @@ class StaffManagement extends PageBase {
 
               </div>
             </Col>
-            <Col span={20}>
+            <Col span={20} md={20} xs={16}>
               <div className="staff-management__body__staffs__content">
                 <div className="staff-management__body__staffs__content__toolbar">
                   <Row style={{ width: '100%' }} align="middle">
-                    <Col span={7}>
+                    <Col span={7} md={7} xs={24}>
                       {!isLoading ? (
                         <Input
                           prefix={<SearchOutlined style={{ marginRight: 5 }} />}
@@ -410,7 +410,7 @@ class StaffManagement extends PageBase {
                   <div className="staff-management__body__staffs__content__list-staffs__header">
                     <div className="staff-management__body__staffs__content__list-staffs__header__dark-bg"></div>
                     <Row>
-                      <Col span={6}>
+                      <Col span={6} md={6} xs={23}>
                         {!isLoading ? (
                           <div
                             className="staff-management__body__staffs__content__list-staffs__header__role-selection">
@@ -431,7 +431,7 @@ class StaffManagement extends PageBase {
                           </div>
                         ) : <></>}
                       </Col>
-                      <Col span={18}>
+                      <Col span={18} md={18} xs={1}>
                         <div className="staff-management__body__staffs__content__list-staffs__header__dialogs">
                           {!isLoading ? (
                             <AddStaffDialog

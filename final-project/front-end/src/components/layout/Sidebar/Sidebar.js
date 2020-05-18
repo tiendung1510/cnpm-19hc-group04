@@ -1,19 +1,25 @@
+import { ArrowLeftOutlined, CaretRightFilled } from '@ant-design/icons';
+import { Button, Layout, Menu } from 'antd';
 import React, { Component } from 'react';
-import { Layout, Menu } from 'antd';
-import { Link, withRouter } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
+import { connect } from 'react-redux';
+import { Link, withRouter } from 'react-router-dom';
+import { COOKIE_NAMES } from '../../../constants/cookie-name.constant';
+import { default as links, default as SIDEBAR } from '../../../constants/sidebar.constant';
+import USER_ROLES from '../../../constants/user-role.constant';
+import * as actions from '../../../redux/actions';
 import './Sidebar.style.scss';
 import UserInfo from './UserInfo/UserInfo';
-import { connect } from 'react-redux';
-import * as actions from '../../../redux/actions';
-import links from '../../../constants/sidebar.constant';
-import USER_ROLES from '../../../constants/user-role.constant';
-import SIDEBAR from '../../../constants/sidebar.constant';
-import { COOKIE_NAMES } from '../../../constants/cookie-name.constant';
 
 const { Sider } = Layout;
 
 class Sidebar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isToggled: false
+    }
+  }
   componentDidMount() {
     const { pagesByUserRole } = this.props;
     const href = window.location.href.split('?')[0];
@@ -60,37 +66,53 @@ class Sidebar extends Component {
   render() {
     const { user, pagesByUserRole } = this.props;
     const { sidebarSelectedIndex } = this.props.app;
+    const { isToggled } = this.state;
+    const isMobile = window.innerHeight <= 768;
 
     return (
-      <Sider className="sidebar">
-        <div className="sidebar__header">
-          <img className="sidebar__header__company-logo" src={require('../../../assets/images/app-logo.png')} alt="logo" />
-          <div className="sidebar__header__company-brand">
-            <div className="sidebar__header__company-brand__name"><span>Mini Mart</span></div>
-            <div className="sidebar__header__company-brand__slogan"><span>Tiện Lợi mà Chất Lượng</span></div>
+      <div className="sidebar-container">
+        <Button
+          className={isMobile && !isToggled ? 'sidebar__btn-toggle' : 'sidebar__btn-toggle--hidden'}
+          icon={<CaretRightFilled />}
+          onClick={() => this.setState({ isToggled: true })}
+        />
+        <Sider className={(isToggled && isMobile) || !isMobile ? 'sidebar animated slideInLeft' : 'sidebar--hidden'}>
+          <div className="sidebar__header">
+            <img className="sidebar__header__company-logo" src={require('../../../assets/images/app-logo.png')} alt="logo" />
+            <div className="sidebar__header__company-brand">
+              <div className="sidebar__header__company-brand__name"><span>Mini Mart</span></div>
+              <div className="sidebar__header__company-brand__slogan"><span>Tiện Lợi mà Chất Lượng</span></div>
+            </div>
+            <Button
+              shape="circle"
+              icon={<ArrowLeftOutlined />}
+              className={isMobile ? 'sidebar__btn-hide' : 'sidebar__btn-hide--hidden'}
+              onClick={() => this.setState({ isToggled: false })}
+            />
           </div>
-        </div>
-        <UserInfo user={user} />
-        <Menu
-          theme='light'
-          mode='inline'
-          selectedKeys={[sidebarSelectedIndex ? sidebarSelectedIndex.toString() : '0']}>
-          {pagesByUserRole.map((page, pageIndex) => {
-            const Page = { Icon: page.icon };
-            return (
-              <Menu.Item key={pageIndex}
-                onClick={() => {
-                  this.props.setCurrentPageTitle(page.title, page.icon);
-                  this.props.setSidebarSelectedIndex(pageIndex);
-                }}>
-                <Page.Icon style={{ color: '#ff8220' }} />
-                <span className="sidebar__nav-title">{page.title}</span>
-                <Link to={page.path} />
-              </Menu.Item>
-            )
-          })}
-        </Menu>
-      </Sider>
+          <UserInfo user={user} />
+          <Menu
+            theme='light'
+            mode='inline'
+            selectedKeys={[sidebarSelectedIndex ? sidebarSelectedIndex.toString() : '0']}>
+            {pagesByUserRole.map((page, pageIndex) => {
+              const Page = { Icon: page.icon };
+              return (
+                <Menu.Item key={pageIndex}
+                  onClick={() => {
+                    this.props.setCurrentPageTitle(page.title, page.icon);
+                    this.props.setSidebarSelectedIndex(pageIndex);
+                    this.setState({ isToggled: false })
+                  }}>
+                  <Page.Icon style={{ color: '#ff8220' }} />
+                  <span className="sidebar__nav-title">{page.title}</span>
+                  <Link to={page.path} />
+                </Menu.Item>
+              )
+            })}
+          </Menu>
+        </Sider>
+      </div>
     )
   }
 }

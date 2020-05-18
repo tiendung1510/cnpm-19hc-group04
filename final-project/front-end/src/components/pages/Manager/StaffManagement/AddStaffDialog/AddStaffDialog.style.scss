@@ -1,11 +1,10 @@
 .staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog {
   .staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__btn-open {
-    color: #ff8220;
+    color: white;
     font-size: 1.25rem;
     border: 0;
-    background: #ffedcc;
-    box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.07), 0 0.125rem 0.25rem rgba(0, 0, 0, 0.07), 0 0.25rem 0.5rem rgba(0, 0, 0, 0.07),
-      0 0.5rem 1rem rgba(0, 0, 0, 0.07), 0 1rem 2rem rgba(0, 0, 0, 0.07), 0 2rem 4rem rgba(0, 0, 0, 0.07);
+    background: orange;
+    box-shadow: 0 0.0625rem 0.1875rem rgba($color: #000000, $alpha: 0.3);
     margin-top: 0.9375rem;
     margin-right: 0.3125rem;
     width: 2.5rem;
@@ -89,5 +88,38 @@
   .ant-modal-content {
     width: 64rem;
     left: -12.5rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog
+    .staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__btn-open {
+    position: fixed;
+    z-index: 999;
+    right: 0.3125rem;
+    bottom: 5%;
+  }
+
+  .staff-management
+    .staff-management__body
+    .staff-management__body__staffs
+    .staff-management__body__staffs__content
+    .staff-management__body__staffs__content__list-staffs
+    .staff-management__body__staffs__content__list-staffs__header
+    .staff-management__body__staffs__content__list-staffs__header__role-selection
+    .staff-management__body__staffs__content__list-staffs__header__role-selection__staft-total-by-role {
+    display: none;
+  }
+
+  .staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__form
+    .staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__form__img-uploader {
+    padding: 0.625rem;
+  }
+
+  .staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__content {
+    .ant-modal-content {
+      width: 100%;
+      left: 0;
+    }
   }
 }

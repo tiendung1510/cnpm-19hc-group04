@@ -66,7 +66,7 @@ class Main extends Component {
       <div className="main">
         <Layout>
           <Sidebar user={user} pagesByUserRole={pagesByUserRole} />
-          <Layout style={{ marginLeft: '12.5rem' }}>
+          <Layout className="main__layout">
             <div style={{ position: 'relative' }}>
               <Toolbar user={user} avatarMenuItems={commonPages} />
             </div>

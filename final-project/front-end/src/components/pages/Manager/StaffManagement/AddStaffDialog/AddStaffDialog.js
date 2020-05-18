@@ -125,7 +125,7 @@ class AddStaffDialog extends PageBase {
             </Form.Item>
 
             <Row gutter={10}>
-              <Col span={10}>
+              <Col span={10} md={10} xs={24}>
                 <h3
                   className="staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__form__title">
                   <span className="staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__form__title__icon">
@@ -252,8 +252,8 @@ class AddStaffDialog extends PageBase {
                   <Input placeholder="Dán đường dẫn ảnh vào đây" />
                 </Form.Item>
               </Col>
-              <Col span={2} style={{ textAlign: 'center' }}><Divider type="vertical" /></Col>
-              <Col span={12}>
+              <Col span={2} md={2} xs={24} style={{ textAlign: 'center' }}><Divider type="vertical" /></Col>
+              <Col span={12} md={12} xs={24}>
                 <h3
                   className="staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__form__title">
                   <span className="staff-management__body__staffs__content__list-staffs__header__dialogs__add-staff-dialog__form__title__icon">
