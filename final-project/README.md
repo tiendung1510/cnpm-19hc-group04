@@ -1,5 +1,9 @@
 
-# Final Project: Mini Mart Super Market
+# Final Project: Mini Mart Super Market 🛍
 
-- Start at: 20-03-2020
-- End at: 19-05-2020
+## About
+An application helps all staffs at `Mini Mart Super Market` manage their jobs, assignments, work schedule and so on. It is integrated many tools that can help the staff do his/her job faster and more effectively.
+
+## Components
+- Front-end project
+- Back-end project
