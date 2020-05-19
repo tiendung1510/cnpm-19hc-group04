@@ -295,7 +295,7 @@ class StaffManagement extends PageBase {
     return (
       <div className="staff-management">
         <div className="staff-management__body">
-          <Row className="staff-management__body__staffs animated fadeInUp">
+          <Row className="staff-management__body__staffs">
             <Col span={4} md={4} xs={8}>
               <div className="staff-management__body__staffs__sidebar">
                 <div className="staff-management__body__staffs__sidebar__staff-details">

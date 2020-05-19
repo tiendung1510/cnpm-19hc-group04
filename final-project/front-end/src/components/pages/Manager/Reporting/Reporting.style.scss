@@ -180,6 +180,15 @@
         margin-top: 0.25rem;
         box-shadow: $boxShadow1;
 
+        .ant-table-body {
+          @extend .styled-scrollbar;
+        }
+
+        .ant-table .ant-table-container::before,
+        .ant-table .ant-table-container::after {
+          width: 0;
+        }
+
         .product-statistic__products__list__header {
           border-top-left-radius: 0.625rem;
           border-top-right-radius: 0.625rem;
@@ -282,7 +291,7 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 992px) {
   .reporting {
     padding-left: 0.25rem;
     padding-right: 0.25rem;

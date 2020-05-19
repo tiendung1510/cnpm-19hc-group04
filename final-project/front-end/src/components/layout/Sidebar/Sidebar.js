@@ -67,12 +67,12 @@ class Sidebar extends Component {
     const { user, pagesByUserRole } = this.props;
     const { sidebarSelectedIndex } = this.props.app;
     const { isToggled } = this.state;
-    const isMobile = window.innerHeight <= 768;
+    const isMobile = window.innerWidth <= 992;
 
     return (
       <div className="sidebar-container">
         <Button
-          className={isMobile && !isToggled ? 'sidebar__btn-toggle' : 'sidebar__btn-toggle--hidden'}
+          className={isMobile && !isToggled ? 'sidebar__btn-toggle animated slideInLeft' : 'sidebar__btn-toggle--hidden'}
           icon={<MenuOutlined />}
           onClick={() => this.setState({ isToggled: true })}
         />

@@ -59,7 +59,7 @@
       font-size: 1rem;
 
       .transaction-history__header__title__icon {
-        margin-right: 1%;
+        margin-right: 0.625rem;
       }
 
       .transaction-history__header__title__text {
@@ -86,7 +86,6 @@
       height: 100%;
       width: 100%;
       overflow: auto;
-      overflow-x: hidden;
       padding-top: 1%;
       padding-left: 2%;
       @extend .styled-scrollbar;
@@ -129,18 +128,47 @@
         text-align: left;
       }
 
+      .ant-timeline-item-tail,
+      .ant-timeline.ant-timeline-alternate .ant-timeline-item-head,
+      .ant-timeline.ant-timeline-right .ant-timeline-item-head,
+      .ant-timeline.ant-timeline-label .ant-timeline-item-head {
+        left: 14.5%;
+      }
+
       .ant-timeline.ant-timeline-alternate .ant-timeline-item-left .ant-timeline-item-content,
       .ant-timeline.ant-timeline-right .ant-timeline-item-left .ant-timeline-item-content,
       .ant-timeline.ant-timeline-label .ant-timeline-item-left .ant-timeline-item-content {
         left: calc(17% - 0.25rem);
         width: calc(80.5% - 0.875rem);
       }
+    }
+  }
+}
 
-      .ant-timeline-item-tail,
-      .ant-timeline.ant-timeline-alternate .ant-timeline-item-head,
-      .ant-timeline.ant-timeline-right .ant-timeline-item-head,
-      .ant-timeline.ant-timeline-label .ant-timeline-item-head {
-        left: 14.5%;
+@media screen and (max-width: 768px) {
+  .transaction-history {
+    .transaction-history__header {
+      padding: 9% 6%;
+    }
+
+    .transaction-history__content {
+      .transaction-history__content__timeline {
+        .ant-timeline.ant-timeline-label .ant-timeline-item-label {
+          width: calc(40% - 0.75rem);
+        }
+
+        .ant-timeline-item-tail,
+        .ant-timeline.ant-timeline-alternate .ant-timeline-item-head,
+        .ant-timeline.ant-timeline-right .ant-timeline-item-head,
+        .ant-timeline.ant-timeline-label .ant-timeline-item-head {
+          left: 40%;
+        }
+
+        .ant-timeline.ant-timeline-alternate .ant-timeline-item-left .ant-timeline-item-content,
+        .ant-timeline.ant-timeline-right .ant-timeline-item-left .ant-timeline-item-content,
+        .ant-timeline.ant-timeline-label .ant-timeline-item-left .ant-timeline-item-content {
+          left: calc(40% - 0.25rem);
+        }
       }
     }
   }

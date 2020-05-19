@@ -1,10 +1,5 @@
 $primaryTextShadow: 0.0625rem 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
 
-@media screen and (max-width: 768px) {
-  .sidebar {
-  }
-}
-
 .sidebar {
   overflow: hidden;
   overflow-y: auto;

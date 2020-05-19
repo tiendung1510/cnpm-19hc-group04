@@ -207,7 +207,7 @@ $fontSize: 0.8rem;
   }
 }
 
-@media screen and (max-width: 762px) {
+@media screen and (max-width: 992px) {
   .container {
     .__header {
       left: 0;
@@ -219,9 +219,15 @@ $fontSize: 0.8rem;
     }
 
     .login {
-      width: 90%;
+      width: 55%;
       padding: 4em 2rem 2em 2em;
       margin-top: 0;
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .container .login {
+    width: 90%;
   }
 }

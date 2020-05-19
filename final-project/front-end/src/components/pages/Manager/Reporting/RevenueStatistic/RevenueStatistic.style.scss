@@ -132,8 +132,36 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 992px) {
   .reporting__revenue-statistic {
     padding: 0.6rem 0.25rem !important;
+  }
+
+  .reporting__revenue-statistic__revenue__number {
+    font-size: 0.8rem;
+  }
+
+  .reporting__revenue-statistic
+    .reporting__revenue-statistic__widget
+    .reporting__revenue-statistic__widget__content
+    .reporting__revenue-statistic__widget__content__label {
+    font-size: 0.6rem;
+  }
+
+  .reporting__revenue-statistic .reporting__revenue-statistic__widget {
+    padding-left: 10%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .reporting__revenue-statistic__revenue__number {
+    font-size: inherit;
+  }
+
+  .reporting__revenue-statistic
+    .reporting__revenue-statistic__widget
+    .reporting__revenue-statistic__widget__content
+    .reporting__revenue-statistic__widget__content__label {
+    font-size: inherit;
   }
 }

@@ -6,8 +6,7 @@
 }
 
 .product-management {
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
   padding: 3.75rem 0.9375rem 0.7813rem 0.9375rem;
   background: #ff8220;
 
@@ -42,7 +41,7 @@
 
   .product-management__container {
     width: 100%;
-    height: 100%;
+    height: 42rem;
     background: white;
     box-shadow: $boxShadow2;
     border-radius: 0.3125rem;
@@ -75,6 +74,7 @@
           border-top-right-radius: 1.5rem;
           border-bottom-right-radius: 1.5rem;
           margin-left: -10%;
+          font-size: 1rem;
         }
       }
 
@@ -155,6 +155,7 @@
         color: #ff8220;
         font-weight: bold;
         margin: 0;
+        font-size: 1rem;
       }
 
       .product-management__container__topbar__supplier-select {
@@ -365,7 +366,7 @@
                 border-radius: 1.5rem;
                 min-height: 2.5rem;
                 box-shadow: $boxShadow1;
-                font-size: $primaryFontSize + '0.0625rem';
+                font-size: $primaryFontSize + "0.0625rem";
                 width: 100%;
               }
             }
@@ -424,5 +425,11 @@
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .product-management {
+    padding: 4.5rem 0.5rem 0.5rem 0.5rem;
   }
 }

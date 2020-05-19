@@ -53,12 +53,18 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 992px) {
   .toolbar {
     padding: 1.25rem 0 0 3.5rem;
     width: 90vw;
   }
   .toolbar .__account .__account__avatar-menu .__account__avatar-menu__name {
     display: none;
+  }
+}
+
+@media screen and (max-width: 762px) {
+  .toolbar .__page-title .__page-title__text {
+    padding-left: 0.9375rem;
   }
 }

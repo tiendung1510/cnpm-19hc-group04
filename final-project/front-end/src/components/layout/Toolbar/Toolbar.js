@@ -38,13 +38,13 @@ class Toolbar extends Component {
 
     return (
       <Row className="toolbar" justify="start" align="middle">
-        <Col className="__page-title" span={16} xs={22} md={16}>
+        <Col className="__page-title" span={16} xs={22} lg={16}>
           <Row align="center">
-            <Col span={1} xs={3} md={1}><div className="__page-title__icon"><CurrentPage.Icon /></div></Col>
-            <Col span={23} xs={21} md={23}><span className="__page-title__text">{currentPageTitle}</span></Col>
+            <Col span={1} xs={2} lg={1}><div className="__page-title__icon"><CurrentPage.Icon /></div></Col>
+            <Col span={23} xs={22} lg={23}><span className="__page-title__text">{currentPageTitle}</span></Col>
           </Row>
         </Col>
-        <Col span={8} xs={2} md={8}>
+        <Col span={8} xs={2} lg={8}>
           <Row className="__account" justify="end" align="middle">
             <Col span={14}></Col>
             <Col span={10}>
@@ -67,8 +67,8 @@ class Toolbar extends Component {
                 </Menu>
               } className="__account__avatar-menu">
                 <Row align="middle" gutter={5}>
-                  <Col span={4} xs={24} md={4}><Avatar src={user.avatar} /></Col>
-                  <Col span={20} xs={0} md={20}>
+                  <Col span={4} xs={24} lg={4}><Avatar src={user.avatar} /></Col>
+                  <Col span={20} xs={0} lg={20}>
                     <span className="__account__avatar-menu__name">{user.fullname || ''}</span><CaretDownFilled style={{ color: 'white' }} />
                   </Col>
                 </Row>

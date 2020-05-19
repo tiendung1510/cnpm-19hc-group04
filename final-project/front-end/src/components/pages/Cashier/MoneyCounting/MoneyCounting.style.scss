@@ -55,7 +55,7 @@ $primaryBorderRadius: 0.625rem;
         .money-counting__getting-started__content__left__title {
           color: #ff8220;
           font-weight: bold;
-          font-size: 32px;
+          font-size: 2rem;
         }
 
         .money-counting__getting-started__content__left__btn-start {
@@ -66,7 +66,7 @@ $primaryBorderRadius: 0.625rem;
           font-weight: bold;
           border-radius: 1.5rem;
           min-height: 2.8125rem;
-          max-width: 60%;
+          width: 70%;
           font-size: 1rem;
           position: relative;
           z-index: 4;
@@ -380,5 +380,28 @@ $primaryBorderRadius: 0.625rem;
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .money-counting
+    .money-counting__getting-started
+    .money-counting__getting-started__content
+    .money-counting__getting-started__content__right-cover {
+    display: none;
+  }
+
+  .money-counting
+    .money-counting__getting-started
+    .money-counting__getting-started__content
+    .money-counting__getting-started__content__left {
+    width: 100%;
+    padding: 0;
+    padding-top: 3.75rem;
+    align-items: center;
+  }
+
+  .money-counting .money-counting__getting-started .money-counting__getting-started__bottom-wave {
+    bottom: -1.25rem;
   }
 }
