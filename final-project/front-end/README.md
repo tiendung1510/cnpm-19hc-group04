@@ -1,7 +1,7 @@
-# Mini Mart Super Market (Front-end) 🚀
+# Mini Mart Supper Market (Front-end) 🚀
 
 ## About
-An application helps all staffs at `Mini Mart Super Market` manage their jobs, assignments, work schedule and so on. It is integrated many tools that can help the staff do his/her job faster and more effectively.
+An application helps all staffs at `Mini Mart Supper Market` manage their jobs, assignments, work schedule and so on. It is integrated many tools that can help the staff do his/her job faster and more effectively.
 
 ## Techniques
 
