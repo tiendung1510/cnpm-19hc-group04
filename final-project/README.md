@@ -1,4 +1,5 @@
 
-# FINAL PROJECT IN SOFTWARE ENGINEERING - 19HCB
+# Final Project: Mini Mart Super Market
 
-## MINI MART SUPPER MARKET
+- Start at: 20-03-2020
+- End at: 19-05-2020
