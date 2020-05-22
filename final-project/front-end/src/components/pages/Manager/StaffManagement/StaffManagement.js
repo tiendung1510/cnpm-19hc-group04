@@ -302,7 +302,6 @@ class StaffManagement extends PageBase {
                   {selectedStaff ? (
                     <Avatar
                       className="staff-management__body__staffs__sidebar__staff-details__avatar"
-                      size={50}
                       src={selectedStaff ? selectedStaff.avatar : 'https://cdn.wrytin.com/images/avatar/s/256/default.jpeg'}
                     />
                   ) : (

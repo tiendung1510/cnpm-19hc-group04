@@ -31,12 +31,12 @@
       letter-spacing: 0.0625rem;
       height: 1.25rem;
       min-width: 5rem;
-      padding: 0.125rem 0.375rem 0 0.375rem;
+      padding: 0 0.375rem 0 0.375rem;
       font-weight: bold;
       display: flex;
       justify-content: center;
       align-items: center;
-      border-radius: 0.1875rem;
+      border-radius: 1.5rem;
       color: white;
       background: rgba($color: #fff, $alpha: 0.3);
 
@@ -55,9 +55,10 @@
         color: #039be5;
       }
       &.__wallpaper__role--manager {
-        background: #ffe8e6;
+        // background: #ffe8e6;
+        background: #ff6f61;
         // border: 0.0938rem solid #ff6f61;
-        color: #ff6f61;
+        color: white;
       }
     }
 

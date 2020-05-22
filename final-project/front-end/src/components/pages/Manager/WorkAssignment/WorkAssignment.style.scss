@@ -1,10 +1,12 @@
 $primaryTextShadow: 0.0625rem 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
 $boxShadow1: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
 $boxShadow2: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.16), 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.12);
+$workScheduleHeight: 43.7rem;
 
 .work-assignment {
   padding: 0.9375rem;
   padding-top: 4rem;
+  min-height: 100vh;
   background: #ff8220;
 
   .centered-content {
@@ -60,7 +62,7 @@ $boxShadow2: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.16), 0 0.125rem 0.3125rem rgba
     .work-assignment__left-sidebar__list-tasks {
       .work-assignment__left-sidebar__list-tasks__wrapper {
         margin-top: 0.3125rem;
-        height: 34.2rem;
+        height: $workScheduleHeight - 9.5rem;
         background: white;
         border-radius: 0.1875rem;
         box-shadow: $boxShadow1;
@@ -115,7 +117,7 @@ $boxShadow2: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.16), 0 0.125rem 0.3125rem rgba
   }
 
   .work-assignment__content {
-    height: 43.5rem;
+    height: $workScheduleHeight;
     position: relative;
     box-shadow: $boxShadow2;
     border-radius: 0.625rem;

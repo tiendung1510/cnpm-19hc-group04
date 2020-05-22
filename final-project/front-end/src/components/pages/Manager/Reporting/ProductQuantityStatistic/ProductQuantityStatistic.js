@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { Row, Col } from 'antd';
-import NumberFormat from 'react-number-format';
-import './ProductQuantityStatistic.style.scss';
-import { Line } from 'react-chartjs-2';
+import { Col, Row } from 'antd';
 import moment from 'moment';
-import SellingHistory from '../SellingHistory/SellingHistory';
+import React, { Component } from 'react';
+import { Bar } from 'react-chartjs-2';
+import NumberFormat from 'react-number-format';
 import NewProductList from '../NewProductList/NewProductList';
+import SellingHistory from '../SellingHistory/SellingHistory';
+import './ProductQuantityStatistic.style.scss';
 
 export default class ProductQuantityStatistic extends Component {
   render() {
@@ -85,10 +85,10 @@ export default class ProductQuantityStatistic extends Component {
               </div>
 
               <div className="product-quantity-statistic__item__chart">
-                <Line
+                <Bar
                   data={soldQuantityStatisticChartData}
                   options={chartOptions}
-                  height={180}
+                  height={170}
                 />
               </div>
             </div>

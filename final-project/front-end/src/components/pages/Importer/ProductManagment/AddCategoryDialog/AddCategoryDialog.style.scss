@@ -9,15 +9,14 @@
       border: 1px solid #eee;
       background: #eee;
       box-shadow: 0;
-      width: 1.9688rem;
-      height: 1.9688rem;
+      width: 1.6rem;
+      height: 1.6rem;
       border-radius: 50%;
       font-size: 0.85rem;
       margin-left: 0.2rem;
       transition: 0.2s;
-      &:hover{
-        background: #ff8220;
-        color: white;
+      &:hover {
+        background: #dcdcdc;
       }
     }
   }

@@ -9,18 +9,18 @@ const { Meta } = Card;
 const responsive = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
-    item: 3,
-    paritialVisibilityGutter: 60
+    items: 5,
+    slidesToSlide: 1 // optional, default to 1.
   },
   tablet: {
     breakpoint: { max: 1024, min: 464 },
-    item: 2,
-    paritialVisibilityGutter: 50
+    items: 5,
+    slidesToSlide: 1 // optional, default to 1.
   },
   mobile: {
     breakpoint: { max: 464, min: 0 },
-    item: 1,
-    paritialVisibilityGutter: 30
+    items: 2,
+    slidesToSlide: 1 // optional, default to 1.
   }
 };
 
@@ -33,6 +33,10 @@ export default class BestSelling extends Component {
   }
   render() {
     const { products } = this.props;
+    // if (products.length > 0) {
+    //   for (let i = 1; i <= 7; i++)
+    //     products.push(products[0]);
+    // }
     const { deviceType } = this.state;
     return (
       <div className="product-statistic__products__best-selling">
@@ -56,14 +60,13 @@ export default class BestSelling extends Component {
                 removeArrowOnDeviceType={["tablet", "mobile"]}
                 deviceType={deviceType}
                 itemClass="carousel-item-padding-40-px"
-
               >
                 {products.map((p, i) => {
                   return (
                     <Popover
                       key={i}
                       overlayClassName="product-statistic__products__best-selling__item__details"
-                      placement="bottomLeft"
+                      placement="top"
                       title={p.details.name}
                       content={
                         <div>
@@ -97,7 +100,7 @@ export default class BestSelling extends Component {
                           </Row>
                         </div>
                       }
-                      trigger="hover">
+                      trigger="click">
                       <Card
                         className="animated zoomIn"
                         cover={<img alt="example" src={p.details.image} />}

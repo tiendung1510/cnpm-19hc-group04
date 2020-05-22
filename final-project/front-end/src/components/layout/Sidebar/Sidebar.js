@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined, CaretRightFilled, MenuOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, MenuOutlined } from '@ant-design/icons';
 import { Button, Layout, Menu } from 'antd';
 import React, { Component } from 'react';
 import { withCookies } from 'react-cookie';

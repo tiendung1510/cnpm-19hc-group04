@@ -13,24 +13,27 @@
 
   background: white;
   width: 100%;
-  // box-shadow: $boxShadow1;
-  padding: 0 1.5625rem;
-  padding-bottom: 0.625rem;
-  // position: absolute;
-  // bottom: 0;
+  padding: 0.8rem 1.5625rem 0 1.5625rem;
 
   h1 {
     height: 2.8125rem !important;
     font-size: $fontSize2 !important;
+    color: #ff8220;
+    font-weight: bold;
   }
 
   .product-statistic__products__best-selling__hot-badge {
     background: crimson;
     color: white;
-    font-size: 0.6875rem;
+    font-size: 0.65rem;
     font-weight: bold;
-    padding: 0.125rem 0.375rem;
-    margin-left: 0.625rem;
+    margin-left: 0.5rem;
+    min-width: 2.1875rem;
+    min-height: 1.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.1875rem;
   }
 
   .product-statistic__products__best-selling__item {
@@ -40,20 +43,19 @@
     // background: #eee;
 
     .react-multi-carousel-item {
-      width: 10rem !important;
-      padding-bottom: 0.0625rem;
+      width: 10.7rem !important;
     }
 
     .ant-card {
-      // box-shadow: $boxShadow1;
       $cardBorderRadius: 0.4375rem;
+      // box-shadow: $boxShadow1;
       border-top: 0;
       margin-right: 0.625rem;
       border-radius: $cardBorderRadius !important;
       overflow: hidden;
       min-width: 8.75rem;
       position: relative;
-      cursor: initial;
+      cursor: pointer;
 
       .ant-card-cover {
         border: 0.0625rem solid #eee;
@@ -67,8 +69,10 @@
           border-radius: $cardBorderRadius;
           position: absolute;
           width: 100%;
+          opacity: 0.8;
           transition: 0.2s ease-in-out;
           &:hover {
+            opacity: 1;
             transform: scale(1.2, 1.2);
           }
         }
@@ -110,6 +114,6 @@
 
 @media screen and (max-width: 992px) {
   .product-statistic__products__best-selling {
-    padding: 0 0.5rem 0.5rem 0.5rem;
+    padding: 0 0.8rem 0.8rem 0.8rem;
   }
 }

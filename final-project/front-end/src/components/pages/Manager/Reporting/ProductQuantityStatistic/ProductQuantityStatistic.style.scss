@@ -3,7 +3,7 @@
   padding-right: 0.625rem;
 
   .product-quantity-statistic__item {
-    height: 8.125rem;
+    height: 7.5rem;
     display: flex;
     border-radius: 0.3125rem;
     align-items: center;
@@ -67,7 +67,7 @@
       flex-direction: column;
       justify-content: center;
       padding-left: 1.875rem;
-      padding-top: 1.5625rem !important;
+      padding-top: 1rem !important;
       height: 100%;
 
       .product-quantity-statistic__item__metric__quantity {
@@ -76,7 +76,7 @@
       }
 
       .product-quantity-statistic__item__metric__label {
-        font-size: 0.6875rem;
+        font-size: 0.75rem;
         font-weight: bold;
         padding-top: 0.125rem;
       }
@@ -90,6 +90,7 @@
 
       canvas {
         padding-right: 1.25rem;
+        padding-top: 1.25rem;
       }
     }
   }

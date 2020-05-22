@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import './RevenueStatistic.style.scss';
-import moment from 'moment';
-import NumberFormat from 'react-number-format';
-import { Bar } from 'react-chartjs-2';
-import { Row, Col, Button, Popover, Table, Tooltip } from 'antd';
 import { ScheduleFilled, StarFilled, TagFilled, UnorderedListOutlined } from '@ant-design/icons';
+import { Button, Col, Popover, Row, Table, Tooltip } from 'antd';
+import moment from 'moment';
+import React, { Component } from 'react';
+import { Line } from 'react-chartjs-2';
+import NumberFormat from 'react-number-format';
+import './RevenueStatistic.style.scss';
 
 export default class RevenueStatistic extends Component {
   render() {
@@ -16,7 +16,7 @@ export default class RevenueStatistic extends Component {
       importingCostTotal
     } = this.props;
     const profitTotal = revenueTotal - paymentTotal;
-    const height = 55;
+    const height = window.innerWidth <= 768 ? 150 : 55;
     const chartOptions = {
       legend: { display: false },
       scales: {
@@ -30,8 +30,10 @@ export default class RevenueStatistic extends Component {
     const lineChartData = (canvas) => {
       const ctx = canvas.getContext("2d")
       const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-      gradient.addColorStop(0, 'orange');
-      gradient.addColorStop(1, '#ff5858');
+      // gradient.addColorStop(0, 'orange');
+      // gradient.addColorStop(1, '#ff5858');
+      gradient.addColorStop(0, 'rgba(255, 165, 0, 0.8)');
+      gradient.addColorStop(1, 'rgba(255, 228, 179, 0.1)');
       return {
         labels: statisticData.map(item => moment(item.date).format('DD/MM')),
         datasets: [
@@ -182,7 +184,7 @@ export default class RevenueStatistic extends Component {
         </Row>
         <div className="reporting__revenue-statistic__chart">
           <h1>Doanh thu bán hàng mỗi ngày</h1>
-          <Bar
+          <Line
             data={lineChartData}
             options={chartOptions}
             height={height}

@@ -560,7 +560,7 @@ class ProductManagement extends PageBase {
         title: <center>Trạng thái</center>,
         dataIndex: 'status',
         key: 'status',
-        width: 80,
+        width: 100,
         render: (text, record) => (<center>
           {record.availableQuantity === 0 ? (
             <span style={{ color: 'crimson', fontWeight: 'bold' }}>Hết hàng</span>
@@ -571,6 +571,7 @@ class ProductManagement extends PageBase {
         title: <center>Mã QR</center>,
         dataIndex: '',
         key: 'qrcode',
+        width: 100,
         render: (value, record) => (
           <center>
             <QRCode
@@ -585,7 +586,7 @@ class ProductManagement extends PageBase {
     return (
       <div className="product-management">
 
-        <div className="product-management__container animated fadeInUp">
+        <div className="product-management__container">
           <Row>
             <Col span={4}>
               <div className="product-management__container__left-sidebar">
@@ -862,7 +863,7 @@ class ProductManagement extends PageBase {
                   <Table
                     dataSource={[...this.state.filteredProducts]}
                     columns={columns}
-                    scroll={{ y: 545 }}
+                    scroll={{ y: 700 }}
                     pagination={false}
                     onRow={(record) => {
                       return {

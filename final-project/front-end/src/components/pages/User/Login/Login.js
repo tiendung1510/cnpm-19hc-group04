@@ -102,7 +102,7 @@ class Login extends PageBase {
           </div>
         </div>
         <div className="login animated bounceInDown">
-          <h2 className="__main-title">STAFF ONLY</h2>
+          <h2 className="__main-title">ĐĂNG NHẬP TÀI KHOẢN</h2>
           <div className="__cover-img"></div>
           <Form
             className="__form"
@@ -161,8 +161,13 @@ class Login extends PageBase {
             <stop offset="0%" stopColor="#ff5858" />
             <stop offset="100%" stopColor="#f09819" />
           </linearGradient> */}
-          <path fillOpacity={1}
+
+          {/* <path fillOpacity={1}
             d="M0,0L1440,192L1440,320L0,320Z"
+          /> */}
+
+          <path fillOpacity={1}
+            d="M0,192L80,165.3C160,139,320,85,480,90.7C640,96,800,160,960,160C1120,160,1280,96,1360,64L1440,32L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"
           />
         </svg>
 

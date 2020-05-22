@@ -101,6 +101,8 @@ $primaryTextShadow: 0.0625rem 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
     height: 2.5rem;
     display: flex;
     align-items: center;
+    border-top-right-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
   }
 
   .ant-menu-item-selected {
@@ -109,7 +111,7 @@ $primaryTextShadow: 0.0625rem 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
     color: white !important;
     border-top-right-radius: 1.5rem;
     border-bottom-right-radius: 1.5rem;
-    box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
+    // box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
 
     &.ant-menu-item .anticon,
     .ant-menu-submenu-title .anticon {

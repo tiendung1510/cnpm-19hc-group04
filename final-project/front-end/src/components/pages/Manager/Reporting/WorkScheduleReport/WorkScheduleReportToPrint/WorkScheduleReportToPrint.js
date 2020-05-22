@@ -213,7 +213,7 @@ class WorkScheduleReportToPrint extends Component {
             <Col span={10} align="middle">
               <span className="work-schedule-report-to-print__content__manager-confirm__stand-for">TM. Người quản lý</span>
               <div className="work-schedule-report-to-print__content__manager-confirm__signature">
-                <img src="https://files.slack.com/files-pri/THXMMTH2T-F0110T0NABG/signature__1_.png" alt="signature" />
+                <img src={require('../../../../../../assets/images/tue-signature.png')} alt="signature" />
               </div>
               <span className="work-schedule-report-to-print__content__manager-confirm__fullname">{manager.fullname}</span>
             </Col>
