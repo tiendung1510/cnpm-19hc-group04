@@ -342,7 +342,14 @@ const getProducts = async (req, res, next) => {
     const soldProducts = await CheckoutSessionModel.aggregate([
       { $lookup: { from: 'SoldItems', localField: 'soldItems', foreignField: '_id', as: 'soldItem' } },
       { $unwind: '$soldItem' },
-      { $match: createdAtCond },
+      {
+        $match: {
+          submittedAt: {
+            $gte: new Date(statisticStartDate),
+            $lte: new Date(statisticEndDate)
+          }
+        }
+      },
       { $group: { _id: '$soldItem.product', quantity: { $sum: '$soldItem.quantity' } } },
       { $sort: { quantity: -1 } },
       { $lookup: { from: 'Products', localField: '_id', foreignField: '_id', as: 'details' } },
@@ -386,7 +393,14 @@ const getProducts = async (req, res, next) => {
     const sellingDates = await CheckoutSessionModel.aggregate([
       { $lookup: { from: 'SoldItems', localField: 'soldItems', foreignField: '_id', as: 'soldItem' } },
       { $unwind: '$soldItem' },
-      { $match: createdAtCond },
+      {
+        $match: {
+          submittedAt: {
+            $gte: new Date(statisticStartDate),
+            $lte: new Date(statisticEndDate)
+          }
+        }
+      },
       { $group: { _id: '$submittedAt', quantity: { $sum: '$soldItem.quantity' } } },
       { $project: { _id: 0, submittedAt: '$_id', quantity: 1 } }
     ]);
@@ -400,8 +414,7 @@ const getProducts = async (req, res, next) => {
     }
     result.soldQuantityStatisticData = [...soldQuantityStatisticData];
 
-    // Calculate revenue total and statistic daily revenue total in month
-    result.revenueTotal = soldProducts.reduce((acc, cur) => acc + cur.quantity * cur.details.price, 0);
+    // Statistic daily revenue total in month
     const checkoutSessions = await CheckoutSessionModel.aggregate([
       {
         $match: {
@@ -425,6 +438,10 @@ const getProducts = async (req, res, next) => {
         }
       }
     ]);
+
+    // Calculate revenue total in month
+    // result.revenueTotal = soldProducts.reduce((acc, cur) => acc + cur.quantity * cur.details.price, 0);
+    result.revenueTotal = checkoutSessions.reduce((acc, cur) => acc + cur.priceTotal, 0);
 
     const sellingHistories = await CheckoutSessionModel.find({
       submittedAt: {
