@@ -128,7 +128,9 @@ class Reporting extends PageBase {
 
   async onProductPageChange(page) {
     try {
-      const res = await this.loadProducts(page);
+      this.props.setAppLoading(true);
+      const res = await this.loadProducts(page, this.state.month, this.state.year);
+      this.props.setAppLoading(false);
       this.setState({
         productCurrentPage: page,
         products: res.products
@@ -235,7 +237,7 @@ class Reporting extends PageBase {
         title: 'SL tồn kho',
         dataIndex: 'availableQuantity',
         key: 'availableQuantity',
-        width: '5rem',
+        width: '6.25rem',
         sorter: (a, b) => a.availableQuantity - b.availableQuantity,
         render: (text) => (<center>{text}</center>)
       },
