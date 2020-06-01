@@ -30,7 +30,7 @@ const navbarMenuItems = [
   },
   {
     key: '3',
-    title: 'Lịch sử giao dịch',
+    title: 'Lịch sử bán hàng',
     icon: HistoryOutlined
   }
 ];

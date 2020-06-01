@@ -60,7 +60,7 @@ class TransactionHistory extends PageBase {
         <div className="transaction-history__header">
           <div className="transaction-history__header__title">
             <HistoryOutlined className="transaction-history__header__title__icon" />
-            <span className="transaction-history__header__title__text">Lịch sử giao dịch</span>
+            <span className="transaction-history__header__title__text">Lịch sử bán hàng</span>
           </div>
         </div>
         {!this.state.isLoading ? (

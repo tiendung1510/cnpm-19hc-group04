@@ -275,7 +275,7 @@ class Reporting extends PageBase {
         <div className="reporting__header-cover2"></div>
         <ReactToPrint
           trigger={() => (
-            <Tooltip title="In báo cáo" placement="left">
+            <Tooltip title="Xuất báo cáo" placement="left">
               <Button
                 className="reporting__btn-print-report"
                 shape="circle"
