@@ -14,6 +14,7 @@ $primaryTextShadow: 0.0625rem 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
   width: $width;
   max-width: $width;
   min-width: $width;
+  animation-duration: 0.6s;
 
   &--hidden {
     display: none;
@@ -21,7 +22,7 @@ $primaryTextShadow: 0.0625rem 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
 
   &__btn-toggle {
     $bg: #fff6e6;
-    $txtColor: #ff8220;
+    $txtColor: orange;
     $br: 0.3125rem;
     position: fixed;
     z-index: 1000;
@@ -35,6 +36,7 @@ $primaryTextShadow: 0.0625rem 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
     box-shadow: 0.5px 1px 4px rgba(0, 0, 0, 0.2);
     min-height: 2.5rem;
     width: 2.5rem;
+    animation-duration: 0.6s;
 
     &--hidden {
       display: none;
@@ -60,7 +62,7 @@ $primaryTextShadow: 0.0625rem 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
 
   .anticon {
     font-size: 0.8rem;
-    padding-right: 0.2rem;
+    padding-right: 0.4rem;
     margin-top: -0.125rem;
   }
 
@@ -95,27 +97,30 @@ $primaryTextShadow: 0.0625rem 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
   }
 
   .ant-menu-item {
-    color: rgba($color: #000000, $alpha: 0.65) !important;
+    color: rgba($color: #000000, $alpha: 0.7) !important;
     font-size: 0.75rem !important;
     max-width: 12.1875rem;
-    height: 2.5rem;
+    height: 2.6rem;
     display: flex;
     align-items: center;
     border-top-right-radius: 1.5rem;
     border-bottom-right-radius: 1.5rem;
+    border-left: 4px solid white;
+    padding-left: 0.8rem !important;
   }
 
   .ant-menu-item-selected {
-    background: #ff8220 !important;
+    background: #fff6e6 !important;
     font-weight: bold;
-    color: white !important;
+    color: #ff8220 !important;
     border-top-right-radius: 1.5rem;
     border-bottom-right-radius: 1.5rem;
+    border-left-color: #ff8220;
     // box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
 
     &.ant-menu-item .anticon,
     .ant-menu-submenu-title .anticon {
-      color: white !important;
+      color: #ff8220 !important;
     }
   }
 

@@ -1,7 +1,7 @@
 .product-statistic__products__best-selling {
   $textShadow1: 0.0625rem 0.0625rem 0.125rem rgba(0, 0, 0, 0.4);
   $boxShadow0: 0 0 0.3125rem rgba(0, 0, 0, 0.15);
-  $boxShadow1: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
+  $boxShadow1: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.3);
   $boxShadow2: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.16), 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.23);
   $borderRadius0: 0.1875rem;
   $borderRadius1: 0.3125rem;
@@ -37,7 +37,6 @@
   }
 
   .product-statistic__products__best-selling__item {
-    // padding: 0.9375rem;
     border-radius: 0.3125rem;
     display: flex;
     // background: #eee;
@@ -46,9 +45,23 @@
       width: 10.7rem !important;
     }
 
+    .react-multi-carousel-list {
+      padding-bottom: 0.625rem;
+    }
+
+    .react-multiple-carousel__arrow {
+      background: white;
+      box-shadow: $boxShadow2;
+
+      &::before {
+        color: #ff8220;
+        font-weight: bold;
+      }
+    }
+
     .ant-card {
       $cardBorderRadius: 0.4375rem;
-      // box-shadow: $boxShadow1;
+      box-shadow: $boxShadow1;
       border-top: 0;
       margin-right: 0.625rem;
       border-radius: $cardBorderRadius !important;
@@ -58,7 +71,7 @@
       cursor: pointer;
 
       .ant-card-cover {
-        border: 0.0625rem solid #eee;
+        // border: 0.0625rem solid #eee;
         display: flex;
         justify-content: center;
         align-content: center;

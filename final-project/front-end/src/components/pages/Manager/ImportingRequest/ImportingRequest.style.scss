@@ -43,7 +43,7 @@
     .importing-request__container__block {
       @extend .block-style;
       padding: 0.625rem;
-      height: 44rem;
+      height: 42.5rem;
       overflow: hidden;
 
       .importing-request__container__block__header {
@@ -120,7 +120,7 @@
         overflow: auto;
 
         &.--pending {
-          height: 84.5%;
+          height: 85%;
         }
       }
     }

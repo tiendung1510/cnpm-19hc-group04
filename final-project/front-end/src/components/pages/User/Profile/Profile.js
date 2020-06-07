@@ -28,7 +28,7 @@ class Profile extends Component {
 
     return (
       <div className="profile">
-        <div className="profile__main animated fadeInUp">
+        <div className="profile__main animated slideInUp">
           <div className="profile__main__header">
             <Avatar
               className="profile__main__header__user-avatar"

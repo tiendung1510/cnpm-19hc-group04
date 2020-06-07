@@ -320,6 +320,7 @@ class MoneyCounting extends PageBase {
 				title: '',
 				dataIndex: '',
 				key: '',
+				width: 80,
 				render: (value, record) => (
 					<Button
 						className="money-counting__panel__right__shopping-cart__list-products__btn-remove-item"

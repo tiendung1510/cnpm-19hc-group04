@@ -209,7 +209,7 @@ $primaryBorderRadius: 0.625rem;
       }
 
       .money-counting__panel__left__product-details {
-        margin-top: 1.875rem;
+        margin-top: 2.5rem;
         .money-counting__panel__left__product-details__empty {
           padding-top: 1.875rem;
           color: silver;
@@ -319,7 +319,7 @@ $primaryBorderRadius: 0.625rem;
       }
 
       .money-counting__panel__right__shopping-cart {
-        height: 89%;
+        height: 100%;
 
         .money-counting__panel__right__shopping-cart__list-products {
           width: 100%;
@@ -351,7 +351,6 @@ $primaryBorderRadius: 0.625rem;
           }
 
           .ant-table-body {
-            height: 31.25rem;
             @extend .styled-scrollbar;
           }
 
@@ -371,7 +370,7 @@ $primaryBorderRadius: 0.625rem;
             }
 
             .ant-empty {
-              height: 28.125rem;
+              height: 29rem;
               display: flex;
               flex-direction: column;
               justify-content: center;

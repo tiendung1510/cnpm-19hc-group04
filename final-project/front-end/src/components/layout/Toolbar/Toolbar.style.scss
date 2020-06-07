@@ -6,7 +6,7 @@
   padding-top: 0.25rem;
   position: absolute;
   z-index: 200;
-  width: 87vw;
+  width: 86vw;
   color: white;
   font-weight: bold;
   font-size: 0.875rem;
@@ -40,14 +40,18 @@
   .__account {
     .__account__avatar-menu {
       cursor: pointer;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
 
       .ant-avatar {
         width: 1.875rem !important;
         height: 1.875rem !important;
+        margin-right: 0.625rem;
       }
 
       .__account__avatar-menu__name {
-        margin: 0 0.625rem;
+        margin-right: 0.625rem;
       }
     }
   }
@@ -56,8 +60,18 @@
 @media screen and (max-width: 992px) {
   .toolbar {
     padding: 1.25rem 0 0 3.5rem;
-    width: 90vw;
+    width: 96vw;
+
+    .__page-title {
+      font-size: 0.9rem;
+
+      .__page-title__text {
+        margin-left: 0.8rem;
+        margin-top: 0.25rem;
+      }
+    }
   }
+
   .toolbar .__account .__account__avatar-menu .__account__avatar-menu__name {
     display: none;
   }

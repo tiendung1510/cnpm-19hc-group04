@@ -10,7 +10,7 @@ const responsive = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
     items: 5,
-    slidesToSlide: 1 // optional, default to 1.
+    slidesToSlide: 5 // optional, default to 1.
   },
   tablet: {
     breakpoint: { max: 1024, min: 464 },
@@ -33,10 +33,10 @@ export default class BestSelling extends Component {
   }
   render() {
     const { products } = this.props;
-    // if (products.length > 0) {
-    //   for (let i = 1; i <= 7; i++)
-    //     products.push(products[0]);
-    // }
+    if (products.length > 0) {
+      for (let i = 1; i <= 7; i++)
+        products.push(products[0]);
+    }
     const { deviceType } = this.state;
     return (
       <div className="product-statistic__products__best-selling">

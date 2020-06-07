@@ -1,7 +1,5 @@
 .reporting {
-  padding: 0.9375rem;
-  padding-right: 0.625rem;
-  padding-top: 5rem;
+  padding: 5rem 0.625rem 0 0.625rem;
   position: relative;
   background: #fff6e6;
   overflow: hidden;
@@ -78,8 +76,8 @@
 
   .reporting__btn-print-report {
     position: fixed;
-    background: orange;
-    color: white;
+    background: #fff6e6;
+    color: orange;
     z-index: 100;
     border: 0;
     box-shadow: 0 0.0625rem 0.1875rem rgba($color: #000000, $alpha: 0.3);

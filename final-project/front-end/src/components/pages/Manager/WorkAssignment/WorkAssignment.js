@@ -629,10 +629,10 @@ class WorkAssignment extends PageBase {
                         }
                         onClick={() => this.handleSelectWorkSchedule(item, index)}>
                         <Row style={{ width: '90%' }}>
-                          <Col span={22} md={22} xs={23}>
+                          <Col span={23} md={23} xs={23}>
                             <span className="work-assignment__left-sidebar__list-tasks__item__task-name">Tháng {item.month}</span>
                           </Col>
-                          <Col span={2} md={2} xs={1}>
+                          <Col span={1} md={1} xs={1}>
                             <Button
                               onClick={() => this.openRemoveWorkScheduleConfirm(item._id)}
                               className="work-assignment__left-sidebar__list-tasks__item__btn-remove"

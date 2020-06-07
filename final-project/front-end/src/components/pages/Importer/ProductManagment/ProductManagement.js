@@ -848,7 +848,7 @@ class ProductManagement extends PageBase {
                                   htmlType="submit"
                                   className="product-management__container__content__product-details__panel__product-details__btn-update__wrapper__btn"
                                 >
-                                  Cập nhật sản phẩm
+                                  CẬP NHẬT SẢN PHẨM
                                 </Button>
                               </div>
                             </Form.Item>

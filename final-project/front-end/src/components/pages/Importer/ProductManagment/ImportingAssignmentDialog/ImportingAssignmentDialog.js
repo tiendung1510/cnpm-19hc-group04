@@ -122,13 +122,17 @@ export default class ImportingAssignmentDialog extends Component {
               </li>
               <li>
                 <strong>
-                  <span style={{ marginRight: 3 }}>{importedPriceTotal}</span>/
-                    <NumberFormat
+                  <NumberFormat
+                    value={importedPriceTotal}
+                    displayType="text"
+                    thousandSeparator={true}
+                    suffix=" / "
+                  />
+                  <NumberFormat
                     value={data.priceTotal}
                     displayType="text"
                     thousandSeparator={true}
                     suffix=" đ̲"
-                    style={{ marginLeft: 3 }}
                   />
                 </strong>
               </li>

@@ -17,7 +17,7 @@
     );
   $boxShadow1: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.12), 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.24);
   $boxShadow2: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.16), 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.13);
-  $primaryFontSize: 0.75rem;
+  $primaryFontSize: 0.7rem;
   $padding: 1.25rem;
   $textShadow1: 0.0625rem 0.0625rem 0.125rem rgba(0, 0, 0, 0.4);
 
@@ -41,7 +41,7 @@
 
   .product-management__container {
     width: 100%;
-    height: 44rem;
+    height: 42.25rem;
     background: white;
     box-shadow: $boxShadow2;
     border-radius: 0.3125rem;
@@ -209,23 +209,26 @@
           @extend .centered-content;
           cursor: pointer;
 
+          $btnShowAssignmentColor: #ff8220;
           .product-management__container__topbar__features__feature__btn-show-assignment {
             min-width: 11.875rem;
             min-height: 2.1875rem;
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 0;
+            border: 0 !important;
             // background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
-            background: #40a5ec;
+            background: #fff6e6;
+            color: $btnShowAssignmentColor;
             font-weight: bold;
             font-size: $primaryFontSize;
-            box-shadow: $boxShadow1;
+            box-shadow: none;
+            text-shadow: none;
 
             &.--alert {
               .--bell {
                 font-size: 1rem;
-                color: white;
+                color: gold;
                 animation-iteration-count: infinite !important;
               }
             }
@@ -284,6 +287,7 @@
           background: white;
           border-top: 0.0625rem solid #eee;
           box-shadow: -0.3125rem 0 0.3125rem -0.3125rem rgba(0, 0, 0, 0.24);
+          animation-duration: 0.5s;
 
           .product-management__container__content__product-details__panel__header {
             position: relative;
@@ -370,7 +374,7 @@
                 border-radius: 1.5rem;
                 min-height: 2.5rem;
                 box-shadow: $boxShadow1;
-                font-size: $primaryFontSize + "0.0625rem";
+                font-size: 0.75rem;
                 width: 100%;
               }
             }
