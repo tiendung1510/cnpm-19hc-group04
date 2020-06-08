@@ -167,7 +167,7 @@ $primaryBorderRadius: 0.625rem;
         .money-counting__panel__left__header__company {
           display: flex;
           align-items: center;
-          margin-left: 1%;
+          margin-left: 4%;
           transform: scale(0.9, 0.9);
 
           .money-counting__panel__left__header__company__logo {
@@ -239,6 +239,10 @@ $primaryBorderRadius: 0.625rem;
           li {
             font-size: 0.6875rem;
             line-height: 2.1875rem;
+            width: 12rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
 

@@ -149,8 +149,9 @@ $fontSize3: 0.75rem;
     .pending-importing-request__content__btn-cancel-wrapper__btn {
       border: 0;
       background: white;
-      color: crimson;
+      color: gray;
       box-shadow: none;
+      font-size: 0.8rem;
     }
   }
 }

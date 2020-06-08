@@ -35,18 +35,20 @@ $primaryBorderRadius: 0.4375rem;
       position: absolute;
       top: 0;
       right: 0;
-      padding: 1.25rem 0.625rem;
+      padding: 1rem 0.5rem;
 
       .money-counting__submit-checkout-session-dialog__content__bill__toolbar__item {
         border: 0;
         background: #ff8220;
         color: white;
         box-shadow: $boxShadow1;
+        min-width: 2.75rem;
+        min-height: 2.75rem;
+        font-size: 1.25rem;
       }
     }
 
     .money-counting__submit-checkout-session-dialog__content__bill__wrapper {
-      width: 68%;
       display: table;
       margin: 0 auto;
       border: 0.0625rem solid #eee;

@@ -76,7 +76,8 @@ class Sidebar extends Component {
           icon={<MenuOutlined />}
           onClick={() => this.setState({ isToggled: true })}
         />
-        <Sider className={(isToggled && isMobile) || !isMobile ? 'sidebar animated slideInLeft' : 'sidebar--hidden'}>
+        {isToggled && isMobile && (<div className="__full-screen-cover"></div>)}
+        <Sider className={(isToggled && isMobile) || !isMobile ? 'sidebar animated slideInLeft' : 'animated slideOutLeft sidebar'}>
           <div className="sidebar__header">
             <img className="sidebar__header__company-logo" src={require('../../../assets/images/app-logo.png')} alt="logo" />
             <div className="sidebar__header__company-brand">
