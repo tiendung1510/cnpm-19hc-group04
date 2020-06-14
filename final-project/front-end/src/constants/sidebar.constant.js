@@ -49,7 +49,7 @@ export default [
     role: "IMPORTER",
     pages: [
       {
-        title: 'Kho chứa sản phẩm',
+        title: 'Quản lý kho hàng',
         path: '/products',
         icon: InboxOutlined,
         component: ProductManagement
