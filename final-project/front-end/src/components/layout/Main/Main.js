@@ -16,10 +16,14 @@ const { Content } = Layout;
 class Main extends Component {
   constructor(props) {
     super(props);
-    const loggedUser = this.props.cookies.get(COOKIE_NAMES.user);
+    const loggedInUser = this.props.cookies.get(COOKIE_NAMES.user);
     const token = this.props.cookies.get(COOKIE_NAMES.token);
-    if (!(loggedUser && token)) {
+
+    if (!(loggedInUser && token)) {
       this.isAuthenticated = false;
+      const { cookies } = this.props;
+      cookies.remove(COOKIE_NAMES.token, { path: '/' });
+      cookies.remove(COOKIE_NAMES.user, { path: '/' });
       this.props.history.length = 0;
       this.props.history.push('/login');
     } else {
