@@ -381,7 +381,7 @@ const getImporterAssignments = async (req, res, next) => {
 const getImportingRequests = async (req, res, next) => {
   logger.info(`${CONTROLLER_NAME}::getImportingRequests::was called`);
   try {
-    let importingRequests = await ImportingRequestModel.find({})
+    let importingRequests = await ImportingRequestModel.find({ sender: mongoose.Types.ObjectId(req.fromUser._id) })
       .populate('executor')
       .populate('accepter')
       .populate({
