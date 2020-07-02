@@ -57,7 +57,7 @@ export default class BestSelling extends Component {
                 keyBoardControl={true}
                 responsive={responsive}
                 containerClass="carousel-container"
-                removeArrowOnDeviceType={["tablet", "mobile"]}
+                // removeArrowOnDeviceType={["tablet", "mobile"]}
                 deviceType={deviceType}
                 itemClass="carousel-item-padding-40-px"
               >

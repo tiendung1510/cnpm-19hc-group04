@@ -17,12 +17,6 @@ const layout = {
     span: 16,
   },
 };
-const tailLayout = {
-  wrapperCol: {
-    offset: 8,
-    span: 16,
-  },
-};
 
 class ChangePassword extends PageBase {
   constructor(props) {
@@ -116,11 +110,14 @@ class ChangePassword extends PageBase {
               <Input.Password />
             </Form.Item>
 
-            <Form.Item {...tailLayout}>
-              <Button shape="round" htmlType="submit" className="change-password__content__form__btn-submit">
-                LƯU THAY ĐỔI
+            <div className="change-password__content__form__btn-submit-div">
+              <Form.Item>
+                <Button shape="round" htmlType="submit" className="change-password__content__form__btn-submit-div__btn">
+                  LƯU THAY ĐỔI
               </Button>
-            </Form.Item>
+              </Form.Item>
+            </div>
+
           </Form>
         </div>
       </div>

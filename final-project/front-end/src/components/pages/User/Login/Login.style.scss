@@ -96,13 +96,12 @@ $fontSize: 0.8rem;
   }
 
   .login {
-    border-radius: 0.75rem;
+    border-radius: 1rem;
     padding: 4.375rem 2.5rem 3.125rem 2.5rem;
     position: relative;
     z-index: 10;
     width: 24%;
     height: 70%;
-    margin-top: -3%;
     background: white;
     @extend .centered-content;
     box-shadow: 0 1.1875rem 2.375rem rgba(0, 0, 0, 0.1), 0 0.9375rem 5rem rgba(0, 0, 0, 0.1);
@@ -203,7 +202,7 @@ $fontSize: 0.8rem;
   .__footer {
     position: absolute;
     z-index: 3;
-    bottom: 0.5%;
+    bottom: 0;
     width: 100vw;
     text-align: center;
     font-size: 0.6875rem;
@@ -225,7 +224,7 @@ $fontSize: 0.8rem;
 
     .login {
       width: 55%;
-      padding: 4em 2rem 2em 2em;
+      padding: 4rem 2rem 2rem 2rem;
       margin-top: 0;
     }
   }
@@ -233,6 +232,9 @@ $fontSize: 0.8rem;
 
 @media screen and (max-width: 768px) {
   .container .login {
-    width: 90%;
+    width: 92.5%;
+    height: 30rem;
+    padding-bottom: 1.5rem;
+    top: 1%;
   }
 }

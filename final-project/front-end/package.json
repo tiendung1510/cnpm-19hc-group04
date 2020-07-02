@@ -94,6 +94,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
+    "start-host": "HOST=192.168.0.112 node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "serve-build": "serve -s build -l 5000"
