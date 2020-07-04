@@ -5,7 +5,7 @@
   "url": "http://localhost:8000/",
   "tests": [{
     "id": "422ad313-a86a-423c-b516-d6d2735855db",
-    "name": "đăng nhập (enter login)",
+    "name": "01 frame đăng nhập (enter login)",
     "commands": [{
       "id": "415568c4-cec3-4c54-bea1-bf29534d552f",
       "comment": "",
@@ -55,7 +55,7 @@
     }]
   }, {
     "id": "1a210d9d-60e5-4134-805c-41739e6a4c89",
-    "name": "đăng nhập thu ngân",
+    "name": "U001-001 đăng nhập nv thu ngân",
     "commands": [{
       "id": "45bf509b-f673-4004-8cb7-e524e407ebce",
       "comment": "",
@@ -74,7 +74,7 @@
       "id": "56850f70-fa82-481c-890b-d4eb246c918b",
       "comment": "",
       "command": "run",
-      "target": "đăng nhập (click login)",
+      "target": "01 frame đăng nhập (click login)",
       "targets": [],
       "value": ""
     }, {
@@ -91,7 +91,7 @@
     }]
   }, {
     "id": "797dabf1-55fe-45e5-90b6-1ca0752d54b4",
-    "name": "đăng nhập (click login)",
+    "name": "01 frame đăng nhập (click login)",
     "commands": [{
       "id": "b04ce4eb-c0ae-4831-b3b2-fed540bafd68",
       "comment": "",
@@ -164,7 +164,7 @@
     }]
   }, {
     "id": "be287a07-9d09-4c26-aaf0-f1719847488b",
-    "name": "đăng nhập thất bại",
+    "name": "U001-004 nhập tài khoản và mật khẩu không có trong database",
     "commands": [{
       "id": "f34dc2b2-a199-4d2d-bcc2-2edd5fdb3df6",
       "comment": "",
@@ -183,11 +183,153 @@
       "id": "bd6accb3-1344-4476-acb1-0140f43aa2c3",
       "comment": "",
       "command": "run",
-      "target": "đăng nhập (click login)",
+      "target": "01 frame đăng nhập (click login)",
       "targets": [],
       "value": ""
     }, {
       "id": "571e24c9-92b6-4708-987e-915aa7b2508e",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=span:nth-child(2)",
+      "targets": [
+        ["css=span:nth-child(2)", "css:finder"],
+        ["xpath=//div/span[2]", "xpath:position"]
+      ],
+      "value": "Tài khoản hoặc mật khẩu không đúng"
+    }]
+  }, {
+    "id": "07d28b7c-4e49-478e-b8a3-a7537ca94234",
+    "name": "U001-002 đăng nhập nv nhập hàng",
+    "commands": [{
+      "id": "0bbda2ec-2b13-4f45-9f6f-4d47e0543873",
+      "comment": "",
+      "command": "store",
+      "target": "binh",
+      "targets": [],
+      "value": "username"
+    }, {
+      "id": "9220415d-6325-43d6-b59e-b0dac4457e71",
+      "comment": "",
+      "command": "store",
+      "target": "asdasd",
+      "targets": [],
+      "value": "password"
+    }, {
+      "id": "dde6e8cc-38d2-4838-bf9a-ba57b2cd36c4",
+      "comment": "",
+      "command": "run",
+      "target": "01 frame đăng nhập (click login)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e1de6977-6400-4cd7-8325-764c7e48329d",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.\\__page-title__text",
+      "targets": [
+        ["css=.\\__page-title__text", "css:finder"],
+        ["xpath=//div[@id='root']/div/section/section/div/div/div/div/div[2]/span", "xpath:idRelative"],
+        ["xpath=//div/div/div/div/div[2]/span", "xpath:position"]
+      ],
+      "value": "Quầy thu ngân"
+    }]
+  }, {
+    "id": "76b6470b-193d-44d1-bfe7-b77f74774fe2",
+    "name": "U001-003 đăng nhập nv quản lý",
+    "commands": [{
+      "id": "116c0e43-16cb-418f-bb6d-9434502de37e",
+      "comment": "",
+      "command": "store",
+      "target": "binh",
+      "targets": [],
+      "value": "username"
+    }, {
+      "id": "f7530f05-17bb-4c70-aba2-981feb4b7d6e",
+      "comment": "",
+      "command": "store",
+      "target": "asdasd",
+      "targets": [],
+      "value": "password"
+    }, {
+      "id": "be51a2b5-695f-440e-8cad-0a1e49932106",
+      "comment": "",
+      "command": "run",
+      "target": "01 frame đăng nhập (click login)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "006f9690-eb24-4a9f-9ee1-2ede12b099fb",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.\\__page-title__text",
+      "targets": [
+        ["css=.\\__page-title__text", "css:finder"],
+        ["xpath=//div[@id='root']/div/section/section/div/div/div/div/div[2]/span", "xpath:idRelative"],
+        ["xpath=//div/div/div/div/div[2]/span", "xpath:position"]
+      ],
+      "value": "Quầy thu ngân"
+    }]
+  }, {
+    "id": "7cc469c2-cadd-4645-a78e-6d5c1390fd4a",
+    "name": "U001-005 nhập tài khoản đúng và mật khẩu sai",
+    "commands": [{
+      "id": "326469e6-4de3-4a19-b4ff-c8a784f45fee",
+      "comment": "",
+      "command": "store",
+      "target": "binh",
+      "targets": [],
+      "value": "username"
+    }, {
+      "id": "87075841-eec3-4df2-b616-ae15e169d46d",
+      "comment": "",
+      "command": "store",
+      "target": "xyz",
+      "targets": [],
+      "value": "password"
+    }, {
+      "id": "b414d52a-3216-4193-9e38-465853133578",
+      "comment": "",
+      "command": "run",
+      "target": "01 frame đăng nhập (click login)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f3f1defd-4daa-42b8-81e5-d10a14843a6a",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=span:nth-child(2)",
+      "targets": [
+        ["css=span:nth-child(2)", "css:finder"],
+        ["xpath=//div/span[2]", "xpath:position"]
+      ],
+      "value": "Tài khoản hoặc mật khẩu không đúng"
+    }]
+  }, {
+    "id": "76dadee1-a235-493b-96f6-96618e8b4caf",
+    "name": "U001-006 nhập tài khoản  sai và mật khẩu đúng",
+    "commands": [{
+      "id": "084ada5f-a8ae-4384-aa34-e00bc90658cd",
+      "comment": "",
+      "command": "store",
+      "target": "abc",
+      "targets": [],
+      "value": "username"
+    }, {
+      "id": "726a6703-0b16-4e1d-b572-048ad270d16f",
+      "comment": "",
+      "command": "store",
+      "target": "asdasd",
+      "targets": [],
+      "value": "password"
+    }, {
+      "id": "4a6092b6-c4d4-42fe-8295-c751717b5d20",
+      "comment": "",
+      "command": "run",
+      "target": "01 frame đăng nhập (click login)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "765e9868-5339-4a7c-97b5-7b8bf2406400",
       "comment": "",
       "command": "assertText",
       "target": "css=span:nth-child(2)",
