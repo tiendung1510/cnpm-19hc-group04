@@ -1,0 +1,353 @@
+{
+  "id": "484fcba3-7d87-4e1d-bde3-e8b06ac32417",
+  "version": "2.0",
+  "name": "Mini-Mart",
+  "url": "http://localhost:8000/",
+  "tests": [{
+    "id": "422ad313-a86a-423c-b516-d6d2735855db",
+    "name": "01 frame đăng nhập (enter login)",
+    "commands": [{
+      "id": "415568c4-cec3-4c54-bea1-bf29534d552f",
+      "comment": "",
+      "command": "open",
+      "target": "/login",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6c42b465-c536-4c7e-8313-3e189dff8b85",
+      "comment": "",
+      "command": "type",
+      "target": "id=basic_username",
+      "targets": [
+        ["id=basic_username", "id"],
+        ["css=#basic_username", "css:finder"],
+        ["xpath=//input[@id='basic_username']", "xpath:attributes"],
+        ["xpath=//form[@id='basic']/div/div/div/div/span/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "${username}"
+    }, {
+      "id": "5ba9a89e-9152-4343-95e2-ca7343d5ca6e",
+      "comment": "",
+      "command": "type",
+      "target": "id=basic_password",
+      "targets": [
+        ["id=basic_password", "id"],
+        ["css=#basic_password", "css:finder"],
+        ["xpath=//input[@id='basic_password']", "xpath:attributes"],
+        ["xpath=//form[@id='basic']/div[2]/div/div/div/span/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/span/input", "xpath:position"]
+      ],
+      "value": "${password}"
+    }, {
+      "id": "e09c1cdc-17a5-44fd-9f67-aa8fd8fe9256",
+      "comment": "",
+      "command": "sendKeys",
+      "target": "id=basic_password",
+      "targets": [
+        ["id=basic_password", "id"],
+        ["css=#basic_password", "css:finder"],
+        ["xpath=//input[@id='basic_password']", "xpath:attributes"],
+        ["xpath=//form[@id='basic']/div[2]/div/div/div/span/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/span/input", "xpath:position"]
+      ],
+      "value": "${KEY_ENTER}"
+    }]
+  }, {
+    "id": "1a210d9d-60e5-4134-805c-41739e6a4c89",
+    "name": "U001-001 đăng nhập nv thu ngân",
+    "commands": [{
+      "id": "45bf509b-f673-4004-8cb7-e524e407ebce",
+      "comment": "",
+      "command": "store",
+      "target": "binh",
+      "targets": [],
+      "value": "username"
+    }, {
+      "id": "037ae5e0-a628-4916-9eeb-f15953403f4b",
+      "comment": "",
+      "command": "store",
+      "target": "asdasd",
+      "targets": [],
+      "value": "password"
+    }, {
+      "id": "56850f70-fa82-481c-890b-d4eb246c918b",
+      "comment": "",
+      "command": "run",
+      "target": "01 frame đăng nhập (click login)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "9f307939-d9c1-47cd-bbfd-ee313d2b1941",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.\\__page-title__text",
+      "targets": [
+        ["css=.\\__page-title__text", "css:finder"],
+        ["xpath=//div[@id='root']/div/section/section/div/div/div/div/div[2]/span", "xpath:idRelative"],
+        ["xpath=//div/div/div/div/div[2]/span", "xpath:position"]
+      ],
+      "value": "Quầy thu ngân"
+    }]
+  }, {
+    "id": "797dabf1-55fe-45e5-90b6-1ca0752d54b4",
+    "name": "01 frame đăng nhập (click login)",
+    "commands": [{
+      "id": "b04ce4eb-c0ae-4831-b3b2-fed540bafd68",
+      "comment": "",
+      "command": "open",
+      "target": "/login",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "1782f94f-fed2-484e-a6aa-e8fabd978df9",
+      "comment": "",
+      "command": "type",
+      "target": "id=basic_username",
+      "targets": [
+        ["id=basic_username", "id"],
+        ["css=#basic_username", "css:finder"],
+        ["xpath=//input[@id='basic_username']", "xpath:attributes"],
+        ["xpath=//form[@id='basic']/div/div/div/div/span/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "${username}"
+    }, {
+      "id": "1fc6567f-870d-4119-814e-9552fcca2988",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.ant-btn > span",
+      "targets": [
+        ["css=.ant-btn > span", "css:finder"],
+        ["xpath=//form[@id='basic']/div[4]/div/div/div/button/span", "xpath:idRelative"],
+        ["xpath=//button/span", "xpath:position"],
+        ["xpath=//span[contains(.,'ĐĂNG NHẬP')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c635fae4-f4b0-4863-b6e0-ee378d29306c",
+      "comment": "",
+      "command": "type",
+      "target": "id=basic_password",
+      "targets": [
+        ["id=basic_password", "id"],
+        ["css=#basic_password", "css:finder"],
+        ["xpath=//input[@id='basic_password']", "xpath:attributes"],
+        ["xpath=//form[@id='basic']/div[2]/div/div/div/span/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/span/input", "xpath:position"]
+      ],
+      "value": "${password}"
+    }, {
+      "id": "56a9cafe-b2bc-4944-9ecf-7c43e77a7be4",
+      "comment": "",
+      "command": "click",
+      "target": "css=.ant-btn > span",
+      "targets": [
+        ["css=.ant-btn > span", "css:finder"],
+        ["xpath=//form[@id='basic']/div[4]/div/div/div/button/span", "xpath:idRelative"],
+        ["xpath=//button/span", "xpath:position"],
+        ["xpath=//span[contains(.,'ĐĂNG NHẬP')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "04179de5-3c89-41db-81da-e7e9a59baa19",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "css=.ant-btn > span",
+      "targets": [
+        ["css=.ant-btn > span", "css:finder"],
+        ["xpath=//form[@id='basic']/div[4]/div/div/div/button/span", "xpath:idRelative"],
+        ["xpath=//button/span", "xpath:position"],
+        ["xpath=//span[contains(.,'ĐĂNG NHẬP')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "be287a07-9d09-4c26-aaf0-f1719847488b",
+    "name": "U001-004 nhập tài khoản và mật khẩu không có trong database",
+    "commands": [{
+      "id": "f34dc2b2-a199-4d2d-bcc2-2edd5fdb3df6",
+      "comment": "",
+      "command": "store",
+      "target": "abc",
+      "targets": [],
+      "value": "username"
+    }, {
+      "id": "092194c6-1091-4a5a-9939-70604048c6f4",
+      "comment": "",
+      "command": "store",
+      "target": "xyz",
+      "targets": [],
+      "value": "password"
+    }, {
+      "id": "bd6accb3-1344-4476-acb1-0140f43aa2c3",
+      "comment": "",
+      "command": "run",
+      "target": "01 frame đăng nhập (click login)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "571e24c9-92b6-4708-987e-915aa7b2508e",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=span:nth-child(2)",
+      "targets": [
+        ["css=span:nth-child(2)", "css:finder"],
+        ["xpath=//div/span[2]", "xpath:position"]
+      ],
+      "value": "Tài khoản hoặc mật khẩu không đúng"
+    }]
+  }, {
+    "id": "07d28b7c-4e49-478e-b8a3-a7537ca94234",
+    "name": "U001-002 đăng nhập nv nhập hàng",
+    "commands": [{
+      "id": "0bbda2ec-2b13-4f45-9f6f-4d47e0543873",
+      "comment": "",
+      "command": "store",
+      "target": "binh",
+      "targets": [],
+      "value": "username"
+    }, {
+      "id": "9220415d-6325-43d6-b59e-b0dac4457e71",
+      "comment": "",
+      "command": "store",
+      "target": "asdasd",
+      "targets": [],
+      "value": "password"
+    }, {
+      "id": "dde6e8cc-38d2-4838-bf9a-ba57b2cd36c4",
+      "comment": "",
+      "command": "run",
+      "target": "01 frame đăng nhập (click login)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e1de6977-6400-4cd7-8325-764c7e48329d",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.\\__page-title__text",
+      "targets": [
+        ["css=.\\__page-title__text", "css:finder"],
+        ["xpath=//div[@id='root']/div/section/section/div/div/div/div/div[2]/span", "xpath:idRelative"],
+        ["xpath=//div/div/div/div/div[2]/span", "xpath:position"]
+      ],
+      "value": "Quầy thu ngân"
+    }]
+  }, {
+    "id": "76b6470b-193d-44d1-bfe7-b77f74774fe2",
+    "name": "U001-003 đăng nhập nv quản lý",
+    "commands": [{
+      "id": "116c0e43-16cb-418f-bb6d-9434502de37e",
+      "comment": "",
+      "command": "store",
+      "target": "binh",
+      "targets": [],
+      "value": "username"
+    }, {
+      "id": "f7530f05-17bb-4c70-aba2-981feb4b7d6e",
+      "comment": "",
+      "command": "store",
+      "target": "asdasd",
+      "targets": [],
+      "value": "password"
+    }, {
+      "id": "be51a2b5-695f-440e-8cad-0a1e49932106",
+      "comment": "",
+      "command": "run",
+      "target": "01 frame đăng nhập (click login)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "006f9690-eb24-4a9f-9ee1-2ede12b099fb",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.\\__page-title__text",
+      "targets": [
+        ["css=.\\__page-title__text", "css:finder"],
+        ["xpath=//div[@id='root']/div/section/section/div/div/div/div/div[2]/span", "xpath:idRelative"],
+        ["xpath=//div/div/div/div/div[2]/span", "xpath:position"]
+      ],
+      "value": "Quầy thu ngân"
+    }]
+  }, {
+    "id": "7cc469c2-cadd-4645-a78e-6d5c1390fd4a",
+    "name": "U001-005 nhập tài khoản đúng và mật khẩu sai",
+    "commands": [{
+      "id": "326469e6-4de3-4a19-b4ff-c8a784f45fee",
+      "comment": "",
+      "command": "store",
+      "target": "binh",
+      "targets": [],
+      "value": "username"
+    }, {
+      "id": "87075841-eec3-4df2-b616-ae15e169d46d",
+      "comment": "",
+      "command": "store",
+      "target": "xyz",
+      "targets": [],
+      "value": "password"
+    }, {
+      "id": "b414d52a-3216-4193-9e38-465853133578",
+      "comment": "",
+      "command": "run",
+      "target": "01 frame đăng nhập (click login)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f3f1defd-4daa-42b8-81e5-d10a14843a6a",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=span:nth-child(2)",
+      "targets": [
+        ["css=span:nth-child(2)", "css:finder"],
+        ["xpath=//div/span[2]", "xpath:position"]
+      ],
+      "value": "Tài khoản hoặc mật khẩu không đúng"
+    }]
+  }, {
+    "id": "76dadee1-a235-493b-96f6-96618e8b4caf",
+    "name": "U001-006 nhập tài khoản  sai và mật khẩu đúng",
+    "commands": [{
+      "id": "084ada5f-a8ae-4384-aa34-e00bc90658cd",
+      "comment": "",
+      "command": "store",
+      "target": "abc",
+      "targets": [],
+      "value": "username"
+    }, {
+      "id": "726a6703-0b16-4e1d-b572-048ad270d16f",
+      "comment": "",
+      "command": "store",
+      "target": "asdasd",
+      "targets": [],
+      "value": "password"
+    }, {
+      "id": "4a6092b6-c4d4-42fe-8295-c751717b5d20",
+      "comment": "",
+      "command": "run",
+      "target": "01 frame đăng nhập (click login)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "765e9868-5339-4a7c-97b5-7b8bf2406400",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=span:nth-child(2)",
+      "targets": [
+        ["css=span:nth-child(2)", "css:finder"],
+        ["xpath=//div/span[2]", "xpath:position"]
+      ],
+      "value": "Tài khoản hoặc mật khẩu không đúng"
+    }]
+  }],
+  "suites": [{
+    "id": "4cc53586-fa5f-4414-9faf-060ff3f5e9a1",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": []
+  }],
+  "urls": ["http://localhost:8000/", "http://localhost:8000/login"],
+  "plugins": []
+}
