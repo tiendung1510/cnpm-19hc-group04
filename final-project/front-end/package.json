@@ -74,7 +74,7 @@
     "postcss-safe-parser": "4.0.1",
     "prop-types": "^15.7.2",
     "react-app-polyfill": "^1.0.2",
-    "react-dev-utils": "^9.0.3",
+    "react-dev-utils": "^11.0.4",
     "react-highcharts": "^16.1.0",
     "react-highlight-words": "^0.16.0",
     "react-json-pretty": "^2.1.0",
